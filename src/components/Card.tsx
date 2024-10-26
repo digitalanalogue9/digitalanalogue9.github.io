@@ -1,3 +1,4 @@
+// Card.tsx
 'use client'
 
 import { useState } from 'react';
@@ -9,10 +10,10 @@ interface CardProps {
   onDrop?: (value: Value, columnIndex: number) => void;
   onMoveUp?: (value: Value, fromColumnIndex: number) => void;
   onMoveDown?: (value: Value, fromColumnIndex: number) => void;
+  debug?: boolean;
 }
 
-export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown }: CardProps) {
-  // Early return if value is undefined
+export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown, debug = true }: CardProps) {
   if (!value) {
     return null;
   }
@@ -22,26 +23,36 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(true);
     e.dataTransfer.setData('text/plain', JSON.stringify(value));
+    if (debug) console.log('🎪 Card dragStart:', { value, columnIndex });
   };
 
   const handleDragEnd = (): void => {
     setIsDragging(false);
+    if (debug) console.log('🏁 Card dragEnd:', { value, columnIndex });
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
+    if (debug) console.log('⬇️ Card drop event starting:', { targetValue: value, targetColumnIndex: columnIndex });
+    
     try {
       const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value;
+      if (debug) console.log('📦 Dropped value:', droppedValue);
+      
       if (onDrop) {
         onDrop(droppedValue, columnIndex);
+        if (debug) console.log('✅ Card onDrop executed:', { droppedValue, targetColumnIndex: columnIndex });
+      } else if (debug) {
+        console.log('⚠️ No onDrop handler provided for card');
       }
     } catch (error) {
-      console.error('Error parsing dropped value:', error);
+      console.error('❌ Error parsing dropped value:', error);
     }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
+    if (debug) console.log('🔄 Card dragOver:', { value, columnIndex });
   };
 
   return (
