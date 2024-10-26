@@ -1,3 +1,5 @@
+'use client'
+
 import { useDrop } from 'react-dnd';
 import Card from './Card';
 import { Value, CategoryName } from '../types';

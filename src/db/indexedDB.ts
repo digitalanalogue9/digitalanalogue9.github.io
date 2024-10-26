@@ -1,3 +1,5 @@
+'use client'
+
 import { openDB, IDBPDatabase } from 'idb';
 import { Session, Round } from '../types';
 const isBrowser = typeof window !== 'undefined';
@@ -5,7 +7,6 @@ const dbName = 'CoreValuesDB';
 const dbVersion = 1;
 
 export async function initDB(): Promise<IDBPDatabase> {
-  if (!isBrowser) return null;
   const db = await openDB(dbName, dbVersion, {
     upgrade(db) {
       db.createObjectStore('sessions', { keyPath: 'id' });
