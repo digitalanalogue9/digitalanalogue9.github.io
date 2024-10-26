@@ -4,11 +4,14 @@
 import { useState } from 'react';
 import { Value } from "@/types/Value";
 import { CardProps } from './CardProps';
+import { getEnvBoolean } from '@/utils/envUtils';
 
-export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown, debug = true }: CardProps) {
+
+export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown }: CardProps) {
   if (!value) {
     return null;
   }
+  const debug = getEnvBoolean('DEBUG', false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);

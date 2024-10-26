@@ -1,15 +1,19 @@
 'use client'
 
 import { useState } from 'react';
-import useGameStore from '../store/useGameStore';
+import { useGameStore } from '../store/useGameStore';
 import { StartScreenProps } from './StartScreenProps';
+import { getEnvNumber } from '@/utils/envUtils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
-  const [coreValuesCount, setCoreValuesCount] = useState<number>(5);
-  const setTargetCoreValues = useGameStore(state => state.setTargetCoreValues);
+  const defaultCoreValues = getEnvNumber('NUM_CORE_VALUES', 5);
+  const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
+  const setTargetCoreValues = useGameStore((state) => state.setTargetCoreValues);
+  const initializeGame = useGameStore((state) => state.initializeGame);
 
   const handleStart = () => {
     setTargetCoreValues(coreValuesCount);
+    initializeGame();
     onStart();
   };
  

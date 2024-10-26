@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import useGameStore from '../store/useGameStore';
+import {useGameStore} from '../store/useGameStore';
 import Card from './Card';
 import CategoryColumn from './CategoryColumn';
 import { DropCommand } from '../commands/DropCommand';
@@ -11,6 +11,7 @@ import Results from './Results';
 import { CategoryName } from "@/types/CategoryName";
 import { Categories } from "@/types/Categories";
 import { Value } from "@/types/Value";
+import { getRandomValues } from '@/utils/valuesUtils';
 
 const RoundUI: React.FC = () => {
   const {
@@ -72,7 +73,7 @@ const RoundUI: React.FC = () => {
       setShowResults(true);
     } else {
       setCurrentRound(currentRound + 1);
-      setRemainingCards(importantCards);
+      setRemainingCards(getRandomValues(importantCards));
       setCategories({
         'Very Important': [],
         'Quite Important': [],

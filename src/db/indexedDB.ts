@@ -1,16 +1,17 @@
 'use client'
-
+import { getEnvBoolean } from '@/utils/envUtils';
 import { openDB, IDBPDatabase } from 'idb';
 import { Session } from "@/types/Session";
+
 import { Round } from "@/types/Round";
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'CoreValuesDB';
 const dbVersion = 1;
 
-const debug = true; // You can make this configurable
+const debug = getEnvBoolean('DEBUG', false);
 
 export async function initDB(): Promise<IDBPDatabase> {
-  if (debug) console.log('🔵 Initializing IndexedDB');
+    if (debug) console.log('🔵 Initializing IndexedDB');
   try {
     const db = await openDB(dbName, dbVersion, {
       upgrade(db) {
