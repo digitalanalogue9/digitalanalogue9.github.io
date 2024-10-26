@@ -1,8 +1,9 @@
 'use client'
 
-import { useDrop } from 'react-dnd';
+import { useState } from 'react';
+import { Value } from '../types';
+import { CategoryName } from '../types';
 import Card from './Card';
-import { Value, CategoryName } from '../types';
 
 interface CategoryColumnProps {
   title: CategoryName;
@@ -12,21 +13,31 @@ interface CategoryColumnProps {
 }
 
 export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: CategoryColumnProps) {
-  const [{ isOver }, drop] = useDrop({
-    accept: 'CARD',
-    drop: (item: { id: string }) => onDrop(item.id, title),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  });
+  const [isOver, setIsOver] = useState(false);
 
-  const moveCardUp = (index: number) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsOver(false);
+    const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain'));
+    onDrop(droppedValue.id, title);
+  };
+
+  const handleMoveUp = (index: number) => {
     if (index > 0) {
       onMoveCard(title, index, index - 1);
     }
   };
 
-  const moveCardDown = (index: number) => {
+  const handleMoveDown = (index: number) => {
     if (index < cards.length - 1) {
       onMoveCard(title, index, index + 1);
     }
@@ -34,22 +45,45 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: Cat
 
   return (
     <div
-      {...drop}
-      className={`category-column p-4 border rounded min-h-[200px] ${
-        isOver ? 'bg-gray-100' : 'bg-white'
-      }`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`
+        flex-1 
+        p-4 
+        rounded-lg 
+        min-h-[500px]
+        transition-colors 
+        duration-200
+        ${isOver ? 'bg-blue-50' : 'bg-gray-50'}
+        border-2 
+        ${isOver ? 'border-blue-300' : 'border-transparent'}
+      `}
     >
-      <h2 className="text-lg font-bold mb-4">{title}</h2>
-      <div className="space-y-2">
-        {cards.map((card, index) => (
-          <Card
-            key={card.title}
-            value={card}
-            inCategory={true}
-            onMoveUp={() => moveCardUp(index)}
-            onMoveDown={() => moveCardDown(index)}
-          />
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-gray-700">{title}</h2>
+        <span className="bg-gray-200 px-2 py-1 rounded-full text-sm text-gray-600">
+          {cards.length}
+        </span>
+      </div>
+      
+      <div className="space-y-4 relative">
+        {cards.map((value, index) => (
+          <div key={value.id} className="transition-all duration-200">
+            <Card
+              value={value}
+              onDrop={(value) => onDrop(value.id, title)}
+              onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
+              onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
+            />
+          </div>
         ))}
+        
+        {cards.length === 0 && (
+          <div className="text-center py-8 text-gray-400 border-2 border-dashed rounded-lg">
+            Drop cards here
+          </div>
+        )}
       </div>
     </div>
   );

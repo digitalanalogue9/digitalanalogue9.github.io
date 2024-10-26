@@ -33,18 +33,3 @@ export interface MoveCommandPayload {
     fromCategory: CategoryName;
     toCategory: CategoryName;
 }
-
-export type Value = {
-    id: string;
-    title: string;
-    description: string;
-    category?: Category;
-};
-
-export enum Category {
-    ESSENTIAL = "ESSENTIAL",
-    VERY_IMPORTANT = "VERY_IMPORTANT",
-    IMPORTANT = "IMPORTANT",
-    NOT_IMPORTANT = "NOT_IMPORTANT",
-    DROPPED = "DROPPED"
-}

@@ -1,177 +1,177 @@
 {
     "values": [
         {
-            "id" : 1,
+            "id" : "1",
             "title": "BEING EXPERT",
             "description": "You like being known as someone with special knowledge or skills."
         },
         {
-            "id" : 2,
+            "id" : "2",
             "title": "FAST PACE",
             "description": "You enjoy working rapidly at a high pace."
         },
         {
-            "id" : 3,
+            "id" : "3",
             "title": "MONEY",
             "description": "Earning a large amount of money is important to you."
         },
         {
-            "id" : 4,
+            "id" : "4",
             "title": "PRESSURE",
             "description": "You like working to deadlines."
         },
         {
-            "id" : 5,
+            "id" : "5",
             "title": "WORK ALONE",
             "description": "You like to work on your own."
         },
         {
-            "id" : 6,
+            "id" : "6",
             "title": "COMPETITION",
             "description": "You enjoy competing against other people or groups."
         },
         {
-            "id" : 7,
+            "id" : "7",
             "title": "PRECISE WORK",
             "description": "You like working on things which involve great care and concentration."
         },
         {
-            "id" : 8,
+            "id" : "8",
             "title": "ARTISTIC",
             "description": "You enjoy making music, making designs, writing poetry, making models etc."
         },
         {
-            "id" : 9,
+            "id" : "9",
             "title": "PHYSICAL CHALLENGE",
             "description": "You enjoy doing something that is physically demanding."
         },
         {
-            "id" : 10,
+            "id" : "10",
             "title": "A WELL-KNOWN ORGANISATION",
             "description": "You like being part of a well-known organisation."
         },
         {
-            "id" : 11,
+            "id" : "11",
             "title": "STATUS",
             "description": "You enjoy being in a position which leads other people to respect you."
         },
         {
-            "id" : 12,
+            "id" : "12",
             "title": "VARIETY",
             "description": "You enjoy having lots of different things to do."
         },
         {
-            "id" : 13,
+            "id" : "13",
             "title": "ROUTINE",
             "description": "You like having a routine which is fairly predictable."
         },
         {
-            "id" : 14,
+            "id" : "14",
             "title": "CONTACT WITH PEOPLE",
             "description": "You enjoy having a lot of contact with people."
         },
         {
-            "id" : 15,
+            "id" : "15",
             "title": "TIME FREEDOM",
             "description": "You prefer to decide how to use your own time, rather than having a rigid daily routine."
         },
         {
-            "id" : 16,
+            "id" : "16",
             "title": "COMMUNICATION",
             "description": "You enjoy being able to express ideas or feelings to other people."
         },
         {
-            "id" : 17,
+            "id" : "17",
             "title": "PERSUADING PEOPLE",
             "description": "You enjoy persuading people to buy something or change their minds about something."
         },
         {
-            "id" : 18,
+            "id" : "18",
             "title": "PROMOTION",
             "description": "You like to work where there is a good chance of promotion."
         },
         {
-            "id" : 19,
+            "id" : "19",
             "title": "SECURITY",
             "description": "It is important to know your work will always be there for you."
         },
         {
-            "id" : 20,
+            "id" : "20",
             "title": "FRIENDSHIP",
             "description": "You would or do like close friendships with people at work."
         },
         {
-            "id" : 21,
+            "id" : "21",
             "title": "SUPERVISION",
             "description": "You enjoy being responsible for work done by others."
         },
         {
-            "id" : 22,
+            "id" : "22",
             "title": "RISK",
             "description": "You like to take risks."
         },
         {
-            "id" : 23,
+            "id" : "23",
             "title": "RECOGNITION",
             "description": "You do like people to appreciate you for the work you do."
         },
         {
-            "id" : 24,
+            "id" : "24",
             "title": "HELP SOCIETY",
             "description": "You like to think that your work is producing something worthwhile for society."
         },
         {
-            "id" : 25,
+            "id" : "25",
             "title": "PLACE OF WORK",
             "description": "It is important that you work in the right part of the country for you."
         },
         {
-            "id" : 26,
+            "id" : "26",
             "title": "EXCITEMENT",
             "description": "It is important for you to have a lot of excitement in your work."
         },
         {
-            "id" : 27,
+            "id" : "27",
             "title": "MAKING DECISIONS",
             "description": "It is important to you to have to make decisions about how things should be done, who should do it and when it should be done."
         },
         {
-            "id" : 28,
+            "id" : "28",
             "title": "CHALLENGE",
             "description": "You enjoy being 'stretched' and given new problems to work on."
         },
         {
-            "id" : 29,
+            "id" : "29",
             "title": "HELPING OTHERS",
             "description": "It is important to you to help other people either individually or in groups, as part of your work."
         },
         {
-            "id" : 30,
+            "id" : "30",
             "title": "COMMUNITY",
             "description": "You like to live in a place where you can get involved in the community."
         },
         {
-            "id" : 31,
+            "id" : "31",
             "title": "INDEPENDENCE",
             "description": "You like being able to work in the way you want, without others telling you what to do."
         },
         {
-            "id" : 32,
+            "id" : "32",
             "title": "WORK WITH OTHERS",
             "description": "You like to work in a team alongside others."
         },
         {
-            "id" : 33,
+            "id" : "33",
             "title": "PEACE",
             "description": "You prefer to have few pressures and uncomfortable demands."
         },
         {
-            "id" : 34,
+            "id" : "34",
             "title": "LEARNING",
             "description": "It is important for you to learn new things."
         },
         {
-            "id" : 35,
+            "id" : "35",
             "title": "CREATIVITY",
             "description": "Thinking up new ideas and ways of doing things is important to you."
         }

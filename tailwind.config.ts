@@ -14,6 +14,7 @@ const config: Config = {
       },
       fontFamily: {
         // Custom fonts can be added here
+        'handwritten': ['var(--font-kalam)']
       },
     },
   },
