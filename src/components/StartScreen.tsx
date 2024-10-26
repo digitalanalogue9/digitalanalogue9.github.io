@@ -19,8 +19,8 @@ export default function StartScreen({ onStart }: StartScreenProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-3xl font-bold mb-8">Core Values</h1>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
+      <div className="flex items-center space-x-4">
+        <label className="text-sm font-medium whitespace-nowrap">
           How many core values do you want to end up with?
         </label>
         <input
@@ -29,15 +29,15 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           max="10"
           value={coreValuesCount}
           onChange={(e) => setCoreValuesCount(Number(e.target.value))}
-          className="border rounded p-2"
+          className="border rounded p-2 w-20"
         />
+        <button
+          onClick={handleStart}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 whitespace-nowrap"
+        >
+          Start
+        </button>
       </div>
-      <button
-        onClick={handleStart}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Start
-      </button>
     </div>
   );
 }

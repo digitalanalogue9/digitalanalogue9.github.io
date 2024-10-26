@@ -8,8 +8,18 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  background-image: url('/images/core-values.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Add a semi-transparent overlay to improve text readability if needed */
+.content-overlay {
+  background-color: rgba(255, 255, 255, 0.9);
+  min-height: 100vh;
 }
 
 .card {

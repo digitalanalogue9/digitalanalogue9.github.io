@@ -1,14 +1,10 @@
-'use client'
-
+// src/app/layout.tsx
 import './globals.css'
-import { Inter } from 'next/font/google'
-import Navigation from '../components/Navigation'
-
-const inter = Inter({ subsets: ['latin'] })
+import ClientLayout from '../components/ClientLayout'
 
 export const metadata = {
   title: 'Core Values',
-  description: 'A tool to help discover your core values',
+  description: 'A tool to help you discover your core values',
 }
 
 export default function RootLayout({
@@ -18,11 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Navigation />
-        <main className="min-h-screen">
+      <body>
+        <ClientLayout>
           {children}
-        </main>
+        </ClientLayout>
       </body>
     </html>
   )
