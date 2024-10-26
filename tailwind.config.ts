@@ -16,6 +16,9 @@ const config: Config = {
         // Custom fonts can be added here
         'handwritten': ['var(--font-kalam)']
       },
+      rotate: {
+        '1': '1deg',
+      },
     },
   },
   plugins: [],

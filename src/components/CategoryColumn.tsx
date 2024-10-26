@@ -8,7 +8,7 @@ import Card from './Card';
 interface CategoryColumnProps {
   title: CategoryName;
   cards: Value[];
-  onDrop: (cardId: string, category: CategoryName) => void;
+  onDrop: (value: Value, category: CategoryName) => void;
   onMoveCard: (category: CategoryName, fromIndex: number, toIndex: number) => void;
 }
 
@@ -72,7 +72,8 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: Cat
           <div key={value.id} className="transition-all duration-200">
             <Card
               value={value}
-              onDrop={(value) => onDrop(value.id, title)}
+              columnIndex={index}
+              onDrop={(value) => onDrop(value, title)}
               onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
               onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
             />

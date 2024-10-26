@@ -1,7 +1,5 @@
 'use client'
 
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useState } from 'react';
 import useGameStore from '../store/useGameStore';
 import Card from './Card';
@@ -10,9 +8,9 @@ import { DropCommand } from '../commands/DropCommand';
 import { MoveCommand } from '../commands/MoveCommand';
 import { saveRound } from '../db/indexedDB';
 import Results from './Results';
-import { CategoryName } from '../types';
+import { CategoryName, Value, Categories } from '../types';
 
-export default function RoundUI() {
+const RoundUI: React.FC = () => {
   const {
     currentRound,
     remainingCards,
@@ -24,29 +22,33 @@ export default function RoundUI() {
     setRemainingCards
   } = useGameStore();
 
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
-  const handleDrop = async (cardId: string, category: CategoryName) => {
-    const command = new DropCommand(cardId, category);
-    const card = remainingCards.find(c => c.title === cardId);
+  const handleDrop = async (value: Value, category: CategoryName): Promise<void> => {
+    const command = new DropCommand(value.title, category);
+    const card = remainingCards.find((c: Value) => c.title === value.title);
     if (!card) return;
 
-    const updatedCategories = { ...categories };
+    const updatedCategories: Categories = { ...categories };
     updatedCategories[category] = [...updatedCategories[category], card];
     setCategories(updatedCategories);
-    setRemainingCards(remainingCards.filter(c => c.title !== cardId));
+    setRemainingCards(remainingCards.filter((c: Value) => c.title !== value.title));
 
     await saveRound(sessionId, currentRound, [command]);
   };
 
-  const handleMoveCard = async (category: CategoryName, fromIndex: number, toIndex: number) => {
+  const handleMoveCard = async (
+    category: CategoryName, 
+    fromIndex: number, 
+    toIndex: number
+  ): Promise<void> => {
     const command = new MoveCommand(
       categories[category][fromIndex].title,
       category,
       category
     );
     
-    const updatedCategories = { ...categories };
+    const updatedCategories: Categories = { ...categories };
     const categoryCards = [...updatedCategories[category]];
     const [movedCard] = categoryCards.splice(fromIndex, 1);
     categoryCards.splice(toIndex, 0, movedCard);
@@ -56,8 +58,8 @@ export default function RoundUI() {
     await saveRound(sessionId, currentRound, [command]);
   };
 
-  const handleNextRound = () => {
-    const importantCards = [
+  const handleNextRound = (): void => {
+    const importantCards: Value[] = [
       ...categories['Very Important'],
       ...categories['Quite Important'],
       ...categories['Important'],
@@ -89,7 +91,7 @@ export default function RoundUI() {
       <div className="flex flex-col space-y-4">
         {remainingCards.length > 0 ? (
           <div className="mb-4">
-            <Card value={remainingCards[0]} />
+            <Card value={remainingCards[0]} columnIndex={0} />
           </div>
         ) : (
           <div className="mb-4 text-center">
@@ -103,7 +105,7 @@ export default function RoundUI() {
         )}
         
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {(Object.entries(categories) as [CategoryName, typeof categories[CategoryName]][]).map(([title, cards]) => (
+          {(Object.entries(categories) as [CategoryName, Value[]][]).map(([title, cards]) => (
             <CategoryColumn
               key={title}
               title={title}
@@ -124,4 +126,6 @@ export default function RoundUI() {
       </div>
     </div>
   );
-}
+};
+
+export default RoundUI;

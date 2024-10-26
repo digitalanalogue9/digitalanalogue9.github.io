@@ -5,10 +5,12 @@ import { Value } from '../types';
 
 interface CardProps {
   value: Value;
-  onDrop: (value: Value) => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
+  columnIndex: number; // Add this prop
+  onDrop?: (value: Value, columnIndex: number) => void;
+  onMoveUp?: (value: Value, fromColumnIndex: number) => void;
+  onMoveDown?: (value: Value, fromColumnIndex: number) => void;
 }
+
 
 export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -28,7 +30,7 @@ export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps)
         <div className="absolute -left-10 top-1/2 transform -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           {onMoveUp && (
             <button
-              onClick={onMoveUp}
+              onClick={() => onMoveUp && onMoveUp(value, 0)} // Add callback with parameters
               className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
               aria-label="Move Up"
             >
@@ -37,9 +39,9 @@ export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps)
           )}
           {onMoveDown && (
             <button
-              onClick={onMoveDown}
-              className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
-              aria-label="Move Down"
+            onClick={() => onMoveDown && onMoveDown(value, 0)} // Add callback with parameters
+            className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
+            aria-label="Move Down"
             >
               ↓
             </button>
