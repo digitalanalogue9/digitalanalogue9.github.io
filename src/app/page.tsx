@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import StartScreen from '../components/StartScreen';
 import RoundUI from '../components/RoundUI';
 import Instructions from '../components/Instructions';
-import useGameStore from '../store/useGameStore';
+import {useGameStore} from '../store/useGameStore';
 import { generateSessionName } from '../utils/sessionUtils';
 import { initDB } from '../db/indexedDB';
 import valuesData from '../data/values.json';

@@ -8,7 +8,7 @@ const isBrowser = typeof window !== 'undefined';
 const dbName = 'CoreValuesDB';
 const dbVersion = 1;
 
-const debug = getEnvBoolean('DEBUG', false);
+const debug = getEnvBoolean('debug', false);
 
 export async function initDB(): Promise<IDBPDatabase> {
     if (debug) console.log('🔵 Initializing IndexedDB');

@@ -13,4 +13,5 @@ export interface GameState {
   setRemainingCards: (cards: Value[]) => void;
   setCategories: (categories: Categories) => void;
   setSessionId: (id: string) => void;
+  initializeGame: () => void;
 }

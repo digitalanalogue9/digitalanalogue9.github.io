@@ -1,12 +1,23 @@
-export const getEnvBoolean = (key: string, defaultValue: boolean = false): boolean => {
-    const value = process.env[key]?.toLowerCase();
-    if (value === undefined) return defaultValue;
-    return value === 'true';
-};
+import config from '../config/config.json';
 
-export const getEnvNumber = (key: string, defaultValue: number): number => {
-    const value = process.env[key];
-    if (value === undefined) return defaultValue;
-    const parsed = parseInt(value, 10);
-    return isNaN(parsed) ? defaultValue : parsed;
-};
+export function getEnvNumber(key: keyof typeof config, defaultValue: number): number {
+  console.log('getEnvNumber', key, process.env);
+  const configKey = key.toLowerCase() as keyof typeof config;
+  const value = config[configKey];
+  console.log('getEnvNumber value:', value);
+  if (typeof value === 'number') {
+    return value;
+  }
+  return defaultValue;
+}
+
+export function getEnvBoolean(key: keyof typeof config, defaultValue: boolean): boolean {
+  console.log('getEnvBoolean', key, process.env);
+  const configKey = key.toLowerCase() as keyof typeof config;
+  const value = config[configKey];
+  console.log('getEnvBoolean value:', value);
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  return defaultValue;
+}

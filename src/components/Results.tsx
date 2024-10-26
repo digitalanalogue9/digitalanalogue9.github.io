@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react';
-import useGameStore from '../store/useGameStore';
+  import {useGameStore} from '../store/useGameStore';
 import { Value } from "@/types/Value";
 
 export default function Results() {

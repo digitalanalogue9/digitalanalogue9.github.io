@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/useGameStore';
 import { StartScreenProps } from './StartScreenProps';
-import { getEnvNumber } from '@/utils/envUtils';
+import { getEnvNumber, getEnvBoolean } from '@/utils/envUtils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
-  const defaultCoreValues = getEnvNumber('NUM_CORE_VALUES', 5);
+  const isDebug = getEnvBoolean('debug', false);
+  const maxCards = getEnvNumber('maxCards', 5);
+  const defaultCoreValues = getEnvNumber('numCoreValues', 5);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const setTargetCoreValues = useGameStore((state) => state.setTargetCoreValues);
   const initializeGame = useGameStore((state) => state.initializeGame);
@@ -20,12 +22,20 @@ export default function StartScreen({ onStart }: StartScreenProps) {
   return (
     <div suppressHydrationWarning={true} className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-3xl font-bold mb-8">Core Values</h1>
+      {isDebug && (
+        <div className="mb-4 text-sm text-gray-600">
+          <div>Debug Mode: On</div>
+          <div>Max Cards: {maxCards}</div>
+          <div>Default Core Values: {defaultCoreValues}</div>
+        </div>
+      )}
       <div className="flex items-center space-x-4">
         <label className="text-sm font-medium whitespace-nowrap">
           How many core values do you want to end up with?
         </label>
         <input
           type="number"
+          title="Maximum core values"
           min="1"
           max="10"
           value={coreValuesCount}

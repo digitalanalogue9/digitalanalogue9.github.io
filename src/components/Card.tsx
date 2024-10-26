@@ -11,7 +11,7 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
   if (!value) {
     return null;
   }
-  const debug = getEnvBoolean('DEBUG', false);
+  const debug = getEnvBoolean('debug', false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
