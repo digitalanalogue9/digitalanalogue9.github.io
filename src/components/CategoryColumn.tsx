@@ -1,16 +1,8 @@
 'use client'
 
 import { useState } from 'react';
-import { Value } from '../types';
-import { CategoryName } from '../types';
 import Card from './Card';
-
-interface CategoryColumnProps {
-  title: CategoryName;
-  cards: Value[];
-  onDrop: (value: Value, category: CategoryName) => void;
-  onMoveCard: (category: CategoryName, fromIndex: number, toIndex: number) => void;
-}
+import { CategoryColumnProps } from './CategoryColumnProps';
 
 export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: CategoryColumnProps) {
   const [isOver, setIsOver] = useState(false);
@@ -28,8 +20,8 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: Cat
     e.preventDefault();
     setIsOver(false);
     const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain'));
-    onDrop(droppedValue.id, title);
-  };
+    onDrop(droppedValue, title);  // Pass the entire value object
+};
 
   const handleMoveUp = (index: number) => {
     if (index > 0) {

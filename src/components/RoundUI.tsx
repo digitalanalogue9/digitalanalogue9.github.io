@@ -8,7 +8,9 @@ import { DropCommand } from '../commands/DropCommand';
 import { MoveCommand } from '../commands/MoveCommand';
 import { saveRound } from '../db/indexedDB';
 import Results from './Results';
-import { CategoryName, Value, Categories } from '../types';
+import { CategoryName } from "@/types/CategoryName";
+import { Categories } from "@/types/Categories";
+import { Value } from "@/types/Value";
 
 const RoundUI: React.FC = () => {
   const {

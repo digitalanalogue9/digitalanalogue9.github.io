@@ -2,10 +2,7 @@
 
 import { useState } from 'react';
 import useGameStore from '../store/useGameStore';
-
-interface StartScreenProps {
-  onStart: () => void;
-}
+import { StartScreenProps } from './StartScreenProps';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const [coreValuesCount, setCoreValuesCount] = useState<number>(5);

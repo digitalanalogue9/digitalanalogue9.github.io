@@ -2,16 +2,8 @@
 'use client'
 
 import { useState } from 'react';
-import { Value } from '../types';
-
-interface CardProps {
-  value: Value;
-  columnIndex: number;
-  onDrop?: (value: Value, columnIndex: number) => void;
-  onMoveUp?: (value: Value, fromColumnIndex: number) => void;
-  onMoveDown?: (value: Value, fromColumnIndex: number) => void;
-  debug?: boolean;
-}
+import { Value } from "@/types/Value";
+import { CardProps } from './CardProps';
 
 export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown, debug = true }: CardProps) {
   if (!value) {
@@ -19,6 +11,7 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
   }
 
   const [isDragging, setIsDragging] = useState(false);
+  const [isOver, setIsOver] = useState(false);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(true);
@@ -26,28 +19,22 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
     if (debug) console.log('🎪 Card dragStart:', { value, columnIndex });
   };
 
-  const handleDragEnd = (): void => {
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(false);
+    setIsOver(false);
     if (debug) console.log('🏁 Card dragEnd:', { value, columnIndex });
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
-    if (debug) console.log('⬇️ Card drop event starting:', { targetValue: value, targetColumnIndex: columnIndex });
-    
-    try {
-      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value;
-      if (debug) console.log('📦 Dropped value:', droppedValue);
-      
-      if (onDrop) {
-        onDrop(droppedValue, columnIndex);
-        if (debug) console.log('✅ Card onDrop executed:', { droppedValue, targetColumnIndex: columnIndex });
-      } else if (debug) {
-        console.log('⚠️ No onDrop handler provided for card');
-      }
-    } catch (error) {
-      console.error('❌ Error parsing dropped value:', error);
-    }
+    setIsOver(true);
+    if (debug) console.log('➡️ Card dragEnter:', { value, columnIndex });
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault();
+    setIsOver(false);
+    if (debug) console.log('⬅️ Card dragLeave:', { value, columnIndex });
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -83,7 +70,8 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
-        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         className={`
           w-48 h-48 
@@ -92,6 +80,7 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
           cursor-move 
           transform transition-transform duration-200
           ${isDragging ? 'scale-105 opacity-75' : ''}
+          ${isOver ? 'border-2 border-blue-500' : ''}
           bg-yellow-100
           rotate-1
           rounded-sm

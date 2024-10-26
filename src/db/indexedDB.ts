@@ -1,7 +1,8 @@
 'use client'
 
 import { openDB, IDBPDatabase } from 'idb';
-import { Session, Round } from '../types';
+import { Session } from "@/types/Session.1";
+import { Round } from "@/types/Round";
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'CoreValuesDB';
 const dbVersion = 1;

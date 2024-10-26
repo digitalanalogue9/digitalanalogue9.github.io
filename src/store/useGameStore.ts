@@ -1,20 +1,9 @@
 'use client'
 
 import { create } from 'zustand';
-import { Value, Categories, CategoryName } from '../types';
-
-interface GameState {
-  targetCoreValues: number;
-  currentRound: number;
-  remainingCards: Value[];
-  categories: Categories;
-  sessionId: string;
-  setTargetCoreValues: (count: number) => void;
-  setCurrentRound: (round: number) => void;
-  setRemainingCards: (cards: Value[]) => void;
-  setCategories: (categories: Categories) => void;
-  setSessionId: (id: string) => void;
-}
+import { CategoryName } from "@/types/CategoryName";
+import { Categories } from "@/types/Categories";
+import { GameState } from './GameState';
 
 const initialCategories: Categories = {
   'Very Important': [],

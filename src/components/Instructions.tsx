@@ -1,9 +1,7 @@
 'use client'
 
-interface InstructionsProps {
-    onClose: () => void;
-  }
-  
+import { InstructionsProps } from "./InstructionsProps";
+
   export default function Instructions({ onClose }: InstructionsProps) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
