@@ -15,9 +15,9 @@ export default function StartScreen({ onStart }: StartScreenProps) {
     setTargetCoreValues(coreValuesCount);
     onStart();
   };
-
+ 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div suppressHydrationWarning={true} className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-3xl font-bold mb-8">Core Values</h1>
       <div className="flex items-center space-x-4">
         <label className="text-sm font-medium whitespace-nowrap">

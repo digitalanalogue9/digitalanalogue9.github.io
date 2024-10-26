@@ -5,23 +5,43 @@ import { Value } from '../types';
 
 interface CardProps {
   value: Value;
-  columnIndex: number; // Add this prop
+  columnIndex: number;
   onDrop?: (value: Value, columnIndex: number) => void;
   onMoveUp?: (value: Value, fromColumnIndex: number) => void;
   onMoveDown?: (value: Value, fromColumnIndex: number) => void;
 }
 
+export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown }: CardProps) {
+  // Early return if value is undefined
+  if (!value) {
+    return null;
+  }
 
-export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps) {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(true);
     e.dataTransfer.setData('text/plain', JSON.stringify(value));
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (): void => {
     setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault();
+    try {
+      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value;
+      if (onDrop) {
+        onDrop(droppedValue, columnIndex);
+      }
+    } catch (error) {
+      console.error('Error parsing dropped value:', error);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault();
   };
 
   return (
@@ -30,7 +50,7 @@ export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps)
         <div className="absolute -left-10 top-1/2 transform -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           {onMoveUp && (
             <button
-              onClick={() => onMoveUp && onMoveUp(value, 0)} // Add callback with parameters
+              onClick={() => onMoveUp(value, columnIndex)}
               className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
               aria-label="Move Up"
             >
@@ -39,9 +59,9 @@ export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps)
           )}
           {onMoveDown && (
             <button
-            onClick={() => onMoveDown && onMoveDown(value, 0)} // Add callback with parameters
-            className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
-            aria-label="Move Down"
+              onClick={() => onMoveDown(value, columnIndex)}
+              className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
+              aria-label="Move Down"
             >
               ↓
             </button>
@@ -52,6 +72,8 @@ export default function Card({ value, onDrop, onMoveUp, onMoveDown }: CardProps)
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
         className={`
           w-48 h-48 
           p-4 
