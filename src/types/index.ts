@@ -1,32 +1,50 @@
-export interface Value {
-    title: string;
-    description: string;
-  }
-  
-  export interface Category {
-    'Very Important': Value[];
-    'Quite Important': Value[];
-    'Important': Value[];
-    'Of Some Importance': Value[];
-    'Not Important': Value[];
-  }
-  
-  export interface Session {
+export type CategoryName = 'Very Important' | 'Quite Important' | 'Important' | 'Of Some Importance' | 'Not Important';
+
+export type Categories = {
+    [key in CategoryName]: Value[];
+}
+
+export interface Session {
     id: string;
     timestamp: number;
     targetCoreValues: number;
-    rounds: number;
-  }
-  
-  export interface Command {
-    type: string;
-    payload: any;
-    timestamp: number;
-  }
-  
-  export interface Round {
+    currentRound: number;
+}
+
+export interface Round {
     sessionId: string;
     roundNumber: number;
     commands: Command[];
-  }
-  
+}
+
+export interface Command {
+    type: string;
+    payload: any;
+    timestamp: number;
+}
+
+export interface DropCommandPayload {
+    cardId: string;
+    category: CategoryName;
+}
+
+export interface MoveCommandPayload {
+    cardId: string;
+    fromCategory: CategoryName;
+    toCategory: CategoryName;
+}
+
+export type Value = {
+    id: number;
+    title: string;
+    description: string;
+    category?: Category;
+};
+
+export enum Category {
+    ESSENTIAL = "ESSENTIAL",
+    VERY_IMPORTANT = "VERY_IMPORTANT",
+    IMPORTANT = "IMPORTANT",
+    NOT_IMPORTANT = "NOT_IMPORTANT",
+    DROPPED = "DROPPED"
+}

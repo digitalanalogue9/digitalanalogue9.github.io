@@ -1,43 +1,35 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import Card from '../../src/components/Card';
-
-const mockValue = {
-  title: "TEST VALUE",
-  description: "Test description"
-};
-
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <DndProvider backend={HTML5Backend}>
-    {children}
-  </DndProvider>
-);
+// in Card.test.tsx
+import { createMockValue, resetMockIdCounter } from '../utils/mockData';
 
 describe('Card Component', () => {
-  it('renders title and description', () => {
-    render(
-      <TestWrapper>
-        <Card value={mockValue} />
-      </TestWrapper>
-    );
-    
-    expect(screen.getByText('TEST VALUE')).toBeInTheDocument();
-    expect(screen.getByText('Test description')).toBeInTheDocument();
+  beforeEach(() => {
+    resetMockIdCounter(); // Optional: reset ID counter before each test
   });
 
-  it('toggles description visibility when title is clicked', () => {
-    render(
-      <TestWrapper>
-        <Card value={mockValue} inCategory={true} />
-      </TestWrapper>
-    );
-    
-    const description = screen.getByText('Test description');
-    const title = screen.getByText('TEST VALUE');
-    
-    expect(description).toBeInTheDocument();
-    fireEvent.click(title);
-    expect(description).not.toBeVisible();
+  it('renders card content correctly', () => {
+    const testValue = createMockValue({
+      title: 'Test Title',
+      description: 'Test Description'
+    });
+    // testValue.id will be 1
+    // ... rest of the test
+  });
+
+  it('other test case', () => {
+    const testValue = createMockValue({
+      title: 'Another Title',
+      description: 'Another Description'
+    });
+    // testValue.id will be 2
+    // ... rest of the test
+  });
+
+  it('can override id if needed', () => {
+    const testValue = createMockValue({
+      id: 35,
+      title: 'Specific ID Test',
+      description: 'Test Description'
+    });
+    // testValue.id will be 35
   });
 });

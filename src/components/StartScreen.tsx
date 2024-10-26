@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import useGameStore from '../store/useGameStore';
 
-export default function StartScreen({ onStart }) {
-  const [coreValuesCount, setCoreValuesCount] = useState(5);
+interface StartScreenProps {
+  onStart: () => void;
+}
+
+export default function StartScreen({ onStart }: StartScreenProps) {
+  const [coreValuesCount, setCoreValuesCount] = useState<number>(5);
   const setTargetCoreValues = useGameStore(state => state.setTargetCoreValues);
 
   const handleStart = () => {

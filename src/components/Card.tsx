@@ -1,7 +1,15 @@
 import { useDrag } from 'react-dnd';
 import { useState } from 'react';
+import { Value } from '../types';
 
-export default function Card({ value, inCategory, onMoveUp, onMoveDown }) {
+interface CardProps {
+  value: Value;
+  inCategory?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+}
+
+export default function Card({ value, inCategory, onMoveUp, onMoveDown }: CardProps) {
   const [showDescription, setShowDescription] = useState(!inCategory);
   
   const [{ isDragging }, drag] = useDrag({
@@ -14,7 +22,7 @@ export default function Card({ value, inCategory, onMoveUp, onMoveDown }) {
 
   return (
     <div
-      ref={drag}
+    {...drag}
       className={`card border p-4 rounded mb-2 ${isDragging ? 'opacity-50' : ''}`}
     >
       <div className="flex items-center justify-between">

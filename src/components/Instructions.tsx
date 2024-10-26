@@ -1,4 +1,8 @@
-export default function Instructions({ onClose }) {
+interface InstructionsProps {
+    onClose: () => void;
+  }
+  
+  export default function Instructions({ onClose }: InstructionsProps) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
         <div className="bg-white p-6 rounded-lg max-w-2xl max-h-[80vh] overflow-y-auto">

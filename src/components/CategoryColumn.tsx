@@ -1,22 +1,30 @@
 import { useDrop } from 'react-dnd';
 import Card from './Card';
+import { Value, CategoryName } from '../types';
 
-export default function CategoryColumn({ title, cards, onDrop, onMoveCard }) {
+interface CategoryColumnProps {
+  title: CategoryName;
+  cards: Value[];
+  onDrop: (cardId: string, category: CategoryName) => void;
+  onMoveCard: (category: CategoryName, fromIndex: number, toIndex: number) => void;
+}
+
+export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: CategoryColumnProps) {
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
-    drop: (item) => onDrop(item.id, title),
+    drop: (item: { id: string }) => onDrop(item.id, title),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
   });
 
-  const moveCardUp = (index) => {
+  const moveCardUp = (index: number) => {
     if (index > 0) {
       onMoveCard(title, index, index - 1);
     }
   };
 
-  const moveCardDown = (index) => {
+  const moveCardDown = (index: number) => {
     if (index < cards.length - 1) {
       onMoveCard(title, index, index + 1);
     }
@@ -24,7 +32,7 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }) {
 
   return (
     <div
-      ref={drop}
+      {...drop}
       className={`category-column p-4 border rounded min-h-[200px] ${
         isOver ? 'bg-gray-100' : 'bg-white'
       }`}
