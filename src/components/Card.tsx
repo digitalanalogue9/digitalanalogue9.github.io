@@ -12,6 +12,8 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
 
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isInCategory = columnIndex !== undefined;
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(true);
@@ -42,30 +44,15 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
     if (debug) console.log('🔄 Card dragOver:', { value, columnIndex });
   };
 
-  return (
-    <div className="group relative">
-      {(onMoveUp || onMoveDown) && (
-        <div className="absolute -left-10 top-1/2 transform -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          {onMoveUp && (
-            <button
-              onClick={() => onMoveUp(value, columnIndex)}
-              className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
-              aria-label="Move Up"
-            >
-              ↑
-            </button>
-          )}
-          {onMoveDown && (
-            <button
-              onClick={() => onMoveDown(value, columnIndex)}
-              className="p-1 bg-gray-200 hover:bg-gray-300 rounded"
-              aria-label="Move Down"
-            >
-              ↓
-            </button>
-          )}
-        </div>
-      )}
+  const toggleDescription = () => {
+    if (isInCategory) {
+      setIsExpanded(!isExpanded);
+      if (debug) console.log('📖 Toggle description:', { isExpanded: !isExpanded });
+    }
+  };
+
+  if (isInCategory) {
+    return (
       <div
         draggable="true"
         onDragStart={handleDragStart}
@@ -74,11 +61,12 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         className={`
-          w-48 h-48 
+          min-h-[40px]
+          w-48
           p-4 
           shadow-md 
           cursor-move 
-          transform transition-transform duration-200
+          transform transition-all duration-200
           ${isDragging ? 'scale-105 opacity-75' : ''}
           ${isOver ? 'border-2 border-blue-500' : ''}
           bg-yellow-100
@@ -99,13 +87,89 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown,
           before:bg-yellow-200/50
         `}
       >
-        <h3 className="font-bold mb-2 text-gray-800 text-lg font-handwritten">
-          {value.title}
-        </h3>
-        <p className="text-sm text-gray-700 font-handwritten leading-tight overflow-auto">
-          {value.description}
-        </p>
+        <div className="flex items-center gap-2">
+          <h3 
+            onClick={toggleDescription}
+            className="flex-grow font-bold text-gray-800 text-lg font-handwritten cursor-pointer hover:text-gray-600"
+          >
+            {value.title}
+            <span className="ml-1 text-sm text-gray-500">
+              {isExpanded ? '▼' : '▶'}
+            </span>
+          </h3>
+          <div className="flex gap-1">
+            {onMoveUp && (
+              <button
+                onClick={() => onMoveUp(value, columnIndex)}
+                className="p-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+                aria-label="Move Up"
+              >
+                ↑
+              </button>
+            )}
+            {onMoveDown && (
+              <button
+                onClick={() => onMoveDown(value, columnIndex)}
+                className="p-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+                aria-label="Move Down"
+              >
+                ↓
+              </button>
+            )}
+          </div>
+        </div>
+        
+        {isExpanded && (
+          <p className="mt-2 text-sm text-gray-700 font-handwritten leading-tight">
+            {value.description}
+          </p>
+        )}
       </div>
+    );
+  }
+
+  // Unassigned card view
+  return (
+    <div
+      draggable="true"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      className={`
+        h-48
+        w-48
+        p-4 
+        shadow-md 
+        cursor-move 
+        transform transition-all duration-200
+        ${isDragging ? 'scale-105 opacity-75' : ''}
+        ${isOver ? 'border-2 border-blue-500' : ''}
+        bg-yellow-100
+        rotate-1
+        rounded-sm
+        border-b-4 border-yellow-200
+        shadow-lg
+        hover:scale-105
+        flex flex-col
+        relative
+        overflow-hidden
+        before:content-['']
+        before:absolute
+        before:top-0
+        before:left-0
+        before:w-full
+        before:h-4
+        before:bg-yellow-200/50
+      `}
+    >
+      <h3 className="font-bold text-gray-800 text-lg font-handwritten mb-2">
+        {value.title}
+      </h3>
+      <p className="text-sm text-gray-700 font-handwritten leading-tight">
+        {value.description}
+      </p>
     </div>
   );
 }

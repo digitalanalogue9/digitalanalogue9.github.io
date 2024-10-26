@@ -12,6 +12,8 @@ const initialCategories: Categories = {
   'Of Some Importance': [],
   'Not Important': []
 };
+// Export the store type if needed
+export type GameStore = ReturnType<typeof useGameStore>;
 
 const useGameStore = create<GameState>((set) => ({
   targetCoreValues: 0,

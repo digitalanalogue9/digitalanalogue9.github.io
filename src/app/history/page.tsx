@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Session } from "@/types/Session.1";
+import { Session } from "@/types/Session";
 import { getSessions } from '@/utils/sessionUtils';
 
 export default function HistoryPage() {

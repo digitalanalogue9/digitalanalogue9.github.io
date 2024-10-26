@@ -93,7 +93,7 @@ const RoundUI: React.FC = () => {
       <div className="flex flex-col space-y-4">
         {remainingCards.length > 0 ? (
           <div className="mb-4">
-            <Card value={remainingCards[0]} columnIndex={0} />
+            <Card value={remainingCards[0]} />
           </div>
         ) : (
           <div className="mb-4 text-center">
@@ -106,6 +106,13 @@ const RoundUI: React.FC = () => {
           </div>
         )}
         
+        <div className="mt-4 text-center text-sm text-gray-600">
+          {remainingCards.length > 0 ? (
+            <p>Cards remaining: {remainingCards.length}</p>
+          ) : (
+            <p>All cards sorted! Click "Next Round" to continue.</p>
+          )}
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {(Object.entries(categories) as [CategoryName, Value[]][]).map(([title, cards]) => (
             <CategoryColumn
@@ -118,13 +125,6 @@ const RoundUI: React.FC = () => {
           ))}
         </div>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
-          {remainingCards.length > 0 ? (
-            <p>Cards remaining: {remainingCards.length}</p>
-          ) : (
-            <p>All cards sorted! Click "Next Round" to continue.</p>
-          )}
-        </div>
       </div>
     </div>
   );
