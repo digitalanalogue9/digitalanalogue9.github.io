@@ -1,7 +1,7 @@
 'use client'
 import { getEnvBoolean } from '@/utils/envUtils';
 import { openDB, IDBPDatabase } from 'idb';
-import { Session } from "@/types/Session";
+import { Session } from "../types/Session";
 
 import { Round } from "@/types/Round";
 const isBrowser = typeof window !== 'undefined';

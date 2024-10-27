@@ -1,4 +1,4 @@
-import { Session } from "@/types/Session";
+import { Session } from "../types/Session";
 
 export const adjectives: string[] = ['happy', 'bright', 'swift', 'clever', 'gentle'];
 export const nouns: string[] = ['river', 'mountain', 'forest', 'star', 'ocean'];
