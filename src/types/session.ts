@@ -5,3 +5,4 @@ export interface Session {
     targetCoreValues: number;
     currentRound: number;
 }
+
