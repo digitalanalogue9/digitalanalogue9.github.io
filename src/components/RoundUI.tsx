@@ -116,9 +116,9 @@ const RoundUI: React.FC = () => {
       return `Remaining cards ${remainingCards.length}`;
     }
     if (!canProceedToNextRound) {
-      return "Move at least one value to Not Important to continue";
+      return "Move at least one value to &quot;Not Important&quot; to continue";
     }
-    return "All cards sorted! Click Next Round to continue.";
+    return "All cards sorted! Click &quot;Next Round&quot; to continue.";
   };
 
   return (
@@ -165,7 +165,7 @@ const RoundUI: React.FC = () => {
             </div>
           ) : (
             <div className="text-center text-red-600">
-              Move at least one value to "Not Important" before continuing
+              Move at least one value to &quot;Not Important&quot; before continuing
             </div>
           )}
         </div>
