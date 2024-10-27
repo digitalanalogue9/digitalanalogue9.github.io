@@ -14,7 +14,7 @@ const shuffleArray = <T>(array: T[]): T[] => {
 
 // Get initial random values for first round
 export const getInitialRandomValues = (): Value[] => {
-    const maxCards = getEnvNumber('maxCards', 15);
+    const maxCards = getEnvNumber('maxCards', 35);
     const shuffledValues = shuffleArray(values.values);
     const slicedShuffledValues =  shuffledValues.slice(0, maxCards);
     console.log('getInitialRandomValues maxCards:', maxCards, ' values length', values.values.length, ' slicedShuffledValues length', slicedShuffledValues.length);

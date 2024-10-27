@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/useGameStore';
 import { StartScreenProps } from './StartScreenProps';
 import { getEnvNumber, getEnvBoolean } from '@/utils/envUtils';
+import CenteredImage from './CentredImage';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const isDebug = getEnvBoolean('debug', false);
   const maxCards = getEnvNumber('maxCards', 35);
   const defaultCoreValues = getEnvNumber('numCoreValues', 5);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
-  const setTargetCoreValues = useGameStore((state) => state.setTargetCoreValues);
-  const initializeGame = useGameStore((state) => state.initializeGame);
+  const setTargetCoreValues = useGameStore((state:any) => state.setTargetCoreValues);
+  const initializeGame = useGameStore((state:any) => state.initializeGame);
 
   const handleStart = () => {
     setTargetCoreValues(coreValuesCount);
@@ -21,6 +22,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
  
   return (
     <div suppressHydrationWarning={true} className="flex flex-col items-center justify-center min-h-screen">
+      <CenteredImage/>
       <h1 className="text-3xl font-bold mb-8">Core Values</h1>
       {isDebug && (
         <div className="mb-4 text-sm text-gray-600">

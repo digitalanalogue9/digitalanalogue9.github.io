@@ -1,12 +1,12 @@
 'use client'
 
-import { create } from 'zustand';
+import { create } from "zustand";
 import { CategoryName } from "@/types/CategoryName";
 import { Categories } from "@/types/Categories";
-import { GameState } from './GameState';
-import { Value } from '@/types/Value';
-import { getInitialRandomValues, getRandomValues } from '@/utils/valuesUtils';
-import { getEnvNumber } from '@/utils/envUtils';
+import { GameState } from "./GameState";
+import { Value } from "@/types/Value";
+import { getInitialRandomValues, getRandomValues } from "@/utils/valuesUtils";
+import { getEnvNumber } from "@/utils/envUtils";
 
 const initialCategories: Categories = {
   'Very Important': [],
@@ -16,7 +16,7 @@ const initialCategories: Categories = {
   'Not Important': []
 };
 
-export const useGameStore = create<GameState>((set) => ({
+export const useGameStore = create<GameState>((set : any) => ({
   targetCoreValues: 0,
   currentRound: 1,
   remainingCards: [],
@@ -37,7 +37,7 @@ export const useGameStore = create<GameState>((set) => ({
   setSessionId: (id: string) => set({ sessionId: id }),
   
   initializeGame: () => {
-    const maxCards = getEnvNumber('maxCards', 5);
+    const maxCards = getEnvNumber('maxCards', 35);
     console.log('initializeGame maxCards:', maxCards);
     
     const initialCards = getInitialRandomValues();
