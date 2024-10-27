@@ -116,9 +116,9 @@ const RoundUI: React.FC = () => {
       return `Remaining cards ${remainingCards.length}`;
     }
     if (!canProceedToNextRound) {
-      return "Move at least one value to 'Not Important' to continue";
+      return "Move at least one value to Not Important to continue";
     }
-    return "All cards sorted! Click 'Next Round' to continue.";
+    return "All cards sorted! Click Next Round to continue.";
   };
 
   return (
