@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import {useGameStore} from '../store/useGameStore';
+import { useGameStore } from '../store/useGameStore';
 import Card from './Card';
 import CategoryColumn from './CategoryColumn';
 import { DropCommand } from '../commands/DropCommand';
@@ -12,8 +12,10 @@ import { CategoryName } from "@/types/CategoryName";
 import { Categories } from "@/types/Categories";
 import { Value } from "@/types/Value";
 import { getRandomValues } from '@/utils/valuesUtils';
+import { getEnvNumber } from '@/utils/envUtils';
 
 const RoundUI: React.FC = () => {
+  const maxCards = getEnvNumber('maxCards', 35);
   const {
     currentRound,
     remainingCards,
@@ -41,8 +43,8 @@ const RoundUI: React.FC = () => {
   };
 
   const handleMoveCard = async (
-    category: CategoryName, 
-    fromIndex: number, 
+    category: CategoryName,
+    fromIndex: number,
     toIndex: number
   ): Promise<void> => {
     const command = new MoveCommand(
@@ -50,7 +52,7 @@ const RoundUI: React.FC = () => {
       category,
       category
     );
-    
+
     const updatedCategories: Categories = { ...categories };
     const categoryCards = [...updatedCategories[category]];
     const [movedCard] = categoryCards.splice(fromIndex, 1);
@@ -90,7 +92,11 @@ const RoundUI: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Round {currentRound}</h1>
+      <h1 className="text-2xl font-bold mb-4">Round {currentRound} : {remainingCards.length > 0 ? 
+            "Remaining cards " + remainingCards.length
+           : 
+            "All cards sorted! Click 'Next Round' to continue."
+          } </h1>
       <div className="flex flex-col space-y-4">
         {remainingCards.length > 0 ? (
           <div className="mb-4">
@@ -106,14 +112,6 @@ const RoundUI: React.FC = () => {
             </button>
           </div>
         )}
-        
-        <div className="mt-4 text-center text-sm text-gray-600">
-          {remainingCards.length > 0 ? (
-            <p>Cards remaining: {remainingCards.length}</p>
-          ) : (
-            <p>All cards sorted! Click "Next Round" to continue.</p>
-          )}
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {(Object.entries(categories) as [CategoryName, Value[]][]).map(([title, cards]) => (
             <CategoryColumn

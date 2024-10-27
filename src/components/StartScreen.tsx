@@ -7,7 +7,7 @@ import { getEnvNumber, getEnvBoolean } from '@/utils/envUtils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const isDebug = getEnvBoolean('debug', false);
-  const maxCards = getEnvNumber('maxCards', 5);
+  const maxCards = getEnvNumber('maxCards', 35);
   const defaultCoreValues = getEnvNumber('numCoreValues', 5);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const setTargetCoreValues = useGameStore((state) => state.setTargetCoreValues);
