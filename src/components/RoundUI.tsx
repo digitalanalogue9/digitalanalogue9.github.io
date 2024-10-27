@@ -29,6 +29,8 @@ const RoundUI: React.FC = () => {
 
   const [showResults, setShowResults] = useState<boolean>(false);
 
+  const canProceedToNextRound = remainingCards.length === 0 && categories['Not Important'].length > 0;
+
   const handleDrop = async (value: Value, category: CategoryName): Promise<void> => {
     const command = new DropCommand(value.title, category);
     const card = remainingCards.find((c: Value) => c.title === value.title);
@@ -77,7 +79,7 @@ const RoundUI: React.FC = () => {
     );
     // Add to new category
     updatedCategories[toCategory] = [...updatedCategories[toCategory], value];
-    
+
     setCategories(updatedCategories);
     await saveRound(sessionId, currentRound, [command]);
   };
@@ -109,29 +111,72 @@ const RoundUI: React.FC = () => {
     return <Results />;
   }
 
+  const getRoundStatus = () => {
+    if (remainingCards.length > 0) {
+      return `Remaining cards ${remainingCards.length}`;
+    }
+    if (!canProceedToNextRound) {
+      return "Move at least one value to 'Not Important' to continue";
+    }
+    return "All cards sorted! Click 'Next Round' to continue.";
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Round {currentRound} : {remainingCards.length > 0 ? 
-            "Remaining cards " + remainingCards.length
-           : 
-            "All cards sorted! Click 'Next Round' to continue."
-          } </h1>
-      <div className="flex flex-col space-y-4">
-        {remainingCards.length > 0 ? (
-          <div className="mb-4">
-            <Card value={remainingCards[0]} />
-          </div>
-        ) : (
-          <div className="mb-4 text-center">
-            <button
-              onClick={handleNextRound}
-              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-            >
-              Next Round
-            </button>
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      {/* Header section split into thirds */}
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700">Target Values</h2>
+          <p className="text-3xl font-bold text-gray-900">{targetCoreValues}</p>
+        </div>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700">Round</h2>
+          <p className="text-3xl font-bold text-gray-900">{currentRound}</p>
+        </div>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700">Remaining Cards</h2>
+          <p className="text-3xl font-bold text-gray-900">{remainingCards.length}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center space-y-8">
+        {/* Fixed height container for card/button/message */}
+        <div className="h-[280px] flex flex-col items-center justify-center">
+          {remainingCards.length > 0 ? (
+            <div className="flex flex-col items-center">
+              <p className="text-gray-600 mb-4">Drag this value to a category:</p>
+              <div className="transform hover:scale-105 transition-transform">
+                <Card
+                  value={remainingCards[0]}
+                  columnIndex={undefined}
+                  onDrop={() => { }}
+                  currentCategory={undefined}
+                />
+              </div>
+            </div>
+          ) : canProceedToNextRound ? (
+            <div className="text-center">
+              <button
+                onClick={handleNextRound}
+                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+              >
+                Next Round
+              </button>
+            </div>
+          ) : (
+            <div className="text-center text-red-600">
+              Move at least one value to "Not Important" before continuing
+            </div>
+          )}
+        </div>
+
+        {/* Fixed height container for status message */}
+        <div className="h-[40px] flex items-center justify-center text-gray-600">
+          {getRoundStatus()}
+        </div>
+
+        {/* Categories grid */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-4">
           {(Object.entries(categories) as [CategoryName, Value[]][]).map(([title, cards]) => (
             <CategoryColumn
               key={title}
@@ -139,10 +184,10 @@ const RoundUI: React.FC = () => {
               cards={cards}
               onDrop={handleDrop}
               onMoveWithinCategory={(fromIndex, toIndex) => handleMoveCard(title, fromIndex, toIndex)}
-              onMoveBetweenCategories={handleMoveBetweenCategories}            />
+              onMoveBetweenCategories={handleMoveBetweenCategories}
+            />
           ))}
         </div>
-
       </div>
     </div>
   );
