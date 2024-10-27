@@ -9,7 +9,7 @@ import { InstructionsProps } from "./InstructionsProps";
           <h2 className="text-2xl font-bold mb-4">How to Use Core Values</h2>
           <ol className="list-decimal ml-6 space-y-2">
             <li>Enter the number of core values you want to end up with (typically 5).</li>
-            <li>For each round, you'll see value cards that you need to sort into categories.</li>
+            <li>For each round, you&apos;ll see value cards that you need to sort into categories.</li>
             <li>Drag each card into one of the five categories based on its importance to you:
               <ul className="list-disc ml-6 mt-2">
                 <li>Very Important</li>
@@ -19,10 +19,10 @@ import { InstructionsProps } from "./InstructionsProps";
                 <li>Not Important</li>
               </ul>
             </li>
-            <li>Click on a card's title to show/hide its description.</li>
+            <li>Click on a card&apos;s title to show/hide its description.</li>
             <li>Use the up/down arrows to reorder cards within a category.</li>
-            <li>When you're done sorting all cards, click "Next Round".</li>
-            <li>In the next round, cards marked as "Not Important" will be removed.</li>
+            <li>When you&quot;re done sorting all cards, click &quot;Next Round&quot;.</li>
+            <li>In the next round, cards marked as &quot;Not Important&quot; will be removed.</li>
             <li>Continue sorting until you reach your target number of core values.</li>
           </ol>
           <button
