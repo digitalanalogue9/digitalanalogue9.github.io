@@ -63,6 +63,25 @@ const RoundUI: React.FC = () => {
     await saveRound(sessionId, currentRound, [command]);
   };
 
+  const handleMoveBetweenCategories = async (
+    value: Value,
+    fromCategory: CategoryName,
+    toCategory: CategoryName
+  ): Promise<void> => {
+    const command = new MoveCommand(value.title, fromCategory, toCategory);
+
+    const updatedCategories: Categories = { ...categories };
+    // Remove from old category
+    updatedCategories[fromCategory] = updatedCategories[fromCategory].filter(
+      card => card.title !== value.title
+    );
+    // Add to new category
+    updatedCategories[toCategory] = [...updatedCategories[toCategory], value];
+    
+    setCategories(updatedCategories);
+    await saveRound(sessionId, currentRound, [command]);
+  };
+
   const handleNextRound = (): void => {
     const importantCards: Value[] = [
       ...categories['Very Important'],
@@ -119,8 +138,8 @@ const RoundUI: React.FC = () => {
               title={title}
               cards={cards}
               onDrop={handleDrop}
-              onMoveCard={handleMoveCard}
-            />
+              onMoveWithinCategory={(fromIndex, toIndex) => handleMoveCard(title, fromIndex, toIndex)}
+              onMoveBetweenCategories={handleMoveBetweenCategories}            />
           ))}
         </div>
 

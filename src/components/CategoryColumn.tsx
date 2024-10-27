@@ -3,8 +3,16 @@
 import { useState } from 'react';
 import Card from './Card';
 import { CategoryColumnProps } from './CategoryColumnProps';
+import { Value } from '@/types/Value';
+import { CategoryName } from '@/types/CategoryName';
 
-export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: CategoryColumnProps) {
+export default function CategoryColumn({ 
+  title, 
+  cards, 
+  onDrop, 
+  onMoveWithinCategory,
+  onMoveBetweenCategories 
+}: CategoryColumnProps) {
   const [isOver, setIsOver] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -19,19 +27,25 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: Cat
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsOver(false);
-    const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain'));
-    onDrop(droppedValue, title);  // Pass the entire value object
-};
+    const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & { sourceCategory?: string };
+    if (droppedValue.sourceCategory) {
+      // Card is being moved between categories
+      onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
+    } else {
+      // Card is being dropped from the remaining cards
+      onDrop(droppedValue, title);
+    }
+  };
 
   const handleMoveUp = (index: number) => {
     if (index > 0) {
-      onMoveCard(title, index, index - 1);
+      onMoveWithinCategory(index, index - 1);
     }
   };
 
   const handleMoveDown = (index: number) => {
     if (index < cards.length - 1) {
-      onMoveCard(title, index, index + 1);
+      onMoveWithinCategory(index, index + 1);
     }
   };
 
@@ -65,9 +79,12 @@ export default function CategoryColumn({ title, cards, onDrop, onMoveCard }: Cat
             <Card
               value={value}
               columnIndex={index}
+              currentCategory={title}
               onDrop={(value) => onDrop(value, title)}
               onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
               onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
+              onMoveToCategory={(value, fromCat, toCat) => 
+                onMoveBetweenCategories(value, fromCat, toCat)}
             />
           </div>
         ))}

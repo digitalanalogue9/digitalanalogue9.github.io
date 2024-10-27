@@ -1,12 +1,12 @@
-// Card.tsx
-'use client';
 import { Value } from "@/types/Value";
+import { CategoryName } from "@/types/CategoryName";
 
 export interface CardProps {
   value: Value;
   columnIndex?: number;
-  onDrop?: (value: Value, columnIndex: number) => void;
-  onMoveUp?: (value: Value, fromColumnIndex: number) => void;
-  onMoveDown?: (value: Value, fromColumnIndex: number) => void;
-  debug?: boolean;
+  currentCategory?: CategoryName;
+  onDrop?: (value: Value) => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  onMoveToCategory?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
 }

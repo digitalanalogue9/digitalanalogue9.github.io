@@ -1,26 +1,35 @@
-// Card.tsx
 'use client'
 
 import { useState } from 'react';
-import { Value } from "@/types/Value";
 import { CardProps } from './CardProps';
+import { CategoryName } from '@/types/CategoryName';
 import { getEnvBoolean } from '@/utils/envUtils';
 
+export default function Card({ 
+  value, 
+  onDrop, 
+  onMoveUp, 
+  onMoveDown,
+  onMoveToCategory,
+  currentCategory,
+  columnIndex 
+}: CardProps) {
+  if (!value) return null;
 
-export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown }: CardProps) {
-  if (!value) {
-    return null;
-  }
   const debug = getEnvBoolean('debug', false);
-
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showMoveOptions, setShowMoveOptions] = useState(false);
   const isInCategory = columnIndex !== undefined;
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     setIsDragging(true);
-    e.dataTransfer.setData('text/plain', JSON.stringify(value));
+    const dragData = {
+      ...value,
+      sourceCategory: currentCategory
+    };
+    e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
     if (debug) console.log('🎪 Card dragStart:', { value, columnIndex });
   };
 
@@ -54,6 +63,14 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
     }
   };
 
+  const categories: CategoryName[] = [
+    'Very Important',
+    'Quite Important',
+    'Important',
+    'Of Some Importance',
+    'Not Important'
+  ];
+
   if (isInCategory) {
     return (
       <div
@@ -66,9 +83,9 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
         className={`
           min-h-[40px]
           w-48
-          p-4 
-          shadow-md 
-          cursor-move 
+          p-4
+          shadow-md
+          cursor-move
           transform transition-all duration-200
           ${isDragging ? 'scale-105 opacity-75' : ''}
           ${isOver ? 'border-2 border-blue-500' : ''}
@@ -91,7 +108,7 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
         `}
       >
         <div className="flex items-center gap-2">
-          <h3 
+          <h3
             onClick={toggleDescription}
             className="flex-grow font-bold text-gray-800 text-lg font-handwritten cursor-pointer hover:text-gray-600"
           >
@@ -103,7 +120,7 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
           <div className="flex gap-1">
             {onMoveUp && (
               <button
-                onClick={() => onMoveUp(value, columnIndex)}
+                onClick={onMoveUp}
                 className="p-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
                 aria-label="Move Up"
               >
@@ -112,20 +129,46 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
             )}
             {onMoveDown && (
               <button
-                onClick={() => onMoveDown(value, columnIndex)}
+                onClick={onMoveDown}
                 className="p-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
                 aria-label="Move Down"
               >
                 ↓
               </button>
             )}
+            {currentCategory && (
+              <button
+                onClick={() => setShowMoveOptions(!showMoveOptions)}
+                className="p-1 hover:bg-gray-100 rounded"
+              >
+                ⋮
+              </button>
+            )}
           </div>
         </div>
-        
         {isExpanded && (
           <p className="mt-2 text-sm text-gray-700 font-handwritten leading-tight">
             {value.description}
           </p>
+        )}
+        {showMoveOptions && onMoveToCategory && currentCategory && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border">
+            {categories
+              .filter(cat => cat !== currentCategory)
+              .map(category => (
+                <button
+                  key={category}
+                  onClick={() => {
+                    onMoveToCategory(value, currentCategory, category);
+                    setShowMoveOptions(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                  Move to {category}
+                </button>
+              ))
+            }
+          </div>
         )}
       </div>
     );
@@ -143,9 +186,9 @@ export default function Card({ value, columnIndex, onDrop, onMoveUp, onMoveDown 
       className={`
         h-48
         w-48
-        p-4 
-        shadow-md 
-        cursor-move 
+        p-4
+        shadow-md
+        cursor-move
         transform transition-all duration-200
         ${isDragging ? 'scale-105 opacity-75' : ''}
         ${isOver ? 'border-2 border-blue-500' : ''}
