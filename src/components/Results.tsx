@@ -44,6 +44,30 @@ export default function Results() {
             </div>
           ))}
         </div>
+        <div className="max-w-2xl mx-auto">
+          {categories['Quite Important']?.map((value: Value, index: number) => (
+            <div key={value.title} className="mb-6 p-4 bg-white rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">{index + 1}. {value.title}</h2>
+              <p className="text-gray-600">{value.description}</p>
+            </div>
+          ))}
+        </div>
+        <div className="max-w-2xl mx-auto">
+          {categories['Important']?.map((value: Value, index: number) => (
+            <div key={value.title} className="mb-6 p-4 bg-white rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">{index + 1}. {value.title}</h2>
+              <p className="text-gray-600">{value.description}</p>
+            </div>
+          ))}
+        </div>
+        <div className="max-w-2xl mx-auto">
+          {categories['Of Some Importance']?.map((value: Value, index: number) => (
+            <div key={value.title} className="mb-6 p-4 bg-white rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">{index + 1}. {value.title}</h2>
+              <p className="text-gray-600">{value.description}</p>
+            </div>
+          ))}
+        </div>        
       </div>
       <div className="mt-8 text-center">
         <button
