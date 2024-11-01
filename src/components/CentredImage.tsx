@@ -1,10 +1,12 @@
-'use client'
-
-import Image from 'next/image';
-
+// src/components/CentredImage.tsx
 export default function CenteredImage() {
   return (
-    <div className="flex justify-center mb-4">
-      <Image src="/images/core-values.png" alt="" width={200} height={200} />
+    <div className="absolute inset-0">
+      <img
+        src="/images/core-values.png" // Update with your actual image path
+        alt="Core Values"
+        className="w-full h-full object-cover"
+      />
     </div>
-  );}
+  );
+}

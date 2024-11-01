@@ -1,17 +1,32 @@
-import { Command } from './Command';
+import { BaseCommand } from './BaseCommand';
+import { CategoryName, Value } from '@/types';
+import { getCardPosition, getCategoryPosition } from '@/utils/dom';
+import { MoveCommandPayload } from '@/types';
 
-interface MoveCommandPayload {
-  cardId: string;
-  fromCategory: string;
-  toCategory: string;
-}
+export class MoveCommand extends BaseCommand {
+    constructor(
+        value: Value,
+        fromCategory: CategoryName,
+        toCategory: CategoryName,
+        fromIndex?: number,
+        toIndex?: number
+    ) {
+        const payload: MoveCommandPayload = { 
+            cardId: value.id,
+            fromCategory, 
+            toCategory,
+            fromIndex,
+            toIndex
+        };
+        super('MOVE', payload);
 
-export class MoveCommand extends Command {
-  constructor(cardId: string, fromCategory: string, toCategory: string) {
-    super('MOVE', { cardId, fromCategory, toCategory });
-  }
+        // Capture positions when command is created
+        const sourcePos = getCardPosition(value.id);
+        const targetPos = getCategoryPosition(toCategory);
+        this.setPositions(sourcePos, targetPos);
+    }
 
-  getPayload(): MoveCommandPayload {
-    return this.payload as MoveCommandPayload;
-  }
+    getPayload(): MoveCommandPayload {
+        return this.payload as MoveCommandPayload;
+    }
 }

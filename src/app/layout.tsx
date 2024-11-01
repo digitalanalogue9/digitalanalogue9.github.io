@@ -1,18 +1,17 @@
-// src/app/layout.tsx
 import './globals.css'
-import ClientLayout from '../components/ClientLayout'
-// src/app/layout.tsx
-import { Inter, Kalam } from 'next/font/google'
+import Navigation from '../components/Navigation'
 
-const kalam = Kalam({
-  weight: ['400'],
-  subsets: ['latin'],
-  variable: '--font-kalam',
-})
+export const viewport = {
+  themeColor: '#3b82f6',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export const metadata = {
   title: 'Core Values',
-  description: 'A tool to help you discover your core values',
+  description: 'Discover and prioritize your personal core values',
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({
@@ -22,10 +21,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body>
-        <ClientLayout>
+        <Navigation />
+        <main className="pt-16">
           {children}
-        </ClientLayout>
+        </main>
       </body>
     </html>
   )

@@ -1,16 +1,23 @@
-import { Command } from './Command';
+import { BaseCommand } from './BaseCommand';
+import { CategoryName, Value } from '@/types';
+import { getCardPosition, getCategoryPosition } from '@/utils';
+import { DropCommandPayload } from '@/types';
 
-interface DropCommandPayload {
-  cardId: string;
-  category: string;
-}
+export class DropCommand extends BaseCommand {
+    constructor(value: Value, category: CategoryName) {
+        const payload: DropCommandPayload = { 
+            cardId: value.id,
+            category 
+        };
+        super('DROP', payload);
 
-export class DropCommand extends Command {
-  constructor(cardId: string, category: string) {
-    super('DROP', { cardId, category });
-  }
+        // Capture positions when command is created
+        const sourcePos = getCardPosition(value.id);
+        const targetPos = getCategoryPosition(category);
+        this.setPositions(sourcePos, targetPos);
+    }
 
-  getPayload(): DropCommandPayload {
-    return this.payload as DropCommandPayload;
-  }
+    getPayload(): DropCommandPayload {
+        return this.payload as DropCommandPayload;
+    }
 }

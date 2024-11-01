@@ -5,7 +5,11 @@ const nextConfig = {
     images: {
       unoptimized: true
     },
-    basePath: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io' : ''
+    basePath: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io' : '',
+    webpack: (config) => {
+      // Add any necessary webpack configurations
+      return config;
+    }
   }
   
   module.exports = nextConfig

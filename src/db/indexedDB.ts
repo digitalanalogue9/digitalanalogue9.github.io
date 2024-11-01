@@ -1,9 +1,10 @@
 'use client'
-import { getEnvBoolean } from '@/utils/envUtils';
+import { getEnvBoolean,generateSessionName } from '@/utils';
 import { openDB, IDBPDatabase } from 'idb';
 import { Session } from "../types/Session";
-
 import { Round } from "@/types/Round";
+import { Command } from '@/types/Command';
+
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'CoreValuesDB';
 const dbVersion = 1;
@@ -11,7 +12,7 @@ const dbVersion = 1;
 const debug = getEnvBoolean('debug', false);
 
 export async function initDB(): Promise<IDBPDatabase> {
-    if (debug) console.log('🔵 Initializing IndexedDB');
+  if (debug) console.log('🔵 Initializing IndexedDB');
   try {
     const db = await openDB(dbName, dbVersion, {
       upgrade(db) {
@@ -28,27 +29,38 @@ export async function initDB(): Promise<IDBPDatabase> {
   }
 }
 
-export async function saveSession(session: Session): Promise<void> {
+export async function addSession(session: Omit<Session, 'id'>): Promise<string> {
   if (debug) console.log('💾 Saving session:', session);
   try {
     const db = await initDB();
-    await db.put('sessions', session);
+    const sessionId = await generateSessionName(db);
+    await db.put('sessions', { ...session, id: sessionId });
     if (debug) console.log('✅ Session saved successfully');
+    return sessionId;
   } catch (error) {
     console.error('❌ Error saving session:', error);
     throw error;
   }
 }
 
-export async function saveRound(sessionId: string, roundNumber: number, commands: any[]): Promise<void> {
+export async function saveRound(
+  sessionId: string, 
+  roundNumber: number, 
+  commands: Command[]
+): Promise<void> {
   if (debug) console.log('💾 Saving round:', { sessionId, roundNumber, commands });
   try {
+    if (!sessionId) return;
     const db = await initDB();
-    await db.put('rounds', {
+
+    const round: Round = {
       sessionId,
       roundNumber,
-      commands
-    });
+      commands,
+      timestamp: Date.now()
+    };
+
+    await db.put('rounds', round);
     if (debug) console.log('✅ Round saved successfully');
   } catch (error) {
     console.error('❌ Error saving round:', error);
@@ -81,3 +93,28 @@ export async function getRound(sessionId: string, roundNumber: number): Promise<
     throw error;
   }
 }
+
+export async function getRoundsBySession(sessionId: string): Promise<Round[]> {
+  if (debug) console.log('🔍 Fetching all rounds for session:', sessionId);
+  try {
+    const db = await initDB();
+    const rounds = await db.getAllFromIndex('rounds', 'sessionId', sessionId);
+    if (debug) console.log('✅ Rounds fetched successfully:', rounds);
+    return rounds;
+  } catch (error) {
+    console.error('❌ Error fetching rounds:', error);
+    throw error;
+  }
+}
+
+// In src/db/indexedDB.ts (if not already present)
+export const updateSession = async (sessionId: string, updates: Partial<Session>) => {
+  const db = await initDB();
+  const tx = db.transaction('sessions', 'readwrite');
+  const store = tx.objectStore('sessions');
+  const session = await store.get(sessionId);
+  if (session) {
+    await store.put({ ...session, ...updates });
+  }
+  await tx.done;
+};

@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react';
-import Card from './Card';
+import {Card} from '@/components/Card';
 import { CategoryColumnProps } from './CategoryColumnProps';
-import { Value } from '@/types/Value';
-import { CategoryName } from '@/types/CategoryName';
+import { Value, CategoryName } from '@/types';
+
 
 export default function CategoryColumn({ 
   title, 
@@ -54,6 +54,7 @@ export default function CategoryColumn({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      id={`category-${title}`}
       className={`
         flex-1 
         p-4 
