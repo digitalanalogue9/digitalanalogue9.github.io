@@ -56,7 +56,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8">
             <p className="text-base sm:text-lg text-gray-700">
               Welcome to the Core Values discovery exercise! Through this interactive experience, 
-              you will discover and prioritize your personal core values, helping you identify what matters most to you.
+              you will discover and prioritise your personal core values, helping you identify what matters most to you.
             </p>
           </div>
 

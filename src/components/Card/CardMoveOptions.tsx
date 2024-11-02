@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 import { CardMoveOptionsProps } from './types';
 import { CategoryName } from '@/types';
 
@@ -16,12 +18,34 @@ export function CardMoveOptions({
   onMoveToCategory,
   onClose
 }: CardMoveOptionsProps) {
-  return (
+  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+    // Calculate position based on the button that opened the menu
+    const button = document.getElementById(`options-${value.id}`);
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.right + window.scrollX - 200, // Menu width is 200px
+      });
+    }
+  }, [value.id]);
+
+  const menuContent = (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="absolute right-0 mt-1 sm:mt-2 w-36 sm:w-48 bg-white rounded-md shadow-lg z-20 border border-gray-200"
+      style={{
+        position: 'fixed',
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+        zIndex: 9999,
+      }}
+      className="w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1"
     >
       {categories
         .filter(cat => cat !== currentCategory)
@@ -32,12 +56,19 @@ export function CardMoveOptions({
               onMoveToCategory(value, currentCategory, category);
               onClose();
             }}
-            className="block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50"
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 
+                     hover:bg-gray-50 transition-colors"
           >
             Move to {category}
           </button>
-        ))
-      }
+        ))}
     </motion.div>
+  );
+
+  if (!mounted) return null;
+
+  return createPortal(
+    menuContent,
+    document.getElementById('portal-root') || document.body
   );
 }

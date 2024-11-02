@@ -24,13 +24,13 @@ const cardTransition = {
 };
 
 // This version uses Framer Motion for Replay view
-export function AnimatedCard({ 
-  value, 
-  onMoveUp, 
+export function AnimatedCard({
+  value,
+  onMoveUp,
   onMoveDown,
   onMoveToCategory,
   currentCategory,
-  columnIndex 
+  columnIndex
 }: CardProps) {
   const debug = getEnvBoolean('debug', false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -51,28 +51,34 @@ export function AnimatedCard({
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
-        className={`${postItBaseStyles} ${tapeEffect} w-full sm:w-48 min-h-[40px] max-w-sm mx-auto`}
+        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative`}
       >
         <CardContent
           title={value.title}
           description={value.description}
           isExpanded={isExpanded}
-          onToggle={() => setIsExpanded(!isExpanded)}
-        />
-        <CardControls
-          onMoveUp={onMoveUp}
-          onMoveDown={onMoveDown}
-          onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
-          currentCategory={currentCategory}
+          controls={
+            <CardControls
+              onMoveUp={onMoveUp}
+              onMoveDown={onMoveDown}
+              onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
+              currentCategory={currentCategory}
+              isExpanded={isExpanded}
+              onToggleExpand={() => setIsExpanded(!isExpanded)}
+              value={value}  // Add this
+            />
+          }
         />
         <AnimatePresence>
           {showMoveOptions && onMoveToCategory && currentCategory && (
-            <CardMoveOptions
-              value={value}
-              currentCategory={currentCategory}
-              onMoveToCategory={onMoveToCategory}
-              onClose={() => setShowMoveOptions(false)}
-            />
+            <div className="relative z-50">
+              <CardMoveOptions
+                value={value}
+                currentCategory={currentCategory}
+                onMoveToCategory={onMoveToCategory}
+                onClose={() => setShowMoveOptions(false)}
+              />
+            </div>
           )}
         </AnimatePresence>
       </motion.div>

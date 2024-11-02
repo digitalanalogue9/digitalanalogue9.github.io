@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 # Core Values Application
 
-A web application to help individuals discover and prioritize their personal values through an interactive card sorting exercise.
+A web application to help individuals discover and prioritise their personal values through an interactive card sorting exercise.
 
 ## Features
 

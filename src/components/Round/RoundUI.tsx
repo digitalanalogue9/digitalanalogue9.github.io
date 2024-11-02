@@ -24,47 +24,78 @@ export default function RoundUI() {
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
   const { currentRoundCommands, addCommand, clearCommands } = useCommands();
 
-  const canProceedToNextRound = remainingCards.length === 0;
-
   const importantCards = getImportantCards(categories);
-  const hasNotImportantCards = (categories['Not Important']?.length || 0) > 0;
-  const hasTooManyImportantCards = importantCards.length > targetCoreValues;
-  const isEndGameReady = importantCards.length <= targetCoreValues && !hasNotImportantCards;
+  const veryImportantCount = categories['Very Important']?.length || 0;
+  const notImportantCount = categories['Not Important']?.length || 0;
+  const isLastRound = roundNumber >= 3;
+
+  // Check if we have too many values across all important categories
+  const totalImportantValues = importantCards.length; // This excludes Not Important category
+  const needsToDiscardValues = totalImportantValues > targetCoreValues && notImportantCount === 0;
+
+  const hasTooManyImportantCards = isLastRound && veryImportantCount > targetCoreValues;
+  const hasNotEnoughImportantCards = isLastRound && veryImportantCount < targetCoreValues;
+  const isEndGameReady = isLastRound && veryImportantCount === targetCoreValues;
+
+  // Can only proceed if all cards are sorted AND either:
+  // - we're not over the target count, OR
+  // - we have some cards in Not Important to discard
+  const canProceedToNextRound = remainingCards.length === 0 && !needsToDiscardValues;
 
   const getStatusMessage = useCallback(() => {
     if (remainingCards.length > 0) {
       return {
-        text: `Sort the remaining ${remainingCards.length} cards`,
+        text: `Drag the remaining ${remainingCards.length} ${remainingCards.length == 1 ? "value" : "values"} to a category`,
         type: 'info' as const
       };
     }
 
-    if (hasNotImportantCards) {
+    if (needsToDiscardValues) {
       return {
-        text: 'You need to reconsider values in "Not Important" before completing',
+        text: `You have ${totalImportantValues - targetCoreValues} too many values. Move some to Not Important.`,
         type: 'warning' as const
       };
     }
 
-    if (hasTooManyImportantCards) {
-      return {
-        text: `You have ${importantCards.length - targetCoreValues} too many important values`,
-        type: 'warning' as const
-      };
-    }
+    if (isLastRound) {
+      if (hasTooManyImportantCards) {
+        return {
+          text: `Move ${veryImportantCount - targetCoreValues} values from Very Important to other categories`,
+          type: 'warning' as const
+        };
+      }
 
-    if (isEndGameReady) {
-      return {
-        text: 'You can now complete the exercise!',
-        type: 'success' as const
-      };
+      if (hasNotEnoughImportantCards) {
+        return {
+          text: `Move ${targetCoreValues - veryImportantCount} more values to Very Important`,
+          type: 'warning' as const
+        };
+      }
+
+      if (isEndGameReady) {
+        return {
+          text: 'Perfect! You can now complete the exercise.',
+          type: 'success' as const
+        };
+      }
     }
 
     return {
-      text: 'Continue sorting your values',
+      text: 'Start the next round to continue sorting your values',
       type: 'info' as const
     };
-  }, [remainingCards.length, hasNotImportantCards, hasTooManyImportantCards, isEndGameReady, importantCards.length, targetCoreValues]);
+  }, [
+    remainingCards.length,
+    needsToDiscardValues,
+    totalImportantValues,
+    targetCoreValues,
+    isLastRound,
+    hasTooManyImportantCards,
+    hasNotEnoughImportantCards,
+    isEndGameReady,
+    veryImportantCount
+  ]);
+
 
   const saveRoundData = useCallback(async (command: Command) => {
     if (!sessionId) return;
@@ -193,9 +224,12 @@ export default function RoundUI() {
       />
 
       <div className="flex flex-col items-center space-y-4 sm:space-y-8">
+        {/* Three-column layout */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
+          {/* Left column - empty for balance */}
           <div className="hidden sm:block"></div>
 
+          {/* Center column - Value card */}
           <div className="flex justify-center">
             <RoundActions
               remainingCards={remainingCards}
@@ -205,19 +239,32 @@ export default function RoundUI() {
             />
           </div>
 
-          <div className={`p-2 sm:p-4 min-h-[4rem] sm:h-24 flex flex-col justify-center rounded-lg ${status.type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-              status.type === 'success' ? 'bg-green-100 text-green-800' :
-                'bg-blue-100 text-blue-800'
-            }`}>
+          {/* Right column - Status message */}
+          <div className={`
+  p-4 sm:p-6                    // Increased padding
+  min-h-[5rem] sm:h-28         // Increased height
+  flex flex-col justify-center 
+  rounded-lg 
+  ${
+            // Add error styling when user can't proceed
+            !canProceedToNextRound && remainingCards.length === 0
+              ? 'bg-red-50 text-red-800'
+              : status.type === 'warning'
+                ? 'bg-yellow-100 text-yellow-800'
+                : status.type === 'success'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-blue-100 text-blue-800'
+            }
+`}>
             <p className="text-base sm:text-lg font-medium">{status.text}</p>
-            {hasNotImportantCards && (
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm">
-                Move important values from "Not Important" to other categories
+            {isLastRound && (hasTooManyImportantCards || hasNotEnoughImportantCards) && (
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm">  {/* Increased margin */}
+                You need exactly {targetCoreValues} values in Very Important
               </p>
             )}
-            {hasTooManyImportantCards && (
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm">
-                You need to reduce your important values by {importantCards.length - targetCoreValues}
+            {needsToDiscardValues && (
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm">  {/* Increased margin */}
+                Use the Not Important category to discard values that are not meaningful to you
               </p>
             )}
           </div>

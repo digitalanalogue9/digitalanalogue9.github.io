@@ -10,7 +10,7 @@ export const viewport = {
 
 export const metadata = {
   title: 'Core Values',
-  description: 'Discover and prioritize your personal core values',
+  description: 'Discover and prioritise your personal core values',
   manifest: '/manifest.json',
 }
 
@@ -29,6 +29,7 @@ export default function RootLayout({
         <Navigation />
         <main className="pt-16">
           {children}
+          <div id="portal-root" /> {/* Add this */}
         </main>
       </body>
     </html>

@@ -9,10 +9,9 @@ export function RoundActions({
   onDrop
 }: RoundActionsProps) {
   return (
-    <div className="h-[280px] flex flex-col items-center justify-center">
+    <div className="h-[180px] flex flex-col items-center justify-center">
       {remainingCards.length > 0 ? (
         <div className="flex flex-col items-center">
-          <p className="text-gray-600 mb-4">Drag this value to a category:</p>
           <div className="transform hover:scale-105 transition-transform">
             <Card
               value={remainingCards[0]}
@@ -32,8 +31,13 @@ export function RoundActions({
           </button>
         </div>
       ) : (
-        <div className="text-center text-red-600">
-          Move at least one value to Not Important before continuing
+        <div className="text-center">
+          <button disabled
+            onClick={onNextRound}
+            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          >
+            Next Round
+          </button>
         </div>
       )}
     </div>
