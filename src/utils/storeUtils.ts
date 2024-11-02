@@ -2,13 +2,13 @@
 import { useStore } from '@/store/store'
 
 import { Value, Categories } from '@/types';
-import { allCategories } from '@/constants/categories';
+import { emptyCategories } from '@/constants/categories';
 
 export const initializeGameState = (
   sessionId: string,
   targetCoreValues: number,
   initialCards: Value[],
-  initialCategories: Categories = allCategories
+  initialCategories: Categories = emptyCategories
 ) => {
   const store = useStore.getState();
   

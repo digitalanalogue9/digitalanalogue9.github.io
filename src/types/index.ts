@@ -1,5 +1,5 @@
 export type { BaseCommand } from './BaseCommand';
-export type { Categories } from './Categories';
+export type { Categories, Round1And2Categories, Round3Categories, Round4Categories } from './Categories';
 export type { Category } from './Category';
 export type { CategoryName } from './CategoryName';
 export type { Command } from './Command';

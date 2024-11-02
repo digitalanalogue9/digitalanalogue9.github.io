@@ -1,8 +1,7 @@
-
 export enum Category {
-    ESSENTIAL = "ESSENTIAL",
-    VERY_IMPORTANT = "VERY_IMPORTANT",
-    IMPORTANT = "IMPORTANT",
-    NOT_IMPORTANT = "NOT_IMPORTANT",
-    DROPPED = "DROPPED"
+    VERY_IMPORTANT = "Very Important",
+    QUITE_IMPORTANT = "Quite Important",
+    IMPORTANT = "Important",
+    OF_SOME_IMPORTANCE = "Of Some Importance",
+    NOT_IMPORTANT = "Not Important"
 }

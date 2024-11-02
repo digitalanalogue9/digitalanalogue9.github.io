@@ -2,7 +2,7 @@
 
 import { createWithEqualityFn } from 'zustand/traditional'
 import { devtools } from 'zustand/middleware'
-import { allCategories } from '@/constants/categories'
+import { emptyCategories } from '@/constants/categories'
 import { saveRoundCommands } from '@/db/roundCommands'
 import { Value, Categories, Command, Round } from '@/types'
 import { shallow } from 'zustand/shallow'
@@ -49,7 +49,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       roundNumber: 1,
       targetCoreValues: 10,
       remainingCards: [],
-      categories: allCategories,
+      categories: emptyCategories,
       isGameStarted: false,
       showInstructions: false,
       commands: [],
@@ -79,7 +79,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       resetGame: () => set({
         roundNumber: 1,
         remainingCards: [],
-        categories: allCategories,
+        categories: emptyCategories,
         isGameStarted: false,
         showInstructions: false,
         commands: [],
