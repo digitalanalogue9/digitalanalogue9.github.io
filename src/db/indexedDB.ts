@@ -53,6 +53,9 @@ export async function saveRound(
     if (!sessionId) return;
     const db = await initDB();
 
+    // Check if round already exists
+    const existingRound = await db.get('rounds', [sessionId, roundNumber]);
+
     const round: Round = {
       sessionId,
       roundNumber,
@@ -60,7 +63,20 @@ export async function saveRound(
       timestamp: Date.now()
     };
 
-    await db.put('rounds', round);
+    if (existingRound) {
+      // Update existing round
+      if (debug) console.log('🔄 Updating existing round');
+      await db.put('rounds', {
+        ...existingRound,
+        commands: round.commands,
+        timestamp: round.timestamp
+      });
+    } else {
+      // Insert new round
+      if (debug) console.log('➕ Creating new round');
+      await db.add('rounds', round);
+    }
+
     if (debug) console.log('✅ Round saved successfully');
   } catch (error) {
     console.error('❌ Error saving round:', error);

@@ -22,6 +22,18 @@ export default function Results() {
     const winPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
     if (!winPrint) return;
 
+    // Add print-specific styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @media print {
+        body { font-size: 12pt; }
+        h1 { font-size: 24pt; }
+        h2 { font-size: 18pt; }
+        h3 { font-size: 14pt; }
+      }
+    `;
+    winPrint.document.head.appendChild(style);
+
     winPrint.document.write(printContent.innerHTML);
     winPrint.document.close();
     winPrint.focus();
@@ -36,46 +48,67 @@ export default function Results() {
   if (!mounted) return null;
 
   return (
-    <div className="p-8">
-      <div ref={printRef}>
-        <h1 className="text-3xl font-bold mb-6">Your Core Values Results</h1>
-        {(Object.entries(categories) as [CategoryName, Value[]][]).map(([category, values]) => (
-          values.length > 0 && (
-            <div key={category} className="mb-6">
-              <h2 className="text-xl font-semibold mb-3">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {values.map((value: Value) => (
-                  <div key={value.id} className="p-4 bg-white rounded shadow">
-                    <h3 className="font-medium">{value.title}</h3>
-                    <p className="text-gray-600 text-sm">{value.description}</p>
-                  </div>
-                ))}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <div ref={printRef} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gray-900">
+          Your Core Values Results
+        </h1>
+        
+        <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+          {(Object.entries(categories) as [CategoryName, Value[]][]).map(([category, values]) => (
+            values.length > 0 && (
+              <div key={category} className="bg-gray-50 rounded-lg p-4 sm:p-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-800">
+                  {category}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                  {values.map((value: Value) => (
+                    <div key={value.id} 
+                         className="bg-white rounded-lg shadow-sm p-4 
+                                  transform transition-all duration-200 
+                                  hover:shadow-md hover:-translate-y-1">
+                      <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
+                        {value.title}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        {value.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )
-        ))}
-      </div>
-      <div className="mt-8 flex flex-col items-center gap-4">
-        <div className="flex space-x-4">
-          <button
-            onClick={handlePrint}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Print Results
-          </button>
-
-          <Link
-            href="/"
-            onClick={handleNewExercise}
-            className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
-          >
-            Start New Exercise
-          </Link>
+            )
+          ))}
         </div>
+      </div>
+
+      <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <button
+          onClick={handlePrint}
+          className="w-full sm:w-auto px-6 py-2 bg-blue-500 text-white rounded-lg
+                   hover:bg-blue-600 transition-colors duration-200
+                   text-sm sm:text-base font-medium shadow-sm hover:shadow
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Print Results
+        </button>
+
+        <Link
+          href="/"
+          onClick={handleNewExercise}
+          className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg
+                   hover:bg-green-600 transition-colors duration-200
+                   text-sm sm:text-base font-medium shadow-sm hover:shadow
+                   focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                   text-center"
+        >
+          Start New Exercise
+        </Link>
 
         <Link
           href="/history"
-          className="text-blue-600 hover:text-blue-800 underline mt-2"
+          className="text-blue-600 hover:text-blue-800 underline
+                   text-sm sm:text-base transition-colors duration-200"
         >
           View All Previous Results
         </Link>

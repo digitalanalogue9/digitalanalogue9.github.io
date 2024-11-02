@@ -51,7 +51,7 @@ export function AnimatedCard({
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
-        className={`${postItBaseStyles} ${tapeEffect} w-48 min-h-[40px]`}
+        className={`${postItBaseStyles} ${tapeEffect} w-full sm:w-48 min-h-[40px] max-w-sm mx-auto`}
       >
         <CardContent
           title={value.title}
@@ -87,11 +87,11 @@ export function AnimatedCard({
       exit="exit"
       whileHover="hover"
       transition={cardTransition}
-      className={`${postItBaseStyles} ${tapeEffect} w-48 h-48`}
+      className={`${postItBaseStyles} ${tapeEffect} w-full sm:w-48 h-auto sm:h-48 max-w-sm mx-auto p-3 sm:p-4`}
     >
       <div className="relative z-10">
-        <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
-        <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
+        <h3 className="font-medium text-gray-800 text-sm sm:text-base mb-2 sm:mb-3">{value.title}</h3>
+        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{value.description}</p>
       </div>
     </motion.div>
   );

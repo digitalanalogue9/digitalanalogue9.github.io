@@ -57,9 +57,9 @@ export default function CategoryColumn({
       id={`category-${title}`}
       className={`
         flex-1 
-        p-4 
+        p-2 sm:p-4 
         rounded-lg 
-        min-h-[500px]
+        min-h-[300px] sm:min-h-[500px]
         transition-colors 
         duration-200
         ${isOver ? 'bg-blue-50' : 'bg-gray-50'}
@@ -67,14 +67,14 @@ export default function CategoryColumn({
         ${isOver ? 'border-blue-300' : 'border-transparent'}
       `}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-700">{title}</h2>
-        <span className="bg-gray-200 px-2 py-1 rounded-full text-sm text-gray-600">
+      <div className="flex items-center justify-between mb-2 sm:mb-4">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-700">{title}</h2>
+        <span className="bg-gray-200 px-2 py-1 rounded-full text-xs sm:text-sm text-gray-600">
           {cards.length}
         </span>
       </div>
       
-      <div className="space-y-4 relative">
+      <div className="space-y-2 sm:space-y-4 relative">
         {cards.map((value, index) => (
           <div key={value.id} className="transition-all duration-200">
             <Card
@@ -91,7 +91,7 @@ export default function CategoryColumn({
         ))}
         
         {cards.length === 0 && (
-          <div className="text-center py-8 text-gray-400 border-2 border-dashed rounded-lg">
+          <div className="text-center py-4 sm:py-8 text-sm sm:text-base text-gray-400 border-2 border-dashed rounded-lg">
             Drop cards here
           </div>
         )}

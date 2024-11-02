@@ -6,4 +6,10 @@ export const allCategories: Categories = {
   'Important': [],
   'Of Some Importance': [],
   'Not Important': []
-} as const;
+};
+
+export const simplifiedCategories: Categories = {
+  'Very Important': [],
+  'Important': [],
+  'Not Important': []
+};

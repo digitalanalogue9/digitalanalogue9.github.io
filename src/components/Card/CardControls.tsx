@@ -7,11 +7,11 @@ export function CardControls({
   currentCategory
 }: CardControlsProps) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-0.5 sm:gap-1 mt-1 sm:mt-2">
       {onMoveUp && (
         <button
           onClick={onMoveUp}
-          className="p-1 text-gray-600 hover:text-gray-800 rounded"
+          className="p-1 text-gray-600 hover:text-gray-800 rounded text-xs sm:text-sm"
           aria-label="Move Up"
         >
           ↑
@@ -20,7 +20,7 @@ export function CardControls({
       {onMoveDown && (
         <button
           onClick={onMoveDown}
-          className="p-1 text-gray-600 hover:text-gray-800 rounded"
+          className="p-1 text-gray-600 hover:text-gray-800 rounded text-xs sm:text-sm"
           aria-label="Move Down"
         >
           ↓
@@ -29,7 +29,7 @@ export function CardControls({
       {currentCategory && (
         <button
           onClick={onShowMoveOptions}
-          className="p-1 text-gray-600 hover:text-gray-800 rounded"
+          className="p-1 text-gray-600 hover:text-gray-800 rounded text-xs sm:text-sm"
         >
           ⋮
         </button>

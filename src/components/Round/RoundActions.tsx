@@ -1,6 +1,6 @@
 import { Card } from '@/components/Card';
 
-import { RoundActionsProps } from './types';
+import { RoundActionsProps } from './RoundActionsProps';
 
 export function RoundActions({
   remainingCards,

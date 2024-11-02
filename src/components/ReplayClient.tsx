@@ -122,41 +122,41 @@ export default function ReplayClient() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">
+    <div className="container mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
+      <div className="mb-4 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
           Replay Session: {sessionId}
         </h1>
-        <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex flex-wrap gap-2 sm:gap-4 items-center">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm sm:text-base"
           >
             {isPlaying ? 'Pause' : 'Play'}
           </button>
           <button
             onClick={handleReset}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors text-sm sm:text-base"
           >
             Reset
           </button>
           <select
             value={playbackSpeed}
             onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
-            className="px-4 py-2 border rounded"
+            className="px-2 sm:px-4 py-1.5 sm:py-2 border rounded text-sm sm:text-base"
           >
             <option value={0.5}>0.5x Speed</option>
             <option value={1}>1x Speed</option>
             <option value={2}>2x Speed</option>
             <option value={4}>4x Speed</option>
           </select>
-          <div className="text-gray-600">
+          <div className="text-gray-600 text-sm sm:text-base">
             Round {currentRound} - Command {currentCommandIndex + 1}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-4">
         {(Object.entries(categories) as [CategoryName, Value[]][]).map(([title, cards]) => (
           <CategoryColumn
             key={title}

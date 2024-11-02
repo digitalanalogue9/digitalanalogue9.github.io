@@ -1,4 +1,4 @@
-import { RoundHeaderProps } from './types';
+import { RoundHeaderProps } from './RoundHeaderProps';
 
 export function RoundHeader({ 
   targetCoreValues, 
