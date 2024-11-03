@@ -27,7 +27,7 @@ export default function RootLayout({
       </head>
       <body>
         <Navigation />
-        <main className="pt-16">
+        <main className="pt-4">
           {children}
           <div id="portal-root" /> {/* Add this */}
         </main>

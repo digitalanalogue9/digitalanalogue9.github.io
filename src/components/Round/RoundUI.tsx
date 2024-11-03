@@ -15,11 +15,15 @@ import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
 import { getRandomValues } from '@/utils';
-import { Categories } from '@/types';
+import { Categories, CategoryName } from '@/types';
 import { StatusMessage } from '@/components/Round/components/StatusMessage';
 import { getCategoriesForRound } from '@/utils/categoryUtils';
+import { MobileCategoryList } from './components/MobileCategoryList';
 
 export default function RoundUI() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
+  const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [shouldEndGame, setShouldEndGame] = useState<boolean>(false);
 
@@ -39,6 +43,15 @@ export default function RoundUI() {
   useEffect(() => {
     setShouldEndGame(activeCards === targetCoreValues);
   }, [activeCards, targetCoreValues]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Get validation function
   const validateRound = useRoundValidation({
@@ -183,13 +196,24 @@ export default function RoundUI() {
             remainingCards={remainingCards}
           />
         </div>
-
-        <CategoryGrid
-          categories={roundState.visibleCategories}
-          onDrop={handleDrop}
-          onMoveCard={handleMoveCard}
-          onMoveBetweenCategories={handleMoveBetweenCategories}
-        />
+        {isMobile ? (
+          <MobileCategoryList
+            categories={categories}
+            onDrop={(card, category) => {
+              setActiveDropZone(category);
+              handleDrop(card, category);  // Changed order here
+            }}
+            onExpand={setExpandedCategory}
+            activeDropZone={activeDropZone}
+          />
+        ) : (
+          <CategoryGrid
+            categories={roundState.visibleCategories}
+            onDrop={handleDrop}
+            onMoveCard={handleMoveCard}
+            onMoveBetweenCategories={handleMoveBetweenCategories}
+          />
+        )}
       </div>
     </div>
   );

@@ -22,13 +22,14 @@ export default function StartScreen({ onStart }: StartScreenProps) {
       currentRound: 1,
       completed: false
     };
-    
+
     const sessionId = await addSession(session);
-    
+
     // Get random subset of values limited by maxCards
     const shuffledValues = getRandomValues(valuesData.values);
     const limitedValues = shuffledValues.slice(0, maxCards);
-    
+    // In handleStart, before initializeGameState
+    console.log('Starting game with cards:', limitedValues);
     // Initialize game state with limited number of cards
     initializeGameState(
       sessionId,
@@ -42,7 +43,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
         'Not Important': []
       }
     );
-    
+
     onStart();
   };
 
@@ -57,7 +58,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
 
           <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8">
             <p className="text-base sm:text-lg text-gray-700">
-              Welcome to the Core Values discovery exercise! Through this interactive experience, 
+              Welcome to the Core Values discovery exercise! Through this interactive experience,
               you will discover and prioritise your personal core values, helping you identify what matters most to you.
             </p>
           </div>
@@ -95,7 +96,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
 
           <div className="mt-6 sm:mt-8 text-center">
             <p className="text-gray-600 mb-2 text-sm sm:text-base">Have you completed this exercise before?</p>
-            <Link 
+            <Link
               href="/history"
               className="text-blue-600 hover:text-blue-800 underline font-medium text-sm sm:text-base"
             >
