@@ -1,6 +1,6 @@
 {
     "debug": false,
-    "maxCards": 10,
-    "numCoreValues": 2
+    "maxCards": 35,
+    "numCoreValues": 5
 }
   
