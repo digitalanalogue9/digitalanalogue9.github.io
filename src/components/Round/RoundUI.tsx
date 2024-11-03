@@ -29,6 +29,7 @@ export default function RoundUI() {
 
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
+  console.log('remainingCards:', remainingCards);
   const { currentRoundCommands, addCommand, clearCommands } = useCommands();
 
   // Calculate active cards (not in Not Important)
@@ -162,9 +163,8 @@ export default function RoundUI() {
   if (showResults) {
     return <Results />;
   }
-
   return (
-    <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-8">
+    <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-4">
       <RoundHeader
         targetCoreValues={targetCoreValues}
         roundNumber={roundNumber}
