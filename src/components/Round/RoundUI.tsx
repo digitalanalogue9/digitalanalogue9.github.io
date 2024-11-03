@@ -170,38 +170,63 @@ export default function RoundUI() {
         roundNumber={roundNumber}
         remainingCardsCount={remainingCards.length}
       />
-
+  
       <div className="flex flex-col items-center space-y-4 sm:space-y-8">
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
           <div className="hidden sm:block" />
-
-          <div className="flex justify-center">
-            <RoundActions
-              remainingCards={remainingCards}
-              canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
-              onNextRound={handleNextRound}
-              onDrop={handleDrop}
-              isEndGame={shouldEndGame}
-            />
-          </div>
-
-          <StatusMessage
-            status={status}
-            isNearingCompletion={roundState.isNearingCompletion}
-            hasTooManyImportantCards={roundState.hasTooManyImportantCards}
-            hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
-            hasEnoughCards={roundState.hasEnoughCards}
-            targetCoreValues={targetCoreValues}
-            canProceedToNextRound={validateRound()}
-            remainingCards={remainingCards}
-          />
+          
+          {/* Mobile layout for card and status */}
+          {isMobile ? (
+            <div className="flex items-center justify-center gap-4">
+              <RoundActions
+                remainingCards={remainingCards}
+                canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
+                onNextRound={handleNextRound}
+                onDrop={handleDrop}
+                isEndGame={shouldEndGame}
+              />
+              <StatusMessage
+                status={status}
+                isNearingCompletion={roundState.isNearingCompletion}
+                hasTooManyImportantCards={roundState.hasTooManyImportantCards}
+                hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
+                hasEnoughCards={roundState.hasEnoughCards}
+                targetCoreValues={targetCoreValues}
+                canProceedToNextRound={validateRound()}
+                remainingCards={remainingCards}
+              />
+            </div>
+          ) : (
+            <>
+              <div className="flex justify-center">
+                <RoundActions
+                  remainingCards={remainingCards}
+                  canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
+                  onNextRound={handleNextRound}
+                  onDrop={handleDrop}
+                  isEndGame={shouldEndGame}
+                />
+              </div>
+              <StatusMessage
+                status={status}
+                isNearingCompletion={roundState.isNearingCompletion}
+                hasTooManyImportantCards={roundState.hasTooManyImportantCards}
+                hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
+                hasEnoughCards={roundState.hasEnoughCards}
+                targetCoreValues={targetCoreValues}
+                canProceedToNextRound={validateRound()}
+                remainingCards={remainingCards}
+              />
+            </>
+          )}
         </div>
+  
         {isMobile ? (
           <MobileCategoryList
             categories={categories}
             onDrop={(card, category) => {
               setActiveDropZone(category);
-              handleDrop(card, category);  // Changed order here
+              handleDrop(card, category);
             }}
             onExpand={setExpandedCategory}
             activeDropZone={activeDropZone}

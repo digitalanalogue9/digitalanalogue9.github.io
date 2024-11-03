@@ -1,13 +1,6 @@
 import { Value, CategoryName } from '@/types';
 import { Card } from '@/components/Card';
-
-interface RoundActionsProps {
-  remainingCards: Value[];
-  canProceedToNextRound: boolean;
-  onNextRound: () => void;
-  onDrop: (card: Value, category: CategoryName) => void;
-  isEndGame: boolean;
-}
+import { RoundActionsProps } from './RoundActionsProps';
 
 export function RoundActions({
   remainingCards,

@@ -160,13 +160,36 @@ export default function Card({
 
   return (
     <motion.div
-      {...commonProps}
-      className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 touch-manipulation`}
-    >
-      <div className="relative z-10">
+    {...commonProps}
+    className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 touch-manipulation relative`}
+  >
+    <div className="relative z-10 flex flex-col h-full">
+      <div className="flex-1">
         <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
         <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
       </div>
-    </motion.div>
+      
+      {'ontouchstart' in window && (
+        <div className="absolute bottom-0 left-0 right-0 bg-blue-50 p-2 rounded-b text-center">
+          <div className="flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">
+            <svg 
+              className="w-5 h-5" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M7.5 3.5c0-1.1.9-2 2-2s2 .9 2 2v7m0 0v3m0-3h3m-3 0h-3m-2.5-4c0-1.1-.9-2-2-2s-2 .9-2 2"
+              />
+            </svg>
+            Press & Hold to Drag
+          </div>
+        </div>
+      )}
+    </div>
+  </motion.div>
   );
 }
