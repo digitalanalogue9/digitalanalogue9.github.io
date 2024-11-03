@@ -2,44 +2,32 @@ import { Card } from '@/components/Card';
 
 import { RoundActionsProps } from './RoundActionsProps';
 
-export function RoundActions({
+export const RoundActions: React.FC<RoundActionsProps> = ({
   remainingCards,
   canProceedToNextRound,
   onNextRound,
-  onDrop
-}: RoundActionsProps) {
+  onDrop,
+  isEndGame
+}) => {
+  console.log('RoundActions isEndGame:', isEndGame); // Debug log
+
   return (
-    <div className="h-[180px] flex flex-col items-center justify-center">
-      {remainingCards.length > 0 ? (
-        <div className="flex flex-col items-center">
-          <div className="transform hover:scale-105 transition-transform">
-            <Card
-              value={remainingCards[0]}
-              columnIndex={undefined}
-              onDrop={() => { }}
-              currentCategory={undefined}
-            />
-          </div>
-        </div>
-      ) : canProceedToNextRound ? (
-        <div className="text-center">
-          <button
-            onClick={onNextRound}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Next Round
-          </button>
-        </div>
-      ) : (
-        <div className="text-center">
-          <button disabled
-            onClick={onNextRound}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Next Round
-          </button>
-        </div>
-      )}
-    </div>
+    <button
+      onClick={onNextRound}
+      disabled={!canProceedToNextRound}
+      className={`
+        px-6 py-3
+        rounded-lg
+        font-medium
+        transition-colors
+        ${canProceedToNextRound
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        }
+      `}
+    >
+      {isEndGame ? 'End Game' : 'Next Round'}
+    </button>
   );
-}
+};
+

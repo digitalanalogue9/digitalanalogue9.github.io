@@ -1,29 +1,5 @@
-import { Categories, Round1And2Categories, Round3Categories, Round4Categories } from '@/types';
-import { CategoryName, Value } from '@/types';
-
-export function getCategoriesForRound(roundNumber: number): Categories {
-  if (roundNumber <= 2) {
-    return {
-      'Very Important': [],
-      'Quite Important': [],
-      'Important': [],
-      'Of Some Importance': [],
-      'Not Important': []
-    };
-  } else if (roundNumber === 3) {
-    return {
-      'Very Important': [],
-      'Quite Important': [],
-      'Important': [],
-      'Not Important': []
-    };
-  } else {
-    return {
-      'Very Important': [],
-      'Not Important': []
-    };
-  }
-}
+import { Categories, CategoryName, Value } from '@/types';
+import { getGameConfig } from '@/utils/config/gameConfig';
 
 export const getImportantCards = (categories: Categories): Value[] => {
   const importantCards: Value[] = [];
@@ -47,12 +23,42 @@ export const getImportantCards = (categories: Categories): Value[] => {
   return importantCards;
 };
 
-export const getCategoryNames = (roundNumber: number): CategoryName[] => {
-  if (roundNumber <= 2) {
-    return ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'];
-  } else if (roundNumber === 3) {
-    return ['Very Important', 'Quite Important', 'Important', 'Not Important'];
+
+export const getCategoriesForRound = (cardCount: number, targetValue: number): Categories => {
+  const ratio = cardCount / targetValue;
+  const { ratioThresholds } = getGameConfig();
+  const categories = {} as Categories;
+  
+  if (ratio <= ratioThresholds.final) {
+    categories['Very Important'] = [];
+    categories['Not Important'] = [];
+  } else if (ratio <= ratioThresholds.reduced) {
+    categories['Very Important'] = [];
+    categories['Quite Important'] = [];
+    categories['Not Important'] = [];
+  } else if (ratio <= ratioThresholds.standard) {
+    categories['Very Important'] = [];
+    categories['Quite Important'] = [];
+    categories['Important'] = [];
+    categories['Not Important'] = [];
   } else {
-    return ['Very Important', 'Not Important'];
+    categories['Very Important'] = [];
+    categories['Quite Important'] = [];
+    categories['Important'] = [];
+    categories['Of Some Importance'] = [];
+    categories['Not Important'] = [];
   }
+
+  return categories;
+};
+
+export const getCategoryNames = (ratio: number): CategoryName[] => {
+  if (ratio <= 1.5) {
+    return ['Very Important', 'Not Important'];
+  } else if (ratio <= 2) {
+    return ['Very Important', 'Quite Important', 'Not Important'];
+  } else if (ratio <= 3) {
+    return ['Very Important', 'Quite Important', 'Important', 'Not Important'];
+  }
+  return ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'];
 };

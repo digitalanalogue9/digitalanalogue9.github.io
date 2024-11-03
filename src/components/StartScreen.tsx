@@ -3,18 +3,16 @@
 import { useState } from 'react';
 import { StartScreenProps } from './StartScreenProps';
 import { getEnvNumber, getEnvBoolean } from '@/utils/config';
-import CenteredImage from './CentredImage';
 import Link from 'next/link';
 import { addSession } from '@/db/indexedDB';
-import { useSession } from '@/hooks/useSession';
-import { useGameState } from '@/hooks/useGameState';
 import { initializeGameState } from '@/utils/storage';
 import valuesData from '@/data/values.json';
+import { getRandomValues } from '@/utils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const isDebug = getEnvBoolean('debug', false);
-  const maxCards = getEnvNumber('maxCards', 35);
-  const defaultCoreValues = getEnvNumber('numCoreValues', 5);
+  const maxCards = getEnvNumber('maxCards', 10);  // Default now matches config
+  const defaultCoreValues = getEnvNumber('numCoreValues', 2);  // Default now matches config
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
 
   const handleStart = async () => {
@@ -27,11 +25,15 @@ export default function StartScreen({ onStart }: StartScreenProps) {
     
     const sessionId = await addSession(session);
     
-    // Initialize game state
+    // Get random subset of values limited by maxCards
+    const shuffledValues = getRandomValues(valuesData.values);
+    const limitedValues = shuffledValues.slice(0, maxCards);
+    
+    // Initialize game state with limited number of cards
     initializeGameState(
       sessionId,
       coreValuesCount,
-      valuesData.values,
+      limitedValues,  // Using limited set of cards
       {
         'Very Important': [],
         'Quite Important': [],
