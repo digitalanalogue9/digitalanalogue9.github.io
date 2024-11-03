@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from './types';
 import { CategoryName } from '@/types';
 
@@ -21,21 +21,56 @@ export function CardMoveOptions({
   const [mounted, setMounted] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
-  useEffect(() => {
-    setMounted(true);
-    // Calculate position based on the button that opened the menu
+  const updatePosition = useCallback(() => {
     const button = document.getElementById(`options-${value.id}`);
     if (button) {
       const rect = button.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.right + window.scrollX - 200, // Menu width is 200px
-      });
+      const isMobile = window.innerWidth < 768;
+      
+      if (isMobile) {
+        setPosition({
+          top: rect.bottom + window.scrollY,
+          left: Math.max(10, Math.min(window.innerWidth - 210, rect.right + window.scrollX - 200))
+        });
+      } else {
+        setPosition({
+          top: rect.bottom + window.scrollY,
+          left: rect.right + window.scrollX - 200
+        });
+      }
     }
   }, [value.id]);
 
+  useEffect(() => {
+    setMounted(true);
+    updatePosition();
+
+    window.addEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition);
+  }, [updatePosition]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(`#options-${value.id}`) && 
+          !target.closest('.move-options-menu')) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [value.id, onClose]);
+
   const menuContent = (
     <motion.div
+      className="move-options-menu w-48 bg-white rounded-md shadow-lg border 
+                border-gray-200 py-1 touch-manipulation"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
@@ -45,19 +80,20 @@ export function CardMoveOptions({
         left: `${position.left}px`,
         zIndex: 9999,
       }}
-      className="w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1"
     >
       {categories
         .filter(cat => cat !== currentCategory)
         .map(category => (
           <button
             key={category}
+            type="button"
             onClick={() => {
               onMoveToCategory(value, currentCategory, category);
               onClose();
             }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 
-                     hover:bg-gray-50 transition-colors"
+            className="block w-full text-left px-4 py-3 text-sm text-gray-700 
+                     hover:bg-gray-50 active:bg-gray-100 transition-colors
+                     touch-manipulation select-none"
           >
             Move to {category}
           </button>
