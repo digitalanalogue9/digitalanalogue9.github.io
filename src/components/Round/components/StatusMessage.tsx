@@ -25,16 +25,16 @@ export const StatusMessage = ({
 
   const messageContent = (
     <>
-      <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} font-medium`}>
+      <p className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight`}>
         {status.text}
       </p>
       {isNearingCompletion && (hasTooManyImportantCards || hasNotEnoughImportantCards) && (
-        <p className={`mt-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+        <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}>
           You need exactly {targetCoreValues} values in Very Important
         </p>
       )}
       {!hasEnoughCards && (
-        <p className={`mt-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+        <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}>
           You must keep at least {targetCoreValues} values outside of Not Important
         </p>
       )}
@@ -72,10 +72,13 @@ export const StatusMessage = ({
 
   return (
     <div className={`
-      p-4 sm:p-6
-      min-h-[5rem] sm:h-28
+      relative
+      p-3 sm:p-4
+      min-h-[5rem]
+      h-auto
       flex flex-col justify-center 
       rounded-lg 
+      overflow-hidden
       ${!canProceedToNextRound && remainingCards.length === 0
         ? 'bg-red-50 text-red-800'
         : status.type === 'warning'
@@ -85,7 +88,9 @@ export const StatusMessage = ({
             : 'bg-blue-100 text-blue-800'
       }
     `}>
-      {messageContent}
+      <div className="space-y-1">
+        {messageContent}
+      </div>
     </div>
   );
 };

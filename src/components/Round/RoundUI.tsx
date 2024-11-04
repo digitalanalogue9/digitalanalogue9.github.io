@@ -172,14 +172,14 @@ export default function RoundUI() {
     return <Results />;
   }
   return (
-    <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-4">
+    <div className="container mx-auto px-1 sm:px-2 md:px-4 lg:px-6 py-1 sm:py-2"> {/* Reduced padding */}
       <RoundHeader
         targetCoreValues={targetCoreValues}
         roundNumber={roundNumber}
         remainingCardsCount={remainingCards.length}
       />
 
-      <div className="flex flex-col items-center space-y-4 sm:space-y-8">
+      <div className="flex flex-col items-center space-y-2 sm:space-y-4">
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
           <div className="hidden sm:block" />
 
