@@ -21,6 +21,16 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    extend: {
+      transform: ['hover', 'print'],
+      translate: ['hover', 'print'],
+      backgroundColor: ['print'],
+      borderWidth: ['print'],
+      borderColor: ['print'],
+      textColor: ['print'],
+    },
+  },
   plugins: [],
   // Enable JIT mode
   darkMode: 'class', // or 'media' if you prefer system settings
