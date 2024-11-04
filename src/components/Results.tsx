@@ -1,4 +1,5 @@
 'use client'
+import { getPostItStyles } from '@/components/Card/styles';
 
 import { useRef, useEffect, useState } from 'react';
 import { Value, Categories, CategoryName } from "@/types";
@@ -14,6 +15,8 @@ export default function Results() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
 
   const handlePrint = () => {
     const printContent = printRef.current;
@@ -53,7 +56,7 @@ export default function Results() {
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gray-900">
           Your Core Values Results
         </h1>
-        
+
         <div className="space-y-6 sm:space-y-8 lg:space-y-10">
           {(Object.entries(categories) as [CategoryName, Value[]][]).map(([category, values]) => (
             values.length > 0 && (
@@ -63,10 +66,20 @@ export default function Results() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                   {values.map((value: Value) => (
-                    <div key={value.id} 
-                         className="bg-white rounded-lg shadow-sm p-4 
-                                  transform transition-all duration-200 
-                                  hover:shadow-md hover:-translate-y-1">
+                    <div key={value.id}
+                      className={`
+                        ${postItBaseStyles} 
+                        ${tapeEffect}
+                        transform transition-all duration-200 
+                        hover:-translate-y-1
+                        print:bg-white 
+                        print:shadow-none 
+                        print:border-2 
+                        print:border-gray-900
+                        print:!transform-none
+                        print:hover:transform-none
+                      `}
+                    >
                       <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
                         {value.title}
                       </h3>

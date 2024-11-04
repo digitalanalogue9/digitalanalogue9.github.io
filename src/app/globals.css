@@ -34,3 +34,22 @@ body {
 .category-column {
   @apply transition-colors duration-200 ease-in-out;
 }
+
+@media print {
+  /* Remove any background images/effects from post-it notes */
+  [class*="postit-"] {
+    background-image: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure text is black for printing */
+  * {
+    color: black !important;
+  }
+
+  /* Hide unnecessary elements when printing */
+  .print:hidden {
+    display: none !important;
+  }
+}
