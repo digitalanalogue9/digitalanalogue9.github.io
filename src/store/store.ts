@@ -3,7 +3,7 @@
 import { createWithEqualityFn } from 'zustand/traditional'
 import { devtools } from 'zustand/middleware'
 import { emptyCategories } from '@/constants/categories'
-import { saveRoundCommands } from '@/db/roundCommands'
+import { saveRoundCommands } from '@/db/indexedDB'
 import { Value, Categories, Command, Round } from '@/types'
 import { shallow } from 'zustand/shallow'
 

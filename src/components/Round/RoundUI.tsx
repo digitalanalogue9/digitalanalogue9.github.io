@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { saveRound, updateSession } from '@/db/indexedDB';
+import { saveRound, updateSession, saveCompletedSession } from '@/db/indexedDB';
 import Results from '../Results';
 import { useSession } from '@/hooks/useSession';
 import { useGameState } from '@/hooks/useGameState';
@@ -15,7 +15,7 @@ import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
 import { getRandomValues } from '@/utils';
-import { Categories, CategoryName } from '@/types';
+import { Categories, CategoryName, Value } from '@/types';
 import { StatusMessage } from '@/components/Round/components/StatusMessage';
 import { getCategoriesForRound } from '@/utils/categoryUtils';
 import { MobileCategoryList } from './components/MobileCategoryList';
@@ -116,6 +116,11 @@ export default function RoundUI() {
       // If we're ending the game
       if (shouldEndGame) {
         if (sessionId) {
+          // Get all core values from all important categories
+          const finalValues = Object.entries(categories)
+            .filter(([category]) => category !== 'Not Important')
+            .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
+
           // Update session to mark it as completed
           const session = {
             timestamp: Date.now(),
@@ -124,6 +129,9 @@ export default function RoundUI() {
             completed: true
           };
           await updateSession(sessionId, session);
+
+          // Save the completed session data
+          await saveCompletedSession(sessionId, finalValues);
         }
 
         // Filter out Not Important cards before showing results
@@ -170,11 +178,11 @@ export default function RoundUI() {
         roundNumber={roundNumber}
         remainingCardsCount={remainingCards.length}
       />
-  
+
       <div className="flex flex-col items-center space-y-4 sm:space-y-8">
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
           <div className="hidden sm:block" />
-          
+
           {/* Mobile layout for card and status */}
           {isMobile ? (
             <div className="flex items-center justify-center gap-4">
@@ -220,7 +228,7 @@ export default function RoundUI() {
             </>
           )}
         </div>
-  
+
         {isMobile ? (
           <MobileCategoryList
             categories={categories}

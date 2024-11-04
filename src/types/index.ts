@@ -9,3 +9,4 @@ export type { Position } from './Position';
 export type { Round } from './Round';
 export type { Session } from './Session';
 export type { Value } from './Value';
+export type { CompletedSession} from './CompletedSession'
