@@ -1,6 +1,6 @@
 import { Categories, CategoryName } from '@/types';
 
-export const ALL_CATEGORIES: CategoryName[] = [
+export const allCategories: CategoryName[] = [
   'Very Important',
   'Quite Important',
   'Important',
@@ -8,13 +8,13 @@ export const ALL_CATEGORIES: CategoryName[] = [
   'Not Important'
 ] as const;
 
-export const emptyCategories: Categories = ALL_CATEGORIES.reduce((acc, category) => {
+export const emptyCategories: Categories = allCategories.reduce((acc, category) => {
   acc[category] = [];
   return acc;
 }, {} as Categories);
 
 // Create a constant for initial categories
-export const INITIAL_CATEGORIES: Categories = {
+export const initialCategories: Categories = {
   'Very Important': [],
   'Quite Important': [],
   'Important': [],

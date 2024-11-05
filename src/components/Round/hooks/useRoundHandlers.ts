@@ -20,14 +20,28 @@ export const useRoundHandlers = (
   setRoundNumber: (round: number) => void,
   setShowResults: (show: boolean) => void
 ) => {
+  // in useRoundHandlers.ts
   const saveRoundData = useCallback(async (command: Command) => {
     if (!sessionId) return;
     try {
-      await saveRound(sessionId, roundNumber, [...currentRoundCommands, command]);
+      // Only pass the visible categories
+      const visibleCats = Object.fromEntries(
+        Object.entries(categories).filter(([category]) =>
+          validCategories.includes(category as CategoryName)
+        )
+      ) as Categories;
+
+      await saveRound(
+        sessionId,
+        roundNumber,
+        [...currentRoundCommands, command],
+        visibleCats
+      );
     } catch (error) {
       console.error('Failed to save round data:', error);
     }
-  }, [sessionId, roundNumber, currentRoundCommands]);
+  }, [sessionId, roundNumber, currentRoundCommands, categories, validCategories]);
+
 
   const handleMoveCard = useCallback(async (
     category: CategoryName,

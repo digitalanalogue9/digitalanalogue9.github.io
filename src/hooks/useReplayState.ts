@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { Categories, Value, Command, CategoryName } from '@/types';
 import { getEnvBoolean } from '@/utils/config';
 import { DropCommandPayload, MoveCommandPayload } from '@/types';
-import { INITIAL_CATEGORIES} from '@/constants/categories';
+import { initialCategories} from '@/constants/categories';
 const debug = getEnvBoolean('debug', false);
 
 interface AnimatingCard {
@@ -13,7 +13,7 @@ interface AnimatingCard {
 
 export const useReplayState = (initialCards: Value[] = [], roundNumber: number = 1) => {
     const [remainingCards, setRemainingCards] = useState<Value[]>(initialCards);
-    const [categories, setCategories] = useState<Categories>(INITIAL_CATEGORIES);
+    const [categories, setCategories] = useState<Categories>(initialCategories);
     const [animatingCard, setAnimatingCard] = useState<AnimatingCard | null>(null);
 
     const executeCommand = useCallback((command: Command) => {
@@ -81,7 +81,7 @@ export const useReplayState = (initialCards: Value[] = [], roundNumber: number =
     }, [categories, remainingCards]); 
     
     const resetCategories = useCallback(() => {
-        setCategories(INITIAL_CATEGORIES);
+        setCategories(initialCategories);
         setRemainingCards(initialCards);
         setAnimatingCard(null);
     }, [initialCards]);

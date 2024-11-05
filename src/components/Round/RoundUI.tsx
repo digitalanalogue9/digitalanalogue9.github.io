@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { saveRound, updateSession, saveCompletedSession } from '@/db/indexedDB';
+import { saveRound, updateSession, saveCompletedSession, getRoundsBySession } from '@/db/indexedDB';
 import Results from '../Results';
 import { useSession } from '@/hooks/useSession';
 import { useGameState } from '@/hooks/useGameState';
@@ -15,10 +15,11 @@ import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
 import { getRandomValues } from '@/utils';
-import { Categories, CategoryName, Value } from '@/types';
+import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/types';
 import { StatusMessage } from '@/components/Round/components/StatusMessage';
 import { getCategoriesForRound } from '@/utils/categoryUtils';
 import { MobileCategoryList } from './components/MobileCategoryList';
+import { initialCategories } from '@/constants/categories';
 
 export default function RoundUI() {
   const [isMobile, setIsMobile] = useState(false);
@@ -37,8 +38,90 @@ export default function RoundUI() {
     .filter(([category]) => category !== 'Not Important')
     .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
 
+
+    // useEffect(() => {
+    //   const loadCurrentRound = async () => {
+    //     if (!sessionId) return;
+    
+    //     try {
+    //       // Get the current round
+    //       const rounds = await getRoundsBySession(sessionId);
+    //       if (rounds.length > 0) {
+    //         const currentRound = rounds.find(r => r.roundNumber === roundNumber);
+    //         if (currentRound) {
+    //           // Create a deep copy of the categories structure
+    //           let workingCategories = JSON.parse(JSON.stringify(currentRound.availableCategories)) as Categories;
+    
+    //           // Track cards that have been placed
+    //           const placedCards = new Set<string>();
+    
+    //           // Apply commands to track placed cards and update categories
+    //           for (const command of currentRound.commands) {
+    //             if (command.type === 'DROP') {
+    //               const { cardId, category } = command.payload as DropCommandPayload;
+    //               placedCards.add(cardId);
+                  
+    //               // Find the card in remaining cards and add it to the category
+    //               const cardToAdd = remainingCards.find(card => card.id === cardId);
+    //               if (cardToAdd && workingCategories[category]) {
+    //                 workingCategories[category] = [
+    //                   ...(workingCategories[category] ?? []),
+    //                   cardToAdd
+    //                 ];
+    //               }
+    //             }
+    //             else if (command.type === 'MOVE') {
+    //               const { cardId, fromCategory, toCategory } = command.payload as MoveCommandPayload;
+                  
+    //               // Find the card in the source category
+    //               const sourceCategory = workingCategories[fromCategory] ?? [];
+    //               const cardToMove = sourceCategory.find(
+    //                 card => card.id === cardId
+    //               );
+                  
+    //               if (cardToMove) {
+    //                 // Remove from source
+    //                 workingCategories[fromCategory] = sourceCategory.filter(
+    //                   card => card.id !== cardId
+    //                 );
+                    
+    //                 // Add to target
+    //                 workingCategories[toCategory] = [
+    //                   ...(workingCategories[toCategory] ?? []),
+    //                   cardToMove
+    //                 ];
+    //               }
+    //             }
+    //           }
+    
+    //           // Update remaining cards
+    //           const updatedRemainingCards = remainingCards.filter(card => !placedCards.has(card.id));
+    
+    //           // Set state
+    //           setCategories(workingCategories);
+    //           setRemainingCards(updatedRemainingCards);
+    
+    //           console.log('Round state restored:', {
+    //             categories: workingCategories,
+    //             remainingCards: updatedRemainingCards,
+    //             roundNumber: currentRound.roundNumber
+    //           });
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error('Failed to load current round:', error);
+    //     }
+    //   };
+    
+    //   loadCurrentRound();
+    // }, [sessionId, roundNumber]);
+    
+
+
   // Get round state calculations
   const roundState = useRoundState(categories, remainingCards, targetCoreValues);
+
+
 
   // Update shouldEndGame when activeCards equals targetCoreValues
   useEffect(() => {
@@ -110,7 +193,7 @@ export default function RoundUI() {
       }
 
       if (sessionId) {
-        await saveRound(sessionId, roundNumber, currentRoundCommands);
+        await saveRound(sessionId, roundNumber, currentRoundCommands, categories);
       }
 
       // If we're ending the game
@@ -159,7 +242,9 @@ export default function RoundUI() {
 
       const ratio = cardsForNextRound.length / targetCoreValues;
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
-
+      if (sessionId) {
+        await saveRound(sessionId, nextRound, [], nextCategories);
+      }
       setRoundNumber(nextRound);
       setCategories(nextCategories);
       setRemainingCards(getRandomValues(cardsForNextRound));

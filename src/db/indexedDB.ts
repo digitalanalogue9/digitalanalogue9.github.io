@@ -4,7 +4,7 @@ import { openDB, IDBPDatabase } from 'idb';
 import { Session } from "../types/Session";
 import { Round } from "@/types/Round";
 import { Command } from '@/types/Command';
-import { Value, CompletedSession } from '@/types';
+import { Value, CompletedSession, Categories } from '@/types';
 
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'coreValuesDb';
@@ -13,7 +13,6 @@ const storeNames = {
   sessions: 'sessions',
   rounds: 'rounds',
   completedSessions: 'completedSessions',
-  roundCommands: 'roundCommands'
 };
 
 const debug = getEnvBoolean('debug', false);
@@ -47,13 +46,7 @@ export async function initDB(): Promise<IDBPDatabase> {
         if (!db.objectStoreNames.contains(storeNames.completedSessions)) {
           db.createObjectStore(storeNames.completedSessions, { keyPath: 'sessionId' });  // Single string, not array
         }
-
-        if (!db.objectStoreNames.contains(storeNames.roundCommands)) {
-          db.createObjectStore(storeNames.roundCommands, { 
-            keyPath: ['sessionId', 'roundNumber'] 
-          });
-        }
-      },
+      }
     });
     if (debug) console.log('✅ IndexedDB initialized successfully');
     return db;
@@ -116,7 +109,8 @@ export async function updateSession(sessionId: string, updates: Partial<Session>
 export async function saveRound(
   sessionId: string, 
   roundNumber: number, 
-  commands: Command[]
+  commands: Command[],
+  availableCategories: Categories // Add this parameter
 ): Promise<void> {
   if (debug) console.log('💾 Saving round:', { sessionId, roundNumber, commands });
   try {
@@ -128,6 +122,7 @@ export async function saveRound(
       sessionId,
       roundNumber,
       commands,
+      availableCategories,
       timestamp: Date.now()
     };
 
@@ -136,6 +131,7 @@ export async function saveRound(
       await db.put(storeNames.rounds, {
         ...existingRound,
         commands: round.commands,
+        availableCategories : round.availableCategories,
         timestamp: round.timestamp
       });
     } else {
@@ -202,64 +198,6 @@ export async function getCompletedSession(sessionId: string): Promise<CompletedS
     return completedSession;
   } catch (error) {
     console.error('❌ Error fetching completed session:', error);
-    throw error;
-  }
-}
-
-// Round commands operations
-export async function saveRoundCommands(round: Round) {
-  if (debug) console.log('💾 Saving round commands:', round);
-  try {
-    const db = await initDB();
-    await db.put(storeNames.roundCommands, {
-      sessionId: round.sessionId,
-      roundNumber: round.roundNumber,
-      commands: round.commands,
-      timestamp: Date.now(),
-    });
-    if (debug) console.log('✅ Round commands saved successfully');
-  } catch (error) {
-    console.error('❌ Error saving round commands:', error);
-    throw error;
-  }
-}
-
-export async function getRoundCommands(sessionId: string, roundNumber: number) {
-  if (debug) console.log('🔍 Fetching round commands:', { sessionId, roundNumber });
-  try {
-    const db = await initDB();
-    const commands = await db.get(storeNames.roundCommands, [sessionId, roundNumber]);
-    if (debug) console.log('✅ Round commands fetched successfully:', commands);
-    return commands;
-  } catch (error) {
-    console.error('❌ Error fetching round commands:', error);
-    throw error;
-  }
-}
-
-export async function getAllRoundCommands() {
-  if (debug) console.log('🔍 Fetching all round commands');
-  try {
-    const db = await initDB();
-    const commands = await db.getAll(storeNames.roundCommands);
-    if (debug) console.log('✅ All round commands fetched successfully');
-    return commands;
-  } catch (error) {
-    console.error('❌ Error fetching all round commands:', error);
-    throw error;
-  }
-}
-
-export async function getRoundCommandsBySession(sessionId: string) {
-  if (debug) console.log('🔍 Fetching round commands for session:', sessionId);
-  try {
-    const db = await initDB();
-    const allCommands = await db.getAll(storeNames.roundCommands);
-    const sessionCommands = allCommands.filter(cmd => cmd.sessionId === sessionId);
-    if (debug) console.log('✅ Session round commands fetched successfully:', sessionCommands);
-    return sessionCommands;
-  } catch (error) {
-    console.error('❌ Error fetching session round commands:', error);
     throw error;
   }
 }

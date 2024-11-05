@@ -172,6 +172,9 @@ export function SessionList({ sessions }: SessionListProps) {
         <thead>
           <tr className="bg-gray-50 border-b">
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Session ID
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Last Updated
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -191,6 +194,9 @@ export function SessionList({ sessions }: SessionListProps) {
         <tbody className="divide-y divide-gray-200">
           {sessions.map((session) => (
             <tr key={session.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                {session.id}
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {formatDate(session.timestamp)}
               </td>
@@ -211,12 +217,20 @@ export function SessionList({ sessions }: SessionListProps) {
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 {session.completed ? (
-                  <button
+                 <>
+                 <button
                     onClick={() => handleShowValues(session.id)}
                     className="text-green-600 hover:text-green-900"
                   >
                     Show Values
                   </button>
+                  <Link
+                  href={`/replay?sessionId=${session.id}`}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                >
+                  Replay
+                </Link>
+                </>
                 ) : (
                   <Link
                     href={`/?sessionId=${session.id}`}

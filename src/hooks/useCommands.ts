@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import { useStore } from '@/store/store'
 import { Value, CategoryName } from '@/types'
-import { getRoundCommands } from '@/db/indexedDB'
+import { getRound, saveRound } from '@/db/indexedDB'
 import { DropCommand } from '@/commands/DropCommand'
 import { MoveCommand } from '@/commands/MoveCommand'
 import { shallow } from 'zustand/shallow'
@@ -56,16 +56,17 @@ export function useCommands() {
   const loadCommands = useCallback(
     async () => {
       if (state.currentRound) {
-        const savedRound = await getRoundCommands(
+        const savedRound = await getRound(
           state.currentRound.sessionId,
           state.roundNumber
-        )
+        );
         if (savedRound) {
           useStore.setState({
             currentRound: {
               sessionId: state.currentRound.sessionId,
               roundNumber: state.roundNumber,
               commands: savedRound.commands,
+              availableCategories : state.currentRound.availableCategories,
               timestamp: savedRound.timestamp
             }
           })

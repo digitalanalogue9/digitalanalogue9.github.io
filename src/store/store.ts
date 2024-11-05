@@ -3,7 +3,7 @@
 import { createWithEqualityFn } from 'zustand/traditional'
 import { devtools } from 'zustand/middleware'
 import { emptyCategories } from '@/constants/categories'
-import { saveRoundCommands } from '@/db/indexedDB'
+import { saveRound } from '@/db/indexedDB'
 import { Value, Categories, Command, Round } from '@/types'
 import { shallow } from 'zustand/shallow'
 
@@ -96,12 +96,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         
         const { currentRound, commands } = get()
         if (currentRound) {
-          await saveRoundCommands({
-            sessionId: currentRound.sessionId,
-            roundNumber: currentRound.roundNumber,
-            commands,
-            timestamp: Date.now()
-          })
+          await saveRound(currentRound.sessionId,currentRound.roundNumber,commands,currentRound.availableCategories)
         }
       },
       clearCommands: () => set({ commands: [], currentRoundCommands: [] })
