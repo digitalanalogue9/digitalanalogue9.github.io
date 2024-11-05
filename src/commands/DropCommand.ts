@@ -7,6 +7,7 @@ export class DropCommand extends BaseCommand {
     constructor(value: Value, category: CategoryName) {
         const payload: DropCommandPayload = { 
             cardId: value.id,
+            cardTitle : value.title,
             category 
         };
         super('DROP', payload);

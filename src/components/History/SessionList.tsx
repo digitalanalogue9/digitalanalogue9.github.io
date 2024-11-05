@@ -208,33 +208,33 @@ export function SessionList({ sessions }: SessionListProps) {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                  ${session.completed
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-blue-100 text-blue-800'}`}
+    ${session.completed
+                    ? 'bg-green-50 text-green-700'
+                    : 'bg-blue-50 text-blue-700'}`}
                 >
                   {session.completed ? 'Completed' : 'In Progress'}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                 {session.completed ? (
-                 <>
-                 <button
-                    onClick={() => handleShowValues(session.id)}
-                    className="text-green-600 hover:text-green-900"
-                  >
-                    Show Values
-                  </button>
-                  <Link
-                  href={`/replay?sessionId=${session.id}`}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                >
-                  Replay
-                </Link>
-                </>
+                  <>
+                    <button
+                      onClick={() => handleShowValues(session.id)}
+                      className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                    >
+                      Show Values
+                    </button>
+                    <Link
+                      href={`/replay?sessionId=${session.id}`}
+                      className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                    >
+                      Replay
+                    </Link>
+                  </>
                 ) : (
                   <Link
                     href={`/?sessionId=${session.id}`}
-                    className="text-blue-600 hover:text-blue-900"
+                    className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                   >
                     Resume Game
                   </Link>

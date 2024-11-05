@@ -13,6 +13,7 @@ export class MoveCommand extends BaseCommand {
     ) {
         const payload: MoveCommandPayload = { 
             cardId: value.id,
+            cardTitle : value.title,
             fromCategory, 
             toCategory,
             fromIndex,

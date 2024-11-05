@@ -1,6 +1,6 @@
 // src/app/replay/page.tsx
 import { Suspense } from 'react';
-import ReplayClient from '@/components/ReplayClient';
+import ReplayClient from '@/components/Replay/ReplayClient';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
