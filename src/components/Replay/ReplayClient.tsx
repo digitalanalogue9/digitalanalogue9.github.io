@@ -188,13 +188,14 @@ export default function ReplayClient() {
       if (currentRound < rounds.length) {
         setIsRoundTransition(true);
         setIsPlaying(false);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
         setCurrentRound(currentRound + 1);
         setCurrentCommandIndex(0);
         resetCategories();
         setIsRoundTransition(false);
         setIsPlaying(true);
 
+        // Set the first card of the next round if it exists
         const nextRound = rounds.find(r => r.roundNumber === currentRound + 1);
         if (nextRound && nextRound.commands.length > 0) {
           const firstCommand = nextRound.commands[0];
@@ -212,15 +213,32 @@ export default function ReplayClient() {
 
     const command = currentRoundData.commands[currentCommandIndex];
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
+    const cardId = payload.cardId;
+
+    // Get the card to animate
+    const cardToAnimate = allCards.find(card => card.id === cardId);
+    if (!cardToAnimate) return;
 
     // Get the next command's card ready
     const nextCommand = currentRoundData.commands[currentCommandIndex + 1];
     const nextCardId = nextCommand?.payload && (nextCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
     const nextCard = nextCardId ? allCards.find(card => card.id === nextCardId) : null;
 
-    // Get source and target elements for animation
-    const sourceElement = document.querySelector('.current-card-display');
-    const targetElement = document.querySelector(`[data-category="${(payload as DropCommandPayload).category}"]`);
+    // Calculate source position
+    let sourceElement: Element | null;
+    if (command.type === 'DROP') {
+      sourceElement = document.querySelector('.current-card-display');
+    } else {
+      const movePayload = payload as MoveCommandPayload;
+      sourceElement = document.querySelector(`[data-category="${movePayload.fromCategory}"] [data-card-id="${cardId}"]`);
+    }
+
+
+    // Calculate target position
+    const targetCategory = command.type === 'DROP'
+      ? (payload as DropCommandPayload).category
+      : (payload as MoveCommandPayload).toCategory;
+    const targetElement = document.querySelector(`[data-category="${targetCategory}"]`);
 
     if (sourceElement && targetElement) {
       const sourceRect = sourceElement.getBoundingClientRect();
@@ -236,27 +254,30 @@ export default function ReplayClient() {
         y: targetRect.top + targetRect.height / 2
       };
 
-      // Start animation
-      const cardToMove = allCards.find(card => card.id === payload.cardId);
-      if (cardToMove) {
-        setAnimatingCard({
-          value: cardToMove,
-          sourcePos,
-          targetPos
-        });
+      // Set up animation
+      setAnimatingCard({
+        value: cardToAnimate,
+        sourcePos,
+        targetPos
+      });
 
-        // Wait for animation to complete before updating state
-        await new Promise<void>((resolve) => {
-          const animationDuration = 500 / playbackSpeed;
-          setTimeout(() => {
-            executeCommand(command);
-            if (nextCard) {  // Only set if nextCard exists
-              setCurrentCard(nextCard);
-            }
-            setAnimatingCard(null);
-            resolve();
-          }, animationDuration);
-        });
+      // Wait for animation
+      await new Promise<void>((resolve) => {
+        const animationDuration = 500 / playbackSpeed; // Longer duration for smoother animation
+        setTimeout(() => {
+          executeCommand(command);
+          if (nextCard) {
+            setCurrentCard(nextCard);
+          }
+          setAnimatingCard(null);
+          resolve();
+        }, animationDuration);
+      });
+    } else {
+      // If we can't animate, just execute the command
+      executeCommand(command);
+      if (nextCard) {
+        setCurrentCard(nextCard);
       }
     }
 
@@ -272,13 +293,11 @@ export default function ReplayClient() {
     rounds,
     executeCommand,
     resetCategories,
-    startAnimation,
     animatingCard,
     isRoundTransition,
     allCards,
     playbackSpeed
   ]);
-
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPlaying && rounds.length > 0 && !isAnimating && !isRoundTransition) {
@@ -356,7 +375,7 @@ export default function ReplayClient() {
 
         <div className="relative h-32 sm:h-48">
           <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display">
-            {currentCard && !animatingCard && (
+            {currentCard && !animatingCard && isPlaying && (
               <AnimatedCard
                 value={currentCard}
                 columnIndex={undefined}
@@ -391,9 +410,10 @@ export default function ReplayClient() {
               y: animatingCard.targetPos.y,
               transition: {
                 type: "spring",
-                stiffness: 150,
-                damping: 20,
-                duration: 0.5 / playbackSpeed
+                stiffness: 100, // Lower stiffness for smoother motion
+                damping: 15,    // Adjust damping for natural movement
+                mass: 1,        // Add mass for more realistic physics
+                duration: 0.75 / playbackSpeed
               }
             }}
             style={{
