@@ -15,11 +15,12 @@ import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
 import { getRandomValues } from '@/utils';
-import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/types';
+import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload, Value, ValueWithReason } from '@/types';
 import { StatusMessage } from '@/components/Round/components/StatusMessage';
 import { getCategoriesForRound } from '@/utils/categoryUtils';
 import { MobileCategoryList } from './components/MobileCategoryList';
 import { initialCategories } from '@/constants/categories';
+import { CoreValueReasoning } from '../CoreValueReasoning';
 
 export default function RoundUI() {
   const [isMobile, setIsMobile] = useState(false);
@@ -27,7 +28,9 @@ export default function RoundUI() {
   const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [shouldEndGame, setShouldEndGame] = useState<boolean>(false);
-
+  const [showReasoning, setShowReasoning] = useState<boolean>(false);
+  const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
+  
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
   console.log('remainingCards:', remainingCards);
@@ -37,86 +40,6 @@ export default function RoundUI() {
   const activeCards = Object.entries(categories)
     .filter(([category]) => category !== 'Not Important')
     .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
-
-
-    // useEffect(() => {
-    //   const loadCurrentRound = async () => {
-    //     if (!sessionId) return;
-    
-    //     try {
-    //       // Get the current round
-    //       const rounds = await getRoundsBySession(sessionId);
-    //       if (rounds.length > 0) {
-    //         const currentRound = rounds.find(r => r.roundNumber === roundNumber);
-    //         if (currentRound) {
-    //           // Create a deep copy of the categories structure
-    //           let workingCategories = JSON.parse(JSON.stringify(currentRound.availableCategories)) as Categories;
-    
-    //           // Track cards that have been placed
-    //           const placedCards = new Set<string>();
-    
-    //           // Apply commands to track placed cards and update categories
-    //           for (const command of currentRound.commands) {
-    //             if (command.type === 'DROP') {
-    //               const { cardId, category } = command.payload as DropCommandPayload;
-    //               placedCards.add(cardId);
-                  
-    //               // Find the card in remaining cards and add it to the category
-    //               const cardToAdd = remainingCards.find(card => card.id === cardId);
-    //               if (cardToAdd && workingCategories[category]) {
-    //                 workingCategories[category] = [
-    //                   ...(workingCategories[category] ?? []),
-    //                   cardToAdd
-    //                 ];
-    //               }
-    //             }
-    //             else if (command.type === 'MOVE') {
-    //               const { cardId, fromCategory, toCategory } = command.payload as MoveCommandPayload;
-                  
-    //               // Find the card in the source category
-    //               const sourceCategory = workingCategories[fromCategory] ?? [];
-    //               const cardToMove = sourceCategory.find(
-    //                 card => card.id === cardId
-    //               );
-                  
-    //               if (cardToMove) {
-    //                 // Remove from source
-    //                 workingCategories[fromCategory] = sourceCategory.filter(
-    //                   card => card.id !== cardId
-    //                 );
-                    
-    //                 // Add to target
-    //                 workingCategories[toCategory] = [
-    //                   ...(workingCategories[toCategory] ?? []),
-    //                   cardToMove
-    //                 ];
-    //               }
-    //             }
-    //           }
-    
-    //           // Update remaining cards
-    //           const updatedRemainingCards = remainingCards.filter(card => !placedCards.has(card.id));
-    
-    //           // Set state
-    //           setCategories(workingCategories);
-    //           setRemainingCards(updatedRemainingCards);
-    
-    //           console.log('Round state restored:', {
-    //             categories: workingCategories,
-    //             remainingCards: updatedRemainingCards,
-    //             roundNumber: currentRound.roundNumber
-    //           });
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error('Failed to load current round:', error);
-    //     }
-    //   };
-    
-    //   loadCurrentRound();
-    // }, [sessionId, roundNumber]);
-    
-
 
   // Get round state calculations
   const roundState = useRoundState(categories, remainingCards, targetCoreValues);
@@ -204,30 +127,34 @@ export default function RoundUI() {
             .filter(([category]) => category !== 'Not Important')
             .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
 
-          // Update session to mark it as completed
-          const session = {
-            timestamp: Date.now(),
-            targetCoreValues,
-            currentRound: roundNumber,
-            completed: true
-          };
-          await updateSession(sessionId, session);
+            setFinalValuesWithoutReasons(finalValues);
+            setShowReasoning(true);
+            return;
 
-          // Save the completed session data
-          await saveCompletedSession(sessionId, finalValues);
+            // Update session to mark it as completed
+          // const session = {
+          //   timestamp: Date.now(),
+          //   targetCoreValues,
+          //   currentRound: roundNumber,
+          //   completed: true
+          // };
+          // await updateSession(sessionId, session);
+
+          // // Save the completed session data
+          // await saveCompletedSession(sessionId, finalValues);
         }
 
         // Filter out Not Important cards before showing results
-        const finalCategories = Object.entries(categories)
-          .filter(([category]) => category !== 'Not Important')
-          .reduce((acc, [category, cards]) => {
-            acc[category] = cards;
-            return acc;
-          }, {} as Categories);
+        // const finalCategories = Object.entries(categories)
+        //   .filter(([category]) => category !== 'Not Important')
+        //   .reduce((acc, [category, cards]) => {
+        //     acc[category] = cards;
+        //     return acc;
+        //   }, {} as Categories);
 
-        setCategories(finalCategories);
-        setShowResults(true);
-        return;
+        // setCategories(finalCategories);
+        // setShowResults(true);
+        // return;
       }
 
       // Normal next round flow
@@ -252,6 +179,38 @@ export default function RoundUI() {
       console.error('Failed to handle next round:', error);
     }
   };
+
+  const handleReasoningComplete = async (valuesWithReasons: ValueWithReason[]) => {
+    if (sessionId) {
+      // Update session to mark it as completed
+      const session = {
+        timestamp: Date.now(),
+        targetCoreValues,
+        currentRound: roundNumber,
+        completed: true
+      };
+      await updateSession(sessionId, session);
+  
+      // Save the completed session data with reasons
+      await saveCompletedSession(sessionId, valuesWithReasons);
+    }
+  
+    // Filter out Not Important cards before showing results
+    const finalCategories = Object.entries(categories)
+      .filter(([category]) => category !== 'Not Important')
+      .reduce((acc, [category, cards]) => {
+        acc[category] = cards;
+        return acc;
+      }, {} as Categories);
+  
+    setCategories(finalCategories);
+    setShowReasoning(false);
+    setShowResults(true);
+  };
+
+  if (showReasoning) {
+    return <CoreValueReasoning values={finalValuesWithoutReasons} onComplete={handleReasoningComplete} />;
+  }
 
   if (showResults) {
     return <Results />;

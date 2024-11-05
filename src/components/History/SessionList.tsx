@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Session, Value, CompletedSession } from '@/types';
+import { Session, Value, CompletedSession, ValueWithReason } from '@/types';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPostItStyles } from '@/components/Card/styles';
@@ -47,7 +47,7 @@ export function SessionList({ sessions }: SessionListProps) {
     }
   };
 
-  const renderCompletedValues = (values: Value[]) => {
+  const renderCompletedValues = (values: ValueWithReason[]) => {
     if (isLoading) {
       return (
         <div className="flex items-center justify-center p-4">
@@ -55,6 +55,7 @@ export function SessionList({ sessions }: SessionListProps) {
         </div>
       );
     }
+
 
     if (isMobile) {
       return (
@@ -68,12 +69,15 @@ export function SessionList({ sessions }: SessionListProps) {
             </div>
             <div className="space-y-4">
               {values.map((value) => (
-                <div
-                  key={value.id}
-                  className="p-4 bg-yellow-50 rounded shadow"
-                >
+                <div key={value.id} className="p-4 bg-yellow-50 rounded shadow">
                   <h4 className="font-medium">{value.title}</h4>
-                  <p className="text-sm text-gray-600">{value.description}</p>
+                  <p className="text-sm text-gray-600 mb-2">{value.description}</p>
+                  {value.reason && (
+                    <div className="mt-2 pt-2 border-t border-gray-200">
+                      <p className="text-sm font-medium text-gray-700">Why it's meaningful:</p>
+                      <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -106,7 +110,13 @@ export function SessionList({ sessions }: SessionListProps) {
               exit={{ opacity: 0, y: -20 }}
             >
               <h4 className="font-medium">{value.title}</h4>
-              <p className="text-sm text-gray-600">{value.description}</p>
+              <p className="text-sm text-gray-600 mb-2">{value.description}</p>
+              {value.reason && (
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <p className="text-sm font-medium text-gray-700">Why it's meaningful:</p>
+                  <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

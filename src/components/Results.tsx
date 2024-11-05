@@ -1,11 +1,12 @@
 'use client'
 import { getPostItStyles } from '@/components/Card/styles';
-
 import { useRef, useEffect, useState } from 'react';
-import { Value, Categories, CategoryName } from "@/types";
+import { ValueWithReason, Categories, CategoryName } from "@/types";
 import Link from 'next/link';
 import { useGameState } from '@/hooks/useGameState';
 import { clearGameState } from '@/utils/storage';
+import { getCompletedSession } from '@/db/indexedDB';
+import { useSession } from '@/hooks/useSession';
 
 export default function Results() {
   const printRef = useRef<HTMLDivElement>(null);
@@ -58,14 +59,14 @@ export default function Results() {
         </h1>
 
         <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-          {(Object.entries(categories) as [CategoryName, Value[]][]).map(([category, values]) => (
+          {(Object.entries(categories) as [CategoryName, ValueWithReason[]][]).map(([category, values]) => (
             values.length > 0 && (
               <div key={category} className="bg-gray-50 rounded-lg p-4 sm:p-6">
                 <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-800">
                   {category}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-                  {values.map((value: Value) => (
+                  {values.map((value: ValueWithReason) => (
                     <div key={value.id}
                       className={`
                         ${postItBaseStyles} 
@@ -83,9 +84,17 @@ export default function Results() {
                       <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
                         {value.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600">
+                      <p className="text-sm sm:text-base text-gray-600 mb-3">
                         {value.description}
                       </p>
+                      {value.reason && (
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <p className="text-sm font-medium text-gray-700 mb-1">Why it's meaningful:</p>
+                          <p className="text-sm sm:text-base text-gray-600 italic">
+                            {value.reason}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

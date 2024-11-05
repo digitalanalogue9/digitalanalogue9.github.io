@@ -13,6 +13,7 @@ import PWAPrompt from '@/components/PWAPrompt';
 import { cacheUtils } from '@/utils/storage';
 import { useSession } from '@/hooks/useSession';
 import { useGameState } from '@/hooks/useGameState';
+import { clearGameState } from '@/utils/storage';
 
 export default function Home() {
   const { sessionId } = useSession();
@@ -23,6 +24,14 @@ export default function Home() {
     setShowInstructions 
   } = useGameState();
   const { isOffline } = usePWA();
+
+  useEffect(() => {
+    // Clear game state when mounting the page component
+    // unless there's a sessionId in the URL
+    if (!window.location.search.includes('sessionId')) {
+      clearGameState();
+    }
+  }, []);
 
   useEffect(() => {
     const initialize = async () => {

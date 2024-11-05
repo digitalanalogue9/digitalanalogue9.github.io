@@ -125,7 +125,7 @@ export default function ReplayClient() {
         const roundData = await getRoundsBySession(sessionId);
         const sortedRounds = roundData.sort((a, b) => a.roundNumber - b.roundNumber);
         setRounds(sortedRounds);
-        
+
         if (sortedRounds.length > 0) {
           // Get all unique cards from all rounds
           const cards = new Set<Value>();
@@ -136,7 +136,7 @@ export default function ReplayClient() {
               });
             });
           });
-          
+
           const cardsArray = Array.from(cards);
           setAllCards(cardsArray);
           setReplayStateCards(cardsArray);
@@ -164,7 +164,7 @@ export default function ReplayClient() {
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
     const card = allCards.find(c => c.id === payload.cardId);
     const cardTitle = card ? card.title : payload.cardId;
-    
+
     if (command.type === 'DROP') {
       const dropPayload = payload as DropCommandPayload;
       return `Drop '${cardTitle}' to '${dropPayload.category}'`;
@@ -180,10 +180,10 @@ export default function ReplayClient() {
 
   const playNextCommand = useCallback(async () => {
     if (isRoundTransition) return;
-  
+
     const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
     if (!currentRoundData) return;
-  
+
     if (currentCommandIndex >= currentRoundData.commands.length) {
       if (currentRound < rounds.length) {
         setIsRoundTransition(true);
@@ -194,8 +194,7 @@ export default function ReplayClient() {
         resetCategories();
         setIsRoundTransition(false);
         setIsPlaying(true);
-  
-        // Set the first card of the next round
+
         const nextRound = rounds.find(r => r.roundNumber === currentRound + 1);
         if (nextRound && nextRound.commands.length > 0) {
           const firstCommand = nextRound.commands[0];
@@ -210,25 +209,62 @@ export default function ReplayClient() {
       }
       return;
     }
-  
+
     const command = currentRoundData.commands[currentCommandIndex];
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
-    
-    // Update current card based on the command
-    const cardToShow = allCards.find(card => card.id === payload.cardId);
-    if (cardToShow) {
-      setCurrentCard(cardToShow);
+
+    // Get the next command's card ready
+    const nextCommand = currentRoundData.commands[currentCommandIndex + 1];
+    const nextCardId = nextCommand?.payload && (nextCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
+    const nextCard = nextCardId ? allCards.find(card => card.id === nextCardId) : null;
+
+    // Get source and target elements for animation
+    const sourceElement = document.querySelector('.current-card-display');
+    const targetElement = document.querySelector(`[data-category="${(payload as DropCommandPayload).category}"]`);
+
+    if (sourceElement && targetElement) {
+      const sourceRect = sourceElement.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+
+      const sourcePos = {
+        x: sourceRect.left + sourceRect.width / 2,
+        y: sourceRect.top + sourceRect.height / 2
+      };
+
+      const targetPos = {
+        x: targetRect.left + targetRect.width / 2,
+        y: targetRect.top + targetRect.height / 2
+      };
+
+      // Start animation
+      const cardToMove = allCards.find(card => card.id === payload.cardId);
+      if (cardToMove) {
+        setAnimatingCard({
+          value: cardToMove,
+          sourcePos,
+          targetPos
+        });
+
+        // Wait for animation to complete before updating state
+        await new Promise<void>((resolve) => {
+          const animationDuration = 500 / playbackSpeed;
+          setTimeout(() => {
+            executeCommand(command);
+            if (nextCard) {  // Only set if nextCard exists
+              setCurrentCard(nextCard);
+            }
+            setAnimatingCard(null);
+            resolve();
+          }, animationDuration);
+        });
+      }
     }
-  
+
     setCommandInfo({
       roundNumber: currentRound,
       description: getCommandDescription(command)
     });
-  
-    executeCommand(command);
-    if (animatingCard) {
-      startAnimation();
-    }
+
     setCurrentCommandIndex(prev => prev + 1);
   }, [
     currentRound,
@@ -239,7 +275,8 @@ export default function ReplayClient() {
     startAnimation,
     animatingCard,
     isRoundTransition,
-    allCards // Add allCards to dependencies
+    allCards,
+    playbackSpeed
   ]);
 
   useEffect(() => {
@@ -292,7 +329,7 @@ export default function ReplayClient() {
                 Reset
               </button>
             </div>
-            
+
             <select
               value={playbackSpeed}
               onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
@@ -318,8 +355,8 @@ export default function ReplayClient() {
         </div>
 
         <div className="relative h-32 sm:h-48">
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            {currentCard && (
+          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display">
+            {currentCard && !animatingCard && (
               <AnimatedCard
                 value={currentCard}
                 columnIndex={undefined}
@@ -348,10 +385,19 @@ export default function ReplayClient() {
 
         {animatingCard && (
           <motion.div
+            initial={{ x: animatingCard.sourcePos.x, y: animatingCard.sourcePos.y }}
+            animate={{
+              x: animatingCard.targetPos.x,
+              y: animatingCard.targetPos.y,
+              transition: {
+                type: "spring",
+                stiffness: 150,
+                damping: 20,
+                duration: 0.5 / playbackSpeed
+              }
+            }}
             style={{
               position: 'fixed',
-              left: x,
-              top: y,
               transform: 'translate(-50%, -50%)',
               zIndex: 1000,
               pointerEvents: 'none'
