@@ -12,12 +12,42 @@ export default function Results() {
   const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const { categories } = useGameState();
+  const { sessionId } = useSession();
+  const [enrichedCategories, setEnrichedCategories] = useState<Categories>(categories);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
 
-  const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
+    // Load reasons and enrich the categories
+    const enrichCategoriesWithReasons = async () => {
+      if (sessionId) {
+        try {
+          const completedSession = await getCompletedSession(sessionId);
+          if (completedSession?.finalValues) {
+            // Create a map of id to reason
+            const reasonsMap = Object.fromEntries(
+              completedSession.finalValues.map(value => [value.id, value.reason])
+            );
+
+            // Enrich categories with reasons
+            const enriched = Object.entries(categories).reduce((acc, [category, values = []]) => {
+              acc[category as CategoryName] = values.map(value => ({
+                ...value,
+                reason: reasonsMap[value.id]
+              }));
+              return acc;
+            }, {} as Categories);
+
+            setEnrichedCategories(enriched);
+          }
+        } catch (error) {
+          console.error('Failed to load reasons:', error);
+        }
+      }
+    };
+
+    enrichCategoriesWithReasons();
+  }, [sessionId, categories]);
 
   const handlePrint = () => {
     const printContent = printRef.current;
@@ -49,6 +79,9 @@ export default function Results() {
     clearGameState();
   };
 
+
+  const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
+
   if (!mounted) return null;
 
   return (
@@ -59,8 +92,9 @@ export default function Results() {
         </h1>
 
         <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-          {(Object.entries(categories) as [CategoryName, ValueWithReason[]][]).map(([category, values]) => (
-            values.length > 0 && (
+          {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][])
+            .filter(([_, values]) => values && values.length > 0)
+            .map(([category, values]) => (
               <div key={category} className="bg-gray-50 rounded-lg p-4 sm:p-6">
                 <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-800">
                   {category}
@@ -68,18 +102,7 @@ export default function Results() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                   {values.map((value: ValueWithReason) => (
                     <div key={value.id}
-                      className={`
-                        ${postItBaseStyles} 
-                        ${tapeEffect}
-                        transform transition-all duration-200 
-                        hover:-translate-y-1
-                        print:bg-white 
-                        print:shadow-none 
-                        print:border-2 
-                        print:border-gray-900
-                        print:!transform-none
-                        print:hover:transform-none
-                      `}
+                      className={`${postItBaseStyles} ${tapeEffect} p-4`}
                     >
                       <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
                         {value.title}
@@ -99,18 +122,14 @@ export default function Results() {
                   ))}
                 </div>
               </div>
-            )
-          ))}
+            ))}
         </div>
       </div>
 
       <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
         <button
           onClick={handlePrint}
-          className="w-full sm:w-auto px-6 py-2 bg-blue-500 text-white rounded-lg
-                   hover:bg-blue-600 transition-colors duration-200
-                   text-sm sm:text-base font-medium shadow-sm hover:shadow
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full sm:w-auto px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
           Print Results
         </button>
@@ -118,19 +137,14 @@ export default function Results() {
         <Link
           href="/"
           onClick={handleNewExercise}
-          className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg
-                   hover:bg-green-600 transition-colors duration-200
-                   text-sm sm:text-base font-medium shadow-sm hover:shadow
-                   focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-                   text-center"
+          className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-center"
         >
           Start New Exercise
         </Link>
 
         <Link
           href="/history"
-          className="text-blue-600 hover:text-blue-800 underline
-                   text-sm sm:text-base transition-colors duration-200"
+          className="text-blue-600 hover:text-blue-800 underline"
         >
           View All Previous Results
         </Link>
