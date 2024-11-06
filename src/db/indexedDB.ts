@@ -7,7 +7,7 @@ import { Command } from '@/types/Command';
 import { Value, CompletedSession, Categories } from '@/types';
 
 const isBrowser = typeof window !== 'undefined';
-const dbName = 'coreValuesDb';
+const dbName = 'coreValuesData';
 const dbVersion = 3;
 const storeNames = {
   sessions: 'sessions',
