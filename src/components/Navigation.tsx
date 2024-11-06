@@ -16,8 +16,8 @@ export default function Navigation() {
           <div className="flex">
             {/* Logo/Brand */}
             <div className="flex-shrink-0 flex items-center">
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 className="text-lg sm:text-xl font-bold text-gray-800"
               >
                 Core Values
@@ -27,21 +27,19 @@ export default function Navigation() {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/"
-                className={`${
-                  pathname === '/'
+                className={`${pathname === '/'
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Home
               </Link>
               <Link
                 href="/history"
-                className={`${
-                  pathname === '/history'
+                className={`${pathname === '/history'
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 History
               </Link>
@@ -91,23 +89,24 @@ export default function Navigation() {
         <div className="pt-2 pb-3 space-y-1">
           <Link
             href="/"
-            className={`${
-              pathname === '/'
+            className={`${pathname === '/'
                 ? 'bg-blue-50 border-blue-500 text-blue-700'
                 : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-            } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
           >
             Home
           </Link>
           <Link
             href="/history"
-            className={`${
-              pathname === '/history'
+            className={`${pathname === '/history'
                 ? 'bg-blue-50 border-blue-500 text-blue-700'
                 : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-            } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
           >
             History
+          </Link>
+          <Link href="/about" className="...">
+            About
           </Link>
         </div>
       </div>
