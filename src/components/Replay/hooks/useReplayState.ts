@@ -98,7 +98,7 @@ export function useReplayState() {
         [toCategory]: [...(prev[toCategory] || []), card]
       }));
     }
-  }, [categories, findCardById, allCards]);
+  }, [findCardById, allCards]);
 
   return {
     categories,

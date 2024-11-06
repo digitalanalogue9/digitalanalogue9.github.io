@@ -1,60 +1,23 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getRoundsBySession } from '@/db/indexedDB';
 import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from '@/types';
 import { getEnvBoolean } from '@/utils';
 import { AnimatedCard } from '@/components/Card';
-import { useReplayState } from '@/hooks/useReplayState';
-import { useCardAnimation } from '@/hooks/useCardAnimation';
-import { ReplayColumn } from './ReplayColumn';
+import { useReplayState } from './hooks/useReplayState';
+import { useCardAnimation } from './hooks/useCardAnimation';
+import { ReplayColumn } from './components/ReplayColumn';
 import { motion, useSpring } from 'framer-motion';
+import { MobileReplayCategories } from './components/MobileReplayCategories';
 
 interface CommandInfo {
   roundNumber: number;
   description: string;
 }
 
-function MobileReplayCategory({ title, cards }: { title: CategoryName; cards: Value[] }) {
-  return (
-    <div data-category={title} className="p-2 rounded-lg border bg-white border-gray-200">
-      <div className="flex items-center justify-between">
-        <span className="font-medium text-xs sm:text-sm truncate">{title}</span>
-        <span className="bg-gray-200 px-1.5 py-0.5 rounded-full text-xs">
-          {cards.length}
-        </span>
-      </div>
-      {cards.length > 0 && (
-        <div className="mt-1 space-y-1">
-          {cards.map(card => (
-            <div key={card.id} className="text-xs text-gray-600 truncate">
-              {card.title}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
-function MobileReplayCategories({ categories }: { categories: Categories }) {
-  return (
-    <div className="w-full space-y-1">
-      <div className="w-full">
-        <MobileReplayCategory title="Very Important" cards={categories['Very Important'] || []} />
-      </div>
-      <div className="grid grid-cols-2 gap-1">
-        <MobileReplayCategory title="Quite Important" cards={categories['Quite Important'] || []} />
-        <MobileReplayCategory title="Important" cards={categories['Important'] || []} />
-      </div>
-      <div className="grid grid-cols-2 gap-1">
-        <MobileReplayCategory title="Of Some Importance" cards={categories['Of Some Importance'] || []} />
-        <MobileReplayCategory title="Not Important" cards={categories['Not Important'] || []} />
-      </div>
-    </div>
-  );
-}
 
 export default function ReplayClient() {
   const searchParams = useSearchParams();
@@ -80,8 +43,13 @@ export default function ReplayClient() {
     setAllCards: setReplayStateCards
   } = useReplayState();
 
-  const x = useSpring(0, { stiffness: 100, damping: 20 });
-  const y = useSpring(0, { stiffness: 100, damping: 20 });
+  const x = useSpring(0, { stiffness: 100, damping: 15, mass: 1, duration: 0.75 });
+  const y = useSpring(0, { stiffness: 100, damping: 15, mass: 1, duration: 0.75 });
+  const { position, isAnimating, startAnimation } = useCardAnimation(
+    animatingCard?.sourcePos || { x: 0, y: 0 },
+    animatingCard?.targetPos || { x: 0, y: 0 },
+    1000 / playbackSpeed
+  );
 
   // Mobile detection after mount
   useEffect(() => {
@@ -96,26 +64,21 @@ export default function ReplayClient() {
       x.set(position.x);
       y.set(position.y);
     }
-  }, [animatingCard, x, y]);
+  }, [animatingCard, x, y, position]);
 
-  const { position, isAnimating, startAnimation } = useCardAnimation(
-    animatingCard?.sourcePos || { x: 0, y: 0 },
-    animatingCard?.targetPos || { x: 0, y: 0 },
-    1000 / playbackSpeed
-  );
 
-  const emptyCategories = {
+  const emptyCategories = useMemo(() => ({
     'Very Important': [],
     'Important': [],
     'Quite Important': [],
     'Of Some Importance': [],
     'Not Important': []
-  };
+  }), []);
 
   const getCurrentRoundCategories = useCallback(() => {
     const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
     return currentRoundData?.availableCategories || emptyCategories;
-  }, [currentRound, rounds]);
+  }, [currentRound, rounds, emptyCategories]);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -160,7 +123,7 @@ export default function ReplayClient() {
     loadRounds();
   }, [sessionId, resetCategories, setReplayStateCards]);
 
-  const getCommandDescription = (command: Command): string => {
+  const getCommandDescription = useCallback((command: Command): string => {
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
     const card = allCards.find(c => c.id === payload.cardId);
     const cardTitle = card ? card.title : payload.cardId;
@@ -176,26 +139,26 @@ export default function ReplayClient() {
       return `Move '${cardTitle}' from '${movePayload.fromCategory}' to '${movePayload.toCategory}'`;
     }
     return `Command ${currentCommandIndex + 1}`;
-  };
+  }, [allCards, currentCommandIndex]);
 
   const playNextCommand = useCallback(async () => {
     if (isRoundTransition) return;
-
+    
     const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
     if (!currentRoundData) return;
-
+  
     if (currentCommandIndex >= currentRoundData.commands.length) {
       if (currentRound < rounds.length) {
+        // Transition to the next round
         setIsRoundTransition(true);
         setIsPlaying(false);
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Pause before transitioning
         setCurrentRound(currentRound + 1);
         setCurrentCommandIndex(0);
         resetCategories();
         setIsRoundTransition(false);
         setIsPlaying(true);
-
-        // Set the first card of the next round if it exists
+  
         const nextRound = rounds.find(r => r.roundNumber === currentRound + 1);
         if (nextRound && nextRound.commands.length > 0) {
           const firstCommand = nextRound.commands[0];
@@ -204,88 +167,91 @@ export default function ReplayClient() {
           if (nextCard) {
             setCurrentCard(nextCard);
           }
+          setCommandInfo({
+            roundNumber: currentRound + 1,
+            description: getCommandDescription(firstCommand)
+          });
         }
+  
+        return;
       } else {
         setIsPlaying(false);
+        return; // End of all rounds
       }
-      return;
     }
-
+    
     const command = currentRoundData.commands[currentCommandIndex];
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
     const cardId = payload.cardId;
-
-    // Get the card to animate
     const cardToAnimate = allCards.find(card => card.id === cardId);
     if (!cardToAnimate) return;
-
-    // Get the next command's card ready
+    
+    // Set the next command info if available
     const nextCommand = currentRoundData.commands[currentCommandIndex + 1];
-    const nextCardId = nextCommand?.payload && (nextCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
-    const nextCard = nextCardId ? allCards.find(card => card.id === nextCardId) : null;
-
-    // Calculate source position
+    if (nextCommand) {
+      setCommandInfo({
+        roundNumber: currentRound,
+        description: getCommandDescription(nextCommand)
+      });
+      const nextCardId = (nextCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
+      const nextCard = allCards.find(card => card.id === nextCardId);
+      if (nextCard) {
+        setCurrentCard(nextCard);
+      }
+    } else if (currentCommandIndex + 1 === currentRoundData.commands.length && currentRound < rounds.length) {
+      // Prepare for the transition indicating next round
+      setCommandInfo({
+        roundNumber: currentRound + 1,
+        description: "Next round starting soon..."
+      });
+    }
+    
     let sourceElement: Element | null;
     if (command.type === 'DROP') {
-      sourceElement = document.querySelector('.current-card-display');
+      //sourceElement = document.querySelector('.current-card-display');
+      sourceElement = document.querySelector('[data-card-wrapper]');
     } else {
       const movePayload = payload as MoveCommandPayload;
       sourceElement = document.querySelector(`[data-category="${movePayload.fromCategory}"] [data-card-id="${cardId}"]`);
     }
-
-
-    // Calculate target position
+    
     const targetCategory = command.type === 'DROP'
       ? (payload as DropCommandPayload).category
       : (payload as MoveCommandPayload).toCategory;
     const targetElement = document.querySelector(`[data-category="${targetCategory}"]`);
-
+    
     if (sourceElement && targetElement) {
       const sourceRect = sourceElement.getBoundingClientRect();
       const targetRect = targetElement.getBoundingClientRect();
-
+    
       const sourcePos = {
         x: sourceRect.left + sourceRect.width / 2,
         y: sourceRect.top + sourceRect.height / 2
       };
-
+    
       const targetPos = {
         x: targetRect.left + targetRect.width / 2,
         y: targetRect.top + targetRect.height / 2
       };
-
-      // Set up animation
+    
       setAnimatingCard({
         value: cardToAnimate,
         sourcePos,
         targetPos
       });
-
-      // Wait for animation
+    
       await new Promise<void>((resolve) => {
-        const animationDuration = 500 / playbackSpeed; // Longer duration for smoother animation
+        const animationDuration = 500 / playbackSpeed;
         setTimeout(() => {
           executeCommand(command);
-          if (nextCard) {
-            setCurrentCard(nextCard);
-          }
           setAnimatingCard(null);
           resolve();
         }, animationDuration);
       });
     } else {
-      // If we can't animate, just execute the command
       executeCommand(command);
-      if (nextCard) {
-        setCurrentCard(nextCard);
-      }
     }
-
-    setCommandInfo({
-      roundNumber: currentRound,
-      description: getCommandDescription(command)
-    });
-
+    
     setCurrentCommandIndex(prev => prev + 1);
   }, [
     currentRound,
@@ -293,11 +259,12 @@ export default function ReplayClient() {
     rounds,
     executeCommand,
     resetCategories,
-    animatingCard,
     isRoundTransition,
     allCards,
-    playbackSpeed
+    playbackSpeed, getCommandDescription, setAnimatingCard
   ]);
+
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPlaying && rounds.length > 0 && !isAnimating && !isRoundTransition) {
@@ -374,7 +341,7 @@ export default function ReplayClient() {
         </div>
 
         <div className="relative h-32 sm:h-48">
-          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display">
+          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display" data-card-wrapper>
             {currentCard && !animatingCard && isPlaying && (
               <AnimatedCard
                 value={currentCard}
@@ -388,11 +355,11 @@ export default function ReplayClient() {
 
         {isMobile ? (
           <div className="flex-1 min-h-0">
-            <MobileReplayCategories categories={categories} />
+            <MobileReplayCategories categories={getCurrentRoundCategories()} />
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {Object.entries(emptyCategories).map(([title]) => (
+            {Object.entries(getCurrentRoundCategories()).map(([title]) => (
               <ReplayColumn
                 key={title}
                 title={title as CategoryName}

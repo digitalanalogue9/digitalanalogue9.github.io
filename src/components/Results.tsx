@@ -112,7 +112,7 @@ export default function Results() {
                       </p>
                       {value.reason && (
                         <div className="mt-3 pt-3 border-t border-gray-200">
-                          <p className="text-sm font-medium text-gray-700 mb-1">Why it's meaningful:</p>
+                          <p className="text-sm font-medium text-gray-700 mb-1">Why it is meaningful:</p>
                           <p className="text-sm sm:text-base text-gray-600 italic">
                             {value.reason}
                           </p>
