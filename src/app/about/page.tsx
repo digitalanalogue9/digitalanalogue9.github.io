@@ -1,6 +1,12 @@
 import React from 'react';
+import { Metadata } from 'next'
 
-export const About: React.FC = () => {
+export const metadata: Metadata = {
+  title: 'About Core Values',
+  description: 'Learn more about the Core Values application'
+}
+
+export default function About() {
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
       {/* Hero Section */}
@@ -25,7 +31,7 @@ export const About: React.FC = () => {
             through an interactive and thoughtful process.
           </p>
           <p>
-            Whether you're at a crossroads in life, planning your future, or simply want 
+            Whether you are at a crossroads in life, planning your future, or simply want 
             to better understand yourself, identifying your core values provides a compass 
             for decision-making and personal growth.
           </p>
@@ -129,7 +135,7 @@ export const About: React.FC = () => {
               🔒 Complete Privacy
             </h3>
             <p className="text-gray-600">
-              Your data never leaves your device - we don't use any external servers 
+              Your data never leaves your device - we do not use any external servers 
               or cloud storage. Your personal journey stays completely private.
             </p>
           </div>
@@ -175,7 +181,7 @@ export const About: React.FC = () => {
           </h3>
           <p className="text-gray-600">
             For the best experience, install this as an app on your device 
-            (look for the "Install" button in your browser). This makes it easier 
+            (look for the Install App button in your browser). This makes it easier 
             to access and use, just like any other app on your device!
           </p>
         </div>
@@ -183,5 +189,3 @@ export const About: React.FC = () => {
     </div>
   );
 };
-
-export default About;

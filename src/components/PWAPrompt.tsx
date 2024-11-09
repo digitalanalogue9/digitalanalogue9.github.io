@@ -1,129 +1,121 @@
-import React, { useEffect } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePWA } from '@/hooks/usePWA';
 
-export const PWAPrompt: React.FC = () => {
-  const { 
-    isInstallable, 
-    isInstalled, 
-    isOffline, 
-    needsUpdate,
-    installPWA,
-    updateServiceWorker,
-    checkForUpdates
-  } = usePWA();
+type PromptType = 'install' | 'update' | null;
+
+export default function PWAPrompt() {
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [promptType, setPromptType] = useState<PromptType>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const { needsUpdate, updateServiceWorker } = usePWA();
 
   useEffect(() => {
-    checkForUpdates();
-  }, [checkForUpdates]);
+    // Handle installation prompt
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      // Only show install prompt if there's no update needed
+      if (!needsUpdate) {
+        setPromptType('install');
+        setShowPrompt(true);
+      }
+    };
 
-  if (!isInstallable && !needsUpdate && !isOffline) return null;
+    // Handle update availability
+    if (needsUpdate) {
+      setPromptType('update');
+      setShowPrompt(true);
+    }
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Hide prompts if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setShowPrompt(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, [needsUpdate]);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    setDeferredPrompt(null);
+    setShowPrompt(false);
+
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+  };
+
+  const handleUpdateClick = async () => {
+    await updateServiceWorker();
+    setShowPrompt(false);
+  };
+
+  const handleDismiss = () => {
+    setShowPrompt(false);
+    if (promptType === 'install') {
+      localStorage.setItem('pwa-prompt-dismissed', 'true');
+    }
+  };
+
+  // Don't render anything in development
+  if (process.env.NODE_ENV === 'development') {
+    return null;
+  }
+
+  if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 flex flex-col gap-2">
-      {isInstallable && (
-        <div className="rounded-lg bg-blue-600 p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <svg 
-                className="h-6 w-6" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              <span className="font-semibold">Install App</span>
-            </div>
-            <button
-              onClick={installPWA}
-              className="rounded bg-white px-4 py-2 text-blue-600 transition hover:bg-blue-50"
-            >
-              Install
-            </button>
-          </div>
-        </div>
-      )}
-
-      {needsUpdate && (
-        <div className="rounded-lg bg-green-600 p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <svg 
-                className="h-6 w-6" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              <span className="font-semibold">Update Available</span>
-            </div>
-            <button
-              onClick={updateServiceWorker}
-              className="rounded bg-white px-4 py-2 text-green-600 transition hover:bg-green-50"
-            >
-              Update
-            </button>
-          </div>
-        </div>
-      )}
-
-      {isOffline && (
-        <div className="rounded-lg bg-yellow-500 p-4 text-white shadow-lg">
-          <div className="flex items-center space-x-2">
-            <svg 
-              className="h-6 w-6" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span className="font-semibold">You are currently offline</span>
-          </div>
-        </div>
-      )}
-
-      {isInstalled && (
-        <div 
-          className="rounded-lg bg-gray-800 p-4 text-white shadow-lg"
-          role="alert"
+    <AnimatePresence>
+      {showPrompt && (
+        <motion.div
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 0 }}
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-96 bg-white rounded-lg shadow-lg p-4 border border-gray-200 z-50"
         >
-          <div className="flex items-center space-x-2">
-            <svg 
-              className="h-6 w-6" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            <span className="font-semibold">App successfully installed</span>
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-gray-900">
+                {promptType === 'install' ? 'Install Core Values App' : 'Update Available'}
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                {promptType === 'install' 
+                  ? 'Install our app for a better experience with offline access and faster loading times.'
+                  : 'A new version is available. Update now for the latest features and improvements.'}
+              </p>
+              <div className="mt-4 flex space-x-3">
+                <button
+                  onClick={promptType === 'install' ? handleInstallClick : handleUpdateClick}
+                  className="flex-1 bg-blue-600 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  {promptType === 'install' ? 'Install' : 'Update Now'}
+                </button>
+                {promptType === 'install' && (
+                  <button
+                    onClick={handleDismiss}
+                    className="flex-1 bg-white text-gray-700 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Not Now
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
-};
-
-export default PWAPrompt;
+}

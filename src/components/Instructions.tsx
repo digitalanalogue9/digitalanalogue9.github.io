@@ -8,7 +8,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
       <div className="bg-white p-4 sm:p-6 rounded-lg max-w-xs sm:max-w-sm md:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">How to Use Core Values</h2>
         <ol className="list-decimal ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base">
-          <li>You've already entered the number of core values you want to end up with (typically 5).</li>
+          <li>You have already entered the number of core values you want to end up with (typically 5).</li>
           <li>For each round, you&apos;ll see value cards that you need to sort into categories.</li>
           <li>Drag each card into one of the five categories based on its importance to you:
             <ul className="list-disc ml-4 sm:ml-6 mt-1 sm:mt-2">

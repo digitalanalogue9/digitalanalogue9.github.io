@@ -1,11 +1,11 @@
-interface ServiceWorkerRegistration {
-    sync: {
-      register(tag: string): Promise<void>;
-    };
-  }
-  
-  interface BeforeInstallPromptEvent extends Event {
-    prompt: () => Promise<void>;
-    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-  }
-  
+// Extend the existing Window interface
+interface Window {
+  workbox: any;
+}
+
+// Define ServiceWorkerGlobalScope
+interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
+  __WB_MANIFEST: any[];
+  skipWaiting(): Promise<void>;
+  clients: Clients;
+}

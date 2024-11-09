@@ -11,8 +11,8 @@ import { getRandomValues } from '@/utils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const isDebug = getEnvBoolean('debug', false);
-  const maxCards = getEnvNumber('maxCards', 10);  // Default now matches config
-  const defaultCoreValues = getEnvNumber('numCoreValues', 2);  // Default now matches config
+  const maxCards = getEnvNumber('maxCards', 35);  // Default now matches config
+  const defaultCoreValues = getEnvNumber('numCoreValues', 5);  // Default now matches config
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
 
   const handleStart = async () => {

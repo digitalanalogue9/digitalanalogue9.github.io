@@ -1,12 +1,12 @@
 {
-  "name": "Core Values Exercise",
+  "name": "Core Values",
   "short_name": "Core Values",
-  "description": "Discover and prioritise your personal core values",
+  "description": "Discover and prioritize your personal values",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
-  "orientation": "portrait",
+  "orientation" : "portrait",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -19,22 +19,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Start New Session",
-      "short_name": "New Session",
-      "description": "Start a new core values session",
-      "url": "/?source=pwa",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "View History",
-      "short_name": "History",
-      "description": "View your session history",
-      "url": "/history?source=pwa",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }
