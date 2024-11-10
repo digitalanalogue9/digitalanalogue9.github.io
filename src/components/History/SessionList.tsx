@@ -72,12 +72,14 @@ export function SessionList({ sessions }: SessionListProps) {
                 <div key={value.id} className="p-4 bg-yellow-50 rounded shadow">
                   <h4 className="font-medium">{value.title}</h4>
                   <p className="text-sm text-gray-600 mb-2">{value.description}</p>
-                  {value.reason && (
+                  {value.reason ? (
                     <div className="mt-2 pt-2 border-t border-gray-200">
                       <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
-                      <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                      <p className="text-sm text-gray-600 italic">
+                        {value.reason || "No reason given"}
+                      </p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -111,12 +113,14 @@ export function SessionList({ sessions }: SessionListProps) {
             >
               <h4 className="font-medium">{value.title}</h4>
               <p className="text-sm text-gray-600 mb-2">{value.description}</p>
-              {value.reason && (
+              {value.reason ? (
                 <div className="mt-2 pt-2 border-t border-gray-200">
                   <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
-                  <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                  <p className="text-sm text-gray-600 italic">
+                    {value.reason || "No reason given"}
+                  </p>
                 </div>
-              )}
+              ) : null}
             </motion.div>
           ))}
         </div>
