@@ -48,7 +48,7 @@ jobs:
           npm run build:prod
           touch out/.nojekyll
           cp out/404.html out/index.html
-      
+          echo "/*    /index.html   200" > out/_redirects
       - name: Fix permissions
         run: |
           chmod -c -R +rX out/
