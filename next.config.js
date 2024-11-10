@@ -23,16 +23,6 @@ const nextConfig = {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString(),
     NEXT_PUBLIC_BASE_PATH: basePath
-  },
-  // Add explicit page mapping
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-      '/history': { page: '/history' },
-      '/replay': { page: '/replay' },
-      '/about': { page: '/about' },
-      '/404': { page: '/404' }
-    };
   }
 }
 
