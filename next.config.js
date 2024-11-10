@@ -8,7 +8,8 @@ const withPWA = require('next-pwa')({
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 const repoName = 'digitalanalogue9.github.io';
 const basePath = isGitHubActions ? `/${repoName}` : ''; // Define basePath here
-const assetPrefix = isGitHubActions ? `/${repoName}/` : ''; // Define basePath here
+//const assetPrefix = isGitHubActions ? `/${repoName}/` : ''; // Define basePath here
+const assetPrefix = isGitHubActions ? '.' : ''; // Define basePath here
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
