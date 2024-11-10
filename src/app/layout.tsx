@@ -1,20 +1,8 @@
+// src/app/layout.tsx
 'use client'
 
 import './globals.css'
 import Navigation from '../components/Navigation'
-
-export const viewport = {
-  themeColor: '#3b82f6',
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-}
-
-export const metadata = {
-  title: 'Core Values',
-  description: 'Discover and prioritise your personal core values',
-  manifest: '/manifest.json',
-}
 
 export default function RootLayout({
   children,
@@ -24,6 +12,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="theme-color" content="#3b82f6" />
+        <title>Core Values</title>
+        <meta name="description" content="Discover and prioritise your personal core values" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />

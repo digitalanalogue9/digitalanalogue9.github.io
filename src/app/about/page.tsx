@@ -1,12 +1,6 @@
 'use client'
 
 import React from 'react';
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'About Core Values',
-  description: 'Learn more about the Core Values application'
-}
 
 export default function About() {
   return (
