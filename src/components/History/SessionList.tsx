@@ -234,12 +234,12 @@ export function SessionList({ sessions }: SessionListProps) {
                     >
                       Show Values
                     </button>
-                    <Link
+                    {process.env.NODE_ENV === 'development' && (<Link
                       href={`/replay?sessionId=${session.id}`}
                       className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                     >
                       Replay
-                    </Link>
+                    </Link>)}
                   </>
                 ) : (
                   <Link

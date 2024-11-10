@@ -11,12 +11,10 @@ interface CoreValueReasoningProps {
 export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningProps) {
     const [reasons, setReasons] = useState<Record<string, string>>({});
     const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
-    const [allValuesHaveReasons, setAllValuesHaveReasons] = useState(false);
 
     useEffect(() => {
         // Check if all values have non-empty reasons
         const hasAllReasons = values.every(value => reasons[value.id]?.trim());
-        setAllValuesHaveReasons(hasAllReasons);
     }, [reasons, values]);
 
     const handleReasonChange = (valueId: string, reason: string) => {
@@ -27,14 +25,9 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
     };
 
     const handleSubmit = () => {
-        if (!allValuesHaveReasons) {
-            alert("Please provide a reason for each value before continuing.");
-            return;
-        }
-
         const valuesWithReasons: ValueWithReason[] = values.map(value => ({
             ...value,
-            reason: reasons[value.id]
+            reason: reasons[value.id]?.trim() || '' // Empty string if no reason given
         }));
         onComplete(valuesWithReasons);
     };
@@ -42,6 +35,9 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-2xl font-bold mb-6">Why are these values meaningful to you?</h1>
+            <p className="text-gray-600 mb-6">
+                Optionally, explain why each value is meaningful to you. This can help you reflect on your choices.
+            </p>
             <div className="space-y-6 mb-8">
                 {values.map((value) => (
                     <motion.div
@@ -54,15 +50,14 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
                         <p className="text-gray-600 mb-4">{value.description}</p>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Why is this value meaningful to you?
+                                Why is this value meaningful to you? (Optional)
                             </label>
                             <textarea
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                 rows={3}
                                 value={reasons[value.id] || ''}
                                 onChange={(e) => handleReasonChange(value.id, e.target.value)}
-                                placeholder="Share your thoughts..."
-                                required
+                                placeholder="Share your thoughts... (optional)"
                             />
                         </div>
                     </motion.div>
@@ -71,11 +66,7 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
             <div className="flex justify-end">
                 <button
                     onClick={handleSubmit}
-                    disabled={!allValuesHaveReasons}
-                    className={`px-6 py-2 rounded-md transition-colors
-              ${allValuesHaveReasons
-                            ? 'bg-blue-600 text-white hover:bg-blue-700'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                    className="px-6 py-2 rounded-md transition-colors bg-blue-600 text-white hover:bg-blue-700"
                 >
                     Continue to Results
                 </button>
