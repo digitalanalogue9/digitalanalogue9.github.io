@@ -30,6 +30,7 @@ jobs:
       - name: Build with Next.js
         env:
           CACHE_VERSION: ${{ github.sha }}-${{ github.run_number }}
+          NODE_ENV: production
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -13,6 +13,8 @@ const nextConfig = {
     unoptimized: true
   },
   basePath: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io/' : '',
+  trailingSlash: true,
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString()
