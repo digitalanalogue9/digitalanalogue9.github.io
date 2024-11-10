@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:prod": "cross-env NODE_ENV=production next build",
     "start": "serve out -p 3000",
     "lint": "next lint",
     "test": "jest",
