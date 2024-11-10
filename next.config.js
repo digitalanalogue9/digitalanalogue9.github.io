@@ -7,7 +7,7 @@ const withPWA = require('next-pwa')({
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 const basePath = isGitHubActions ? '/digitalanalogue9.github.io' : '';
-const assetPrefix = isGitHubActions ? '.' : '';
+const assetPrefix = isGitHubActions ? '/digitalanalogue9.github.io' : '';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
