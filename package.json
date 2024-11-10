@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "clean": "rimraf .next && rimraf node_modules/.cache",
     "dev": "next dev",
-    "build": "next build && touch out/.nojekyll",
-    "start": "next start",
+    "build": "next build && type nul > out\\.nojekyll",
+    "build:prod": "cross-env NODE_ENV=production next build && touch out/.nojekyll",
+    "start": "serve out -p 3000",
     "lint": "next lint",
     "test": "jest",
-    "export": "next export",
-    "test:watch": "jest --watch"
+    "serve": "next build && serve out -p 3000"
   },
   "dependencies": {
     "framer-motion": "^11.11.11",
@@ -31,6 +30,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "eslint": "^9.14.0",
     "eslint-config-next": "15.0.3",
     "jest": "^29.7.0",

@@ -5,6 +5,8 @@ const withPWA = require('next-pwa')({
   disable: process.env.NODE_ENV === 'development'
 })
 
+const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -12,9 +14,9 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/digitalanalogue9.github.io/' : '',
   trailingSlash: true,
+  basePath: isGitHubActions ? '/digitalanalogue9.github.io' : '',
+  assetPrefix: isGitHubActions ? '/digitalanalogue9.github.io' : '',
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString()
