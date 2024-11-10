@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
+import RoundUIDebug from '@/components/Round/RoundUIDebug';
 import StartScreen from '../components/StartScreen';
 import RoundUI from '../components/Round/RoundUI';
 import Instructions from '../components/Instructions';
@@ -61,13 +62,16 @@ export default function Home() {
     setShowInstructions(true);
   };
 
+  // Use RoundUIDebug in development, RoundUI in production
+const GameComponent = process.env.NODE_ENV === 'development' ? RoundUIDebug : RoundUI;
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="min-h-screen">
         {!isGameStarted ? (
           <StartScreen onStart={handleGameStart} />
         ) : (
-          <RoundUI />
+          <GameComponent />
         )}
         {showInstructions && (
           <Instructions onClose={() => setShowInstructions(false)} />

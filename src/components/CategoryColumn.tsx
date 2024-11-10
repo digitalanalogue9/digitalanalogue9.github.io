@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Card } from '@/components/Card';
 import { CategoryColumnProps } from './CategoryColumnProps';
 import { Value, CategoryName } from '@/types';
 
 
-export default function CategoryColumn({
+const CategoryColumn = memo(function CategoryColumn({
   title,
   cards,
   onDrop,
@@ -14,6 +14,7 @@ export default function CategoryColumn({
   onMoveBetweenCategories
 }: CategoryColumnProps) {
   const [isOver, setIsOver] = useState(false);
+  const [isMoving, setIsMoving] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -27,27 +28,71 @@ export default function CategoryColumn({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsOver(false);
-    const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & { sourceCategory?: string };
-    if (droppedValue.sourceCategory) {
-      // Card is being moved between categories
-      onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
-    } else {
-      // Card is being dropped from the remaining cards
-      onDrop(droppedValue, title);
+
+    try {
+      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & {
+        sourceCategory?: string;
+        isInternalDrag?: boolean;
+        sourceIndex?: number;
+      };
+
+      // If this is an internal drag within the same category
+      if (droppedValue.isInternalDrag && droppedValue.sourceCategory === title) {
+        // Find the target card element
+        const targetElement = e.target as HTMLElement;
+        const cardElement = targetElement.closest('[data-index]');
+
+        if (cardElement) {
+          const targetIndex = parseInt(cardElement.getAttribute('data-index') || '0', 10);
+          const sourceIndex = cards.findIndex(card => card.id === droppedValue.id);
+
+          // Only move if we have valid indices and they're different
+          if (sourceIndex !== -1 && sourceIndex !== targetIndex) {
+            // If dropping below the source position, we need to adjust the target index
+            const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex : targetIndex;
+            onMoveWithinCategory(sourceIndex, adjustedTargetIndex);
+          }
+        }
+        return;
+      }
+
+      // Handle cross-category move
+      if (droppedValue.sourceCategory && droppedValue.sourceCategory !== title) {
+        onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
+        return;
+      }
+
+      // Handle new card drop (only if it's not an internal drag)
+      if (!droppedValue.isInternalDrag) {
+        onDrop(droppedValue, title);
+      }
+    } catch (error) {
+      console.error('Error handling drop:', error);
     }
   };
 
-  const handleMoveUp = (index: number) => {
+
+  const handleMoveUp = useCallback((index: number) => {
+    if (isMoving) return;
+    console.log('CategoryColumn: handleMoveUp called:', index);
     if (index > 0) {
+      setIsMoving(true);
       onMoveWithinCategory(index, index - 1);
+      // Reset the lock after a short delay
+      setTimeout(() => setIsMoving(false), 300);
     }
-  };
+  }, [onMoveWithinCategory, isMoving]);
 
-  const handleMoveDown = (index: number) => {
+  const handleMoveDown = useCallback((index: number) => {
+    if (isMoving) return;
+    console.log('CategoryColumn: handleMoveDown called:', index);
     if (index < cards.length - 1) {
+      setIsMoving(true);
       onMoveWithinCategory(index, index + 1);
+      // Reset the lock after a short delay
+      setTimeout(() => setIsMoving(false), 300);
     }
-  };
+  }, [onMoveWithinCategory, cards.length, isMoving]);
 
   return (
     <div
@@ -57,7 +102,7 @@ export default function CategoryColumn({
       id={`category-${title}`}
       className={`
         flex-1 
-        p-2      // Reduced padding to allow cards to be wider
+        p-2
         rounded-lg 
         min-h-[500px]
         transition-colors 
@@ -67,35 +112,43 @@ export default function CategoryColumn({
         ${isOver ? 'border-blue-300' : 'border-transparent'}
       `}
     >
-      <div className="flex items-center justify-between mb-4 px-2"> {/* Added padding here */}
+      <div className="flex items-center justify-between mb-4 px-2">
         <h2 className="text-xl font-bold text-gray-700">{title}</h2>
         <span className="bg-gray-200 px-2 py-1 rounded-full text-sm text-gray-600">
           {cards.length}
         </span>
       </div>
 
-      <div className="space-y-2"> {/* Reduced gap between cards */}
+      <div className="space-y-2">
         {cards.map((value, index) => (
-          <div key={value.id} className="transition-all duration-200">
-            <Card
-              value={value}
-              columnIndex={index}
-              currentCategory={title}
-              onDrop={(value) => onDrop(value, title)}
-              onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
-              onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
-              onMoveToCategory={(value, fromCat, toCat) =>
-                onMoveBetweenCategories(value, fromCat, toCat)}
-            />
+          <div key={`${title}-${value.id}-${index}`} className="transition-all duration-200">
+            <div
+              data-index={index}
+              data-dropzone="true"
+              className="w-full"
+            >
+              <Card
+                value={value}
+                columnIndex={index}
+                currentCategory={title}
+                onDrop={(value: Value) => onDrop(value, title)}
+                onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
+                onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
+                onMoveToCategory={(value: Value, fromCat: CategoryName, toCat: CategoryName) =>
+                  onMoveBetweenCategories(value, fromCat, toCat)}
+              />
+            </div>
           </div>
         ))}
 
         {cards.length === 0 && (
-          <div className="text-center mx-2 py-8 text-gray-400 border-2 border-dashed rounded-lg">
+          <div data-index="0" data-dropzone="true" className="text-center mx-2 py-8 text-gray-400 border-2 border-dashed rounded-lg">
             Drop cards here
           </div>
         )}
       </div>
     </div>
   );
-}
+});
+
+export default CategoryColumn;

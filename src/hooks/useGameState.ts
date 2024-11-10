@@ -1,6 +1,7 @@
 'use client'
 
 import {useStore} from '@/store/store'
+import { shallow } from 'zustand/shallow'
 
 export function useGameState() {
   const state = useStore((state) => ({
@@ -17,7 +18,7 @@ export function useGameState() {
     setShowInstructions: state.setShowInstructions,
     resetGame: state.resetGame,
     clearCommands: state.clearCommands
-  }))
+  }), shallow);
   
-  return state
+  return state;
 }

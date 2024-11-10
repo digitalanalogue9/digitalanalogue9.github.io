@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { saveRound, updateSession, saveCompletedSession, getRoundsBySession } from '@/db/indexedDB';
+import { useState, useEffect, memo, useMemo, useCallback } from 'react';
+import { saveRound, updateSession, saveCompletedSession } from '@/db/indexedDB';
 import Results from '../Results';
 import { useSession } from '@/hooks/useSession';
 import { useGameState } from '@/hooks/useGameState';
@@ -15,14 +15,17 @@ import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
 import { getRandomValues } from '@/utils';
-import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload, Value, ValueWithReason } from '@/types';
+import { Categories, CategoryName, Value, ValueWithReason } from '@/types';
 import { StatusMessage } from '@/components/Round/components/StatusMessage';
 import { getCategoriesForRound } from '@/utils/categoryUtils';
 import { MobileCategoryList } from './components/MobileCategoryList';
-import { initialCategories } from '@/constants/categories';
 import { CoreValueReasoning } from '../CoreValueReasoning';
+import { logRender, logStateUpdate, logEffect } from '@/utils/debug/renderLogger';
 
-export default function RoundUI() {
+const RoundUI = memo(function RoundUI() {
+  logRender('RoundUI');
+
+  // State
   const [isMobile, setIsMobile] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
   const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
@@ -30,37 +33,22 @@ export default function RoundUI() {
   const [shouldEndGame, setShouldEndGame] = useState<boolean>(false);
   const [showReasoning, setShowReasoning] = useState<boolean>(false);
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
-  
+
+  // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
-  console.log('remainingCards:', remainingCards);
   const { currentRoundCommands, addCommand, clearCommands } = useCommands();
 
-  // Calculate active cards (not in Not Important)
-  const activeCards = Object.entries(categories)
-    .filter(([category]) => category !== 'Not Important')
-    .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+  // Memoized calculations
+  const activeCards = useMemo(() => {
+    logEffect('Calculate activeCards', [categories]);
+    return Object.entries(categories)
+      .filter(([category]) => category !== 'Not Important')
+      .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+  }, [categories]);
 
-  // Get round state calculations
   const roundState = useRoundState(categories, remainingCards, targetCoreValues);
 
-
-
-  // Update shouldEndGame when activeCards equals targetCoreValues
-  useEffect(() => {
-    setShouldEndGame(activeCards === targetCoreValues);
-  }, [activeCards, targetCoreValues]);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Get validation function
   const validateRound = useRoundValidation({
     remainingCards,
     targetCoreValues,
@@ -72,8 +60,7 @@ export default function RoundUI() {
     categories
   });
 
-  // Get status message
-  const getStatusFn = useRoundStatus({
+  const status = useRoundStatus({
     remainingCards,
     targetCoreValues,
     hasMinimumNotImportant: roundState.hasMinimumNotImportant,
@@ -84,9 +71,7 @@ export default function RoundUI() {
     categories
   });
 
-  const status = getStatusFn();
-
-  // Get handlers
+  // Handlers
   const {
     handleMoveCard,
     handleDrop,
@@ -108,8 +93,15 @@ export default function RoundUI() {
     setShowResults
   );
 
-  const handleNextRound = async () => {
+  const handleDropWithZone = useCallback((card: Value, category: CategoryName) => {
+    logStateUpdate('handleDropWithZone', { card, category }, 'RoundUI');
+    setActiveDropZone(category);
+    handleDrop(card, category);
+  }, [handleDrop]);
+
+  const handleNextRound = useCallback(async () => {
     try {
+      logStateUpdate('handleNextRound', { roundNumber }, 'RoundUI');
       if (!validateRound()) {
         console.error('Cannot proceed: round validation failed');
         return;
@@ -119,45 +111,18 @@ export default function RoundUI() {
         await saveRound(sessionId, roundNumber, currentRoundCommands, categories);
       }
 
-      // If we're ending the game
       if (shouldEndGame) {
         if (sessionId) {
-          // Get all core values from all important categories
           const finalValues = Object.entries(categories)
             .filter(([category]) => category !== 'Not Important')
             .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
 
-            setFinalValuesWithoutReasons(finalValues);
-            setShowReasoning(true);
-            return;
-
-            // Update session to mark it as completed
-          // const session = {
-          //   timestamp: Date.now(),
-          //   targetCoreValues,
-          //   currentRound: roundNumber,
-          //   completed: true
-          // };
-          // await updateSession(sessionId, session);
-
-          // // Save the completed session data
-          // await saveCompletedSession(sessionId, finalValues);
+          setFinalValuesWithoutReasons(finalValues);
+          setShowReasoning(true);
+          return;
         }
-
-        // Filter out Not Important cards before showing results
-        // const finalCategories = Object.entries(categories)
-        //   .filter(([category]) => category !== 'Not Important')
-        //   .reduce((acc, [category, cards]) => {
-        //     acc[category] = cards;
-        //     return acc;
-        //   }, {} as Categories);
-
-        // setCategories(finalCategories);
-        // setShowResults(true);
-        // return;
       }
 
-      // Normal next round flow
       clearCommands();
       const nextRound = roundNumber + 1;
       const cardsForNextRound = getImportantCards(categories);
@@ -167,7 +132,6 @@ export default function RoundUI() {
         return;
       }
 
-      const ratio = cardsForNextRound.length / targetCoreValues;
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
       if (sessionId) {
         await saveRound(sessionId, nextRound, [], nextCategories);
@@ -178,11 +142,15 @@ export default function RoundUI() {
     } catch (error) {
       console.error('Failed to handle next round:', error);
     }
-  };
+  }, [
+    validateRound, sessionId, roundNumber, currentRoundCommands, categories,
+    shouldEndGame, targetCoreValues, clearCommands, setRoundNumber,
+    setCategories, setRemainingCards
+  ]);
 
-  const handleReasoningComplete = async (valuesWithReasons: ValueWithReason[]) => {
+  const handleReasoningComplete = useCallback(async (valuesWithReasons: ValueWithReason[]) => {
+    logStateUpdate('handleReasoningComplete', { valuesWithReasons }, 'RoundUI');
     if (sessionId) {
-      // Update session to mark it as completed
       const session = {
         timestamp: Date.now(),
         targetCoreValues,
@@ -190,24 +158,38 @@ export default function RoundUI() {
         completed: true
       };
       await updateSession(sessionId, session);
-  
-      // Save the completed session data with reasons
       await saveCompletedSession(sessionId, valuesWithReasons);
     }
-  
-    // Filter out Not Important cards before showing results
+
     const finalCategories = Object.entries(categories)
       .filter(([category]) => category !== 'Not Important')
       .reduce((acc, [category, cards]) => {
         acc[category] = cards;
         return acc;
       }, {} as Categories);
-  
+
     setCategories(finalCategories);
     setShowReasoning(false);
     setShowResults(true);
-  };
+  }, [sessionId, targetCoreValues, roundNumber, categories, setCategories]);
 
+  // Effects
+  useEffect(() => {
+    logEffect('shouldEndGame effect', [activeCards, targetCoreValues]);
+    setShouldEndGame(activeCards === targetCoreValues);
+  }, [activeCards, targetCoreValues]);
+
+  useEffect(() => {
+    logEffect('mobile check effect');
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Conditional rendering
   if (showReasoning) {
     return <CoreValueReasoning values={finalValuesWithoutReasons} onComplete={handleReasoningComplete} />;
   }
@@ -215,8 +197,9 @@ export default function RoundUI() {
   if (showResults) {
     return <Results />;
   }
+
   return (
-    <div className="container mx-auto px-1 sm:px-2 md:px-4 lg:px-6 py-1 sm:py-2"> {/* Reduced padding */}
+    <div className="container mx-auto px-1 sm:px-2 md:px-4 lg:px-6 py-1 sm:py-2">
       <RoundHeader
         targetCoreValues={targetCoreValues}
         roundNumber={roundNumber}
@@ -227,7 +210,6 @@ export default function RoundUI() {
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
           <div className="hidden sm:block" />
 
-          {/* Mobile layout for card and status */}
           {isMobile ? (
             <div className="flex items-center justify-center gap-4">
               <RoundActions
@@ -238,7 +220,7 @@ export default function RoundUI() {
                 isEndGame={shouldEndGame}
               />
               <StatusMessage
-                status={status}
+                status={status()}
                 isNearingCompletion={roundState.isNearingCompletion}
                 hasTooManyImportantCards={roundState.hasTooManyImportantCards}
                 hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
@@ -260,7 +242,7 @@ export default function RoundUI() {
                 />
               </div>
               <StatusMessage
-                status={status}
+                status={status()}
                 isNearingCompletion={roundState.isNearingCompletion}
                 hasTooManyImportantCards={roundState.hasTooManyImportantCards}
                 hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
@@ -276,10 +258,7 @@ export default function RoundUI() {
         {isMobile ? (
           <MobileCategoryList
             categories={categories}
-            onDrop={(card, category) => {
-              setActiveDropZone(category);
-              handleDrop(card, category);
-            }}
+            onDrop={handleDropWithZone}
             onExpand={setExpandedCategory}
             activeDropZone={activeDropZone}
           />
@@ -294,4 +273,6 @@ export default function RoundUI() {
       </div>
     </div>
   );
-}
+});
+
+export default RoundUI;

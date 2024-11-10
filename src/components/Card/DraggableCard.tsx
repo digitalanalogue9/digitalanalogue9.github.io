@@ -1,16 +1,23 @@
 // DraggableCard.tsx
 'use client'
 
-import { useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { CardProps } from './types';
-import { CategoryName } from '@/types';
 import { getEnvBoolean } from '@/utils/config';
 import { CardControls } from './CardControls';
 import { CardMoveOptions } from './CardMoveOptions';
 import { CardContent } from './CardContent';
 import { getPostItStyles } from './styles';
+import { CategoryName, Value } from '@/types';
 
-export function DraggableCard({
+
+interface DroppedValue extends Value {
+    sourceCategory?: CategoryName;
+    isInternalDrag?: boolean;
+    sourceIndex?: number;
+}
+
+const DraggableCard = memo(function DraggableCard({
     value,
     onDrop,
     onMoveUp,
@@ -24,6 +31,7 @@ export function DraggableCard({
     const [isOver, setIsOver] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [showMoveOptions, setShowMoveOptions] = useState(false);
+    const moveRef = useRef<{ pending: boolean }>({ pending: false });
 
     if (!value) return null;
     const isInCategory = columnIndex !== undefined;
@@ -32,33 +40,79 @@ export function DraggableCard({
         setIsDragging(true);
         const dragData = {
             ...value,
-            sourceCategory: currentCategory
+            sourceCategory: currentCategory,
+            isInternalDrag: isInCategory,
+            sourceIndex: columnIndex
         };
         e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-        if (debug) console.log('🎪 Card dragStart:', { value, columnIndex });
+        
+        if (debug) console.log('🎪 Card dragStart:', { value, columnIndex, isInCategory });
     };
 
-    const handleDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
+        e.preventDefault();
+        setIsOver(true);
+    };
+    
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsOver(false);
+        
+        try {
+            const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
+
+            // If this is an internal drag within the same category
+            if (droppedValue.isInternalDrag && droppedValue.sourceCategory === currentCategory) {
+                // Find the dropzone element
+                const dropzone = (e.target as HTMLElement).closest('[data-dropzone]');
+                console.log('Found dropzone:', dropzone); // Debug log
+                
+                if (dropzone) {
+                    const targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
+                    const sourceIndex = droppedValue.sourceIndex;
+                    
+                    console.log('Indices:', { sourceIndex, targetIndex }); // Debug log
+
+                    // Only move if we have valid indices and they're different
+                    if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
+                        // If dropping below the source position, we need to adjust the target index
+                        const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
+                        console.log('Moving card:', { sourceIndex, adjustedTargetIndex }); // Debug log
+                        onMoveUp || onMoveDown ? 
+                            (sourceIndex < targetIndex ? onMoveDown?.() : onMoveUp?.()) :
+                            null;
+                    }
+                } else {
+                    console.log('No dropzone found'); // Debug log
+                }
+                return;
+            }
+
+            // Handle regular drops
+            if (onDrop) {
+                onDrop(droppedValue);
+            }
+        } catch (error) {
+            console.error('Error handling drop:', error);
+        }
+    };
+
+    
+    const handleDragEnd = (): void => {
         setIsDragging(false);
         setIsOver(false);
+        moveRef.current.pending = false;
         if (debug) console.log('🏁 Card dragEnd:', { value, columnIndex });
     };
 
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         setIsOver(true);
-        if (debug) console.log('➡️ Card dragEnter:', { value, columnIndex });
     };
 
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         setIsOver(false);
-        if (debug) console.log('⬅️ Card dragLeave:', { value, columnIndex });
-    };
-
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
-        e.preventDefault();
-        if (debug) console.log('🔄 Card dragOver:', { value, columnIndex });
     };
 
     const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
@@ -67,12 +121,15 @@ export function DraggableCard({
         return (
             <div
                 id={`card-${value.title}`}
+                data-index={columnIndex}
+                data-dropzone="true"
                 draggable="true"
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
+                onDrop={handleDrop}
                 className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative`}
             >
                 <CardContent
@@ -87,7 +144,7 @@ export function DraggableCard({
                             currentCategory={currentCategory}
                             isExpanded={isExpanded}
                             onToggleExpand={() => setIsExpanded(!isExpanded)}
-                            value={value}  // Add this
+                            value={value}
                         />
                     }
                 />
@@ -113,6 +170,7 @@ export function DraggableCard({
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
+            onDrop={handleDrop}
             className={`${postItBaseStyles} ${tapeEffect} w-48 h-48`}
         >
             <div className="relative z-10">
@@ -121,4 +179,6 @@ export function DraggableCard({
             </div>
         </div>
     );
-}
+});
+
+export default DraggableCard;

@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { CategoryName, Categories, Value, Command } from '@/types';
 import { MoveCommand } from '@/commands/MoveCommand';
 import { DropCommand } from '@/commands/DropCommand';
 import { saveRound } from '@/db/indexedDB';
+import { logEffect, logStateUpdate } from '@/utils/debug/renderLogger';
 
 export const useRoundHandlers = (
   categories: Categories,
@@ -20,6 +21,17 @@ export const useRoundHandlers = (
   setRoundNumber: (round: number) => void,
   setShowResults: (show: boolean) => void
 ) => {
+
+
+  useEffect(() => {
+    logEffect('categories effect in useRoundHandlers', [categories]);
+  }, [categories]);
+  
+  
+  useEffect(() => {
+    console.log('Commands updated:', currentRoundCommands);
+  }, [currentRoundCommands]);
+
   // in useRoundHandlers.ts
   const saveRoundData = useCallback(async (command: Command) => {
     if (!sessionId) return;
@@ -41,30 +53,7 @@ export const useRoundHandlers = (
       console.error('Failed to save round data:', error);
     }
   }, [sessionId, roundNumber, currentRoundCommands, categories, validCategories]);
-
-
-  const handleMoveCard = useCallback(async (
-    category: CategoryName,
-    fromIndex: number,
-    toIndex: number
-  ): Promise<void> => {
-    if (!validCategories.includes(category)) return;
-
-    const categoryCards = categories[category] || [];
-    if (!categoryCards[fromIndex]) return;
-
-    const command = new MoveCommand(categoryCards[fromIndex], category, category);
-    const updatedCategories = { ...categories };
-    const cards = [...categoryCards];
-    const [movedCard] = cards.splice(fromIndex, 1);
-    cards.splice(toIndex, 0, movedCard);
-    updatedCategories[category] = cards;
-
-    setCategories(updatedCategories);
-    await addCommand(command);
-    await saveRoundData(command);
-  }, [categories, validCategories, setCategories, addCommand, saveRoundData]);
-
+  
   const handleDrop = useCallback(async (value: Value, category: CategoryName): Promise<void> => {
     if (!validCategories.includes(category)) return;
 
@@ -82,6 +71,68 @@ export const useRoundHandlers = (
     await saveRoundData(command);
   }, [remainingCards, categories, validCategories, setCategories, setRemainingCards, addCommand, saveRoundData]);
 
+  const handleMoveCard = useCallback(async (
+    category: CategoryName,
+    fromIndex: number,
+    toIndex: number
+  ): Promise<void> => {
+    // Debug logging
+    console.log('handleMoveCard called:', { category, fromIndex, toIndex });
+  
+    // Early returns with logging
+    if (!validCategories.includes(category)) {
+      console.log('Invalid category, returning');
+      return;
+    }
+    if (fromIndex === toIndex) {
+      console.log('Same index, returning');
+      return;
+    }
+  
+    const categoryCards = categories[category] || [];
+    if (!categoryCards[fromIndex]) {
+      console.log('No card at fromIndex, returning');
+      return;
+    }
+  
+    // Get the card we're moving
+    const cardToMove = categoryCards[fromIndex];
+  
+    // Create a new categories object with the updated order
+    const updatedCategories = { ...categories };
+    const newCards = [...categoryCards];
+    newCards.splice(fromIndex, 1);
+    newCards.splice(toIndex, 0, cardToMove);
+    updatedCategories[category] = newCards;
+  
+    // Create single command for this move
+    const command = new MoveCommand(
+      cardToMove,
+      category,
+      category,
+      fromIndex,
+      toIndex
+    );
+  
+    // Update state and save in a single operation
+    try {
+      setCategories(updatedCategories);
+      await addCommand(command);
+      await saveRoundData(command);
+      
+      console.log('Move completed successfully:', {
+        card: cardToMove,
+        from: fromIndex,
+        to: toIndex,
+        category
+      });
+    } catch (error) {
+      console.error('Error in handleMoveCard:', error);
+    }
+  }, [categories, validCategories, setCategories, addCommand, saveRoundData]);
+  
+  
+  
   const handleMoveBetweenCategories = useCallback(async (
     value: Value,
     fromCategory: CategoryName,
