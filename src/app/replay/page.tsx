@@ -1,3 +1,4 @@
+'use client'
 // src/app/replay/page.tsx
 import { Suspense } from 'react';
 import ReplayClient from '@/components/Replay/ReplayClient';

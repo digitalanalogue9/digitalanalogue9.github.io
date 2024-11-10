@@ -1,3 +1,5 @@
+'use client'
+
 import { Profiler, ProfilerOnRenderCallback } from 'react';
 import RoundUI from './RoundUI';
 

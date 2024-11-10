@@ -20,8 +20,7 @@ const nextConfig = {
   basePath: basePath,
   env: {
     BUILD_TIME: new Date().toISOString(),
-    CACHE_VERSION: Date.now().toString(),
-    NEXT_PUBLIC_BASE_PATH: basePath
+    CACHE_VERSION: Date.now().toString()
   }
 }
 
