@@ -6,8 +6,8 @@ const withPWA = require('next-pwa')({
 })
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
-const basePath = isGitHubActions ? '/digitalanalogue9.github.io' : '';
-const assetPrefix = isGitHubActions ? '.' : '';
+const repoName = 'digitalanalogue9.github.io';
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,8 +17,8 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  basePath: basePath,
-  assetPrefix: assetPrefix,
+  basePath: isGitHubActions ? `/${repoName}` : '',
+  assetPrefix: isGitHubActions ? `/${repoName}/` : '', // Note the trailing slash
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString(),
