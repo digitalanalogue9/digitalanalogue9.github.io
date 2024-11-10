@@ -26,9 +26,11 @@ export function CardControls({
     action();
   };
 
+  const buttonBaseClass = "p-1.5 text-gray-600 hover:text-gray-900 rounded text-sm hover:bg-gray-100 active:bg-gray-200 transition-colors touch-none select-none";
+
   return (
     <div 
-      className="flex gap-0 items-center text-gray-600"
+      className="flex gap-0 items-center justify-end min-w-[120px] ml-auto"
       onTouchStart={(e: ReactTouchEvent) => e.stopPropagation()}
       onClick={(e: ReactMouseEvent) => e.stopPropagation()}
     >
@@ -36,12 +38,12 @@ export function CardControls({
         type="button"
         onClick={(e) => handleButtonClick(e, () => onToggleExpand?.())}
         onTouchStart={(e) => handleButtonClick(e, () => onToggleExpand?.())}
-        className="p-2 hover:text-gray-900 rounded text-sm 
-                 hover:bg-gray-100 active:bg-gray-200 transition-colors
-                 touch-none select-none"
+        className={buttonBaseClass}
         aria-label={isExpanded ? 'Collapse' : 'Expand'}
       >
-        {isExpanded ? '▼' : '▶'}
+        <span className="inline-block w-4 text-center">
+          {isExpanded ? '▼' : '▶︎'}
+        </span>
       </button>
 
       {onMoveUp && (
@@ -49,12 +51,10 @@ export function CardControls({
           type="button"
           onClick={(e) => handleButtonClick(e, onMoveUp)}
           onTouchStart={(e) => handleButtonClick(e, onMoveUp)}
-          className="p-2 hover:text-gray-900 rounded text-sm
-                   hover:bg-gray-100 active:bg-gray-200 transition-colors
-                   touch-none select-none"
+          className={buttonBaseClass}
           aria-label="Move Up"
         >
-          ↑
+          <span className="inline-block w-4 text-center">↑</span>
         </button>
       )}
 
@@ -63,12 +63,10 @@ export function CardControls({
           type="button"
           onClick={(e) => handleButtonClick(e, onMoveDown)}
           onTouchStart={(e) => handleButtonClick(e, onMoveDown)}
-          className="p-2 hover:text-gray-900 rounded text-sm
-                   hover:bg-gray-100 active:bg-gray-200 transition-colors
-                   touch-none select-none"
+          className={buttonBaseClass}
           aria-label="Move Down"
         >
-          ↓
+          <span className="inline-block w-4 text-center">↓</span>
         </button>
       )}
 
@@ -78,12 +76,10 @@ export function CardControls({
           id={`options-${value.id}`}
           onClick={(e) => handleButtonClick(e, onShowMoveOptions)}
           onTouchStart={(e) => handleButtonClick(e, onShowMoveOptions)}
-          className="p-2 hover:text-gray-900 rounded text-sm
-                   hover:bg-gray-100 active:bg-gray-200 transition-colors
-                   touch-none select-none"
+          className={buttonBaseClass}
           aria-label="More options"
         >
-          ⋮
+          <span className="inline-block w-4 text-center">⋮</span>
         </button>
       )}
     </div>

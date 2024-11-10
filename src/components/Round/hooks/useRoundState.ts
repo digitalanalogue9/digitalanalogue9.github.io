@@ -6,6 +6,9 @@ export const useRoundState = (
   remainingCards: Value[],
   targetCoreValues: number
 ) => {
+  
+  const hasTargetCoreValuesInVeryImportant = categories['Very Important']?.length === targetCoreValues;
+  
   // Calculate active cards (excluding Not Important)
   const activeCards = Object.entries(categories)
     .filter(([category]) => category !== 'Not Important')
@@ -54,7 +57,8 @@ export const useRoundState = (
   const isEndGameReady = (isNearingCompletion &&
     veryImportantCount === targetCoreValues &&
     totalActiveCards === targetCoreValues &&
-    hasMinimumNotImportant) || hasFoundCoreValues;
+    hasMinimumNotImportant) || hasFoundCoreValues || 
+    hasTargetCoreValuesInVeryImportant;
 
   return {
     activeCards,
@@ -71,6 +75,7 @@ export const useRoundState = (
     hasNotEnoughImportantCards,
     isEndGameReady,
     hasFoundCoreValues,
+    hasTargetCoreValuesInVeryImportant,
     categories
   };
 };

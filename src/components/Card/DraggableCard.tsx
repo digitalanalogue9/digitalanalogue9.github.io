@@ -124,7 +124,7 @@ const DraggableCard = memo(function DraggableCard({
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative`}
+                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative`}
             >
                 <CardContent
                     title={value.title}
@@ -143,7 +143,7 @@ const DraggableCard = memo(function DraggableCard({
                     }
                 />
                 {showMoveOptions && onMoveToCategory && currentCategory && (
-                    <div className="absolute right-0 top-8 z-50">
+                    <div className="absolute right-2 top-8 z-50">
                         <CardMoveOptions
                             value={value}
                             currentCategory={currentCategory}

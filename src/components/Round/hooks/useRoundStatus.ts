@@ -25,7 +25,7 @@ export const useRoundStatus = (state: StatusState) => {
   return useCallback((): Status => {
     if (state.remainingCards.length > 0) {
       return {
-        text: `Drag the remaining ${state.remainingCards.length} ${state.remainingCards.length === 1 ? "value" : "values"} to a category`,
+        text: `Drag the remaining ${state.remainingCards.length === 1 ? "" : state.remainingCards.length} ${state.remainingCards.length === 1 ? "value" : "values"} to a category`,
         type: 'info',
         isEndGame: false
       };

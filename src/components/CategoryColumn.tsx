@@ -110,6 +110,8 @@ const CategoryColumn = memo(function CategoryColumn({
         p-2
         rounded-lg 
         min-h-[500px]
+        min-w-[300px] // Add minimum width
+        max-w-[400px] // Add maximum width
         transition-colors 
         duration-200
         ${isOver ? 'bg-blue-50' : 'bg-gray-50'}
@@ -124,7 +126,7 @@ const CategoryColumn = memo(function CategoryColumn({
         </span>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         {cards.map((value, index) => (
           <div key={`${title}-${value.id}-${index}`} className="transition-all duration-200">
             <div

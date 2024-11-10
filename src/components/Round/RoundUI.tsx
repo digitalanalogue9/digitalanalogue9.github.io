@@ -106,32 +106,37 @@ const RoundUI = memo(function RoundUI() {
         console.error('Cannot proceed: round validation failed');
         return;
       }
-
+  
       if (sessionId) {
         await saveRound(sessionId, roundNumber, currentRoundCommands, categories);
       }
-
+  
+      const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
+  
       if (shouldEndGame) {
         if (sessionId) {
-          const finalValues = Object.entries(categories)
-            .filter(([category]) => category !== 'Not Important')
-            .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
-
+          // If we have exact target in Very Important, only use those values
+          const finalValues = hasExactTargetInVeryImportant
+            ? categories['Very Important'] || []
+            : Object.entries(categories)
+                .filter(([category]) => category !== 'Not Important')
+                .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
+  
           setFinalValuesWithoutReasons(finalValues);
           setShowReasoning(true);
           return;
         }
       }
-
+  
       clearCommands();
       const nextRound = roundNumber + 1;
       const cardsForNextRound = getImportantCards(categories);
-
+  
       if (cardsForNextRound.length < targetCoreValues) {
         console.error('Not enough cards to proceed');
         return;
       }
-
+  
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
       if (sessionId) {
         await saveRound(sessionId, nextRound, [], nextCategories);
@@ -143,9 +148,17 @@ const RoundUI = memo(function RoundUI() {
       console.error('Failed to handle next round:', error);
     }
   }, [
-    validateRound, sessionId, roundNumber, currentRoundCommands, categories,
-    shouldEndGame, targetCoreValues, clearCommands, setRoundNumber,
-    setCategories, setRemainingCards
+    validateRound, 
+    sessionId, 
+    roundNumber, 
+    currentRoundCommands, 
+    categories,
+    shouldEndGame, 
+    targetCoreValues, 
+    clearCommands, 
+    setRoundNumber,
+    setCategories, 
+    setRemainingCards
   ]);
 
   const handleReasoningComplete = useCallback(async (valuesWithReasons: ValueWithReason[]) => {
@@ -175,9 +188,10 @@ const RoundUI = memo(function RoundUI() {
 
   // Effects
   useEffect(() => {
-    logEffect('shouldEndGame effect', [activeCards, targetCoreValues]);
-    setShouldEndGame(activeCards === targetCoreValues);
-  }, [activeCards, targetCoreValues]);
+    const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
+    setShouldEndGame(hasExactTargetInVeryImportant || activeCards === targetCoreValues);
+  }, [activeCards, targetCoreValues, categories]);
+  
 
   useEffect(() => {
     logEffect('mobile check effect');
