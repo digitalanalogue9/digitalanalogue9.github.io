@@ -7,7 +7,8 @@ const withPWA = require('next-pwa')({
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 const repoName = 'digitalanalogue9.github.io';
-
+const basePath = isGitHubActions ? `/${repoName}` : ''; // Define basePath here
+const assetPrefix = isGitHubActions ? `/${repoName}/` : ''; // Define basePath here
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,12 +18,12 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  basePath: isGitHubActions ? `/${repoName}` : '',
-  assetPrefix: isGitHubActions ? `/${repoName}/` : '', // Note the trailing slash
+  basePath: basePath,
+  assetPrefix: assetPrefix,
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString(),
-    NEXT_PUBLIC_BASE_PATH: basePath
+    NEXT_PUBLIC_BASE_PATH: basePath  // Now basePath is defined when used here
   }
 }
 
