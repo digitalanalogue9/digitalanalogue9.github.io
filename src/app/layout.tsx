@@ -24,13 +24,13 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        <link rel="icon" type="image/x-icon" href="/icons/favicon.ico"></link>
+        <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
       </head>
       <body>
         <Navigation />
         <main className="pt-3">
           {children}
-          <div id="portal-root" /> {/* Add this */}
+          <div id="portal-root" />
         </main>
       </body>
     </html>
