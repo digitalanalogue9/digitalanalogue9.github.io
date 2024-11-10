@@ -6,6 +6,8 @@ const withPWA = require('next-pwa')({
 })
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
+const basePath = isGitHubActions ? '/digitalanalogue9.github.io' : '';
+const assetPrefix = isGitHubActions ? '.' : '';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -15,11 +17,22 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  basePath: isGitHubActions ? '/digitalanalogue9.github.io' : '',
-  assetPrefix: isGitHubActions ? '.' : '', // Changed to relative path
+  basePath: basePath,
+  assetPrefix: assetPrefix,
   env: {
     BUILD_TIME: new Date().toISOString(),
-    CACHE_VERSION: Date.now().toString()
+    CACHE_VERSION: Date.now().toString(),
+    NEXT_PUBLIC_BASE_PATH: basePath
+  },
+  // Add explicit page mapping
+  exportPathMap: async function () {
+    return {
+      '/': { page: '/' },
+      '/history': { page: '/history' },
+      '/replay': { page: '/replay' },
+      '/about': { page: '/about' },
+      '/404': { page: '/404' }
+    };
   }
 }
 
