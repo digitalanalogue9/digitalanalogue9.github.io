@@ -29,11 +29,15 @@ jobs:
         run: npm ci
       - name: Build with Next.js
         env:
-          CACHE_VERSION: ${{ github.sha }}-${{ github.run_number }}
+          GITHUB_ACTIONS: true
           NODE_ENV: production
         run: |
           npm run build:prod
           touch out/.nojekyll
+          cp out/404.html out/index.html
+      - name: Configure GitHub Pages
+        run: |
+          echo "/*    /index.html   200" > out/_redirects
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -6,6 +6,7 @@ const withPWA = require('next-pwa')({
 })
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
+const repoName = 'digitalanalogue9.github.io';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -15,11 +16,22 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  basePath: isGitHubActions ? '/digitalanalogue9.github.io' : '',
-  assetPrefix: isGitHubActions ? '/digitalanalogue9.github.io' : '',
+  basePath: isGitHubActions ? `/${repoName}` : '',
+  assetPrefix: isGitHubActions ? `/${repoName}/` : '', // Note the trailing slash
+  distDir: 'dist',
+  cleanDistDir: true,
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString()
+  },
+  // Add static page generation config
+  generateStaticParams: async () => {
+    return {
+      '/': { page: '/' },
+      '/history': { page: '/history' },
+      '/replay': { page: '/replay' },
+      '/about': { page: '/about' }
+    }
   }
 }
 
