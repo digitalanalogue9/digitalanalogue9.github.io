@@ -28,11 +28,6 @@ const nextConfig = {
     CACHE_VERSION: Date.now().toString(),
     NEXT_PUBLIC_BASE_PATH: basePath
   },
-  // Add these configurations
-  experimental: {
-    appDir: true,
-    serverActions: false
-  },
   // Ensure these files are treated as static
   webpack: (config, { isServer }) => {
     if (!isServer) {
