@@ -31,13 +31,7 @@ jobs:
         env:
           GITHUB_ACTIONS: true
           NODE_ENV: production
-        run: |
-          npm run build:prod
-          touch out/.nojekyll
-          cp out/404.html out/index.html
-      - name: Configure GitHub Pages
-        run: |
-          echo "/*    /index.html   200" > out/_redirects
+        run: npm run build:prod
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

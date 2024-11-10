@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && type nul > out\\.nojekyll",
-    "build:prod": "cross-env NODE_ENV=production next build && touch out/.nojekyll",
+    "build": "next build",
+    "build:prod": "cross-env NODE_ENV=production next build",
     "start": "serve out -p 3000",
     "lint": "next lint",
     "test": "jest",
