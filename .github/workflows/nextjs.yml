@@ -33,12 +33,10 @@ jobs:
           NODE_ENV: production
         run: |
           npm run build:prod
-          ls -la out || true  # Debug: List contents of out directory if it exists
-      - name: Check build output
+          cp out/404.html out/index.html
+      - name: Fix permissions
         run: |
-          pwd
-          ls -la
-          ls -la out || true
+          chmod -c -R +rX out/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
