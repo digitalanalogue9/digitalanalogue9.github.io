@@ -12,6 +12,7 @@ const repoName = 'digitalanalogue9.github.io';
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  distDir: 'out',  // Explicitly set the output directory
   images: {
     unoptimized: true
   },
