@@ -17,12 +17,13 @@ import { useGameState } from '@/hooks/useGameState';
 import { clearGameState } from '@/utils/storage';
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const { sessionId } = useSession();
-  const { 
-    isGameStarted, 
-    showInstructions, 
-    setGameStarted, 
-    setShowInstructions 
+  const {
+    isGameStarted,
+    showInstructions,
+    setGameStarted,
+    setShowInstructions
   } = useGameState();
   const { isOffline } = usePWA();
 
@@ -32,14 +33,15 @@ export default function Home() {
     if (!window.location.search.includes('sessionId')) {
       clearGameState();
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     const initialize = async () => {
-      await initDB();
-      
-      if (!sessionId && isOffline) {
-        try {
+      try {
+        await initDB();
+
+        if (!sessionId && isOffline) {
           const cachedSession = await cacheUtils.getCachedData<{
             sessionId: string;
             values: typeof valuesData.values;
@@ -48,22 +50,26 @@ export default function Home() {
           if (cachedSession) {
             setGameStarted(true);
           }
-        } catch (error) {
-          console.error('Error loading cached data:', error);
         }
+      } catch (error) {
+        console.error('Error loading cached data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     initialize();
   }, [isOffline, sessionId, setGameStarted]);
-  
+
   const handleGameStart = () => {
     setGameStarted(true);
     setShowInstructions(true);
   };
-
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
   // Use RoundUIDebug in development, RoundUI in production
-const GameComponent = process.env.NODE_ENV === 'development' ? RoundUIDebug : RoundUI;
+  const GameComponent = process.env.NODE_ENV === 'development' ? RoundUIDebug : RoundUI;
 
   return (
     <DndProvider backend={HTML5Backend}>
