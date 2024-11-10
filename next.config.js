@@ -2,11 +2,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: false,
-  disable: process.env.NODE_ENV === 'development',
-  // Add these PWA configurations
-  buildExcludes: [/middleware-manifest\.json$/],
-  publicExcludes: ['!**/*'],
-  runtimeCaching: []
+  disable: process.env.NODE_ENV === 'development'
 })
 
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
@@ -22,21 +18,10 @@ const nextConfig = {
   },
   trailingSlash: true,
   basePath: basePath,
-  assetPrefix: isGitHubActions ? '.' : '',
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString(),
     NEXT_PUBLIC_BASE_PATH: basePath
-  },
-  // Ensure these files are treated as static
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-        path: false,
-      };
-    }
-    return config;
   }
 }
 
