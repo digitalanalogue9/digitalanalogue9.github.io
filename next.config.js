@@ -19,7 +19,6 @@ const nextConfig = {
   trailingSlash: true,
   basePath: isGitHubActions ? `/${repoName}` : '',
   assetPrefix: isGitHubActions ? `/${repoName}/` : '', // Note the trailing slash
-  distDir: 'dist',
   cleanDistDir: true,
   env: {
     BUILD_TIME: new Date().toISOString(),
