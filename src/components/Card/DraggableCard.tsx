@@ -60,43 +60,37 @@ const DraggableCard = memo(function DraggableCard({
         
         try {
             const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
-
+    
             // If this is an internal drag within the same category
             if (droppedValue.isInternalDrag && droppedValue.sourceCategory === currentCategory) {
-                // Find the dropzone element
+                const sourceIndex = droppedValue.sourceIndex;
+                let targetIndex: number;
+    
+                // Get either this card's dropzone or the category container
                 const dropzone = (e.target as HTMLElement).closest('[data-dropzone]');
-                console.log('Found dropzone:', dropzone); // Debug log
                 
                 if (dropzone) {
-                    const targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
-                    const sourceIndex = droppedValue.sourceIndex;
-                    
-                    console.log('Indices:', { sourceIndex, targetIndex }); // Debug log
-
+                    targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
+                    console.log('Indices:', { sourceIndex, targetIndex });
+    
                     // Only move if we have valid indices and they're different
                     if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
-                        // If dropping below the source position, we need to adjust the target index
-                        const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
-                        console.log('Moving card:', { sourceIndex, adjustedTargetIndex }); // Debug log
                         onMoveUp || onMoveDown ? 
                             (sourceIndex < targetIndex ? onMoveDown?.() : onMoveUp?.()) :
                             null;
                     }
                 } else {
-                    console.log('No dropzone found'); // Debug log
+                    // Let the category container handle the drop
+                    return;
                 }
-                return;
-            }
-
-            // Handle regular drops
-            if (onDrop) {
+            } else if (onDrop) {
+                // Handle drops from other categories or new cards
                 onDrop(droppedValue);
             }
         } catch (error) {
             console.error('Error handling drop:', error);
         }
     };
-
     
     const handleDragEnd = (): void => {
         setIsDragging(false);

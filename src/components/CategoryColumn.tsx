@@ -28,9 +28,9 @@ const CategoryColumn = memo(function CategoryColumn({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsOver(false);
-
+    
     try {
-      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & {
+      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & { 
         sourceCategory?: string;
         isInternalDrag?: boolean;
         sourceIndex?: number;
@@ -38,20 +38,26 @@ const CategoryColumn = memo(function CategoryColumn({
 
       // If this is an internal drag within the same category
       if (droppedValue.isInternalDrag && droppedValue.sourceCategory === title) {
-        // Find the target card element
-        const targetElement = e.target as HTMLElement;
-        const cardElement = targetElement.closest('[data-index]');
+        const sourceIndex = droppedValue.sourceIndex;
+        
+        // Get the closest dropzone, or the container itself if dropped at the bottom
+        const dropzone = (e.target as HTMLElement).closest('[data-dropzone]') || 
+                        (e.currentTarget as HTMLElement);
+        
+        let targetIndex: number;
+        
+        if (dropzone.hasAttribute('data-dropzone')) {
+          // Dropped on a card
+          targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
+        } else {
+          // Dropped at the bottom of the category
+          targetIndex = cards.length - 1;
+        }
 
-        if (cardElement) {
-          const targetIndex = parseInt(cardElement.getAttribute('data-index') || '0', 10);
-          const sourceIndex = cards.findIndex(card => card.id === droppedValue.id);
+        console.log('Drop indices:', { sourceIndex, targetIndex });
 
-          // Only move if we have valid indices and they're different
-          if (sourceIndex !== -1 && sourceIndex !== targetIndex) {
-            // If dropping below the source position, we need to adjust the target index
-            const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex : targetIndex;
-            onMoveWithinCategory(sourceIndex, adjustedTargetIndex);
-          }
+        if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
+          onMoveWithinCategory(sourceIndex, targetIndex);
         }
         return;
       }
@@ -62,7 +68,7 @@ const CategoryColumn = memo(function CategoryColumn({
         return;
       }
 
-      // Handle new card drop (only if it's not an internal drag)
+      // Handle new card drop
       if (!droppedValue.isInternalDrag) {
         onDrop(droppedValue, title);
       }
@@ -70,7 +76,6 @@ const CategoryColumn = memo(function CategoryColumn({
       console.error('Error handling drop:', error);
     }
   };
-
 
   const handleMoveUp = useCallback((index: number) => {
     if (isMoving) return;
