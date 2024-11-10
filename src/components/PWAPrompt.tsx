@@ -47,7 +47,7 @@ export default function PWAPrompt() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     setDeferredPrompt(null);
     setShowPrompt(false);
 
@@ -84,7 +84,7 @@ export default function PWAPrompt() {
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 0 }}
-          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-96 bg-white rounded-lg shadow-lg p-4 border border-gray-200 z-50"
+          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-11/12 sm:w-96 bg-white rounded-lg shadow-lg p-4 border border-gray-200 z-50"
         >
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -92,7 +92,7 @@ export default function PWAPrompt() {
                 {promptType === 'install' ? 'Install Core Values App' : 'Update Available'}
               </h3>
               <p className="mt-1 text-sm text-gray-500">
-                {promptType === 'install' 
+                {promptType === 'install'
                   ? 'Install our app for a better experience with offline access and faster loading times.'
                   : 'A new version is available. Update now for the latest features and improvements.'}
               </p>
