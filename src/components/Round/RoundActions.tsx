@@ -3,17 +3,24 @@ import { Card } from '@/components/Card';
 import { RoundActionsProps } from './RoundActionsProps';
 import { useMobile } from '@/contexts/MobileContext';
 
+interface RoundActionsPropsWithActiveZone extends RoundActionsProps {
+  onActiveDropZoneChange?: (category: CategoryName | null) => void;
+}
+
 export function RoundActions({
   remainingCards,
   canProceedToNextRound,
   onNextRound,
   onDrop,
-  isEndGame
-}: RoundActionsProps) {
-
+  isEndGame,
+  onActiveDropZoneChange
+}: RoundActionsPropsWithActiveZone) {
+  // Destructure isMobile from the hook
+  const { isMobile } = useMobile();
+  
   // Make sure we display the first card if there are remaining cards
   const currentCard = remainingCards.length > 0 ? remainingCards[0] : null;
-  const isMobile = useMobile();
+
   return (
     <div className="flex flex-col items-center h-24 sm:h-48">
       <div className="flex items-center justify-center h-full">
@@ -22,6 +29,7 @@ export function RoundActions({
             <Card
               value={currentCard}
               onDrop={(value) => onDrop(value, value.sourceCategory as CategoryName)}
+              onActiveDropZoneChange={onActiveDropZoneChange}
             />
           </div>
         ) : (

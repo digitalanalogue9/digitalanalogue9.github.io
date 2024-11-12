@@ -20,7 +20,8 @@ export default function Card({
   onMoveDown,
   onMoveToCategory,
   currentCategory,
-  columnIndex
+  columnIndex,
+  onActiveDropZoneChange 
 }: CardProps) {
   const debug = getEnvBoolean('debug', false);
   const [isDragging, setIsDragging] = useState(false);
@@ -114,10 +115,8 @@ export default function Card({
     setTouchStart({ x: touch.clientX, y: touch.clientY });
     setIsDragging(true);
     handleAnimationDragStart();
-    // Add visual feedback
-    e.currentTarget.style.transform = 'scale(1.05)';
-    e.currentTarget.style.opacity = '0.8';
   };
+
   const handleTouchMove = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
     e.preventDefault();
@@ -126,29 +125,42 @@ export default function Card({
     const newY = touch.clientY - touchStart.y;
     x.set(newX);
     y.set(newY);
+
+    // Check for drop targets during move
+    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+    const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+    if (categoryElement && onActiveDropZoneChange) {
+      const category = categoryElement.getAttribute('data-category') as CategoryName;
+      onActiveDropZoneChange(category);
+    } else if (onActiveDropZoneChange) {
+      onActiveDropZoneChange(null);
+    }
   };
 
+  
   const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
-    
+
     const touch = e.changedTouches[0];
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
     const categoryElement = elements.find(el => el.hasAttribute('data-category'));
-  
+
     if (categoryElement) {
       const category = categoryElement.getAttribute('data-category') as CategoryName;
-      onDrop?.(value);
+      const valueWithCategory = {
+        ...value,
+        sourceCategory: category
+      };
+      onDrop?.(valueWithCategory);
     }
-  
-    // Reset visual feedback
-    e.currentTarget.style.transform = '';
-    e.currentTarget.style.opacity = '';
-    
+
+    if (onActiveDropZoneChange) {
+      onActiveDropZoneChange(null);
+    }
     setIsDragging(false);
-    setIsOver(false);
     handleAnimationDragEnd();
   };
-  
+
   const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     setIsDragging(false);
     setIsOver(false);
@@ -231,7 +243,7 @@ export default function Card({
           onDragEnter={handleNativeDragEnter}
           onDragLeave={handleNativeDragLeave}
           onDragOver={handleNativeDragOver}
-          onDrop={handleNativeDrop}  // Add this
+          onDrop={handleNativeDrop}
           id={`card-${value.title}`}
           data-category={currentCategory}
           data-index={columnIndex}
@@ -258,13 +270,15 @@ export default function Card({
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
-        whileTap={{ scale: 1.05 }}
+        whileTap={{ scale: 1.02 }}
+        whileDrag={{ scale: 1.05 }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         id={`card-${value.title}`}
         data-category={currentCategory}
-        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation active:bg-blue-50`}
+        dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation ${isDragging ? 'shadow-lg ring-2 ring-blue-200' : ''}`}
       >
         {cardContent}
       </motion.div>
@@ -285,37 +299,38 @@ export default function Card({
       exit="exit"
       whileHover="hover"
       transition={cardTransition}
+      whileTap={{ scale: 1.02 }}
+      whileDrag={{ scale: 1.05 }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 touch-manipulation relative`}
+      className={`${postItBaseStyles} ${tapeEffect} w-48 sm:w-64 h-48 sm:h-64 touch-manipulation relative`}
     >
-      <div className="relative z-10 flex flex-col h-full">
+      <div className="relative z-10 flex flex-col h-full p-4">
         <div className="flex-1">
-          <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
-          <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
+          <h3 className="font-medium text-gray-800 mb-3 text-base sm:text-lg">{value.title}</h3>
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{value.description}</p>
         </div>
 
-        {isTouchDevice && (
-          <div className="absolute bottom-0 left-0 right-0 bg-blue-50 p-2 rounded-b text-center">
-            <div className="flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7.5 3.5c0-1.1.9-2 2-2s2 .9 2 2v7m0 0v3m0-3h3m-3 0h-3m-2.5-4c0-1.1-.9-2-2-2s-2 .9-2 2"
-                />
-              </svg>
-              Press & Hold to Drag
-            </div>
+        {/* Always show on mobile screens, regardless of touch detection */}
+        <div className="absolute bottom-0 left-0 right-0 bg-blue-50 p-2 rounded-b text-center sm:hidden">
+          <div className="flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7.5 3.5c0-1.1.9-2 2-2s2 .9 2 2v7m0 0v3m0-3h3m-3 0h-3m-2.5-4c0-1.1-.9-2-2-2s-2 .9-2 2"
+              />
+            </svg>
+            <span>Press & Hold to Drag</span>
           </div>
-        )}
+        </div>
       </div>
     </motion.div>
   );

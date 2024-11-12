@@ -97,6 +97,7 @@ const RoundUI = memo(function RoundUI() {
     logStateUpdate('handleDropWithZone', { card, category }, 'RoundUI');
     setActiveDropZone(category);
     handleDrop(card, category);
+    setActiveDropZone(null);
   }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
@@ -224,6 +225,7 @@ const RoundUI = memo(function RoundUI() {
                 onNextRound={handleNextRound}
                 onDrop={handleDrop}
                 isEndGame={shouldEndGame}
+                onActiveDropZoneChange={setActiveDropZone}
               />
               <StatusMessage
                 status={status()}
@@ -253,6 +255,7 @@ const RoundUI = memo(function RoundUI() {
                 onNextRound={handleNextRound}
                 onDrop={handleDrop}
                 isEndGame={shouldEndGame}
+                onActiveDropZoneChange={setActiveDropZone}
               />
               <StatusMessage
                 status={status()}

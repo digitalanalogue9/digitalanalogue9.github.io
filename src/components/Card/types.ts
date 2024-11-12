@@ -8,6 +8,7 @@ export interface CardProps {
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onMoveToCategory?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
+  onActiveDropZoneChange?: (category: CategoryName | null) => void;
 }
 
 export interface CardControlsProps {

@@ -25,18 +25,19 @@ function CategoryRow({
   return (
       <div 
         data-category={category}
-        className={`p-2 rounded-lg border ${
+        className={`p-2 rounded-lg border transition-all duration-200 ${
           isActive 
-            ? 'bg-blue-100 border-blue-500 ring-2 ring-blue-500 ring-opacity-50' 
+            ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
             : 'bg-white border-gray-200'
         }`}
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             {isActive && (
-              <span className="text-blue-500">
+              <span className="text-blue-500 animate-pulse">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M12 4v16m8-8H4" />
                 </svg>
               </span>
             )}
