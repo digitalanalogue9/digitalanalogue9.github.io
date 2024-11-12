@@ -29,7 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
+      - name: Update Version
+        run: |
+          echo "NEXT_PUBLIC_VERSION=$(node -p "require('./package.json').version")-$(date +'%Y%m%d.%H%M')" >> $GITHUB_ENV
       - name: Build with Next.js
         env:
           NODE_ENV: production

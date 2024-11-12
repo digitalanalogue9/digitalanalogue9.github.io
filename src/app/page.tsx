@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     const lastVersion = localStorage.getItem('app-version');
-    const currentVersion = process.env.VERSION ?? '0.0.0';
+    const currentVersion = process.env.NEXT_PUBLIC_VERSION ?? '0.0.0';
     
     if (lastVersion !== currentVersion) {
       localStorage.setItem('app-version', currentVersion);

@@ -28,7 +28,6 @@ const withPWA = require('next-pwa')({
 })
 
 /** @type {import('next').NextConfig} */
-const packageJson = require('./package.json');
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
@@ -42,7 +41,7 @@ const nextConfig = {
   env: {
     BUILD_TIME: new Date().toISOString(),
     CACHE_VERSION: Date.now().toString(),
-    VERSION: packageJson.version || '0.0.0'
+    NEXT_PUBLIC_VERSION: process.env.NEXT_PUBLIC_VERSION || require('./package.json').version
   }
 }
 

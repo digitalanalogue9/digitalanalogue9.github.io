@@ -11,6 +11,7 @@ import { CardControls } from './CardControls';
 import { CardMoveOptions } from './CardMoveOptions';
 import { CardContent } from './CardContent';
 import { getPostItStyles } from './styles';
+import { CategoryName } from '@/types';
 
 export default function Card({
   value,
@@ -108,11 +109,14 @@ export default function Card({
 
   // Touch handlers
   const handleTouchStart = (e: ReactTouchEvent<HTMLDivElement>) => {
-    e.preventDefault(); // Prevent default to improve responsiveness
+    e.preventDefault();
     const touch = e.touches[0];
     setTouchStart({ x: touch.clientX, y: touch.clientY });
     setIsDragging(true);
     handleAnimationDragStart();
+    // Add visual feedback
+    e.currentTarget.style.transform = 'scale(1.05)';
+    e.currentTarget.style.opacity = '0.8';
   };
   const handleTouchMove = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
@@ -126,26 +130,25 @@ export default function Card({
 
   const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
-    setIsDragging(false);
-    setIsOver(false);
-
+    
     const touch = e.changedTouches[0];
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
     const categoryElement = elements.find(el => el.hasAttribute('data-category'));
-
-    if (categoryElement && onDrop && currentCategory) {
-      const dragData = {
-        ...value,
-        sourceCategory: currentCategory
-      };
-      onDrop(dragData);
+  
+    if (categoryElement) {
+      const category = categoryElement.getAttribute('data-category') as CategoryName;
+      onDrop?.(value);
     }
-
-    x.set(0);
-    y.set(0);
+  
+    // Reset visual feedback
+    e.currentTarget.style.transform = '';
+    e.currentTarget.style.opacity = '';
+    
+    setIsDragging(false);
+    setIsOver(false);
     handleAnimationDragEnd();
   };
-
+  
   const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     setIsDragging(false);
     setIsOver(false);

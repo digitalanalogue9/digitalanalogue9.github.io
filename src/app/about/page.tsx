@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const appVersion = process.env.VERSION || '0.0.0';
+const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
 export default function About() {
   return (

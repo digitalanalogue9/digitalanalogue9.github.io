@@ -16,40 +16,52 @@ interface CategoryRowProps {
 }
 
 function CategoryRow({
-    category,
-    cards,
-    onDrop,
-    isActive,
-    onExpand
+  category,
+  cards,
+  onDrop,
+  isActive,
+  onExpand
 }: CategoryRowProps) {
-    return (
-        <div 
-          data-category={category}
-          className={`p-2 rounded-lg border ${
-            isActive ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-200'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="font-medium text-xs sm:text-sm truncate"> {/* Smaller font and truncate */}
+  return (
+      <div 
+        data-category={category}
+        className={`p-2 rounded-lg border ${
+          isActive 
+            ? 'bg-blue-100 border-blue-500 ring-2 ring-blue-500 ring-opacity-50' 
+            : 'bg-white border-gray-200'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {isActive && (
+              <span className="text-blue-500">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </span>
+            )}
+            <span className="font-medium text-xs sm:text-sm truncate">
               {category}
             </span>
-            <div className="flex items-center space-x-1"> {/* Reduced spacing */}
-              <span className="bg-gray-200 px-1.5 py-0.5 rounded-full text-xs">
-                {cards.length}
-              </span>
-              <button
-                onClick={() => onExpand(category)}
-                className="p-1 rounded-full hover:bg-gray-100"
-              >
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="bg-gray-200 px-1.5 py-0.5 rounded-full text-xs">
+              {cards.length}
+            </span>
+            <button
+              onClick={() => onExpand(category)}
+              className="p-1 rounded-full hover:bg-gray-100"
+            >
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
         </div>
-      );
+      </div>
+  );
 }
+
 
 export function MobileCategoryList({
     categories,

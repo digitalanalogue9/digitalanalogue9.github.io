@@ -205,16 +205,15 @@ const RoundUI = memo(function RoundUI() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header - Same for both layouts */}
-      <header className="sticky top-0 bg-white z-40 px-2 py-2">
+      {/* Header */}
+      <header className="sticky top-0">
         <RoundHeader
           targetCoreValues={targetCoreValues}
           roundNumber={roundNumber}
           remainingCardsCount={remainingCards.length}
         />
       </header>
-  
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col pt-16"> {/* Add padding-top */}
         {isMobile ? (
           <div className="flex flex-col px-2 space-y-4">
             {/* Mobile Actions and Status */}
@@ -277,7 +276,7 @@ const RoundUI = memo(function RoundUI() {
       </main>
     </div>
   );
-  
+
 });
 
 export default RoundUI;
