@@ -57,7 +57,7 @@ export default function Card({
   const handleNativeDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsOver(false);
-  
+
     try {
       const droppedData = JSON.parse(e.dataTransfer.getData('text/plain'));
       if (droppedData.isInternalMove && droppedData.sourceCategory === currentCategory) {
@@ -108,12 +108,12 @@ export default function Card({
 
   // Touch handlers
   const handleTouchStart = (e: ReactTouchEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Prevent default to improve responsiveness
     const touch = e.touches[0];
     setTouchStart({ x: touch.clientX, y: touch.clientY });
     setIsDragging(true);
     handleAnimationDragStart();
   };
-
   const handleTouchMove = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
     e.preventDefault();
@@ -150,7 +150,7 @@ export default function Card({
     setIsDragging(false);
     setIsOver(false);
     handleAnimationDragEnd();
-  
+
     // Only proceed if we have column index (means we're in a category) and currentCategory
     if (columnIndex === undefined || !currentCategory) {
       if (onDrop) {
@@ -158,11 +158,11 @@ export default function Card({
       }
       return;
     }
-  
+
     const DRAG_THRESHOLD = 30;
     const yMovement = info.offset.y;
     const yVelocity = info.velocity.y;
-  
+
     // Calculate how many positions to move based on drag distance
     const moveDistance = Math.round(yMovement / 50); // 50px per card height for example
     if (Math.abs(moveDistance) > 0) {
@@ -176,7 +176,7 @@ export default function Card({
         onMoveDown();
       }
     }
-  
+
     // Reset position
     x.set(0);
     y.set(0);
@@ -255,12 +255,13 @@ export default function Card({
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
+        whileTap={{ scale: 1.05 }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         id={`card-${value.title}`}
         data-category={currentCategory}
-        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation`}
+        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation active:bg-blue-50`}
       >
         {cardContent}
       </motion.div>
@@ -291,7 +292,7 @@ export default function Card({
           <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
           <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
         </div>
-        
+
         {isTouchDevice && (
           <div className="absolute bottom-0 left-0 right-0 bg-blue-50 p-2 rounded-b text-center">
             <div className="flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">

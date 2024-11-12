@@ -4,11 +4,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMobile } from '@/contexts/MobileContext';
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
@@ -23,6 +23,7 @@ export default function Navigation() {
                 Core Values
               </Link>
             </div>
+
             {/* Desktop Menu */}
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link

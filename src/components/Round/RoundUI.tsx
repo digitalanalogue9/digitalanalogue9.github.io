@@ -21,12 +21,12 @@ import { getCategoriesForRound } from '@/utils/categoryUtils';
 import { MobileCategoryList } from './components/MobileCategoryList';
 import { CoreValueReasoning } from '../CoreValueReasoning';
 import { logRender, logStateUpdate, logEffect } from '@/utils/debug/renderLogger';
+import { useMobile } from '@/contexts/MobileContext';
 
 const RoundUI = memo(function RoundUI() {
   logRender('RoundUI');
 
   // State
-  const [isMobile, setIsMobile] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
   const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
@@ -106,37 +106,37 @@ const RoundUI = memo(function RoundUI() {
         console.error('Cannot proceed: round validation failed');
         return;
       }
-  
+
       if (sessionId) {
         await saveRound(sessionId, roundNumber, currentRoundCommands, categories);
       }
-  
+
       const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
-  
+
       if (shouldEndGame) {
         if (sessionId) {
           // If we have exact target in Very Important, only use those values
           const finalValues = hasExactTargetInVeryImportant
             ? categories['Very Important'] || []
             : Object.entries(categories)
-                .filter(([category]) => category !== 'Not Important')
-                .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
-  
+              .filter(([category]) => category !== 'Not Important')
+              .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
+
           setFinalValuesWithoutReasons(finalValues);
           setShowReasoning(true);
           return;
         }
       }
-  
+
       clearCommands();
       const nextRound = roundNumber + 1;
       const cardsForNextRound = getImportantCards(categories);
-  
+
       if (cardsForNextRound.length < targetCoreValues) {
         console.error('Not enough cards to proceed');
         return;
       }
-  
+
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
       if (sessionId) {
         await saveRound(sessionId, nextRound, [], nextCategories);
@@ -148,16 +148,16 @@ const RoundUI = memo(function RoundUI() {
       console.error('Failed to handle next round:', error);
     }
   }, [
-    validateRound, 
-    sessionId, 
-    roundNumber, 
-    currentRoundCommands, 
+    validateRound,
+    sessionId,
+    roundNumber,
+    currentRoundCommands,
     categories,
-    shouldEndGame, 
-    targetCoreValues, 
-    clearCommands, 
+    shouldEndGame,
+    targetCoreValues,
+    clearCommands,
     setRoundNumber,
-    setCategories, 
+    setCategories,
     setRemainingCards
   ]);
 
@@ -191,18 +191,9 @@ const RoundUI = memo(function RoundUI() {
     const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
     setShouldEndGame(hasExactTargetInVeryImportant || activeCards === targetCoreValues);
   }, [activeCards, targetCoreValues, categories]);
-  
 
-  useEffect(() => {
-    logEffect('mobile check effect');
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
+  const { isMobile } = useMobile();
   // Conditional rendering
   if (showReasoning) {
     return <CoreValueReasoning values={finalValuesWithoutReasons} onComplete={handleReasoningComplete} />;
@@ -213,19 +204,21 @@ const RoundUI = memo(function RoundUI() {
   }
 
   return (
-    <div className="container mx-auto px-1 sm:px-2 md:px-4 lg:px-6 py-1 sm:py-2">
-      <RoundHeader
-        targetCoreValues={targetCoreValues}
-        roundNumber={roundNumber}
-        remainingCardsCount={remainingCards.length}
-      />
-
-      <div className="flex flex-col items-center space-y-2 sm:space-y-4">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 items-center gap-2 sm:gap-4">
-          <div className="hidden sm:block" />
-
-          {isMobile ? (
-            <div className="flex items-center justify-center gap-4">
+    <div className="min-h-screen flex flex-col">
+      {/* Header - Same for both layouts */}
+      <header className="sticky top-0 bg-white z-40 px-2 py-2">
+        <RoundHeader
+          targetCoreValues={targetCoreValues}
+          roundNumber={roundNumber}
+          remainingCardsCount={remainingCards.length}
+        />
+      </header>
+  
+      <main className="flex-1 flex flex-col">
+        {isMobile ? (
+          <div className="flex flex-col px-2 space-y-4">
+            {/* Mobile Actions and Status */}
+            <div className="flex flex-col space-y-2">
               <RoundActions
                 remainingCards={remainingCards}
                 canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
@@ -244,17 +237,24 @@ const RoundUI = memo(function RoundUI() {
                 remainingCards={remainingCards}
               />
             </div>
-          ) : (
-            <>
-              <div className="flex justify-center">
-                <RoundActions
-                  remainingCards={remainingCards}
-                  canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
-                  onNextRound={handleNextRound}
-                  onDrop={handleDrop}
-                  isEndGame={shouldEndGame}
-                />
-              </div>
+            <MobileCategoryList
+              categories={categories}
+              onDrop={handleDropWithZone}
+              onExpand={setExpandedCategory}
+              activeDropZone={activeDropZone}
+            />
+          </div>
+        ) : (
+          <div className="container mx-auto px-4 space-y-6">
+            <div className="grid grid-cols-3 gap-8">
+              <div />
+              <RoundActions
+                remainingCards={remainingCards}
+                canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
+                onNextRound={handleNextRound}
+                onDrop={handleDrop}
+                isEndGame={shouldEndGame}
+              />
               <StatusMessage
                 status={status()}
                 isNearingCompletion={roundState.isNearingCompletion}
@@ -265,28 +265,19 @@ const RoundUI = memo(function RoundUI() {
                 canProceedToNextRound={validateRound()}
                 remainingCards={remainingCards}
               />
-            </>
-          )}
-        </div>
-
-        {isMobile ? (
-          <MobileCategoryList
-            categories={categories}
-            onDrop={handleDropWithZone}
-            onExpand={setExpandedCategory}
-            activeDropZone={activeDropZone}
-          />
-        ) : (
-          <CategoryGrid
-            categories={roundState.visibleCategories}
-            onDrop={handleDrop}
-            onMoveCard={handleMoveCard}
-            onMoveBetweenCategories={handleMoveBetweenCategories}
-          />
+            </div>
+            <CategoryGrid
+              categories={roundState.visibleCategories}
+              onDrop={handleDrop}
+              onMoveCard={handleMoveCard}
+              onMoveBetweenCategories={handleMoveBetweenCategories}
+            />
+          </div>
         )}
-      </div>
+      </main>
     </div>
   );
+  
 });
 
 export default RoundUI;

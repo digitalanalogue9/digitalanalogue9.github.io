@@ -3,6 +3,7 @@
 
 import './globals.css'
 import Navigation from '../components/Navigation'
+import { MobileProvider } from '@/contexts/MobileContext'
 
 export default function RootLayout({
   children,
@@ -21,11 +22,13 @@ export default function RootLayout({
         <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
       </head>
       <body>
-        <Navigation />
-        <main className="pt-3">
-          {children}
-          <div id="portal-root" />
-        </main>
+        <MobileProvider>
+          <Navigation />
+          <main className="pt-3">
+            {children}
+            <div id="portal-root" />
+          </main>
+        </MobileProvider>
       </body>
     </html>
   )
