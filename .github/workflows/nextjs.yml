@@ -34,7 +34,7 @@ jobs:
         env:
           NODE_ENV: production
         run: |
-          npm run build:prod
+          npm run build
           touch out/.nojekyll
           # Add cache control headers
           echo '/*' > out/_headers
