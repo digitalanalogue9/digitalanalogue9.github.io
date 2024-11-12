@@ -15,6 +15,7 @@ import { cacheUtils } from '@/utils/storage';
 import { useSession } from '@/hooks/useSession';
 import { useGameState } from '@/hooks/useGameState';
 import { clearGameState } from '@/utils/storage';
+import { forceReload } from '@/utils/cache';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,16 @@ export default function Home() {
     setShowInstructions
   } = useGameState();
   const { isOffline } = usePWA();
+
+  useEffect(() => {
+    const lastVersion = localStorage.getItem('app-version');
+    const currentVersion = process.env.VERSION ?? '0.0.0';
+    
+    if (lastVersion !== currentVersion) {
+      localStorage.setItem('app-version', currentVersion);
+      forceReload();
+    }
+  }, []);
 
   useEffect(() => {
     // Clear game state when mounting the page component

@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+const appVersion = process.env.VERSION || '0.0.0';
+
 export default function About() {
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
@@ -12,6 +14,9 @@ export default function About() {
         </h1>
         <p className="text-xl text-gray-600">
           Discover and prioritize what matters most to you
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          Version {appVersion}
         </p>
       </div>
 

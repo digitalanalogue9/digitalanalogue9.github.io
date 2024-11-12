@@ -5,50 +5,24 @@
             "label": "Next: Dev",
             "type": "npm",
             "script": "dev",
-            "isBackground": true,
-            "problemMatcher": {
-                "owner": "next",
-                "pattern": {
-                    "regexp": "^$"
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "^.*?started server.*?$",
-                    "endsPattern": "^.*?ready in.*?$"
-                }
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
             },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Test: Watch",
+            "type": "npm",
+            "script": "test:watch",
+            "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
             }
-        },
-        {
-            "label": "Next: Build",
-            "type": "npm",
-            "script": "build",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Next: Start",
-            "type": "npm",
-            "script": "start",
-            "problemMatcher": []
-        },
-        {
-            "label": "Kill Port 3000",
-            "type": "shell",
-            "command": "npx kill-port 3000",
-            "problemMatcher": []
-        },
-        {
-            "label": "Clean and Start Dev",
-            "dependsOrder": "sequence",
-            "dependsOn": ["Kill Port 3000", "Next: Dev"],
-            "problemMatcher": []
         }
     ]
 }
