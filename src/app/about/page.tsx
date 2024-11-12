@@ -13,7 +13,7 @@ export default function About() {
           About Core Values
         </h1>
         <p className="text-xl text-gray-600">
-          Discover and prioritize what matters most to you
+          Discover and prioritise what matters most to you
         </p>
         <p className="text-sm text-gray-500 mt-2">
           Version {appVersion}
@@ -53,7 +53,7 @@ export default function About() {
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <div className="text-blue-600 text-xl mb-2">2. Prioritize</div>
+            <div className="text-blue-600 text-xl mb-2">2. prioritise</div>
             <p className="text-gray-600">
               Organize values into categories, helping you identify which ones resonate 
               most strongly with your personal beliefs.

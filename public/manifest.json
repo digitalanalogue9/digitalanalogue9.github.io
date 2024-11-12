@@ -1,7 +1,7 @@
 {
   "name": "Core Values",
   "short_name": "Core Values",
-  "description": "Discover and prioritize your personal values",
+  "description": "Discover and prioritise your personal values",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
