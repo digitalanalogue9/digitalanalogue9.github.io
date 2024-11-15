@@ -23,34 +23,33 @@ function CategoryRow({
   onExpand
 }: CategoryRowProps) {
   return (
-      <div 
+    <div 
         data-category={category}
-        className={`p-4 rounded-lg border transition-all duration-200 min-h-[60px] ${
-          isActive 
-            ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
-            : 'bg-white border-gray-200'
+        className={`p-4 rounded-lg border transition-all duration-200 min-h-[60px] relative z-10 ${
+            isActive 
+                ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
+                : 'bg-white border-gray-200'
         }`}
         onTouchEnd={(e) => {
-          if (isActive) {
-            e.preventDefault();
-            // The actual drop will be handled by the drag-and-drop system
-          }
+            if (isActive) {
+                e.preventDefault();
+            }
         }}
-      >
+    >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {isActive && (
-              <span className="text-blue-500 animate-pulse">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d="M12 4v16m8-8H4" />
-                </svg>
-              </span>
-            )}
-            <span className="font-medium text-sm truncate">
-              {category}
-            </span>
-          </div>
+            <div className="flex items-center gap-2">
+                {isActive && (
+                    <span className="text-blue-500 animate-pulse">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                                d="M12 4v16m8-8H4" />
+                        </svg>
+                    </span>
+                )}
+                <span className="font-medium text-sm truncate">
+                    {category}
+                </span>
+            </div>
           <div className="flex items-center space-x-2">
             <span className="bg-gray-200 px-2 py-1 rounded-full text-sm">
               {cards.length}

@@ -30,7 +30,7 @@ export default function Card({
   const [showMoveOptions, setShowMoveOptions] = useState(false);
   const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
   const [dragStartY, setDragStartY] = useState<number | null>(null);
-
+  const [debugInfo, setDebugInfo] = useState<string[]>([]);
   const {
     x,
     y,
@@ -128,21 +128,16 @@ export default function Card({
 
     // Check for drop targets during move
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    // Look for both direct elements and their parents
-    const categoryElement = elements.find(el => {
-        return el.hasAttribute('data-category') || 
-               el.closest('[data-category]') !== null;
-    });
+    const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+    
+    // Update debug info
+    setDebugInfo(elements.map(el => 
+        `${el.tagName}: ${el.hasAttribute('data-category') ? el.getAttribute('data-category') : 'no-category'}`
+    ));
 
     if (categoryElement && onActiveDropZoneChange) {
-        const category = categoryElement.hasAttribute('data-category') 
-            ? categoryElement.getAttribute('data-category') 
-            : categoryElement.closest('[data-category]')?.getAttribute('data-category');
-        
-        if (category) {
-            onActiveDropZoneChange(category as CategoryName);
-            if (debug) console.log('Found category:', category);
-        }
+        const category = categoryElement.getAttribute('data-category') as CategoryName;
+        onActiveDropZoneChange(category);
     } else if (onActiveDropZoneChange) {
         onActiveDropZoneChange(null);
     }
@@ -343,6 +338,13 @@ export default function Card({
           </div>
         </div>
       </div>
+      {isDragging && debugInfo.length > 0 && (
+    <div className="fixed top-0 left-0 bg-black/50 text-white p-4 z-50 max-w-full overflow-auto">
+        {debugInfo.map((info, i) => (
+            <div key={i}>{info}</div>
+        ))}
+    </div>
+)}
     </motion.div>
   );
 }
