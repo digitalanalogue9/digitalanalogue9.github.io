@@ -1,7 +1,7 @@
 // DraggableCard.tsx
 'use client'
 
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { CardProps } from './types';
 import { getEnvBoolean } from '@/utils/config';
 import { CardControls } from './CardControls';
@@ -32,80 +32,9 @@ const DraggableCard = memo(function DraggableCard({
     const [isExpanded, setIsExpanded] = useState(false);
     const [showMoveOptions, setShowMoveOptions] = useState(false);
     const moveRef = useRef<{ pending: boolean }>({ pending: false });
-    const touchRef = useRef<{ startX: number; startY: number }>({ startX: 0, startY: 0 });
-
-    useEffect(() => {
-        const handleCategoryHover = (e: CustomEvent) => {
-            if (isDragging) {
-                onDrop?.(value);
-            }
-        };
-
-        window.addEventListener('categoryDrop', handleCategoryHover as EventListener);
-        return () => {
-            window.removeEventListener('categoryDrop', handleCategoryHover as EventListener);
-        };
-    }, [isDragging, onDrop, value]);
 
     if (!value) return null;
     const isInCategory = columnIndex !== undefined;
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        const touch = e.touches[0];
-        touchRef.current = {
-            startX: touch.clientX,
-            startY: touch.clientY
-        };
-        setIsDragging(true);
-    };
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        if (!isDragging) return;
-
-        const touch = e.touches[0];
-        const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        const category = element?.closest('[data-category]')?.getAttribute('data-category');
-
-        if (category) {
-            // Dispatch event to highlight category
-            const event = new CustomEvent('categoryHover', {
-                detail: { category }
-            });
-            window.dispatchEvent(event);
-        }
-
-        // Move the card with the touch
-        if (e.currentTarget) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.position = 'fixed';
-            el.style.left = `${touch.clientX - 50}px`;
-            el.style.top = `${touch.clientY - 50}px`;
-            el.style.zIndex = '1000';
-        }
-    };
-
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        setIsDragging(false);
-        const touch = e.changedTouches[0];
-        const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        const category = element?.closest('[data-category]')?.getAttribute('data-category');
-
-        if (category) {
-            const event = new CustomEvent('categoryDrop', {
-                detail: { category }
-            });
-            window.dispatchEvent(event);
-        }
-
-        // Reset card position
-        if (e.currentTarget) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.position = '';
-            el.style.left = '';
-            el.style.top = '';
-            el.style.zIndex = '';
-        }
-    };
 
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
         setIsDragging(true);
@@ -116,7 +45,7 @@ const DraggableCard = memo(function DraggableCard({
             sourceIndex: columnIndex
         };
         e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-
+        
         if (debug) console.log('🎪 Card dragStart:', { value, columnIndex, isInCategory });
     };
 
@@ -124,29 +53,29 @@ const DraggableCard = memo(function DraggableCard({
         e.preventDefault();
         setIsOver(true);
     };
-
+    
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setIsOver(false);
-
+        
         try {
             const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
-
+    
             // If this is an internal drag within the same category
             if (droppedValue.isInternalDrag && droppedValue.sourceCategory === currentCategory) {
                 const sourceIndex = droppedValue.sourceIndex;
                 let targetIndex: number;
-
+    
                 // Get either this card's dropzone or the category container
                 const dropzone = (e.target as HTMLElement).closest('[data-dropzone]');
-
+                
                 if (dropzone) {
                     targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
                     console.log('Indices:', { sourceIndex, targetIndex });
-
+    
                     // Only move if we have valid indices and they're different
                     if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
-                        onMoveUp || onMoveDown ?
+                        onMoveUp || onMoveDown ? 
                             (sourceIndex < targetIndex ? onMoveDown?.() : onMoveUp?.()) :
                             null;
                     }
@@ -162,7 +91,7 @@ const DraggableCard = memo(function DraggableCard({
             console.error('Error handling drop:', error);
         }
     };
-
+    
     const handleDragEnd = (): void => {
         setIsDragging(false);
         setIsOver(false);
@@ -189,17 +118,13 @@ const DraggableCard = memo(function DraggableCard({
                 data-index={columnIndex}
                 data-dropzone="true"
                 draggable="true"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative
-                ${isDragging ? 'border-2 border-blue-400' : ''}`}
+                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative`}
             >
                 <CardContent
                     title={value.title}
@@ -234,17 +159,13 @@ const DraggableCard = memo(function DraggableCard({
     return (
         <div
             draggable="true"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className={`${postItBaseStyles} ${tapeEffect} w-48 h-48
-                ${isDragging ? 'border-2 border-blue-400' : ''}`}
+            className={`${postItBaseStyles} ${tapeEffect} w-48 h-48`}
         >
             <div className="relative z-10">
                 <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>

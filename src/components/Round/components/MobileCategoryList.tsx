@@ -25,38 +25,15 @@ function CategoryRow({
   return (
       <div 
         data-category={category}
-        className={`p-4 rounded-lg border transition-colors duration-200 min-h-[60px] ${
+        className={`p-4 rounded-lg border transition-all duration-200 min-h-[60px] ${
           isActive 
-            ? 'bg-blue-50 border-blue-400' 
+            ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
             : 'bg-white border-gray-200'
         }`}
-        onTouchStart={(e) => {
-          e.preventDefault();
-          // Ensure touch events are captured
-        }}
-        onTouchMove={(e) => {
-          e.preventDefault();
-          const touch = e.touches[0];
-          const element = document.elementFromPoint(touch.clientX, touch.clientY);
-          const category = element?.closest('[data-category]')?.getAttribute('data-category');
-          if (category) {
-            // This will help show the active state
-            const event = new CustomEvent('categoryHover', { 
-              detail: { category } 
-            });
-            window.dispatchEvent(event);
-          }
-        }}
         onTouchEnd={(e) => {
-          e.preventDefault();
-          const touch = e.changedTouches[0];
-          const element = document.elementFromPoint(touch.clientX, touch.clientY);
-          const dropCategory = element?.closest('[data-category]')?.getAttribute('data-category');
-          if (dropCategory && isActive) {
-            const event = new CustomEvent('categoryDrop', { 
-              detail: { category: dropCategory } 
-            });
-            window.dispatchEvent(event);
+          if (isActive) {
+            e.preventDefault();
+            // The actual drop will be handled by the drag-and-drop system
           }
         }}
       >
