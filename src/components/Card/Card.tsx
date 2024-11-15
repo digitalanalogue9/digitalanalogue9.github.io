@@ -128,14 +128,25 @@ export default function Card({
 
     // Check for drop targets during move
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+    // Look for both direct elements and their parents
+    const categoryElement = elements.find(el => {
+        return el.hasAttribute('data-category') || 
+               el.closest('[data-category]') !== null;
+    });
+
     if (categoryElement && onActiveDropZoneChange) {
-      const category = categoryElement.getAttribute('data-category') as CategoryName;
-      onActiveDropZoneChange(category);
+        const category = categoryElement.hasAttribute('data-category') 
+            ? categoryElement.getAttribute('data-category') 
+            : categoryElement.closest('[data-category]')?.getAttribute('data-category');
+        
+        if (category) {
+            onActiveDropZoneChange(category as CategoryName);
+            if (debug) console.log('Found category:', category);
+        }
     } else if (onActiveDropZoneChange) {
-      onActiveDropZoneChange(null);
+        onActiveDropZoneChange(null);
     }
-  };
+};
 
   
   const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
