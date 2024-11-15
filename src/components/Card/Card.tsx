@@ -278,7 +278,7 @@ export default function Card({
         id={`card-${value.title}`}
         data-category={currentCategory}
         dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation ${isDragging ? 'shadow-lg ring-2 ring-blue-200' : ''}`}
+        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation ${isDragging ? 'shadow-lg ring-1 ring-black/20' : ''}`}
       >
         {cardContent}
       </motion.div>
