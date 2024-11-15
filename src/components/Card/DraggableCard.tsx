@@ -32,9 +32,79 @@ const DraggableCard = memo(function DraggableCard({
     const [isExpanded, setIsExpanded] = useState(false);
     const [showMoveOptions, setShowMoveOptions] = useState(false);
     const moveRef = useRef<{ pending: boolean }>({ pending: false });
+    const touchTimeoutRef = useRef<NodeJS.Timeout>();
+    const draggedCategoryRef = useRef<string | null>(null);
 
     if (!value) return null;
     const isInCategory = columnIndex !== undefined;
+
+    const handleTouchStart = () => {
+        touchTimeoutRef.current = setTimeout(() => {
+            setIsDragging(true);
+        }, 200);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (!isDragging) return;
+        e.preventDefault(); // Prevent scrolling
+
+        const touch = e.touches[0];
+        const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+        const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+        
+        // Clear previous category highlight
+        if (draggedCategoryRef.current) {
+            const prevElement = document.querySelector(`[data-category="${draggedCategoryRef.current}"]`);
+            prevElement?.classList.remove('bg-blue-50', 'border-blue-400');
+        }
+
+        if (categoryElement) {
+            const category = categoryElement.getAttribute('data-category');
+            if (category) {
+                draggedCategoryRef.current = category;
+                categoryElement.classList.add('bg-blue-50', 'border-blue-400');
+            }
+        } else {
+            draggedCategoryRef.current = null;
+        }
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchTimeoutRef.current) {
+            clearTimeout(touchTimeoutRef.current);
+        }
+
+        if (!isDragging) return;
+
+        const touch = e.changedTouches[0];
+        const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+        const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+
+        if (categoryElement) {
+            const category = categoryElement.getAttribute('data-category') as CategoryName;
+            if (category && onDrop) {
+                // Create a drop payload similar to drag and drop
+                const dropPayload = {
+                    ...value,
+                    sourceCategory: currentCategory,
+                    isInternalDrag: Boolean(currentCategory),
+                    sourceIndex: columnIndex
+                };
+                
+                onDrop(dropPayload);
+                categoryElement.classList.remove('bg-blue-50', 'border-blue-400');
+            }
+        }
+
+        // Clean up
+        if (draggedCategoryRef.current) {
+            const element = document.querySelector(`[data-category="${draggedCategoryRef.current}"]`);
+            element?.classList.remove('bg-blue-50', 'border-blue-400');
+            draggedCategoryRef.current = null;
+        }
+
+        setIsDragging(false);
+    };
 
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
         setIsDragging(true);
@@ -111,6 +181,16 @@ const DraggableCard = memo(function DraggableCard({
 
     const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
 
+    const cardClasses = `
+        ${postItBaseStyles} 
+        ${tapeEffect} 
+        ${isDragging ? 'border-2 border-blue-400 opacity-75' : ''}
+        ${isInCategory ? 'w-full max-w-full min-h-[40px]' : 'w-48 h-48'} 
+        relative
+        touch-manipulation
+    `;
+
+
     if (isInCategory) {
         return (
             <div
@@ -118,13 +198,14 @@ const DraggableCard = memo(function DraggableCard({
                 data-index={columnIndex}
                 data-dropzone="true"
                 draggable="true"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative`}
+                className={cardClasses}
             >
                 <CardContent
                     title={value.title}
@@ -159,13 +240,14 @@ const DraggableCard = memo(function DraggableCard({
     return (
         <div
             draggable="true"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className={`${postItBaseStyles} ${tapeEffect} w-48 h-48`}
+            className={cardClasses}
         >
             <div className="relative z-10">
                 <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
