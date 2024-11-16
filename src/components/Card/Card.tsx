@@ -128,54 +128,63 @@ export default function Card({
 
     // Check for drop targets during move
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-
-    // Look for both direct elements and their parents with data-category
-    const categoryElement = elements.find(el =>
-      el.hasAttribute('data-category') ||
-      el.closest('[data-category]') !== null
+    const categoryElement = elements.find(el => 
+        el.hasAttribute('data-category') ||
+        el.closest('[data-category]') !== null
     );
 
-    if (categoryElement && onActiveDropZoneChange) {
-      let category: string | null = null;
-
-      if (categoryElement.hasAttribute('data-category')) {
-        category = categoryElement.getAttribute('data-category');
-      } else {
+    if (categoryElement) {
+        setIsOver(true); // Add this to show visual feedback
         const closestWithCategory = categoryElement.closest('[data-category]');
-        category = closestWithCategory?.getAttribute('data-category') || null;
-      }
-
-      if (category) {
-        onActiveDropZoneChange(category as CategoryName);
-      }
-    } else if (onActiveDropZoneChange) {
-      onActiveDropZoneChange(null);
+        if (closestWithCategory) {
+            closestWithCategory.classList.add('category-drop-active'); // Optional: add visual feedback
+        }
+    } else {
+        setIsOver(false);
+        // Remove active class from all categories
+        document.querySelectorAll('.category-drop-active').forEach(el => {
+            el.classList.remove('category-drop-active');
+        });
     }
-  };
+};
 
-
-  const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
+const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
     const touch = e.changedTouches[0];
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => el.hasAttribute('data-category'));
+    const categoryElement = elements.find(el => 
+        el.hasAttribute('data-category') ||
+        el.closest('[data-category]') !== null
+    );
 
-    if (categoryElement) {
-      const category = categoryElement.getAttribute('data-category') as CategoryName;
-      const valueWithCategory = {
-        ...value,
-        sourceCategory: category
-      };
-      onDrop?.(valueWithCategory);
+    if (categoryElement && onDrop) {
+        let category: string | null = null;
+        
+        if (categoryElement.hasAttribute('data-category')) {
+            category = categoryElement.getAttribute('data-category');
+        } else {
+            const closestWithCategory = categoryElement.closest('[data-category]');
+            category = closestWithCategory?.getAttribute('data-category') || null;
+        }
+
+        if (category) {
+            const valueWithCategory = {
+                ...value,
+                sourceCategory: category as CategoryName
+            };
+            onDrop(valueWithCategory);
+        }
     }
 
-    if (onActiveDropZoneChange) {
-      onActiveDropZoneChange(null);
-    }
+    // Cleanup
+    document.querySelectorAll('.category-drop-active').forEach(el => {
+        el.classList.remove('category-drop-active');
+    });
     setIsDragging(false);
+    setIsOver(false);
     handleAnimationDragEnd();
-  };
+};
 
   const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     setIsDragging(false);
