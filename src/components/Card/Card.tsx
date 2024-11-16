@@ -126,52 +126,69 @@ export default function Card({
     x.set(newX);
     y.set(newY);
 
-    // Get element directly under the touch point
-    const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (!elementAtPoint) return;
+    // Check for drop targets during move
+    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
 
-    // Find closest category container
-    const categoryContainer = elementAtPoint.closest('[data-category]');
+    // Look for both direct elements and their parents with data-category
+    const categoryElement = elements.find(el =>
+      el.hasAttribute('data-category') ||
+      el.closest('[data-category]') !== null
+    );
 
-    if (categoryContainer) {
-      const category = categoryContainer.getAttribute('data-category') as CategoryName;
-      setIsOver(true);
-      if (onActiveDropZoneChange) {
-        onActiveDropZoneChange(category);
-      }
-    } else {
-      setIsOver(false);
-      if (onActiveDropZoneChange) {
+    if (categoryElement && onActiveDropZoneChange) {
+        let category: string | null = null;
+
+        if (categoryElement.hasAttribute('data-category')) {
+            category = categoryElement.getAttribute('data-category');
+        } else {
+            const closestWithCategory = categoryElement.closest('[data-category]');
+            category = closestWithCategory?.getAttribute('data-category') || null;
+        }
+
+        if (category) {
+            onActiveDropZoneChange(category as CategoryName);
+        }
+    } else if (onActiveDropZoneChange) {
         onActiveDropZoneChange(null);
-      }
     }
-  };
+};
 
-  const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
+const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
     const touch = e.changedTouches[0];
-    const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+    const categoryElement = elements.find(el => 
+        el.hasAttribute('data-category') ||
+        el.closest('[data-category]') !== null
+    );
 
-    if (elementAtPoint) {
-      const categoryContainer = elementAtPoint.closest('[data-category]');
-      if (categoryContainer && onDrop) {
-        const category = categoryContainer.getAttribute('data-category') as CategoryName;
-        const valueWithCategory = {
-          ...value,
-          sourceCategory: category
-        };
-        onDrop(valueWithCategory);
-      }
+    if (categoryElement) {
+        let category: string | null = null;
+        
+        if (categoryElement.hasAttribute('data-category')) {
+            category = categoryElement.getAttribute('data-category');
+        } else {
+            const closestWithCategory = categoryElement.closest('[data-category]');
+            category = closestWithCategory?.getAttribute('data-category') || null;
+        }
+
+        if (category && onDrop) {
+            const valueWithCategory = {
+                ...value,
+                sourceCategory: category as CategoryName
+            };
+            onDrop(valueWithCategory);
+        }
     }
 
-    setIsDragging(false);
-    setIsOver(false);
     if (onActiveDropZoneChange) {
-      onActiveDropZoneChange(null);
+        onActiveDropZoneChange(null);
     }
+    setIsDragging(false);
     handleAnimationDragEnd();
-  };
+};
+
 
 
 
