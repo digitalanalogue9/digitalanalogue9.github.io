@@ -21,7 +21,7 @@ export default function Card({
   onMoveToCategory,
   currentCategory,
   columnIndex,
-  onActiveDropZoneChange 
+  onActiveDropZoneChange
 }: CardProps) {
   const debug = getEnvBoolean('debug', false);
   const [isDragging, setIsDragging] = useState(false);
@@ -128,22 +128,32 @@ export default function Card({
 
     // Check for drop targets during move
     const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => el.hasAttribute('data-category'));
-    
-    // Update debug info
-    setDebugInfo(elements.map(el => 
-        `${el.tagName}: ${el.hasAttribute('data-category') ? el.getAttribute('data-category') : 'no-category'}`
-    ));
+
+    // Look for both direct elements and their parents with data-category
+    const categoryElement = elements.find(el =>
+      el.hasAttribute('data-category') ||
+      el.closest('[data-category]') !== null
+    );
 
     if (categoryElement && onActiveDropZoneChange) {
-        const category = categoryElement.getAttribute('data-category') as CategoryName;
-        onActiveDropZoneChange(category);
-    } else if (onActiveDropZoneChange) {
-        onActiveDropZoneChange(null);
-    }
-};
+      let category: string | null = null;
 
-  
+      if (categoryElement.hasAttribute('data-category')) {
+        category = categoryElement.getAttribute('data-category');
+      } else {
+        const closestWithCategory = categoryElement.closest('[data-category]');
+        category = closestWithCategory?.getAttribute('data-category') || null;
+      }
+
+      if (category) {
+        onActiveDropZoneChange(category as CategoryName);
+      }
+    } else if (onActiveDropZoneChange) {
+      onActiveDropZoneChange(null);
+    }
+  };
+
+
   const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
@@ -338,13 +348,6 @@ export default function Card({
           </div>
         </div>
       </div>
-      {isDragging && debugInfo.length > 0 && (
-    <div className="fixed top-0 left-0 bg-black/50 text-white p-4 z-50 max-w-full overflow-auto">
-        {debugInfo.map((info, i) => (
-            <div key={i}>{info}</div>
-        ))}
-    </div>
-)}
     </motion.div>
   );
 }

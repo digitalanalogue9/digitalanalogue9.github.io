@@ -99,9 +99,6 @@ const RoundUI = memo(function RoundUI() {
     setActiveDropZone(category);
     handleDrop(card, category);
     // Add a slight delay before clearing the active zone
-    // setTimeout(() => {
-    //     setActiveDropZone(null);
-    // }, 100);
 }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {

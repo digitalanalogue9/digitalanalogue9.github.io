@@ -26,22 +26,14 @@ function CategoryRow({
     <div 
         data-category={category}
         className={`p-4 rounded-lg border transition-all duration-200 min-h-[60px] 
-            relative z-20 touch-none pointer-events-auto
+            relative z-20
             ${isActive 
                 ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
                 : 'bg-white border-gray-200'
             }`}
-        style={{ 
-            touchAction: 'none'  // Prevent scrolling while dragging over
-        }}
     >
-        {/* Add an absolute overlay div to ensure the entire area is detectable */}
-        <div 
-            className="absolute inset-0 z-10" 
-            data-category={category}
-        />
-        
-        <div className="flex items-center justify-between relative z-20">
+        {/* Remove the overlay div since it might interfere with touch events */}
+        <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
                 {isActive && (
                     <span className="text-blue-500 animate-pulse">
@@ -55,7 +47,19 @@ function CategoryRow({
                     {category}
                 </span>
             </div>
-            {/* ... rest of the content ... */}
+            <div className="flex items-center space-x-2">
+                <span className="bg-gray-200 px-2 py-1 rounded-full text-sm">
+                    {cards.length}
+                </span>
+                <button
+                    onClick={() => onExpand(category)}
+                    className="p-1.5 rounded-full hover:bg-gray-100"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
   );
@@ -68,7 +72,7 @@ export function MobileCategoryList({
   activeDropZone
 }: MobileCategoryListProps) {
   return (
-      <div className="w-full flex flex-col gap-3 p-4 pb-8 relative z-20"> 
+      <div className="w-full flex flex-col gap-3 p-4 pb-8"> 
         <CategoryRow
           category="Very Important"
           cards={categories['Very Important'] ?? []}
