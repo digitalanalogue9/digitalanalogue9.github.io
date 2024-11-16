@@ -276,8 +276,8 @@ export default function Card({
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
-        whileTap={{ scale: 1.02 }}
-        whileDrag={{ scale: 1.05 }}
+        whileTap={{ scale: 1.00 }}
+        whileDrag={{ scale: 1.00 }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -305,8 +305,8 @@ export default function Card({
       exit="exit"
       whileHover="hover"
       transition={cardTransition}
-      whileTap={{ scale: 1.02 }}
-      whileDrag={{ scale: 1.05 }}
+      whileTap={{ scale: 1.00 }}
+      whileDrag={{ scale: 1.00 }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
