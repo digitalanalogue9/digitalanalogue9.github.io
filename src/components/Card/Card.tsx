@@ -126,101 +126,55 @@ export default function Card({
     x.set(newX);
     y.set(newY);
 
-    // Check for drop targets during move
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => 
-        el.hasAttribute('data-category') ||
-        el.closest('[data-category]') !== null
-    );
+    // Get element directly under the touch point
+    const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!elementAtPoint) return;
 
-    if (categoryElement) {
-        setIsOver(true); // Add this to show visual feedback
-        const closestWithCategory = categoryElement.closest('[data-category]');
-        if (closestWithCategory) {
-            closestWithCategory.classList.add('category-drop-active'); // Optional: add visual feedback
-        }
+    // Find closest category container
+    const categoryContainer = elementAtPoint.closest('[data-category]');
+
+    if (categoryContainer) {
+      const category = categoryContainer.getAttribute('data-category') as CategoryName;
+      setIsOver(true);
+      if (onActiveDropZoneChange) {
+        onActiveDropZoneChange(category);
+      }
     } else {
-        setIsOver(false);
-        // Remove active class from all categories
-        document.querySelectorAll('.category-drop-active').forEach(el => {
-            el.classList.remove('category-drop-active');
-        });
+      setIsOver(false);
+      if (onActiveDropZoneChange) {
+        onActiveDropZoneChange(null);
+      }
     }
-};
+  };
 
-const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
+  const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
     const touch = e.changedTouches[0];
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => 
-        el.hasAttribute('data-category') ||
-        el.closest('[data-category]') !== null
-    );
+    const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    if (categoryElement && onDrop) {
-        let category: string | null = null;
-        
-        if (categoryElement.hasAttribute('data-category')) {
-            category = categoryElement.getAttribute('data-category');
-        } else {
-            const closestWithCategory = categoryElement.closest('[data-category]');
-            category = closestWithCategory?.getAttribute('data-category') || null;
-        }
-
-        if (category) {
-            const valueWithCategory = {
-                ...value,
-                sourceCategory: category as CategoryName
-            };
-            onDrop(valueWithCategory);
-        }
-    }
-
-    // Cleanup
-    document.querySelectorAll('.category-drop-active').forEach(el => {
-        el.classList.remove('category-drop-active');
-    });
-    setIsDragging(false);
-    setIsOver(false);
-    handleAnimationDragEnd();
-};
-
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
-    setIsDragging(false);
-    setIsOver(false);
-    handleAnimationDragEnd();
-
-    // Only proceed if we have column index (means we're in a category) and currentCategory
-    if (columnIndex === undefined || !currentCategory) {
-      if (onDrop) {
-        onDrop(value);
-      }
-      return;
-    }
-
-    const DRAG_THRESHOLD = 30;
-    const yMovement = info.offset.y;
-    const yVelocity = info.velocity.y;
-
-    // Calculate how many positions to move based on drag distance
-    const moveDistance = Math.round(yMovement / 50); // 50px per card height for example
-    if (Math.abs(moveDistance) > 0) {
-      if (moveDistance < 0 && onMoveUp) {
-        // Only call once at the end of drag
-        console.log('Moving up from index:', columnIndex);
-        onMoveUp();
-      } else if (moveDistance > 0 && onMoveDown) {
-        // Only call once at the end of drag
-        console.log('Moving down from index:', columnIndex);
-        onMoveDown();
+    if (elementAtPoint) {
+      const categoryContainer = elementAtPoint.closest('[data-category]');
+      if (categoryContainer && onDrop) {
+        const category = categoryContainer.getAttribute('data-category') as CategoryName;
+        const valueWithCategory = {
+          ...value,
+          sourceCategory: category
+        };
+        onDrop(valueWithCategory);
       }
     }
 
-    // Reset position
-    x.set(0);
-    y.set(0);
+    setIsDragging(false);
+    setIsOver(false);
+    if (onActiveDropZoneChange) {
+      onActiveDropZoneChange(null);
+    }
+    handleAnimationDragEnd();
   };
+
+
+
 
   const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
 
@@ -288,22 +242,22 @@ const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
         dragMomentum={false}
         onDragStart={handleAnimationDragStart}
         onDragEnd={handleAnimationDragEnd}
-        style={{ x, y }}
+        style={{ x, y, touchAction: 'none' }}
         variants={cardVariants}
         initial="initial"
         animate="animate"
         exit="exit"
         whileHover="hover"
         transition={cardTransition}
-        whileTap={{ scale: 1.00 }}
-        whileDrag={{ scale: 1.00 }}
+        whileTap={{ scale: 0.98 }}
+        whileDrag={{ scale: 1.02, boxShadow: "0 5px 10px rgba(0,0,0,0.1)" }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         id={`card-${value.title}`}
         data-category={currentCategory}
-        dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation ${isDragging ? 'shadow-lg ring-1 ring-black/20' : ''}`}
+        dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
+        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation`}
       >
         {cardContent}
       </motion.div>
@@ -317,15 +271,15 @@ const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
       dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
       dragElastic={0.1}
       dragMomentum={false}
-      style={{ x, y }}
+      style={{ x, y, touchAction: 'none' }}
       variants={cardVariants}
       initial="initial"
       animate="animate"
       exit="exit"
       whileHover="hover"
       transition={cardTransition}
-      whileTap={{ scale: 1.00 }}
-      whileDrag={{ scale: 1.00 }}
+      whileTap={{ scale: 0.98 }}
+      whileDrag={{ scale: 1.02, boxShadow: "0 5px 10px rgba(0,0,0,0.1)" }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}

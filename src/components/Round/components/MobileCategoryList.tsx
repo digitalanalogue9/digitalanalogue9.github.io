@@ -26,11 +26,12 @@ function CategoryRow({
     <div 
         data-category={category}
         className={`p-4 rounded-lg border transition-all duration-200 min-h-[60px] 
-            relative z-20
+            relative z-20 touch-none
             ${isActive 
                 ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 ring-opacity-50' 
                 : 'bg-white border-gray-200'
             }`}
+        style={{ touchAction: 'none' }} // Add this to prevent default touch behaviors
     >
         {/* Remove the overlay div since it might interfere with touch events */}
         <div className="flex items-center justify-between">
