@@ -34,6 +34,7 @@ const RoundUI = memo(function RoundUI() {
   const [showReasoning, setShowReasoning] = useState<boolean>(false);
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
 
+
   // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
@@ -93,12 +94,15 @@ const RoundUI = memo(function RoundUI() {
     setShowResults
   );
 
-  const handleDropWithZone = useCallback((card: Value, category: CategoryName) => {
-    logStateUpdate('handleDropWithZone', { card, category }, 'RoundUI');
+  const handleMobileDropWithZone = useCallback((card: Value, category: CategoryName) => {
+    logStateUpdate('handleMobileDropWithZone', { card, category }, 'RoundUI');
     setActiveDropZone(category);
     handleDrop(card, category);
-    setActiveDropZone(null);
-  }, [handleDrop]);
+    // Add a slight delay before clearing the active zone
+    // setTimeout(() => {
+    //     setActiveDropZone(null);
+    // }, 100);
+}, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
     try {
@@ -206,7 +210,6 @@ const RoundUI = memo(function RoundUI() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
       <header className="sticky top-0">
         <RoundHeader
           targetCoreValues={targetCoreValues}
@@ -214,10 +217,9 @@ const RoundUI = memo(function RoundUI() {
           remainingCardsCount={remainingCards.length}
         />
       </header>
-      <main className="flex-1 flex flex-col pt-16"> {/* Add padding-top */}
+      <main className="flex-1 flex flex-col pt-16">
         {isMobile ? (
           <div className="flex flex-col px-2 space-y-4">
-            {/* Mobile Actions and Status */}
             <div className="flex flex-col space-y-2">
               <RoundActions
                 remainingCards={remainingCards}
@@ -225,7 +227,6 @@ const RoundUI = memo(function RoundUI() {
                 onNextRound={handleNextRound}
                 onDrop={handleDrop}
                 isEndGame={shouldEndGame}
-                onActiveDropZoneChange={setActiveDropZone}
               />
               <StatusMessage
                 status={status()}
@@ -238,12 +239,14 @@ const RoundUI = memo(function RoundUI() {
                 remainingCards={remainingCards}
               />
             </div>
-            <MobileCategoryList
-              categories={categories}
-              onDrop={handleDropWithZone}
-              onExpand={setExpandedCategory}
-              activeDropZone={activeDropZone}
-            />
+            <div className="relative z-20">
+              <MobileCategoryList
+                categories={categories}
+                onDrop={handleMobileDropWithZone}
+                onExpand={setExpandedCategory}
+                activeDropZone={activeDropZone}
+              />
+            </div>
           </div>
         ) : (
           <div className="container mx-auto px-4 space-y-6">
@@ -255,7 +258,6 @@ const RoundUI = memo(function RoundUI() {
                 onNextRound={handleNextRound}
                 onDrop={handleDrop}
                 isEndGame={shouldEndGame}
-                onActiveDropZoneChange={setActiveDropZone}
               />
               <StatusMessage
                 status={status()}
@@ -279,7 +281,6 @@ const RoundUI = memo(function RoundUI() {
       </main>
     </div>
   );
-
 });
 
 export default RoundUI;
