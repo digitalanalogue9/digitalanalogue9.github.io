@@ -2,7 +2,7 @@ import { Variants } from "framer-motion";
 
 export const cardVariants: Variants = {
   initial: { 
-    scale: 0.8, 
+    scale: 1.0, 
     opacity: 0 
   },
   animate: { 
@@ -10,11 +10,11 @@ export const cardVariants: Variants = {
     opacity: 1 
   },
   exit: { 
-    scale: 0.8, 
+    scale: 1.0, 
     opacity: 0 
   },
   hover: { 
-    scale: 1.05,
+    scale: 1.00,
     transition: {
       duration: 0.2
     }
