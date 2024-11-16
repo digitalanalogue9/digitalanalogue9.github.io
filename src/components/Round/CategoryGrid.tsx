@@ -5,7 +5,7 @@ import { CategoryName, Value } from '@/types';
 export function CategoryGrid({
   categories,
   onDrop,
-  onMoveCard,
+  onMoveWithinCategory,
   onMoveBetweenCategories
 }: CategoryGridProps) {
   const categoryNames = Object.keys(categories) as CategoryName[];
@@ -23,7 +23,7 @@ export function CategoryGrid({
             title={title}
             cards={cards}
             onDrop={onDrop}
-            onMoveWithinCategory={(fromIndex, toIndex) => onMoveCard(title, fromIndex, toIndex)}
+            onMoveWithinCategory={(fromIndex, toIndex) => onMoveWithinCategory(title, fromIndex, toIndex)}
             onMoveBetweenCategories={onMoveBetweenCategories}
           />
         ))}

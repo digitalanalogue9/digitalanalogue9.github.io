@@ -99,7 +99,7 @@ const RoundUI = memo(function RoundUI() {
     setActiveDropZone(category);
     handleDrop(card, category);
     // Add a slight delay before clearing the active zone
-}, [handleDrop]);
+  }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
     try {
@@ -242,6 +242,10 @@ const RoundUI = memo(function RoundUI() {
                 onDrop={handleMobileDropWithZone}
                 onExpand={setExpandedCategory}
                 activeDropZone={activeDropZone}
+                expandedCategory={expandedCategory}
+                onClose={() => setExpandedCategory(null)}
+                onMoveWithinCategory={handleMoveCard}
+                onMoveBetweenCategories={handleMoveBetweenCategories}
               />
             </div>
           </div>
@@ -270,7 +274,7 @@ const RoundUI = memo(function RoundUI() {
             <CategoryGrid
               categories={roundState.visibleCategories}
               onDrop={handleDrop}
-              onMoveCard={handleMoveCard}
+              onMoveWithinCategory={handleMoveCard}
               onMoveBetweenCategories={handleMoveBetweenCategories}
             />
           </div>

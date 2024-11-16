@@ -1,10 +1,10 @@
+// src/components/CategoryColumn.tsx
 'use client'
 
 import { memo, useCallback, useState } from 'react';
 import { Card } from '@/components/Card';
 import { CategoryColumnProps } from './CategoryColumnProps';
 import { Value, CategoryName } from '@/types';
-
 
 const CategoryColumn = memo(function CategoryColumn({
   title,
@@ -25,7 +25,7 @@ const CategoryColumn = memo(function CategoryColumn({
     setIsOver(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsOver(false);
     
@@ -49,6 +49,10 @@ const CategoryColumn = memo(function CategoryColumn({
         if (dropzone.hasAttribute('data-dropzone')) {
           // Dropped on a card
           targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
+          // If dropping below the source index, we need to adjust the target index
+          if (sourceIndex !== undefined && targetIndex > sourceIndex) {
+            targetIndex -= 1;
+          }
         } else {
           // Dropped at the bottom of the category
           targetIndex = cards.length - 1;
@@ -57,45 +61,51 @@ const CategoryColumn = memo(function CategoryColumn({
         console.log('Drop indices:', { sourceIndex, targetIndex });
 
         if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
-          onMoveWithinCategory(sourceIndex, targetIndex);
+          await onMoveWithinCategory(sourceIndex, targetIndex);
         }
         return;
       }
 
       // Handle cross-category move
       if (droppedValue.sourceCategory && droppedValue.sourceCategory !== title) {
-        onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
+        await onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
         return;
       }
 
       // Handle new card drop
       if (!droppedValue.isInternalDrag) {
-        onDrop(droppedValue, title);
+        await onDrop(droppedValue, title);
       }
     } catch (error) {
       console.error('Error handling drop:', error);
     }
   };
 
-  const handleMoveUp = useCallback((index: number) => {
+  const handleMoveUp = useCallback(async (index: number) => {
     if (isMoving) return;
     console.log('CategoryColumn: handleMoveUp called:', index);
     if (index > 0) {
       setIsMoving(true);
-      onMoveWithinCategory(index, index - 1);
-      // Reset the lock after a short delay
-      setTimeout(() => setIsMoving(false), 300);
+      try {
+        await onMoveWithinCategory(index, index - 1);
+      } finally {
+        // Reset the lock after a short delay
+        setTimeout(() => setIsMoving(false), 300);
+      }
     }
   }, [onMoveWithinCategory, isMoving]);
 
-  const handleMoveDown = useCallback((index: number) => {
+  const handleMoveDown = useCallback(async (index: number) => {
     if (isMoving) return;
     console.log('CategoryColumn: handleMoveDown called:', index);
     if (index < cards.length - 1) {
       setIsMoving(true);
-      onMoveWithinCategory(index, index + 1);
-      // Reset the lock after a short delay
-      setTimeout(() => setIsMoving(false), 300);
+      try {
+        await onMoveWithinCategory(index, index + 1);
+      } finally {
+        // Reset the lock after a short delay
+        setTimeout(() => setIsMoving(false), 300);
+      }
     }
   }, [onMoveWithinCategory, cards.length, isMoving]);
 
@@ -110,8 +120,8 @@ const CategoryColumn = memo(function CategoryColumn({
         p-2
         rounded-lg 
         min-h-[500px]
-        min-w-[300px] // Add minimum width
-        max-w-[400px] // Add maximum width
+        min-w-[300px]
+        max-w-[400px]
         transition-colors 
         duration-200
         ${isOver ? 'bg-blue-50' : 'bg-gray-50'}
