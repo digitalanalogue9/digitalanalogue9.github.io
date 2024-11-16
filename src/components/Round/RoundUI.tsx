@@ -34,11 +34,11 @@ const RoundUI = memo(function RoundUI() {
   const [showReasoning, setShowReasoning] = useState<boolean>(false);
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
 
-
   // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
   const { remainingCards, categories, setCategories, setRemainingCards } = useGameState();
   const { currentRoundCommands, addCommand, clearCommands } = useCommands();
+  const { isMobile } = useMobile();
 
   // Memoized calculations
   const activeCards = useMemo(() => {
@@ -98,7 +98,7 @@ const RoundUI = memo(function RoundUI() {
     logStateUpdate('handleMobileDropWithZone', { card, category }, 'RoundUI');
     setActiveDropZone(category);
     handleDrop(card, category);
-    // Add a slight delay before clearing the active zone
+    setTimeout(() => setActiveDropZone(null), 500); // Clear after animation
   }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
@@ -117,7 +117,6 @@ const RoundUI = memo(function RoundUI() {
 
       if (shouldEndGame) {
         if (sessionId) {
-          // If we have exact target in Very Important, only use those values
           const finalValues = hasExactTargetInVeryImportant
             ? categories['Very Important'] || []
             : Object.entries(categories)
@@ -194,8 +193,6 @@ const RoundUI = memo(function RoundUI() {
     setShouldEndGame(hasExactTargetInVeryImportant || activeCards === targetCoreValues);
   }, [activeCards, targetCoreValues, categories]);
 
-
-  const { isMobile } = useMobile();
   // Conditional rendering
   if (showReasoning) {
     return <CoreValueReasoning values={finalValuesWithoutReasons} onComplete={handleReasoningComplete} />;
@@ -207,14 +204,14 @@ const RoundUI = memo(function RoundUI() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0">
+      <header className="sticky top-0 z-40 bg-white">
         <RoundHeader
           targetCoreValues={targetCoreValues}
           roundNumber={roundNumber}
           remainingCardsCount={remainingCards.length}
         />
       </header>
-      <main className="flex-1 flex flex-col pt-16">
+      <main className="flex-1 flex flex-col pt-4">
         {isMobile ? (
           <div className="flex flex-col px-2 space-y-4">
             <div className="flex flex-col space-y-2">
@@ -239,11 +236,9 @@ const RoundUI = memo(function RoundUI() {
             <div className="relative z-20">
               <MobileCategoryList
                 categories={categories}
-                onDrop={handleMobileDropWithZone}
-                onExpand={setExpandedCategory}
+                unassignedCards={remainingCards}
                 activeDropZone={activeDropZone}
-                expandedCategory={expandedCategory}
-                onClose={() => setExpandedCategory(null)}
+                onDrop={handleMobileDropWithZone}
                 onMoveWithinCategory={handleMoveCard}
                 onMoveBetweenCategories={handleMoveBetweenCategories}
               />

@@ -151,7 +151,7 @@ const CategoryColumn = memo(function CategoryColumn({
                 onDrop={(value: Value) => onDrop(value, title)}
                 onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
                 onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
-                onMoveToCategory={(value: Value, fromCat: CategoryName, toCat: CategoryName) =>
+                onMoveBetweenCategories={(value: Value, fromCat: CategoryName, toCat: CategoryName) =>
                   onMoveBetweenCategories(value, fromCat, toCat)}
               />
             </div>

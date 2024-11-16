@@ -7,8 +7,9 @@ export interface CardProps {
   onDrop?: (value: Value & { sourceCategory?: CategoryName }) => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
-  onMoveToCategory?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
+  onMoveBetweenCategories?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
   onActiveDropZoneChange?: (category: CategoryName | null) => void;
+  onClick?: (value: Value) => void; // Added for mobile interaction
 }
 
 export interface CardControlsProps {
@@ -21,7 +22,7 @@ export interface CardControlsProps {
 export interface CardMoveOptionsProps {
   value: Value;
   currentCategory: CategoryName;
-  onMoveToCategory: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
+  onMoveBetweenCategories: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
   onClose: () => void;
 }
 
@@ -29,5 +30,5 @@ export interface CardContentProps {
   title: string;
   description: string;
   isExpanded: boolean;
-  onToggle: () => void;
+  controls?: React.ReactNode;
 }
