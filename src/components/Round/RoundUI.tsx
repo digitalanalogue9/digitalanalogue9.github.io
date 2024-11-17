@@ -258,21 +258,23 @@ const RoundUI = memo(function RoundUI() {
             </div>
           </div>
         ) : (
-          <div className="container mx-auto px-4 py-4">
+          <div className="container mx-auto">
             <div
-              className="grid grid-cols-3 gap-8"
+              className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4"
               role="region"
               aria-label="Game controls and status"
             >
-              <div aria-hidden="true" />
-              <RoundActions
-                remainingCards={remainingCards}
-                canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
-                onNextRound={handleNextRound}
-                onDrop={handleDrop}
-                isEndGame={shouldEndGame}
-              />
-              <div role="status" aria-live="polite">
+              <div /> {/* Empty first column */}
+              <div> {/* Middle column */}
+                <RoundActions
+                  remainingCards={remainingCards}
+                  canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
+                  onNextRound={handleNextRound}
+                  onDrop={handleDrop}
+                  isEndGame={shouldEndGame}
+                />
+              </div>
+              <div> {/* Third column */}
                 <StatusMessage
                   status={status()}
                   isNearingCompletion={roundState.isNearingCompletion}
@@ -308,14 +310,14 @@ const RoundUI = memo(function RoundUI() {
             />
           </div>
         ) : (
-          <div className="container mx-auto px-4 py-6">
-            <CategoryGrid
-              categories={roundState.visibleCategories}
-              onDrop={handleDrop}
-              onMoveWithinCategory={handleMoveCard}
-              onMoveBetweenCategories={handleMoveBetweenCategories}
-            />
-          </div>
+          <div className="w-full">
+      <CategoryGrid
+        categories={roundState.visibleCategories}
+        onDrop={handleDrop}
+        onMoveWithinCategory={handleMoveCard}
+        onMoveBetweenCategories={handleMoveBetweenCategories}
+      />
+    </div>
         )}
       </div>
     </div>

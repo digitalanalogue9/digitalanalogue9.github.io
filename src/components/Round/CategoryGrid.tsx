@@ -14,13 +14,13 @@ export function CategoryGrid({
   return (
     <section 
       aria-label="Value Categories Grid"
-      className="w-full flex justify-center"
+      className="w-full flex justify-center px-4"
     >
       <div 
-        className="grid gap-10 w-full max-w-[1600px] mx-auto px-4"
+        className="grid w-full max-w-[1600px]"
         style={{ 
-          gridTemplateColumns: `repeat(${categoryNames.length}, minmax(320px, 1fr))`,
-          gridAutoFlow: 'dense'
+          gridTemplateColumns: `repeat(${categoryNames.length}, minmax(300px, 1fr))`,
+          gap: '1.5rem', // Reduced gap to allow more space
         }}
         role="grid"
         aria-label="Categories grid layout"

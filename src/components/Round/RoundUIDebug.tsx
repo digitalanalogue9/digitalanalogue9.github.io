@@ -30,7 +30,7 @@ export default function RoundUIDebug() {
   }
 
   return (
-    <div aria-hidden="true"> {/* Hide profiler wrapper from screen readers */}
+    <div> {/* Hide profiler wrapper from screen readers */}
       <Profiler 
         id="RoundUI" 
         onRender={onRender}

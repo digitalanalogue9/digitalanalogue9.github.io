@@ -1,6 +1,6 @@
 // src/components/CategoryColumn.tsx
 import { Value, CategoryName } from '@/types';
-import { AnimatedCard } from './Card';
+import { Card } from './Card';  // Change this import
 
 interface CategoryColumnProps {
   title: CategoryName;
@@ -64,15 +64,17 @@ export default function CategoryColumn({
 
   return (
     <div
-      className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 min-w-[320px]"
+      className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 w-full"
       data-category={title}
     >
-      <h2 className="text-lg font-semibold mb-4 text-gray-900">
-        {title}
-        <span className="ml-2 text-sm font-normal text-gray-500">
-          ({cards.length})
-        </span>
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 flex items-center justify-between w-full">
+          <span>{title}</span>
+          <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-sm font-medium text-gray-600 ml-2">
+            {cards.length}
+          </span>
+        </h2>
+      </div>
 
       <div
         className="border-2 border-dashed border-gray-200 rounded-lg p-2 min-h-[400px] transition-colors duration-200"
@@ -88,7 +90,7 @@ export default function CategoryColumn({
               key={card.id}
               className="transition-all duration-200"
             >
-              <AnimatedCard
+              <Card
                 value={card}
                 columnIndex={index}
                 currentCategory={title}
