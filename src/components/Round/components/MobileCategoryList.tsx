@@ -48,8 +48,7 @@ export function MobileCategoryList({
             <div
               key={category}
               className={`
-                transition-all duration-200
-                ${selectedCard ? 'transform scale-105 shadow-lg' : ''}
+                transition-all duration-200}
               `}
             >
               <MobileCategoryRow

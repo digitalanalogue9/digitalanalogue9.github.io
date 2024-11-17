@@ -56,7 +56,7 @@ export function MobileCategoryRow({
       className={`
         rounded-lg border transition-colors duration-200
         ${isActive ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'}
-        ${showingCardSelection ? 'z-50 transform scale-105 shadow-lg' : 'z-0'}
+        ${showingCardSelection ? 'z-50 transform' : 'z-0'}
       `}
       role="region"
       aria-labelledby={categoryId}
