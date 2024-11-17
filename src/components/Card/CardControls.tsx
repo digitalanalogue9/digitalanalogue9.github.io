@@ -34,8 +34,8 @@ export function CardControls({
   `;
 
   return (
-    <div 
-      className="flex gap-0 items-center justify-end min-w-[120px] ml-auto"
+    <div
+      className="flex gap-0 items-center justify-end min-w-[120px] ml-auto pointer-events-auto" // Add pointer-events-auto here
       role="toolbar"
       aria-label={`Controls for ${value.title}`}
       onTouchStart={(e: ReactTouchEvent) => e.stopPropagation()}
@@ -51,7 +51,7 @@ export function CardControls({
           aria-expanded={isExpanded}
           aria-controls={`description-${value.id}`}
         >
-          <span 
+          <span
             className="inline-block w-4 text-center"
             aria-hidden="true"
           >
@@ -67,7 +67,7 @@ export function CardControls({
             className={buttonBaseClass}
             aria-label={`Move ${value.title} up in ${currentCategory}`}
           >
-            <span 
+            <span
               className="inline-block w-4 text-center"
               aria-hidden="true"
             >
@@ -84,7 +84,7 @@ export function CardControls({
             className={buttonBaseClass}
             aria-label={`Move ${value.title} down in ${currentCategory}`}
           >
-            <span 
+            <span
               className="inline-block w-4 text-center"
               aria-hidden="true"
             >
@@ -103,7 +103,7 @@ export function CardControls({
             aria-label={`Show move options for ${value.title}`}
             aria-haspopup="true"
           >
-            <span 
+            <span
               className="inline-block w-4 text-center"
               aria-hidden="true"
             >

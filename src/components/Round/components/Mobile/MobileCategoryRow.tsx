@@ -21,6 +21,7 @@ interface MobileCategoryRowProps {
   showingCardSelection: boolean;
   onMoveWithinCategory?: (fromIndex: number, toIndex: number) => void;
   onMoveBetweenCategories?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => Promise<void>;
+  lastDroppedCategory: CategoryName | null; // Add this line
 }
 
 export function MobileCategoryRow({
@@ -33,7 +34,8 @@ export function MobileCategoryRow({
   onCategorySelect,
   showingCardSelection,
   onMoveWithinCategory,
-  onMoveBetweenCategories
+  onMoveBetweenCategories,
+  lastDroppedCategory
 }: MobileCategoryRowProps) {
   const currentCategoryIndex = availableCategories.indexOf(category);
   const categoryId = `category-${category.toLowerCase().replace(/\s+/g, '-')}`;
@@ -54,9 +56,14 @@ export function MobileCategoryRow({
     <motion.div
       layout
       className={`
-    rounded-lg transition-colors duration-200
-    ${isActive ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'}
-    ${showingCardSelection ? 'z-50 border-2 border-blue-500' : 'z-0 border'}
+    rounded-lg 
+    transition-all duration-300
+    border-2 
+    ${(isActive || lastDroppedCategory === category) ? 'bg-green-50' : 'bg-white'}
+    ${showingCardSelection
+          ? 'border-black shadow-md z-50 cursor-pointer'
+          : 'border-transparent hover:border-gray-200 z-0'
+        }
   `}
       role="region"
       aria-labelledby={categoryId}
@@ -99,10 +106,10 @@ export function MobileCategoryRow({
               {cards.map((card, index) => (
                 <div
                   key={card.id}
-                  className="bg-yellow-100 rounded-lg shadow-sm" // Changed to yellow background
+                  className="bg-yellow-100 rounded-lg shadow-sm"
                   role="listitem"
                 >
-                  <div className="flex items-center justify-between p-2 gap-2 border-b border-yellow-200"> {/* Added subtle border */}
+                  <div className="flex items-center justify-between p-2 gap-2 border-b border-yellow-200">
                     {/* Card Title and Expand Button */}
                     <button
                       onClick={(e) => toggleCardExpansion(card.id, e)}
@@ -112,8 +119,8 @@ export function MobileCategoryRow({
                     >
                       <ChevronDownIcon
                         className={`w-4 h-4 text-yellow-700 transition-transform flex-shrink-0
-            ${expandedCards.has(card.id) ? 'rotate-180' : ''}
-          `}
+                          ${expandedCards.has(card.id) ? 'rotate-180' : ''}
+                        `}
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-yellow-900 truncate">
@@ -145,7 +152,7 @@ export function MobileCategoryRow({
                         )}
                       </div>
 
-                      {/* Position Movement Controls - keeping these with gray background for contrast */}
+                      {/* Position Movement Controls */}
                       <div className="flex items-center gap-1">
                         {index > 0 && (
                           <button
@@ -178,7 +185,7 @@ export function MobileCategoryRow({
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-4 pb-3 text-sm text-yellow-800"> {/* Updated text color */}
+                        <div className="px-4 pb-3 text-sm text-yellow-800">
                           {card.description}
                         </div>
                       </motion.div>

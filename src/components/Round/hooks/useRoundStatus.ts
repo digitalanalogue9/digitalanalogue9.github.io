@@ -24,6 +24,7 @@ export interface StatusState {
 
 export const useRoundStatus = (state: StatusState) => {
   const { isMobile } = useMobile();
+  
   return useCallback((): Status => {
     if (state.remainingCards.length > 0) {
       if (isMobile) {
@@ -48,20 +49,11 @@ export const useRoundStatus = (state: StatusState) => {
       };
     }
 
-    // Calculate active cards (not in Not Important)
-    const activeCards = Object.entries(state.categories)
+    const activeCardsCount = Object.entries(state.categories)
       .filter(([category]) => category !== 'Not Important')
       .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
 
-    if (activeCards === state.targetCoreValues) {
-      return {
-        text: 'Perfect! Click End Game to complete the exercise.',
-        type: 'success',
-        isEndGame: true
-      };
-    }
-
-    if (activeCards < state.targetCoreValues) {
+    if (activeCardsCount < state.targetCoreValues) {
       return {
         text: `You need at least ${state.targetCoreValues} values outside of Not Important to continue`,
         type: 'warning',
@@ -69,10 +61,18 @@ export const useRoundStatus = (state: StatusState) => {
       };
     }
 
+    if (state.veryImportantCount === state.targetCoreValues) {
+      return {
+        text: 'Perfect! Click End Game to complete the exercise.',
+        type: 'success',
+        isEndGame: true
+      };
+    }
+
     return {
-      text: 'Continue refining your choices',
+      text: 'You can continue to the next round or keep refining your choices',
       type: 'info',
       isEndGame: false
     };
-  }, [state]);
+  }, [state, isMobile]);
 };

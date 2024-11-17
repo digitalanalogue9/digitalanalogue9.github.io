@@ -12,26 +12,26 @@ export function CardContent({
   const descriptionId = `description-${title.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <div 
+    <div
       className="flex flex-col w-full p-2"
       role="region"
       aria-labelledby={headingId}
     >
-      <div 
+      <div
         className="flex items-start justify-between gap-2 w-full"
         role="heading"
         aria-level={3}
       >
-        <h3 
+        <h3
           id={headingId}
           className="font-medium text-gray-800 text-sm sm:text-base flex-1 break-words pr-2"
         >
           {title}
         </h3>
-        
+
         {controls && (
-          <div 
-            className="flex-shrink-0 ml-auto"
+          <div
+            className="flex-shrink-0 ml-auto pointer-events-auto" // Add pointer-events-auto here
             role="toolbar"
             aria-label={`Controls for ${title}`}
           >
@@ -51,9 +51,9 @@ export function CardContent({
             role="region"
             aria-labelledby={descriptionId}
           >
-            <p 
+            <p
               id={descriptionId}
-              className="text-sm text-gray-700 leading-relaxed"
+              className="px-4 pb-3 text-base text-gray-800 leading-relaxed"
               aria-expanded={isExpanded}
             >
               <span className="sr-only">Description: </span>

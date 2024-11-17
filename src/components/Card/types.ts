@@ -10,7 +10,8 @@ export interface CardProps {
   onMoveBetweenCategories?: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
   onActiveDropZoneChange?: (category: CategoryName | null) => void;
   onClick?: (value: Value) => void; // Added for mobile interaction
-}
+  selectedMobileCard?: boolean; // Add this line
+  }
 
 export interface CardControlsProps {
   onMoveUp?: () => void;

@@ -1,5 +1,7 @@
 // src/components/Round/components/StatusMessage.tsx
-import { ReactNode, useState } from 'react';
+'use client'
+
+import { ReactNode } from 'react';
 import { StatusMessageProps } from './StatusMessageProps';
 import { useMobile } from '@/contexts/MobileContext';
 
@@ -12,21 +14,28 @@ export const StatusMessage = ({
   targetCoreValues,
   canProceedToNextRound,
   remainingCards,
-  showInitialMessage = false
+  showDetails = true,
+  setShowDetails
 }: StatusMessageProps): ReactNode => {
-  const [showDetails, setShowDetails] = useState(false);
   const { isMobile } = useMobile();
+
+
+  const handleButtonClick = () => {
+    if (setShowDetails) {
+      setShowDetails(!showDetails); // Toggle the details visibility
+    }
+  };
 
   const messageContent = (
     <div role="status">
-      <p 
+      <p
         className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight`}
         aria-live="polite"
       >
         {status.text}
       </p>
       {isNearingCompletion && (hasTooManyImportantCards || hasNotEnoughImportantCards) && (
-        <p 
+        <p
           className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}
           aria-live="polite"
         >
@@ -34,7 +43,7 @@ export const StatusMessage = ({
         </p>
       )}
       {!hasEnoughCards && (
-        <p 
+        <p
           className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}
           aria-live="polite"
         >
@@ -52,7 +61,7 @@ export const StatusMessage = ({
         aria-live="polite"
       >
         <button
-          onClick={() => setShowDetails(!showDetails)}
+          onClick={handleButtonClick}
           className={`
             rounded-full p-2 flex items-center justify-center
             ${!canProceedToNextRound && remainingCards.length === 0
@@ -90,13 +99,15 @@ export const StatusMessage = ({
     );
   }
 
+  // Desktop version - always show
   return (
-    <div 
+    <div
       className={`
         relative
         p-3 sm:p-4
         min-h-[5rem]
-        h-auto
+        h-full
+        w-full
         flex flex-col justify-center 
         rounded-lg 
         overflow-hidden

@@ -19,7 +19,8 @@ export const useRoundHandlers = (
   clearCommands: () => void,
   targetCoreValues: number,
   setRoundNumber: (round: number) => void,
-  setShowResults: (show: boolean) => void
+  setShowResults: (show: boolean) => void,
+  setShowStatusDetails : (isFirst: boolean) => void
 ) => {
 
 
@@ -78,7 +79,7 @@ export const useRoundHandlers = (
   ): Promise<void> => {
     // Debug logging
     console.log('handleMoveCard called:', { category, fromIndex, toIndex });
-  
+
     // Early returns with logging
     if (!validCategories.includes(category)) {
       console.log('Invalid category, returning');
@@ -140,6 +141,7 @@ export const useRoundHandlers = (
   ): Promise<void> => {
     if (!activeCategories.includes(fromCategory)) return;
     if (!validCategories.includes(toCategory) && !activeCategories.includes(toCategory)) return;
+   // Set first interaction to false when a card is dropped
 
     const fromCards = categories[fromCategory] || [];
     const toCards = categories[toCategory] || [];

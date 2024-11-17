@@ -12,33 +12,25 @@ export type ValidationState = {
   categories: Categories;
 };
 
+
 export const useRoundValidation = (state: ValidationState) => {
-    const validateRound = useCallback(() => {
-      const {
-        remainingCards,
-        hasMinimumNotImportant,
-        hasEnoughCards,
-        categories,
-        targetCoreValues
-      } = state;
-  
-      // Can't proceed if cards still need to be sorted
-      if (remainingCards.length > 0) return false;
-  
-      // Must have at least one card in Not Important
-      if (!hasMinimumNotImportant) return false;
-  
-      // Get total cards in non-Not Important categories
-      const activeCards = Object.entries(categories)
-        .filter(([category]) => category !== 'Not Important')
-        .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
-  
-      // Valid if we either:
-      // 1. Have more than targetCoreValues active cards (continue to next round)
-      // 2. Have exactly targetCoreValues in one category (end game)
-      return activeCards >= targetCoreValues;
-    }, [state]);
-  
-    return validateRound;
+  return () => {
+    // Can't proceed if there are remaining cards
+    if (state.remainingCards.length > 0) {
+      return false;
+    }
+
+    // Must have at least one card in Not Important
+    if (!state.hasMinimumNotImportant) {
+      return false;
+    }
+
+    // Calculate total cards in non-Not Important categories
+    const activeCardsCount = Object.entries(state.categories)
+      .filter(([category]) => category !== 'Not Important')
+      .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+
+    // Allow next round if we have enough active cards for the target
+    return activeCardsCount >= state.targetCoreValues;
   };
-  
+};

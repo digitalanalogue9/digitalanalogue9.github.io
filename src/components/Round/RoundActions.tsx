@@ -1,3 +1,4 @@
+// src/components/Round/RoundActions.tsx
 import { Value, CategoryName } from '@/types';
 import { Card } from '@/components/Card';
 import { RoundActionsProps } from './RoundActionsProps';
@@ -7,6 +8,7 @@ interface RoundActionsPropsWithActiveZone extends RoundActionsProps {
   onActiveDropZoneChange?: (category: CategoryName | null) => void;
   selectedMobileCard?: Value | null;
   onMobileCardSelect?: (card: Value | null) => void;
+  setShowDetails?: (show: boolean) => void;
 }
 
 export function RoundActions({
@@ -17,15 +19,23 @@ export function RoundActions({
   isEndGame,
   onActiveDropZoneChange,
   selectedMobileCard,
-  onMobileCardSelect
+  onMobileCardSelect,
+  setShowDetails
 }: RoundActionsPropsWithActiveZone) {
   const { isMobile } = useMobile();
   const currentCard = remainingCards.length > 0 ? remainingCards[0] : null;
 
+  const handleCardClick = () => {
+    if (isMobile) {
+      setShowDetails?.(false);
+      onMobileCardSelect?.(currentCard);
+    }
+  };
+
   if (!currentCard) {
     return (
       <div 
-        className="h-24 sm:h-48"
+        className="h-24 sm:h-48 flex items-center justify-center"
         role="region"
         aria-label="Round progression"
       >
@@ -63,19 +73,22 @@ export function RoundActions({
             flex items-center justify-center cursor-pointer
             transform transition-all duration-200
             scale-[0.7]
-            ${selectedMobileCard ? 'ring-2 ring-blue-500 rounded-lg' : ''}
           `}
           role="button"
           tabIndex={0}
-          onClick={() => onMobileCardSelect?.(currentCard)}
+          onClick={handleCardClick}
           onKeyPress={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              onMobileCardSelect?.(currentCard);
+              handleCardClick();
             }
           }}
           aria-label={`${selectedMobileCard ? 'Selected card' : 'Select card'}: ${currentCard.title}`}
         >
-          <Card value={currentCard} />
+          <Card 
+            value={currentCard} 
+            onClick={handleCardClick}
+            selectedMobileCard={!!selectedMobileCard} // Add this line
+          />
         </div>
       </div>
     );

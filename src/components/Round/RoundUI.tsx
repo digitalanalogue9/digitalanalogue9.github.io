@@ -24,6 +24,7 @@ import { logRender, logStateUpdate, logEffect } from '@/utils/debug/renderLogger
 import { useMobile } from '@/contexts/MobileContext';
 import { Card } from '@/components/Card';
 import { motion } from 'framer-motion';
+import { MoveCommand } from '@/commands/MoveCommand';
 
 const RoundUI = memo(function RoundUI() {
   logRender('RoundUI');
@@ -36,6 +37,8 @@ const RoundUI = memo(function RoundUI() {
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
   const [selectedMobileCard, setSelectedMobileCard] = useState<Value | null>(null);
   const [hasShownInstruction, setHasShownInstruction] = useState<boolean>(false);
+  const [showStatusDetails, setShowStatusDetails] = useState(true); // New state for status message visibility
+
 
   // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
@@ -94,7 +97,8 @@ const RoundUI = memo(function RoundUI() {
     clearCommands,
     targetCoreValues,
     setRoundNumber,
-    setShowResults
+    setShowResults,
+    setShowStatusDetails
   );
 
   const handleMobileDropWithZone = useCallback((card: Value, category: CategoryName) => {
@@ -103,7 +107,7 @@ const RoundUI = memo(function RoundUI() {
     handleDrop(card, category);
     setSelectedMobileCard(null);
     setHasShownInstruction(true); // Add this line
-    setTimeout(() => setActiveDropZone(null), 500);
+    setTimeout(() => setActiveDropZone(null), 1000);
   }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
@@ -113,40 +117,44 @@ const RoundUI = memo(function RoundUI() {
         console.error('Cannot proceed: round validation failed');
         return;
       }
-
+  
       if (sessionId) {
         await saveRound(sessionId, roundNumber, currentRoundCommands, categories);
       }
-
-      const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
-
+  
+      // Check if we have exactly the target number in Very Important
+      const hasExactTargetInVeryImportant = 
+        (categories['Very Important']?.length || 0) === targetCoreValues;
+  
       if (shouldEndGame) {
         if (sessionId) {
-          const finalValues = hasExactTargetInVeryImportant
-            ? categories['Very Important'] || []
-            : Object.entries(categories)
-              .filter(([category]) => category !== 'Not Important')
-              .flatMap(([_, cards]) => (cards || []).filter((card): card is Value => card !== undefined));
-
+          const finalValues = categories['Very Important'] || [];
           setFinalValuesWithoutReasons(finalValues);
           setShowReasoning(true);
           return;
         }
       }
-
+  
+      // If not ending game, prepare for next round
       clearCommands();
       const nextRound = roundNumber + 1;
-      const cardsForNextRound = getImportantCards(categories);
-
+  
+      // Get all cards from non-Not Important categories
+      const cardsForNextRound = Object.entries(categories)
+        .filter(([category]) => category !== 'Not Important')
+        .flatMap(([_, cards]) => cards || []);
+  
       if (cardsForNextRound.length < targetCoreValues) {
         console.error('Not enough cards to proceed');
         return;
       }
-
+  
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
+      
       if (sessionId) {
         await saveRound(sessionId, nextRound, [], nextCategories);
       }
+      
       setRoundNumber(nextRound);
       setCategories(nextCategories);
       setRemainingCards(getRandomValues(cardsForNextRound));
@@ -194,9 +202,12 @@ const RoundUI = memo(function RoundUI() {
 
   // Effects
   useEffect(() => {
-    const hasExactTargetInVeryImportant = categories['Very Important']?.length === targetCoreValues;
-    setShouldEndGame(hasExactTargetInVeryImportant || activeCards === targetCoreValues);
-  }, [activeCards, targetCoreValues, categories]);
+    // Only end game if we have exactly the target number in Very Important
+    const hasExactTargetInVeryImportant = 
+      (categories['Very Important']?.length || 0) === targetCoreValues;
+    
+    setShouldEndGame(hasExactTargetInVeryImportant && remainingCards.length === 0);
+  }, [categories, targetCoreValues, remainingCards.length]);
 
   // Conditional rendering
   if (showReasoning) {
@@ -267,6 +278,7 @@ const RoundUI = memo(function RoundUI() {
                 isEndGame={shouldEndGame}
                 selectedMobileCard={selectedMobileCard}
                 onMobileCardSelect={setSelectedMobileCard}
+                setShowDetails={setShowStatusDetails}
               />
               <div
                 role="status"
@@ -285,8 +297,8 @@ const RoundUI = memo(function RoundUI() {
                   targetCoreValues={targetCoreValues}
                   canProceedToNextRound={validateRound()}
                   remainingCards={remainingCards}
-                  showInitialMessage={true}
-                />
+                  showDetails={showStatusDetails}
+                  setShowDetails={setShowStatusDetails}              />
               </div>
             </div>
           </div>
@@ -317,7 +329,6 @@ const RoundUI = memo(function RoundUI() {
                   targetCoreValues={targetCoreValues}
                   canProceedToNextRound={validateRound()}
                   remainingCards={remainingCards}
-                  showInitialMessage={false}
                 />
               </div>
             </div>

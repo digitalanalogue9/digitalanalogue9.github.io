@@ -1,5 +1,10 @@
+// src/components/Round/components/StatusMessageProps.tsx
 export interface StatusMessageProps {
-    status: { text: string; type: 'info' | 'warning' | 'success'; };
+    status: {
+      text: string;
+      type: 'info' | 'warning' | 'success';
+      isEndGame?: boolean;
+    };
     isNearingCompletion: boolean;
     hasTooManyImportantCards: boolean;
     hasNotEnoughImportantCards: boolean;
@@ -7,5 +12,7 @@ export interface StatusMessageProps {
     targetCoreValues: number;
     canProceedToNextRound: boolean;
     remainingCards: any[];
-    showInitialMessage: boolean;
-}
+    showDetails?: boolean;
+    setShowDetails?: (show: boolean) => void;
+  }
+  
