@@ -1,9 +1,16 @@
 // src/components/Navigation.tsx
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const getActiveClass = (path: string) => {
+    return pathname === path 
+      ? 'text-blue-600 font-semibold underline underline-offset-4' 
+      : 'text-gray-700 hover:text-blue-600 hover:underline hover:underline-offset-4 transition-colors';
+  };
 
   return (
     <nav 
@@ -19,29 +26,29 @@ export default function Navigation() {
         Core Values
       </Link>
 
-      {/* Desktop Navigation */}
-      <div 
-        className="hidden md:flex space-x-4"
+       {/* Desktop Navigation */}
+       <div 
+        className="hidden md:flex space-x-6"
         role="menubar"
         aria-label="Desktop navigation"
       >
         <Link 
           href="/" 
-          className="text-white"
+          className={`${getActiveClass('/')} text-lg py-1`}
           role="menuitem"
         >
           Home
         </Link>
         <Link 
           href="/about" 
-          className="text-white"
+          className={`${getActiveClass('/about')} text-lg py-1`}
           role="menuitem"
         >
           About
         </Link>
         <Link 
           href="/history" 
-          className="text-white"
+          className={`${getActiveClass('/history')} text-lg py-1`}
           role="menuitem"
         >
           History
