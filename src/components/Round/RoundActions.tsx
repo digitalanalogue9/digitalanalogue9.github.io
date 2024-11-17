@@ -26,11 +26,11 @@ export function RoundActions({
   if (!currentCard) {
     return (
       <div 
-        className="flex flex-col items-center h-24 sm:h-48"
+        className="h-24 sm:h-48" // Removed flex flex-col items-center
         role="region"
         aria-label="Round progression"
       >
-        <div className="flex items-center justify-center h-full">
+        <div className="flex justify-center mt-4"> {/* Added mt-4 for top margin */}
           <button
             onClick={onNextRound}
             disabled={!canProceedToNextRound}
