@@ -8,8 +8,8 @@ export default function Navigation() {
   const pathname = usePathname();
   const getActiveClass = (path: string) => {
     return pathname === path 
-      ? 'text-blue-600 font-semibold underline underline-offset-4' 
-      : 'text-gray-700 hover:text-blue-600 hover:underline hover:underline-offset-4 transition-colors';
+      ? 'bg-white text-blue-600 font-semibold rounded-md' 
+      : 'text-white hover:bg-white/20 rounded-md transition-colors';
   };
 
   return (
@@ -26,29 +26,29 @@ export default function Navigation() {
         Core Values
       </Link>
 
-       {/* Desktop Navigation */}
-       <div 
-        className="hidden md:flex space-x-6"
+      {/* Desktop Navigation */}
+      <div 
+        className="hidden md:flex space-x-4"
         role="menubar"
         aria-label="Desktop navigation"
       >
         <Link 
           href="/" 
-          className={`${getActiveClass('/')} text-lg py-1`}
+          className={`${getActiveClass('/')} text-lg px-4 py-2`}
           role="menuitem"
         >
           Home
         </Link>
         <Link 
           href="/about" 
-          className={`${getActiveClass('/about')} text-lg py-1`}
+          className={`${getActiveClass('/about')} text-lg px-4 py-2`}
           role="menuitem"
         >
           About
         </Link>
         <Link 
           href="/history" 
-          className={`${getActiveClass('/history')} text-lg py-1`}
+          className={`${getActiveClass('/history')} text-lg px-4 py-2`}
           role="menuitem"
         >
           History
