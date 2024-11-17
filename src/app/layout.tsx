@@ -1,3 +1,4 @@
+// layout.tsx
 'use client'
 
 import './globals.css'
@@ -32,7 +33,7 @@ export default function RootLayout({
       </head>
       <body className="bg-gray-50">
         <MobileProvider>
-          <div className="h-screen flex flex-col"> {/* Changed to h-screen */}
+          <div className="min-h-screen flex flex-col">
             {/* Header */}
             <header 
               className="bg-blue-500 text-white shadow-md flex-shrink-0"
@@ -46,7 +47,7 @@ export default function RootLayout({
 
             {/* Main content */}
             <main 
-              className="flex-1 flex flex-col overflow-hidden" // Added overflow-auto
+              className="flex-1 flex flex-col md:overflow-hidden" // Only hide overflow on desktop
               role="main"
               aria-label="Main content"
             >
@@ -56,7 +57,7 @@ export default function RootLayout({
 
             {/* Footer */}
             <footer 
-              className="bg-blue-500 text-white flex-shrink-0"
+              className="bg-blue-500 text-white md:flex-shrink-0" // Only shrink on desktop
               role="contentinfo"
               aria-label="Site footer"
             >

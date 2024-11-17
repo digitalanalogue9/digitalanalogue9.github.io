@@ -37,30 +37,41 @@ export function MobileCategoryList({
   };
 
   return (
-    <div className="relative">
-      <div className={`w-full flex flex-col gap-3 p-4 transition-all duration-200
-        ${selectedCard ? 'relative z-30 opacity-100' : 'opacity-100'}`}
-      > 
-        {categoryNames.map(category => (
-          <MobileCategoryRow
-            key={category}
-            category={category}
-            cards={categories[category] ?? []}
-            availableCategories={categoryNames}
-            isActive={activeDropZone === category}
-            isExpanded={expandedCategory === category}
-            onCategoryTap={handleCategoryTap}
-            onCategorySelect={handleCategorySelect}
-            showingCardSelection={!!selectedCard}
-            onMoveWithinCategory={(fromIndex, toIndex) => 
-              onMoveWithinCategory(category, fromIndex, toIndex)
-            }
-            onMoveBetweenCategories={onMoveBetweenCategories}
-          />
-        ))}
+    <div className="h-full flex flex-col">
+      <div
+        className="flex-1 overflow-y-auto -mx-2"
+        role="region"
+        aria-label="Categories list"
+      >
+        <div className="space-y-2 px-2">
+          {categoryNames.map(category => (
+            <div
+              key={category}
+              className={`
+        transition-all duration-200
+        ${selectedCard ? 'transform scale-105 shadow-lg' : ''}
+      `}
+            >
+              <MobileCategoryRow
+                category={category}
+                cards={categories[category] ?? []}
+                availableCategories={categoryNames}
+                isActive={activeDropZone === category}
+                isExpanded={expandedCategory === category}
+                onCategoryTap={handleCategoryTap}
+                onCategorySelect={handleCategorySelect}
+                showingCardSelection={!!selectedCard}
+                onMoveWithinCategory={(fromIndex, toIndex) =>
+                  onMoveWithinCategory(category, fromIndex, toIndex)
+                }
+                onMoveBetweenCategories={onMoveBetweenCategories}
+              />
+            </div>
+          ))}
+        </div>
       </div>
-
-      <MobileSelectionOverlay isVisible={!!selectedCard} />
     </div>
   );
+
 }
+

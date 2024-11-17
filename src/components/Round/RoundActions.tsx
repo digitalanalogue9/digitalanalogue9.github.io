@@ -22,15 +22,14 @@ export function RoundActions({
   const { isMobile } = useMobile();
   const currentCard = remainingCards.length > 0 ? remainingCards[0] : null;
 
-  
   if (!currentCard) {
     return (
       <div 
-        className="h-24 sm:h-48" // Removed flex flex-col items-center
+        className="h-24 sm:h-48"
         role="region"
         aria-label="Round progression"
       >
-        <div className="flex justify-center mt-4"> {/* Added mt-4 for top margin */}
+        <div className="flex justify-center mt-4">
           <button
             onClick={onNextRound}
             disabled={!canProceedToNextRound}
@@ -59,22 +58,25 @@ export function RoundActions({
         role="region"
         aria-label="Current value card"
       >
-        {!selectedMobileCard && (
-          <div 
-            className="flex items-center justify-center cursor-pointer transform transition-transform active:scale-95 scale-[0.7] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-            role="button"
-            tabIndex={0}
-            onClick={() => onMobileCardSelect?.(currentCard)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                onMobileCardSelect?.(currentCard);
-              }
-            }}
-            aria-label={`Select value card: ${currentCard.title}`}
-          >
-            <Card value={currentCard} />
-          </div>
-        )}
+        <div 
+          className={`
+            flex items-center justify-center cursor-pointer
+            transform transition-all duration-200
+            scale-[0.7]
+            ${selectedMobileCard ? 'ring-2 ring-blue-500 rounded-lg' : ''}
+          `}
+          role="button"
+          tabIndex={0}
+          onClick={() => onMobileCardSelect?.(currentCard)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              onMobileCardSelect?.(currentCard);
+            }
+          }}
+          aria-label={`${selectedMobileCard ? 'Selected card' : 'Select card'}: ${currentCard.title}`}
+        >
+          <Card value={currentCard} />
+        </div>
       </div>
     );
   }
