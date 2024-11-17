@@ -32,7 +32,7 @@ export function MobileCategoryRow({
   const categoryId = `category-${category.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <motion.div 
+    <motion.div
       layout
       className={`
         rounded-lg border transition-colors duration-200
@@ -50,13 +50,13 @@ export function MobileCategoryRow({
         aria-label={`${category} category with ${cards.length} cards${showingCardSelection ? '. Tap to select' : ''}`}
       >
         <div className="flex items-center justify-between">
-          <h3 
+          <h3
             id={categoryId}
             className="font-medium"
           >
             {category}
           </h3>
-          <span 
+          <span
             className="bg-gray-200 px-2 py-1 rounded-full text-sm"
             aria-label={`${cards.length} cards`}
           >
@@ -78,13 +78,13 @@ export function MobileCategoryRow({
           >
             <div className="space-y-4 pb-4">
               {cards.map((card, index) => (
-                <div 
-                  key={card.id} 
-                  className="bg-white rounded-lg shadow-sm mx-4"
+                <div
+                  key={card.id}
+                  className="bg-white rounded-lg shadow-sm mx-2" // Changed from mx-4 to mx-2
                   role="listitem"
                 >
                   <div className="p-4">
-                    <Card 
+                    <Card
                       value={card}
                       aria-label={`${card.title} in ${category}`}
                     />
@@ -96,10 +96,10 @@ export function MobileCategoryRow({
                     onMoveDown={() => onMoveWithinCategory?.(index, index + 1)}
                     canMoveToPrevCategory={currentCategoryIndex > 0}
                     canMoveToNextCategory={currentCategoryIndex < availableCategories.length - 1}
-                    onMoveToPrevCategory={() => 
+                    onMoveToPrevCategory={() =>
                       onMoveBetweenCategories?.(card, category, availableCategories[currentCategoryIndex - 1])
                     }
-                    onMoveToNextCategory={() => 
+                    onMoveToNextCategory={() =>
                       onMoveBetweenCategories?.(card, category, availableCategories[currentCategoryIndex + 1])
                     }
                   />

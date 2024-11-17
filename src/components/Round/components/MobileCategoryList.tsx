@@ -39,18 +39,18 @@ export function MobileCategoryList({
   return (
     <div className="h-full flex flex-col">
       <div
-        className="flex-1 overflow-y-auto -mx-2"
+        className="flex-1 overflow-y-auto px-1" // Changed from -mx-2 to px-3
         role="region"
         aria-label="Categories list"
       >
-        <div className="space-y-2 px-2">
+        <div className="space-y-2"> {/* Removed px-2 since padding is now on parent */}
           {categoryNames.map(category => (
             <div
               key={category}
               className={`
-        transition-all duration-200
-        ${selectedCard ? 'transform scale-105 shadow-lg' : ''}
-      `}
+                transition-all duration-200
+                ${selectedCard ? 'transform scale-105 shadow-lg' : ''}
+              `}
             >
               <MobileCategoryRow
                 category={category}
