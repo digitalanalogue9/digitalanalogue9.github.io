@@ -4,7 +4,7 @@ const withPWA = require('next-pwa')({
   skipWaiting: true, // Changed to true
   disable: process.env.NODE_ENV === 'development',
   buildExcludes: [/middleware-manifest\.json$/],
-  publicExcludes: ['!**/*'],
+  publicExcludes: ['!manifest.webmanifest'],
   runtimeCaching: [
     {
       urlPattern: /^https?.*/,
@@ -36,6 +36,11 @@ const nextConfig = {
   },
   basePath: process.env.NODE_ENV === 'production' ? '' : '',
   webpack: (config) => {
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: false,
+      syncWebAssembly: false,
+    };
     return config;
   },
   env: {

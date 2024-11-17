@@ -1,3 +1,4 @@
+// src/components/Round/RoundUIDebug.tsx
 'use client'
 
 import { Profiler, ProfilerOnRenderCallback } from 'react';
@@ -10,18 +11,32 @@ const onRender: ProfilerOnRenderCallback = function(
   actualDuration: number,
   baseDuration: number,
   startTime: number,
-  commitTime: number) {
-  console.group(`[Profiler] ${id} - ${phase}`);
-  console.log(`Actual duration: ${actualDuration.toFixed(2)}ms`);
-  console.log(`Base duration: ${baseDuration.toFixed(2)}ms`);
-  console.log(`Commit time: ${commitTime}`);
-  console.groupEnd();
+  commitTime: number
+) {
+  if (process.env.NODE_ENV === 'development') {
+    console.group(`[Profiler] ${id} - ${phase}`);
+    console.log(`Actual duration: ${actualDuration.toFixed(2)}ms`);
+    console.log(`Base duration: ${baseDuration.toFixed(2)}ms`);
+    console.log(`Start time: ${startTime.toFixed(2)}ms`);
+    console.log(`Commit time: ${commitTime.toFixed(2)}ms`);
+    console.groupEnd();
+  }
 };
 
 export default function RoundUIDebug() {
+  // Only render profiler in development
+  if (process.env.NODE_ENV !== 'development') {
+    return <RoundUI />;
+  }
+
   return (
-    <Profiler id="RoundUI" onRender={onRender}>
-      <RoundUI />
-    </Profiler>
+    <div aria-hidden="true"> {/* Hide profiler wrapper from screen readers */}
+      <Profiler 
+        id="RoundUI" 
+        onRender={onRender}
+      >
+        <RoundUI />
+      </Profiler>
+    </div>
   );
 }

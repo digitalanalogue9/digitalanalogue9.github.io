@@ -297,51 +297,79 @@ export default function ReplayClient() {
   }
 
   return (
-    <div className="container mx-auto px-2 py-2 sm:px-4 sm:py-8">
+    <div 
+      className="container mx-auto px-2 py-2 sm:px-4 sm:py-8"
+      aria-label="Session replay viewer"
+    >
       <div className={`space-y-2 sm:space-y-4 ${isMobile ? 'h-screen flex flex-col' : ''}`}>
-        <div className="bg-white rounded-lg shadow-lg p-2 sm:p-4">
+        <section 
+          className="bg-white rounded-lg shadow-lg p-2 sm:p-4"
+          aria-label="Replay controls"
+        >
           <div className="flex flex-wrap items-center gap-2 sm:gap-4">
             <div className="flex gap-2">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
                 className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                aria-label={isPlaying ? 'Pause replay' : 'Start replay'}
               >
                 {isPlaying ? 'Pause' : 'Play'}
               </button>
               <button
                 onClick={handleReset}
                 className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm sm:text-base"
+                aria-label="Reset replay to beginning"
               >
                 Reset
               </button>
             </div>
 
-            <select
-              value={playbackSpeed}
-              onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
-              className="px-3 py-1.5 sm:px-4 sm:py-2 border rounded bg-white text-sm sm:text-base"
+            <div className="flex items-center">
+              <label htmlFor="playback-speed" className="sr-only">
+                Playback speed
+              </label>
+              <select
+                id="playback-speed"
+                value={playbackSpeed}
+                onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 border rounded bg-white text-sm sm:text-base"
+                aria-label="Select playback speed"
+              >
+                <option value={0.5}>0.5x Speed</option>
+                <option value={1}>1x Speed</option>
+                <option value={2}>2x Speed</option>
+                <option value={4}>4x Speed</option>
+              </select>
+            </div>
+
+            <div 
+              className="flex items-center text-sm sm:text-base"
+              aria-live="polite"
+              role="status"
             >
-              <option value={0.5}>0.5x Speed</option>
-              <option value={1}>1x Speed</option>
-              <option value={2}>2x Speed</option>
-              <option value={4}>4x Speed</option>
-            </select>
-
-            {!isPlaying && !commandInfo ? (
-              <div className="flex items-center text-sm sm:text-base text-gray-600">
-                Click Play to start the replay
-              </div>
-            ) : commandInfo && (
-              <div className="flex items-center gap-2 text-sm sm:text-base">
-                <span className="font-semibold">Round {commandInfo.roundNumber}:</span>
-                <span>{commandInfo.description}</span>
-              </div>
-            )}
+              {!isPlaying && !commandInfo ? (
+                <span className="text-gray-600">
+                  Click Play to start the replay
+                </span>
+              ) : commandInfo && (
+                <span>
+                  <span className="font-semibold">Round {commandInfo.roundNumber}:</span>
+                  {' '}{commandInfo.description}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="relative h-32 sm:h-48">
-          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display" data-card-wrapper>
+        <section 
+          className="relative h-32 sm:h-48"
+          aria-label="Current card display"
+        >
+          <div 
+            className="absolute left-1/2 transform -translate-x-1/2 current-card-display" 
+            data-card-wrapper
+            aria-live="polite"
+          >
             {currentCard && !animatingCard && isPlaying && (
               <AnimatedCard
                 value={currentCard}
@@ -351,23 +379,32 @@ export default function ReplayClient() {
               />
             )}
           </div>
-        </div>
+        </section>
 
-        {isMobile ? (
-          <div className="flex-1 min-h-0">
-            <MobileReplayCategories categories={getCurrentRoundCategories()} />
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {Object.entries(getCurrentRoundCategories()).map(([title]) => (
-              <ReplayColumn
-                key={title}
-                title={title as CategoryName}
-                cards={categories[title as CategoryName] || []}
+        <section aria-label="Card categories">
+          {isMobile ? (
+            <div className="flex-1 min-h-0">
+              <MobileReplayCategories 
+                categories={getCurrentRoundCategories()} 
+                aria-label="Mobile categories view"
               />
-            ))}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div 
+              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
+              role="grid"
+              aria-label="Category grid"
+            >
+              {Object.entries(getCurrentRoundCategories()).map(([title]) => (
+                <ReplayColumn
+                  key={title}
+                  title={title as CategoryName}
+                  cards={categories[title as CategoryName] || []}
+                />
+              ))}
+            </div>
+          )}
+        </section>
 
         {animatingCard && (
           <motion.div
@@ -377,9 +414,9 @@ export default function ReplayClient() {
               y: animatingCard.targetPos.y,
               transition: {
                 type: "spring",
-                stiffness: 100, // Lower stiffness for smoother motion
-                damping: 15,    // Adjust damping for natural movement
-                mass: 1,        // Add mass for more realistic physics
+                stiffness: 100,
+                damping: 15,
+                mass: 1,
                 duration: 0.75 / playbackSpeed
               }
             }}
@@ -389,6 +426,7 @@ export default function ReplayClient() {
               zIndex: 1000,
               pointerEvents: 'none'
             }}
+            aria-hidden="true" // Hide animated card from screen readers
           >
             <AnimatedCard
               value={animatingCard.value}

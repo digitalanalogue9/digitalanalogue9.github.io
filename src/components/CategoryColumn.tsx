@@ -1,171 +1,121 @@
 // src/components/CategoryColumn.tsx
-'use client'
-
-import { memo, useCallback, useState } from 'react';
-import { Card } from '@/components/Card';
-import { CategoryColumnProps } from './CategoryColumnProps';
 import { Value, CategoryName } from '@/types';
+import { AnimatedCard } from './Card';
 
-const CategoryColumn = memo(function CategoryColumn({
+interface CategoryColumnProps {
+  title: CategoryName;
+  cards: Value[];
+  onDrop: (value: Value, category: CategoryName) => void;
+  onMoveWithinCategory: (fromIndex: number, toIndex: number) => void;
+  onMoveBetweenCategories: (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => void;
+  columnIndex?: number;
+}
+
+export default function CategoryColumn({
   title,
   cards,
   onDrop,
   onMoveWithinCategory,
-  onMoveBetweenCategories
+  onMoveBetweenCategories,
+  columnIndex
 }: CategoryColumnProps) {
-  const [isOver, setIsOver] = useState(false);
-  const [isMoving, setIsMoving] = useState(false);
-
+  // Add drag and drop handlers
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsOver(true);
+    e.currentTarget.classList.add('bg-gray-50');
   };
 
-  const handleDragLeave = () => {
-    setIsOver(false);
-  };
-
-  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsOver(false);
+    e.currentTarget.classList.remove('bg-gray-50');
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('bg-gray-50');
     
     try {
-      const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as Value & { 
-        sourceCategory?: string;
-        isInternalDrag?: boolean;
-        sourceIndex?: number;
-      };
+      const data = e.dataTransfer.getData('text/plain');
+      let droppedValue: Value;
 
-      // If this is an internal drag within the same category
-      if (droppedValue.isInternalDrag && droppedValue.sourceCategory === title) {
-        const sourceIndex = droppedValue.sourceIndex;
-        
-        // Get the closest dropzone, or the container itself if dropped at the bottom
-        const dropzone = (e.target as HTMLElement).closest('[data-dropzone]') || 
-                        (e.currentTarget as HTMLElement);
-        
-        let targetIndex: number;
-        
-        if (dropzone.hasAttribute('data-dropzone')) {
-          // Dropped on a card
-          targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
-          // If dropping below the source index, we need to adjust the target index
-          if (sourceIndex !== undefined && targetIndex > sourceIndex) {
-            targetIndex -= 1;
-          }
+      try {
+        // First try to parse as JSON
+        droppedValue = JSON.parse(data);
+      } catch {
+        // If JSON parsing fails, try to use the data directly
+        if (typeof data === 'string') {
+          droppedValue = {
+            id: data,
+            title: data,
+            description: ''
+          };
         } else {
-          // Dropped at the bottom of the category
-          targetIndex = cards.length - 1;
+          throw new Error('Invalid drop data format');
         }
-
-        console.log('Drop indices:', { sourceIndex, targetIndex });
-
-        if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
-          await onMoveWithinCategory(sourceIndex, targetIndex);
-        }
-        return;
       }
 
-      // Handle cross-category move
-      if (droppedValue.sourceCategory && droppedValue.sourceCategory !== title) {
-        await onMoveBetweenCategories(droppedValue, droppedValue.sourceCategory as CategoryName, title);
-        return;
-      }
-
-      // Handle new card drop
-      if (!droppedValue.isInternalDrag) {
-        await onDrop(droppedValue, title);
+      if (droppedValue) {
+        onDrop(droppedValue, title);
       }
     } catch (error) {
       console.error('Error handling drop:', error);
     }
   };
 
-  const handleMoveUp = useCallback(async (index: number) => {
-    if (isMoving) return;
-    console.log('CategoryColumn: handleMoveUp called:', index);
-    if (index > 0) {
-      setIsMoving(true);
-      try {
-        await onMoveWithinCategory(index, index - 1);
-      } finally {
-        // Reset the lock after a short delay
-        setTimeout(() => setIsMoving(false), 300);
-      }
-    }
-  }, [onMoveWithinCategory, isMoving]);
-
-  const handleMoveDown = useCallback(async (index: number) => {
-    if (isMoving) return;
-    console.log('CategoryColumn: handleMoveDown called:', index);
-    if (index < cards.length - 1) {
-      setIsMoving(true);
-      try {
-        await onMoveWithinCategory(index, index + 1);
-      } finally {
-        // Reset the lock after a short delay
-        setTimeout(() => setIsMoving(false), 300);
-      }
-    }
-  }, [onMoveWithinCategory, cards.length, isMoving]);
-
   return (
-    <div
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-      id={`category-${title}`}
-      className={`
-        flex-1 
-        p-2
-        rounded-lg 
-        min-h-[500px]
-        min-w-[300px]
-        max-w-[400px]
-        transition-colors 
-        duration-200
-        ${isOver ? 'bg-blue-50' : 'bg-gray-50'}
-        border-2 
-        ${isOver ? 'border-blue-300' : 'border-transparent'}
-      `}
+    <div 
+      className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 min-w-[320px]"
+      data-category={title}
+      role="region"
+      aria-label={`${title} category column`}
     >
-      <div className="flex items-center justify-between mb-4 px-2">
-        <h2 className="text-xl font-bold text-gray-700">{title}</h2>
-        <span className="bg-gray-200 px-2 py-1 rounded-full text-sm text-gray-600">
-          {cards.length}
+      <h2 
+        className="text-lg font-semibold mb-4 text-gray-900"
+        id={`category-${title.toLowerCase().replace(/\s+/g, '-')}`}
+      >
+        {title}
+        <span className="ml-2 text-sm font-normal text-gray-500">
+          ({cards.length})
         </span>
-      </div>
-
-      <div className="space-y-4">
-        {cards.map((value, index) => (
-          <div key={`${title}-${value.id}-${index}`} className="transition-all duration-200">
-            <div
-              data-index={index}
-              data-dropzone="true"
-              className="w-full"
+      </h2>
+      
+      <div 
+        className="border-2 border-dashed border-gray-200 rounded-lg p-2 min-h-[400px]"
+        role="list"
+        aria-labelledby={`category-${title.toLowerCase().replace(/\s+/g, '-')}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <div className="space-y-2">
+          {cards.map((card, index) => (
+            <div 
+              key={card.id}
+              role="listitem"
+              className="transition-all duration-200"
             >
-              <Card
-                value={value}
+              <AnimatedCard
+                value={card}
                 columnIndex={index}
                 currentCategory={title}
-                onDrop={(value: Value) => onDrop(value, title)}
-                onMoveUp={index > 0 ? () => handleMoveUp(index) : undefined}
-                onMoveDown={index < cards.length - 1 ? () => handleMoveDown(index) : undefined}
-                onMoveBetweenCategories={(value: Value, fromCat: CategoryName, toCat: CategoryName) =>
-                  onMoveBetweenCategories(value, fromCat, toCat)}
+                onDrop={(value) => onDrop(value, title)}
+                onMoveUp={index > 0 ? () => onMoveWithinCategory(index, index - 1) : undefined}
+                onMoveDown={index < cards.length - 1 ? () => onMoveWithinCategory(index, index + 1) : undefined}
+                onMoveBetweenCategories={(value, fromCategory, toCategory) => 
+                  onMoveBetweenCategories(value, fromCategory, toCategory)
+                }
               />
             </div>
-          </div>
-        ))}
-
-        {cards.length === 0 && (
-          <div data-index="0" data-dropzone="true" className="text-center mx-2 py-8 text-gray-400 border-2 border-dashed rounded-lg">
-            Drop cards here
-          </div>
-        )}
+          ))}
+        </div>
+        
+        <div 
+          className={`text-gray-400 text-sm text-center py-4 mt-2 ${cards.length === 0 ? '' : 'border-t-2 border-dashed border-gray-200'}`}
+          role="status"
+        >
+          Drop values here
+        </div>
       </div>
     </div>
   );
-});
-
-export default CategoryColumn;
+}

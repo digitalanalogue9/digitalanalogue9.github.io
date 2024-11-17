@@ -28,7 +28,7 @@ export function AnimatedCard({
   value,
   onMoveUp,
   onMoveDown,
-  onMoveToCategory,
+  onMoveBetweenCategories,
   currentCategory,
   columnIndex
 }: CardProps) {
@@ -70,12 +70,12 @@ export function AnimatedCard({
           }
         />
         <AnimatePresence>
-          {showMoveOptions && onMoveToCategory && currentCategory && (
+          {showMoveOptions && onMoveBetweenCategories && currentCategory && (
             <div className="relative z-50">
               <CardMoveOptions
                 value={value}
                 currentCategory={currentCategory}
-                onMoveToCategory={onMoveToCategory}
+                onMoveBetweenCategories={onMoveBetweenCategories}
                 onClose={() => setShowMoveOptions(false)}
               />
             </div>

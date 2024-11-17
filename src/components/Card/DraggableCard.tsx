@@ -1,3 +1,4 @@
+// src/components/Card/DraggableCard.tsx
 'use client'
 
 import { memo, useRef, useState } from 'react';
@@ -31,7 +32,7 @@ const DraggableCard = memo(function DraggableCard({
     const [isOver, setIsOver] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [showMoveOptions, setShowMoveOptions] = useState(false);
-    const moveRef = useRef<{ pending: boolean }>({ pending: false });
+    const draggedIndexRef = useRef<number | null>(null);
     const { isMobile } = useMobile();
 
     if (!value) return null;
@@ -43,6 +44,8 @@ const DraggableCard = memo(function DraggableCard({
             return;
         }
         setIsDragging(true);
+        draggedIndexRef.current = columnIndex !== undefined ? columnIndex : null;
+        
         const dragData = {
             ...value,
             sourceCategory: currentCategory,
@@ -54,43 +57,33 @@ const DraggableCard = memo(function DraggableCard({
         if (debug) console.log('🎪 Card dragStart:', { value, columnIndex, isInCategory });
     };
 
-    const handleCardClick = () => {
-        if (isMobile && onClick) {
-            onClick(value);
-        }
-    };
-
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
         if (isMobile) return;
         e.preventDefault();
+        e.stopPropagation();
         setIsOver(true);
     };
     
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         if (isMobile) return;
         e.preventDefault();
+        e.stopPropagation();
         setIsOver(false);
         
         try {
             const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
-    
-            if (droppedValue.isInternalDrag && droppedValue.sourceCategory === currentCategory) {
-                const sourceIndex = droppedValue.sourceIndex;
-                let targetIndex: number;
-    
-                const dropzone = (e.target as HTMLElement).closest('[data-dropzone]');
+            const sourceIndex = droppedValue.sourceIndex;
+            const targetIndex = columnIndex;
+
+            if (droppedValue.isInternalDrag && 
+                droppedValue.sourceCategory === currentCategory && 
+                sourceIndex !== undefined && 
+                targetIndex !== undefined) {
                 
-                if (dropzone) {
-                    targetIndex = parseInt(dropzone.getAttribute('data-index') || '0', 10);
-                    console.log('Indices:', { sourceIndex, targetIndex });
-    
-                    if (sourceIndex !== undefined && sourceIndex !== targetIndex) {
-                        onMoveUp || onMoveDown ? 
-                            (sourceIndex < targetIndex ? onMoveDown?.() : onMoveUp?.()) :
-                            null;
-                    }
-                } else {
-                    return;
+                if (sourceIndex < targetIndex) {
+                    onMoveDown?.();
+                } else if (sourceIndex > targetIndex) {
+                    onMoveUp?.();
                 }
             } else if (onDrop) {
                 onDrop(droppedValue);
@@ -104,20 +97,28 @@ const DraggableCard = memo(function DraggableCard({
         if (isMobile) return;
         setIsDragging(false);
         setIsOver(false);
-        moveRef.current.pending = false;
+        draggedIndexRef.current = null;
         if (debug) console.log('🏁 Card dragEnd:', { value, columnIndex });
     };
 
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
         if (isMobile) return;
         e.preventDefault();
+        e.stopPropagation();
         setIsOver(true);
     };
 
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
         if (isMobile) return;
         e.preventDefault();
+        e.stopPropagation();
         setIsOver(false);
+    };
+
+    const handleCardClick = () => {
+        if (isMobile && onClick) {
+            onClick(value);
+        }
     };
 
     const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
@@ -125,7 +126,7 @@ const DraggableCard = memo(function DraggableCard({
     if (isInCategory) {
         return (
             <div
-                id={`card-${value.title}`}
+                id={`card-${value.id}`}
                 data-index={columnIndex}
                 data-dropzone="true"
                 draggable={!isMobile}
@@ -137,7 +138,16 @@ const DraggableCard = memo(function DraggableCard({
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative
-                    ${isMobile ? 'touch-manipulation' : ''}`}
+                    ${isMobile ? 'touch-manipulation' : ''}
+                    ${isOver ? 'border-2 border-blue-300' : ''}`}
+                role="article"
+                aria-label={`Value card: ${value.title}`}
+                tabIndex={0}
+                onKeyPress={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        handleCardClick();
+                    }
+                }}
             >
                 <CardContent
                     title={value.title}
@@ -157,7 +167,11 @@ const DraggableCard = memo(function DraggableCard({
                     }
                 />
                 {!isMobile && showMoveOptions && onMoveBetweenCategories && currentCategory && (
-                    <div className="absolute right-2 top-8 z-50">
+                    <div 
+                        className="absolute right-2 top-8 z-50"
+                        role="dialog"
+                        aria-label="Move options"
+                    >
                         <CardMoveOptions
                             value={value}
                             currentCategory={currentCategory}
@@ -182,8 +196,20 @@ const DraggableCard = memo(function DraggableCard({
             onDrop={handleDrop}
             className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 
                 ${isMobile ? 'touch-manipulation active:scale-95 transition-transform' : ''}`}
+            role="article"
+            aria-label={`Value card: ${value.title}`}
+            tabIndex={0}
+            onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    handleCardClick();
+                }
+            }}
         >
-            <div className="relative z-10">
+            <div 
+                className="relative z-10"
+                role="region"
+                aria-label={`Content for ${value.title}`}
+            >
                 <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
             </div>

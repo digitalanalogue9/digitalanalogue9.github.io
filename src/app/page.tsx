@@ -1,3 +1,4 @@
+// src/app/page.tsx
 'use client'
 
 import { useEffect, useState } from 'react';
@@ -39,8 +40,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Clear game state when mounting the page component
-    // unless there's a sessionId in the URL
     if (!window.location.search.includes('sessionId')) {
       clearGameState();
     }
@@ -76,23 +75,46 @@ export default function Home() {
     setGameStarted(true);
     setShowInstructions(true);
   };
+
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div 
+        className="flex items-center justify-center flex-1" 
+        role="status" 
+        aria-live="polite"
+      >
+        <span className="sr-only">Loading application...</span>
+        Loading...
+      </div>
+    );
   }
+
+
   // Use RoundUIDebug in development, RoundUI in production
   const GameComponent = process.env.NODE_ENV === 'development' ? RoundUIDebug : RoundUI;
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen">
+      <div 
+        className="flex-1 flex flex-col"
+        aria-label="Core Values Application"
+      >
+        <h1 className="sr-only">Core Values - Personal Value Discovery Tool</h1>
+        
         {!isGameStarted ? (
           <StartScreen onStart={handleGameStart} />
         ) : (
           <GameComponent />
         )}
+        
         {showInstructions && (
-          <Instructions onClose={() => setShowInstructions(false)} />
+          <Instructions 
+            onClose={() => setShowInstructions(false)}
+            onStart={handleGameStart}
+            aria-label="Game Instructions"
+          />
         )}
+        
         <PWAPrompt />
       </div>
     </DndProvider>

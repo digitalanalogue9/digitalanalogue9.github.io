@@ -1,5 +1,7 @@
-import { ReactNode, useState, useEffect } from 'react';
+// src/components/Round/components/StatusMessage.tsx
+import { ReactNode, useState } from 'react';
 import { StatusMessageProps } from './StatusMessageProps';
+import { useMobile } from '@/contexts/MobileContext';
 
 export const StatusMessage = ({
   status,
@@ -12,38 +14,42 @@ export const StatusMessage = ({
   remainingCards
 }: StatusMessageProps): ReactNode => {
   const [showDetails, setShowDetails] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile } = useMobile();
 
   const messageContent = (
-    <>
-      <p className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight`}>
+    <div role="status">
+      <p 
+        className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight`}
+        aria-live="polite"
+      >
         {status.text}
       </p>
       {isNearingCompletion && (hasTooManyImportantCards || hasNotEnoughImportantCards) && (
-        <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}>
+        <p 
+          className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}
+          aria-live="polite"
+        >
           You need exactly {targetCoreValues} values in Very Important
         </p>
       )}
       {!hasEnoughCards && (
-        <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}>
+        <p 
+          className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`}
+          aria-live="polite"
+        >
           You must keep at least {targetCoreValues} values outside of Not Important
         </p>
       )}
-    </>
+    </div>
   );
 
   if (isMobile) {
     return (
-      <div className="relative">
+      <div 
+        className="relative"
+        role="status"
+        aria-live="polite"
+      >
         <button
           onClick={() => setShowDetails(!showDetails)}
           className={`
@@ -56,13 +62,26 @@ export const StatusMessage = ({
                   ? 'bg-green-100 text-green-800'
                   : 'bg-blue-100 text-blue-800'
             }
+            focus:outline-none focus:ring-2 focus:ring-offset-2
+            ${status.type === 'warning' ? 'focus:ring-yellow-500' :
+              status.type === 'success' ? 'focus:ring-green-500' :
+              'focus:ring-blue-500'}
           `}
+          aria-expanded={showDetails}
+          aria-label={`Game status: ${status.text}. ${showDetails ? 'Hide details' : 'Show details'}`}
         >
-          {status.type === 'warning' ? '⚠️' : status.type === 'success' ? '✅' : 'ℹ️'}
+          <span aria-hidden="true">
+            {status.type === 'warning' ? '⚠️' : status.type === 'success' ? '✅' : 'ℹ️'}
+          </span>
+          <span className="sr-only">{status.text}</span>
         </button>
 
         {showDetails && (
-          <div className="absolute right-0 top-full mt-2 z-50 w-64 p-4 rounded-lg shadow-lg bg-white border">
+          <div 
+            className="absolute right-0 top-full mt-2 z-50 w-64 p-4 rounded-lg shadow-lg bg-white border"
+            role="tooltip"
+            aria-label="Status details"
+          >
             {messageContent}
           </div>
         )}
@@ -71,23 +90,27 @@ export const StatusMessage = ({
   }
 
   return (
-    <div className={`
-      relative
-      p-3 sm:p-4
-      min-h-[5rem]
-      h-auto
-      flex flex-col justify-center 
-      rounded-lg 
-      overflow-hidden
-      ${!canProceedToNextRound && remainingCards.length === 0
-        ? 'bg-red-50 text-red-800'
-        : status.type === 'warning'
-          ? 'bg-yellow-100 text-yellow-800'
-          : status.type === 'success'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-blue-100 text-blue-800'
-      }
-    `}>
+    <div 
+      className={`
+        relative
+        p-3 sm:p-4
+        min-h-[5rem]
+        h-auto
+        flex flex-col justify-center 
+        rounded-lg 
+        overflow-hidden
+        ${!canProceedToNextRound && remainingCards.length === 0
+          ? 'bg-red-50 text-red-800'
+          : status.type === 'warning'
+            ? 'bg-yellow-100 text-yellow-800'
+            : status.type === 'success'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-blue-100 text-blue-800'
+        }
+      `}
+      role="status"
+      aria-live="polite"
+    >
       <div className="space-y-1">
         {messageContent}
       </div>

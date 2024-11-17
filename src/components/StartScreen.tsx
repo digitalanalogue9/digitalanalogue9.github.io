@@ -1,3 +1,4 @@
+// src/components/StartScreen.tsx
 'use client'
 
 import { useState } from 'react';
@@ -11,8 +12,8 @@ import { getRandomValues } from '@/utils';
 
 export default function StartScreen({ onStart }: StartScreenProps) {
   const isDebug = getEnvBoolean('debug', false);
-  const maxCards = getEnvNumber('maxCards', 35);  // Default now matches config
-  const defaultCoreValues = getEnvNumber('numCoreValues', 5);  // Default now matches config
+  const maxCards = getEnvNumber('maxCards', 35);
+  const defaultCoreValues = getEnvNumber('numCoreValues', 5);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
 
   const handleStart = async () => {
@@ -24,17 +25,13 @@ export default function StartScreen({ onStart }: StartScreenProps) {
     };
 
     const sessionId = await addSession(session);
-
-    // Get random subset of values limited by maxCards
     const shuffledValues = getRandomValues(valuesData.values);
     const limitedValues = shuffledValues.slice(0, maxCards);
-    // In handleStart, before initializeGameState
-    console.log('Starting game with cards:', limitedValues);
-    // Initialize game state with limited number of cards
+    
     initializeGameState(
       sessionId,
       coreValuesCount,
-      limitedValues,  // Using limited set of cards
+      limitedValues,
       {
         'Very Important': [],
         'Quite Important': [],
@@ -48,15 +45,25 @@ export default function StartScreen({ onStart }: StartScreenProps) {
   };
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col"
+      role="main"
+      aria-labelledby="welcome-heading"
+    >
       <div className="flex-1">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6">
+          <h1 
+            id="welcome-heading"
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6"
+          >
             <span className="text-gray-900">Discover Your </span>
             <span className="text-blue-600">Core Values</span>
           </h1>
 
-          <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+          <div 
+            className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8"
+            aria-label="Introduction"
+          >
             <p className="text-base sm:text-lg text-gray-700">
               Welcome to the Core Values discovery exercise! Through this interactive experience,
               you will discover and prioritise your personal core values, helping you identify what matters most to you.
@@ -64,43 +71,67 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           </div>
 
           {isDebug && (
-            <div className="mb-4 text-xs sm:text-sm text-gray-600 text-center">
+            <div 
+              className="mb-4 text-xs sm:text-sm text-gray-600 text-center"
+              role="note"
+              aria-label="Debug information"
+            >
               <div>Debug Mode: On</div>
               <div>Max Cards: {maxCards}</div>
               <div>Default Core Values: {defaultCoreValues}</div>
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <label className="text-base sm:text-lg font-medium text-center sm:text-left whitespace-normal sm:whitespace-nowrap">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleStart();
+            }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+            aria-label="Exercise configuration"
+          >
+            <label 
+              htmlFor="core-values-count"
+              className="text-base sm:text-lg font-medium text-center sm:text-left whitespace-normal sm:whitespace-nowrap"
+            >
               How many core values do you want to end up with?
             </label>
             <div className="flex gap-3 sm:gap-4 items-center">
               <input
+                id="core-values-count"
                 type="number"
-                title="Maximum core values"
                 min="1"
                 max="10"
                 value={coreValuesCount}
                 onChange={(e) => setCoreValuesCount(Number(e.target.value))}
                 className="border rounded p-2 w-16 sm:w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                aria-label="Number of core values"
+                required
               />
               <button
-                onClick={handleStart}
-                className="px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base"
+                type="submit"
+                className="px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                aria-label="Begin the core values exercise"
               >
                 Start Exercise
               </button>
             </div>
-          </div>
+          </form>
 
-          <div className="mt-6 sm:mt-8 text-center">
-            <p className="text-gray-600 mb-2 text-sm sm:text-base">Have you completed this exercise before?</p>
+          <div 
+            className="mt-6 sm:mt-8 text-center"
+            aria-label="Previous results navigation"
+          >
+            <p className="text-gray-600 mb-2 text-sm sm:text-base">
+              Have you completed this exercise before?
+            </p>
             <Link
               href="/history"
-              className="text-blue-600 hover:text-blue-800 underline font-medium text-sm sm:text-base"
+              className="text-blue-600 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
+              aria-label="View your previous exercise results"
             >
-              View Your Previous Results →
+              <span>View Your Previous Results</span>
+              <span aria-hidden="true" className="ml-1">→</span>
             </Link>
           </div>
         </div>

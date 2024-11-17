@@ -18,7 +18,7 @@ export default function Card({
   onDrop,
   onMoveUp,
   onMoveDown,
-  onMoveToCategory,
+  onMoveBetweenCategories,
   currentCategory,
   columnIndex,
   onActiveDropZoneChange
@@ -214,12 +214,12 @@ const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
         }
       />
       <AnimatePresence>
-        {showMoveOptions && onMoveToCategory && currentCategory && (
+        {showMoveOptions && onMoveBetweenCategories && currentCategory && (
           <div className="absolute right-0 top-8 z-50">
             <CardMoveOptions
               value={value}
               currentCategory={currentCategory}
-              onMoveToCategory={onMoveToCategory}
+              onMoveBetweenCategories={onMoveBetweenCategories}
               onClose={() => setShowMoveOptions(false)}
             />
           </div>

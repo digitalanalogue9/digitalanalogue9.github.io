@@ -6,44 +6,36 @@ export function RoundHeader({
   remainingCardsCount
 }: RoundHeaderProps) {
   return (
-    <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-2 sm:mb-4">
-      {/* Mobile Header */}
-      <div className="sm:hidden">
-        <div className="text-center space-y-1">
-          <h2 className="text-sm font-semibold text-gray-700">Target</h2>
-          <p className="text-xl font-bold text-gray-900">{targetCoreValues}</p>
+    <div className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4">
+      {/* Both Mobile and Desktop use the same lozenge style */}
+      <div>
+        <div className="bg-blue-50 rounded-full px-3 py-1.5 text-center shadow-sm">
+          <h2 className="text-xs sm:text-sm font-semibold text-blue-700 uppercase tracking-wide">
+            Target
+          </h2>
+          <p className="text-lg sm:text-2xl font-bold text-blue-900">
+            {targetCoreValues}
+          </p>
         </div>
       </div>
-      <div className="sm:hidden">
-        <div className="text-center space-y-1">
-          <h2 className="text-sm font-semibold text-gray-700">Round</h2>
-          <p className="text-xl font-bold text-gray-900">{roundNumber}</p>
+      <div>
+        <div className="bg-purple-50 rounded-full px-3 py-1.5 text-center shadow-sm">
+          <h2 className="text-xs sm:text-sm font-semibold text-purple-700 uppercase tracking-wide">
+            Round
+          </h2>
+          <p className="text-lg sm:text-2xl font-bold text-purple-900">
+            {roundNumber}
+          </p>
         </div>
       </div>
-      <div className="sm:hidden">
-        <div className="text-center space-y-1">
-          <h2 className="text-sm font-semibold text-gray-700">Cards</h2>
-          <p className="text-xl font-bold text-gray-900">{remainingCardsCount}</p>
-        </div>
-      </div>
-  
-      {/* Desktop Header */}
-      <div className="hidden sm:block">
-        <div className="text-center flex flex-col justify-between h-20">
-          <h2 className="text-xl font-semibold text-gray-700">Target Values</h2>
-          <p className="text-3xl font-bold text-gray-900">{targetCoreValues}</p>
-        </div>
-      </div>
-      <div className="hidden sm:block">
-        <div className="text-center flex flex-col justify-between h-20">
-          <h2 className="text-xl font-semibold text-gray-700">Round</h2>
-          <p className="text-3xl font-bold text-gray-900">{roundNumber}</p>
-        </div>
-      </div>
-      <div className="hidden sm:block">
-        <div className="text-center flex flex-col justify-between h-20">
-          <h2 className="text-xl font-semibold text-gray-700">Remaining Cards</h2>
-          <p className="text-3xl font-bold text-gray-900">{remainingCardsCount}</p>
+      <div>
+        <div className="bg-green-50 rounded-full px-3 py-1.5 text-center shadow-sm">
+          <h2 className="text-xs sm:text-sm font-semibold text-green-700 uppercase tracking-wide">
+            Cards
+          </h2>
+          <p className="text-lg sm:text-2xl font-bold text-green-900">
+            {remainingCardsCount}
+          </p>
         </div>
       </div>
     </div>

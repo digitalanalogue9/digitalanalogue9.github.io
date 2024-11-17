@@ -22,17 +22,19 @@ import { MobileCategoryList } from './components/MobileCategoryList';
 import { CoreValueReasoning } from '../CoreValueReasoning';
 import { logRender, logStateUpdate, logEffect } from '@/utils/debug/renderLogger';
 import { useMobile } from '@/contexts/MobileContext';
+import { Card } from '@/components/Card';
+import { motion } from 'framer-motion';
 
 const RoundUI = memo(function RoundUI() {
   logRender('RoundUI');
 
   // State
-  const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
   const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [shouldEndGame, setShouldEndGame] = useState<boolean>(false);
   const [showReasoning, setShowReasoning] = useState<boolean>(false);
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
+  const [selectedMobileCard, setSelectedMobileCard] = useState<Value | null>(null);
 
   // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
@@ -98,7 +100,8 @@ const RoundUI = memo(function RoundUI() {
     logStateUpdate('handleMobileDropWithZone', { card, category }, 'RoundUI');
     setActiveDropZone(category);
     handleDrop(card, category);
-    setTimeout(() => setActiveDropZone(null), 500); // Clear after animation
+    setSelectedMobileCard(null);
+    setTimeout(() => setActiveDropZone(null), 500);
   }, [handleDrop]);
 
   const handleNextRound = useCallback(async () => {
@@ -203,25 +206,45 @@ const RoundUI = memo(function RoundUI() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-40 bg-white">
+    <div
+      className="flex flex-col h-[calc(100vh-128px)]"
+      role="application"
+      aria-label="Core Values Sorting Exercise"
+    >
+      {/* Game Header - Stays visible */}
+      <div
+        className="flex-shrink-0"
+        role="banner"
+      >
         <RoundHeader
           targetCoreValues={targetCoreValues}
           roundNumber={roundNumber}
           remainingCardsCount={remainingCards.length}
         />
-      </header>
-      <main className="flex-1 flex flex-col pt-4">
+      </div>
+
+      {/* Game Actions - Stays below header */}
+      <div
+        className="flex-shrink-0"
+        role="region"
+        aria-label="Game controls"
+      >
         {isMobile ? (
-          <div className="flex flex-col px-2 space-y-4">
-            <div className="flex flex-col space-y-2">
-              <RoundActions
-                remainingCards={remainingCards}
-                canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
-                onNextRound={handleNextRound}
-                onDrop={handleDrop}
-                isEndGame={shouldEndGame}
-              />
+          <div className="px-2 py-3">
+            <RoundActions
+              remainingCards={remainingCards}
+              canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
+              onNextRound={handleNextRound}
+              onDrop={handleDrop}
+              isEndGame={shouldEndGame}
+              selectedMobileCard={selectedMobileCard}
+              onMobileCardSelect={setSelectedMobileCard}
+            />
+            <div
+              role="status"
+              aria-live="polite"
+              className="mt-2"
+            >
               <StatusMessage
                 status={status()}
                 isNearingCompletion={roundState.isNearingCompletion}
@@ -231,23 +254,17 @@ const RoundUI = memo(function RoundUI() {
                 targetCoreValues={targetCoreValues}
                 canProceedToNextRound={validateRound()}
                 remainingCards={remainingCards}
-              />
-            </div>
-            <div className="relative z-20">
-              <MobileCategoryList
-                categories={categories}
-                unassignedCards={remainingCards}
-                activeDropZone={activeDropZone}
-                onDrop={handleMobileDropWithZone}
-                onMoveWithinCategory={handleMoveCard}
-                onMoveBetweenCategories={handleMoveBetweenCategories}
               />
             </div>
           </div>
         ) : (
-          <div className="container mx-auto px-4 space-y-6">
-            <div className="grid grid-cols-3 gap-8">
-              <div />
+          <div className="container mx-auto px-4 py-4">
+            <div
+              className="grid grid-cols-3 gap-8"
+              role="region"
+              aria-label="Game controls and status"
+            >
+              <div aria-hidden="true" />
               <RoundActions
                 remainingCards={remainingCards}
                 canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant}
@@ -255,17 +272,43 @@ const RoundUI = memo(function RoundUI() {
                 onDrop={handleDrop}
                 isEndGame={shouldEndGame}
               />
-              <StatusMessage
-                status={status()}
-                isNearingCompletion={roundState.isNearingCompletion}
-                hasTooManyImportantCards={roundState.hasTooManyImportantCards}
-                hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
-                hasEnoughCards={roundState.hasEnoughCards}
-                targetCoreValues={targetCoreValues}
-                canProceedToNextRound={validateRound()}
-                remainingCards={remainingCards}
-              />
+              <div role="status" aria-live="polite">
+                <StatusMessage
+                  status={status()}
+                  isNearingCompletion={roundState.isNearingCompletion}
+                  hasTooManyImportantCards={roundState.hasTooManyImportantCards}
+                  hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards}
+                  hasEnoughCards={roundState.hasEnoughCards}
+                  targetCoreValues={targetCoreValues}
+                  canProceedToNextRound={validateRound()}
+                  remainingCards={remainingCards}
+                />
+              </div>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Scrollable Game Content */}
+      <div
+        className="flex-1 overflow-y-auto"
+        role="region"
+        aria-label="Value categories"
+      >
+        {isMobile ? (
+          <div className="p-2">
+            <MobileCategoryList
+              categories={roundState.visibleCategories}
+              activeDropZone={activeDropZone}
+              onDrop={handleMobileDropWithZone}
+              onMoveWithinCategory={handleMoveCard}
+              onMoveBetweenCategories={handleMoveBetweenCategories}
+              selectedCard={selectedMobileCard}
+              onCardSelect={setSelectedMobileCard}
+            />
+          </div>
+        ) : (
+          <div className="container mx-auto px-4 py-6">
             <CategoryGrid
               categories={roundState.visibleCategories}
               onDrop={handleDrop}
@@ -274,7 +317,7 @@ const RoundUI = memo(function RoundUI() {
             />
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 });

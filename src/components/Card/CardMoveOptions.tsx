@@ -1,21 +1,15 @@
+// src/components/Card/CardMoveOptions.tsx
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from './types';
 import { CategoryName } from '@/types';
-
-const categories: CategoryName[] = [
-  'Very Important',
-  'Quite Important',
-  'Important',
-  'Of Some Importance',
-  'Not Important'
-];
+import { allCategories } from '@/constants/categories'; // Use centralized categories
 
 export function CardMoveOptions({
   value,
   currentCategory,
-  onMoveToCategory,
+  onMoveBetweenCategories,
   onClose
 }: CardMoveOptionsProps) {
   const [mounted, setMounted] = useState(false);
@@ -58,12 +52,20 @@ export function CardMoveOptions({
       }
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [value.id, onClose]);
 
@@ -80,24 +82,42 @@ export function CardMoveOptions({
         left: `${position.left}px`,
         zIndex: 9999,
       }}
+      role="dialog"
+      aria-label={`Move options for ${value.title}`}
+      aria-modal="true"
     >
-      {categories
-        .filter(cat => cat !== currentCategory)
-        .map(category => (
-          <button
-            key={category}
-            type="button"
-            onClick={() => {
-              onMoveToCategory(value, currentCategory, category);
-              onClose();
-            }}
-            className="block w-full text-left px-4 py-3 text-sm text-gray-700 
-                     hover:bg-gray-50 active:bg-gray-100 transition-colors
-                     touch-manipulation select-none"
-          >
-            Move to {category}
-          </button>
-        ))}
+      <div 
+        role="menu" 
+        aria-label="Available categories"
+      >
+        {allCategories
+          .filter(cat => cat !== currentCategory)
+          .map(category => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => {
+                onMoveBetweenCategories(value, currentCategory, category);
+                onClose();
+              }}
+              className="block w-full text-left px-4 py-3 text-sm text-gray-700 
+                       hover:bg-gray-50 active:bg-gray-100 transition-colors
+                       touch-manipulation select-none focus:outline-none focus:bg-gray-50
+                       focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              role="menuitem"
+              aria-label={`Move to ${category} category`}
+            >
+              Move to {category}
+            </button>
+          ))}
+      </div>
+      <button
+        onClick={onClose}
+        className="sr-only"
+        aria-label="Close move options"
+      >
+        Close
+      </button>
     </motion.div>
   );
 

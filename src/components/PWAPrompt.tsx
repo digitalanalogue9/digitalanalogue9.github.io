@@ -1,3 +1,4 @@
+// src/components/PWAPrompt.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -77,10 +78,18 @@ export default function PWAPrompt() {
 
   if (!showPrompt) return null;
 
+  const promptTitle = promptType === 'install' ? 'Install Core Values App' : 'Update Available';
+  const promptDescription = promptType === 'install'
+    ? 'Install our app for a better experience with offline access and faster loading times.'
+    : 'A new version is available. Update now for the latest features and improvements.';
+
   return (
     <AnimatePresence>
       {showPrompt && (
         <motion.div
+          role="alertdialog"
+          aria-labelledby="pwa-prompt-title"
+          aria-describedby="pwa-prompt-description"
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 0 }}
@@ -88,18 +97,27 @@ export default function PWAPrompt() {
         >
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="text-base font-semibold text-gray-900">
-                {promptType === 'install' ? 'Install Core Values App' : 'Update Available'}
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                {promptType === 'install'
-                  ? 'Install our app for a better experience with offline access and faster loading times.'
-                  : 'A new version is available. Update now for the latest features and improvements.'}
+              <h2 
+                id="pwa-prompt-title" 
+                className="text-base font-semibold text-gray-900"
+              >
+                {promptTitle}
+              </h2>
+              <p 
+                id="pwa-prompt-description" 
+                className="mt-1 text-sm text-gray-500"
+              >
+                {promptDescription}
               </p>
-              <div className="mt-4 flex space-x-3">
+              <div 
+                className="mt-4 flex space-x-3"
+                role="group"
+                aria-label="PWA prompt actions"
+              >
                 <button
                   onClick={promptType === 'install' ? handleInstallClick : handleUpdateClick}
                   className="flex-1 bg-blue-600 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  aria-label={promptType === 'install' ? 'Install application' : 'Update application'}
                 >
                   {promptType === 'install' ? 'Install' : 'Update Now'}
                 </button>
@@ -107,6 +125,7 @@ export default function PWAPrompt() {
                   <button
                     onClick={handleDismiss}
                     className="flex-1 bg-white text-gray-700 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    aria-label="Dismiss installation prompt"
                   >
                     Not Now
                   </button>
