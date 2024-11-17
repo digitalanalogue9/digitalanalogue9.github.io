@@ -1,333 +1,220 @@
-// Card.tsx
+// src/components/Card/DraggableCard.tsx
 'use client'
 
-import { useState, TouchEvent as ReactTouchEvent } from 'react';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { memo, useRef, useState } from 'react';
 import { CardProps } from './types';
 import { getEnvBoolean } from '@/utils/config';
-import { cardVariants, cardTransition } from '@/utils/animation';
-import { useCardDragAnimation } from '@/hooks/useCardDragAnimation';
 import { CardControls } from './CardControls';
 import { CardMoveOptions } from './CardMoveOptions';
 import { CardContent } from './CardContent';
 import { getPostItStyles } from './styles';
-import { CategoryName } from '@/types';
+import { CategoryName, Value } from '@/types';
+import { useMobile } from '@/contexts/MobileContext';
 
-export default function Card({
-  value,
-  onDrop,
-  onMoveUp,
-  onMoveDown,
-  onMoveBetweenCategories,
-  currentCategory,
-  columnIndex,
-  onActiveDropZoneChange
-}: CardProps) {
-  const debug = getEnvBoolean('debug', false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isOver, setIsOver] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showMoveOptions, setShowMoveOptions] = useState(false);
-  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
-  const [dragStartY, setDragStartY] = useState<number | null>(null);
-  const [debugInfo, setDebugInfo] = useState<string[]>([]);
-  const {
-    x,
-    y,
-    handleDragStart: handleAnimationDragStart,
-    handleDragEnd: handleAnimationDragEnd
-  } = useCardDragAnimation({ x: 0, y: 0 });
-
-  if (!value) return null;
-  const isInCategory = columnIndex !== undefined;
-  const isTouchDevice = 'ontouchstart' in window;
-
-  // Native HTML5 Drag and Drop handlers
-  const handleNativeDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    setDragStartY(e.clientY);
-    const dragData = {
-      ...value,
-      sourceCategory: currentCategory,
-      sourceIndex: columnIndex, // Add this to track the source index
-      isInternalMove: true // Add this flag
-    };
-    e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-    if (debug) console.log('🎪 Native dragStart:', { value, columnIndex });
-  };
-
-  const handleNativeDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsOver(false);
-
-    try {
-      const droppedData = JSON.parse(e.dataTransfer.getData('text/plain'));
-      if (droppedData.isInternalMove && droppedData.sourceCategory === currentCategory) {
-        // This is an internal move within the same category
-        return;
-      }
-    } catch (error) {
-      console.error('Error parsing drop data:', error);
-    }
-  };
-
-  const handleNativeDragEnd = () => {
-    setIsDragging(false);
-    setIsOver(false);
-    setDragStartY(null);
-    if (debug) console.log('🏁 Native dragEnd:', { value, columnIndex });
-  };
-
-  const handleNativeDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsOver(true);
-  };
-
-  const handleNativeDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsOver(false);
-  };
-
-  const handleNativeDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!isInCategory || dragStartY === null) return;
-
-    const currentY = e.clientY;
-    const deltaY = currentY - dragStartY;
-
-    if (Math.abs(deltaY) > 30) {
-      if (deltaY < 0 && onMoveUp) {
-        console.log('Moving up from index:', columnIndex);
-        onMoveUp();
-        setDragStartY(currentY);
-      } else if (deltaY > 0 && onMoveDown) {
-        console.log('Moving down from index:', columnIndex);
-        onMoveDown();
-        setDragStartY(currentY);
-      }
-    }
-  };
-
-  // Touch handlers
-  const handleTouchStart = (e: ReactTouchEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
-    setIsDragging(true);
-    handleAnimationDragStart();
-  };
-
-  const handleTouchMove = (e: ReactTouchEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const newX = touch.clientX - touchStart.x;
-    const newY = touch.clientY - touchStart.y;
-    x.set(newX);
-    y.set(newY);
-
-    // Check for drop targets during move
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-
-    // Look for both direct elements and their parents with data-category
-    const categoryElement = elements.find(el =>
-      el.hasAttribute('data-category') ||
-      el.closest('[data-category]') !== null
-    );
-
-    if (categoryElement && onActiveDropZoneChange) {
-        let category: string | null = null;
-
-        if (categoryElement.hasAttribute('data-category')) {
-            category = categoryElement.getAttribute('data-category');
-        } else {
-            const closestWithCategory = categoryElement.closest('[data-category]');
-            category = closestWithCategory?.getAttribute('data-category') || null;
-        }
-
-        if (category) {
-            onActiveDropZoneChange(category as CategoryName);
-        }
-    } else if (onActiveDropZoneChange) {
-        onActiveDropZoneChange(null);
-    }
-};
-
-const handleTouchEnd = (e: ReactTouchEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
-
-    const touch = e.changedTouches[0];
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const categoryElement = elements.find(el => 
-        el.hasAttribute('data-category') ||
-        el.closest('[data-category]') !== null
-    );
-
-    if (categoryElement) {
-        let category: string | null = null;
-        
-        if (categoryElement.hasAttribute('data-category')) {
-            category = categoryElement.getAttribute('data-category');
-        } else {
-            const closestWithCategory = categoryElement.closest('[data-category]');
-            category = closestWithCategory?.getAttribute('data-category') || null;
-        }
-
-        if (category && onDrop) {
-            const valueWithCategory = {
-                ...value,
-                sourceCategory: category as CategoryName
-            };
-            onDrop(valueWithCategory);
-        }
-    }
-
-    if (onActiveDropZoneChange) {
-        onActiveDropZoneChange(null);
-    }
-    setIsDragging(false);
-    handleAnimationDragEnd();
-};
-
-
-
-
-
-  const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
-
-  const cardContent = (
-    <>
-      <CardContent
-        title={value.title}
-        description={value.description}
-        isExpanded={isExpanded}
-        controls={
-          <CardControls
-            onMoveUp={onMoveUp}
-            onMoveDown={onMoveDown}
-            onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
-            currentCategory={currentCategory}
-            isExpanded={isExpanded}
-            onToggleExpand={() => setIsExpanded(!isExpanded)}
-            value={value}
-          />
-        }
-      />
-      <AnimatePresence>
-        {showMoveOptions && onMoveBetweenCategories && currentCategory && (
-          <div className="absolute right-0 top-8 z-50">
-            <CardMoveOptions
-              value={value}
-              currentCategory={currentCategory}
-              onMoveBetweenCategories={onMoveBetweenCategories}
-              onClose={() => setShowMoveOptions(false)}
-            />
-          </div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-
-  if (isInCategory) {
-    if (!isTouchDevice) {
-      // Desktop version with native drag and drop
-      return (
-        <div
-          draggable="true"
-          onDragStart={handleNativeDragStart}
-          onDragEnd={handleNativeDragEnd}
-          onDragEnter={handleNativeDragEnter}
-          onDragLeave={handleNativeDragLeave}
-          onDragOver={handleNativeDragOver}
-          onDrop={handleNativeDrop}
-          id={`card-${value.title}`}
-          data-category={currentCategory}
-          data-index={columnIndex}
-          className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative`}
-        >
-          {cardContent}
-        </div>
-      );
-    }
-
-    // Touch device version with Framer Motion
-    return (
-      <motion.div
-        drag
-        dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
-        dragElastic={0.1}
-        dragMomentum={false}
-        onDragStart={handleAnimationDragStart}
-        onDragEnd={handleAnimationDragEnd}
-        style={{ x, y, touchAction: 'none' }}
-        variants={cardVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        whileHover="hover"
-        transition={cardTransition}
-        whileTap={{ scale: 0.98 }}
-        whileDrag={{ scale: 1.02, boxShadow: "0 5px 10px rgba(0,0,0,0.1)" }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        id={`card-${value.title}`}
-        data-category={currentCategory}
-        dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
-        className={`${postItBaseStyles} ${tapeEffect} w-full min-h-[40px] relative touch-manipulation`}
-      >
-        {cardContent}
-      </motion.div>
-    );
-  }
-
-  // Non-category card (always using Framer Motion)
-  return (
-    <motion.div
-      drag
-      dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
-      dragElastic={0.1}
-      dragMomentum={false}
-      style={{ x, y, touchAction: 'none' }}
-      variants={cardVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      whileHover="hover"
-      transition={cardTransition}
-      whileTap={{ scale: 0.98 }}
-      whileDrag={{ scale: 1.02, boxShadow: "0 5px 10px rgba(0,0,0,0.1)" }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      className={`${postItBaseStyles} ${tapeEffect} w-48 sm:w-64 h-48 sm:h-64 touch-manipulation relative`}
-    >
-      <div className="relative z-10 flex flex-col h-full p-4">
-        <div className="flex-1">
-          <h3 className="font-medium text-gray-800 mb-3 text-base sm:text-lg">{value.title}</h3>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{value.description}</p>
-        </div>
-
-        {/* Always show on mobile screens, regardless of touch detection */}
-        <div className="absolute bottom-0 left-0 right-0 bg-blue-50 p-2 rounded-b text-center sm:hidden">
-          <div className="flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7.5 3.5c0-1.1.9-2 2-2s2 .9 2 2v7m0 0v3m0-3h3m-3 0h-3m-2.5-4c0-1.1-.9-2-2-2s-2 .9-2 2"
-              />
-            </svg>
-            <span>Press & Hold to Drag</span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+interface DroppedValue extends Value {
+    sourceCategory?: CategoryName;
+    isInternalDrag?: boolean;
+    sourceIndex?: number;
 }
+
+const Card = memo(function Card({
+    value,
+    onDrop,
+    onMoveUp,
+    onMoveDown,
+    onMoveBetweenCategories,
+    currentCategory,
+    columnIndex,
+    onClick
+}: CardProps) {
+    const debug = getEnvBoolean('debug', false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [isOver, setIsOver] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [showMoveOptions, setShowMoveOptions] = useState(false);
+    const draggedIndexRef = useRef<number | null>(null);
+    const { isMobile } = useMobile();
+
+    if (!value) return null;
+    const isInCategory = columnIndex !== undefined;
+
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
+        if (isMobile) {
+            e.preventDefault();
+            return;
+        }
+        setIsDragging(true);
+        draggedIndexRef.current = columnIndex !== undefined ? columnIndex : null;
+        
+        const dragData = {
+            ...value,
+            sourceCategory: currentCategory,
+            isInternalDrag: isInCategory,
+            sourceIndex: columnIndex
+        };
+        e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+        
+        if (debug) console.log('🎪 Card dragStart:', { value, columnIndex, isInCategory });
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
+        if (isMobile) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setIsOver(true);
+    };
+    
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        if (isMobile) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setIsOver(false);
+        
+        try {
+            const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
+            const sourceIndex = droppedValue.sourceIndex;
+            const targetIndex = columnIndex;
+
+            if (droppedValue.isInternalDrag && 
+                droppedValue.sourceCategory === currentCategory && 
+                sourceIndex !== undefined && 
+                targetIndex !== undefined) {
+                
+                if (sourceIndex < targetIndex) {
+                    onMoveDown?.();
+                } else if (sourceIndex > targetIndex) {
+                    onMoveUp?.();
+                }
+            } else if (onDrop) {
+                onDrop(droppedValue);
+            }
+        } catch (error) {
+            console.error('Error handling drop:', error);
+        }
+    };
+    
+    const handleDragEnd = (): void => {
+        if (isMobile) return;
+        setIsDragging(false);
+        setIsOver(false);
+        draggedIndexRef.current = null;
+        if (debug) console.log('🏁 Card dragEnd:', { value, columnIndex });
+    };
+
+    const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
+        if (isMobile) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setIsOver(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
+        if (isMobile) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setIsOver(false);
+    };
+
+    const handleCardClick = () => {
+        if (isMobile && onClick) {
+            onClick(value);
+        }
+    };
+
+    const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
+
+    if (isInCategory) {
+        return (
+            <div
+                id={`card-${value.id}`}
+                data-index={columnIndex}
+                data-dropzone="true"
+                draggable={!isMobile}
+                onClick={handleCardClick}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative
+                    ${isMobile ? 'touch-manipulation' : ''}
+                    ${isOver ? 'border-2 border-blue-300' : ''}`}
+                role="article"
+                aria-label={`Value card: ${value.title}`}
+                tabIndex={0}
+                onKeyPress={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        handleCardClick();
+                    }
+                }}
+            >
+                <CardContent
+                    title={value.title}
+                    description={value.description}
+                    isExpanded={isExpanded}
+                    controls={!isMobile ? 
+                        <CardControls
+                            onMoveUp={onMoveUp}
+                            onMoveDown={onMoveDown}
+                            onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
+                            currentCategory={currentCategory}
+                            isExpanded={isExpanded}
+                            onToggleExpand={() => setIsExpanded(!isExpanded)}
+                            value={value}
+                        />
+                        : null
+                    }
+                />
+                {!isMobile && showMoveOptions && onMoveBetweenCategories && currentCategory && (
+                    <div 
+                        className="absolute right-2 top-8 z-50"
+                        role="dialog"
+                        aria-label="Move options"
+                    >
+                        <CardMoveOptions
+                            value={value}
+                            currentCategory={currentCategory}
+                            onMoveBetweenCategories={onMoveBetweenCategories}
+                            onClose={() => setShowMoveOptions(false)}
+                        />
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <div
+            draggable={!isMobile}
+            onClick={handleCardClick}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 
+                ${isMobile ? 'touch-manipulation active:scale-95 transition-transform' : ''}`}
+            role="article"
+            aria-label={`Value card: ${value.title}`}
+            tabIndex={0}
+            onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    handleCardClick();
+                }
+            }}
+        >
+            <div 
+                className="relative z-10"
+                role="region"
+                aria-label={`Content for ${value.title}`}
+            >
+                <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">{value.description}</p>
+            </div>
+        </div>
+    );
+});
+
+export default Card;
