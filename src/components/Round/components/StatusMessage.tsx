@@ -11,7 +11,8 @@ export const StatusMessage = ({
   hasEnoughCards,
   targetCoreValues,
   canProceedToNextRound,
-  remainingCards
+  remainingCards,
+  showInitialMessage = false
 }: StatusMessageProps): ReactNode => {
   const [showDetails, setShowDetails] = useState(false);
   const { isMobile } = useMobile();

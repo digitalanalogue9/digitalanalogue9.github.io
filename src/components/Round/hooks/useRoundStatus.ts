@@ -1,6 +1,7 @@
 // src/components/Round/hooks/useRoundStatus.ts
 import { useCallback } from 'react';
 import { Categories, Value } from '@/types';
+import { useMobile } from '@/contexts/MobileContext';
 
 type StatusType = 'info' | 'warning' | 'success';
 
@@ -22,8 +23,16 @@ export interface StatusState {
 }
 
 export const useRoundStatus = (state: StatusState) => {
+  const { isMobile } = useMobile();
   return useCallback((): Status => {
     if (state.remainingCards.length > 0) {
+      if (isMobile) {
+        return {
+          text: `Tap the yellow card to select it, then tap a category to place it`,
+          type: 'info',
+          isEndGame: false
+        };
+      }
       return {
         text: `Drag the remaining ${state.remainingCards.length === 1 ? "" : state.remainingCards.length} ${state.remainingCards.length === 1 ? "value" : "values"} to a category`,
         type: 'info',

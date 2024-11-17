@@ -7,4 +7,5 @@ export interface StatusMessageProps {
     targetCoreValues: number;
     canProceedToNextRound: boolean;
     remainingCards: any[];
+    showInitialMessage: boolean;
 }
