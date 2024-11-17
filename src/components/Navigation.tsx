@@ -1,64 +1,110 @@
 // src/components/Navigation.tsx
-'use client'
-
+import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
-// src/components/Navigation.tsx
 export default function Navigation() {
-  const pathname = usePathname();
-
-  const navItems = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/history', label: 'History' }
-  ];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <nav 
+      className="flex items-center justify-between px-4 py-2"
+      role="navigation"
       aria-label="Main navigation"
-      className="flex justify-between items-center h-16"
     >
+      <Link 
+        href="/" 
+        className="text-xl font-bold text-white"
+        aria-label="Core Values Home"
+      >
+        Core Values
+      </Link>
+
+      {/* Desktop Navigation */}
       <div 
-        className="flex-shrink-0"
-        aria-label="Site logo"
+        className="hidden md:flex space-x-4"
+        role="menubar"
+        aria-label="Desktop navigation"
       >
         <Link 
           href="/" 
-          className="text-xl font-bold text-white hover:text-white/90 transition-colors"
-          aria-label="Core Values Home"
+          className="text-white"
+          role="menuitem"
         >
-          <span aria-hidden="true">Core Values</span>
-          <span className="sr-only">Return to homepage</span>
+          Home
+        </Link>
+        <Link 
+          href="/about" 
+          className="text-white"
+          role="menuitem"
+        >
+          About
+        </Link>
+        <Link 
+          href="/history" 
+          className="text-white"
+          role="menuitem"
+        >
+          History
         </Link>
       </div>
 
-      <div className="flex items-center">
-        <ul 
-          className="flex space-x-4" 
-          role="menubar"
-          aria-label="Primary navigation"
+      {/* Mobile Navigation */}
+      <div className="md:hidden">
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-white p-2"
+          aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
         >
-          {navItems.map(({ href, label }) => (
-            <li 
-              key={href} 
-              role="none"
+          <svg 
+            className="w-6 h-6" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth="2" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+
+        {/* Mobile Menu Dropdown */}
+        {isMenuOpen && (
+          <div 
+            id="mobile-menu"
+            className="absolute top-14 right-4 bg-white shadow-lg rounded-lg py-2 z-50"
+            role="menu"
+            aria-label="Mobile navigation"
+          >
+            <Link 
+              href="/" 
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={() => setIsMenuOpen(false)}
+              role="menuitem"
             >
-              <Link
-                href={href}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  pathname === href
-                    ? 'bg-white text-blue-600'
-                    : 'text-white/90 hover:bg-blue-400 hover:text-white'
-                }`}
-                role="menuitem"
-                aria-current={pathname === href ? 'page' : undefined}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+              Home
+            </Link>
+            <Link 
+              href="/about" 
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={() => setIsMenuOpen(false)}
+              role="menuitem"
+            >
+              About
+            </Link>
+            <Link 
+              href="/history" 
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={() => setIsMenuOpen(false)}
+              role="menuitem"
+            >
+              History
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );
