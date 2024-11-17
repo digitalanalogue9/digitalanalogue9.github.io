@@ -35,6 +35,7 @@ const RoundUI = memo(function RoundUI() {
   const [showReasoning, setShowReasoning] = useState<boolean>(false);
   const [finalValuesWithoutReasons, setFinalValuesWithoutReasons] = useState<Value[]>([]);
   const [selectedMobileCard, setSelectedMobileCard] = useState<Value | null>(null);
+  const [hasShownInstruction, setHasShownInstruction] = useState<boolean>(false);
 
   // Hooks
   const { sessionId, roundNumber, targetCoreValues, setRoundNumber } = useSession();
@@ -101,6 +102,7 @@ const RoundUI = memo(function RoundUI() {
     setActiveDropZone(category);
     handleDrop(card, category);
     setSelectedMobileCard(null);
+    setHasShownInstruction(true); // Add this line
     setTimeout(() => setActiveDropZone(null), 500);
   }, [handleDrop]);
 
@@ -221,7 +223,7 @@ const RoundUI = memo(function RoundUI() {
         role="banner"
       >
         {/* Selection instruction overlay */}
-        {isMobile && selectedMobileCard && (
+        {isMobile && selectedMobileCard && !hasShownInstruction && (
           <div
             className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 text-center"
             aria-live="polite"

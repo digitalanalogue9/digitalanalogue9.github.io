@@ -54,10 +54,10 @@ export function MobileCategoryRow({
     <motion.div
       layout
       className={`
-        rounded-lg border transition-colors duration-200
-        ${isActive ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'}
-        ${showingCardSelection ? 'z-50 transform' : 'z-0'}
-      `}
+    rounded-lg transition-colors duration-200
+    ${isActive ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'}
+    ${showingCardSelection ? 'z-50 border-2 border-blue-500' : 'z-0 border'}
+  `}
       role="region"
       aria-labelledby={categoryId}
     >
