@@ -46,7 +46,7 @@ export default function RootLayout({
 
             {/* Main content */}
             <main 
-              className="flex-1 flex flex-col overflow-auto" // Added overflow-auto
+              className="flex-1 flex flex-col overflow-hidden" // Added overflow-auto
               role="main"
               aria-label="Main content"
             >

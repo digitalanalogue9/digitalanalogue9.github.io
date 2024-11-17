@@ -1,4 +1,3 @@
-// src/components/Card/DraggableCard.tsx
 'use client'
 
 import { memo, useRef, useState } from 'react';
@@ -47,20 +46,25 @@ const Card = memo(function Card({
         draggedIndexRef.current = columnIndex !== undefined ? columnIndex : null;
         
         const dragData = {
-            ...value,
+            id: value.id,
+            title: value.title,
+            description: value.description,
             sourceCategory: currentCategory,
-            isInternalDrag: isInCategory,
-            sourceIndex: columnIndex
+            sourceIndex: columnIndex,
+            isInternalDrag: isInCategory
         };
-        e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
         
-        if (debug) console.log('🎪 Card dragStart:', { value, columnIndex, isInCategory });
+        e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+        e.dataTransfer.effectAllowed = 'move';
+        
+        if (debug) console.log('🎪 Card dragStart:', dragData);
     };
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
         if (isMobile) return;
         e.preventDefault();
         e.stopPropagation();
+        e.dataTransfer.dropEffect = 'move';
         setIsOver(true);
     };
     
@@ -71,12 +75,24 @@ const Card = memo(function Card({
         setIsOver(false);
         
         try {
-            const droppedValue = JSON.parse(e.dataTransfer.getData('text/plain')) as DroppedValue;
-            const sourceIndex = droppedValue.sourceIndex;
+            const droppedData = JSON.parse(e.dataTransfer.getData('text/plain'));
+            const sourceIndex = droppedData.sourceIndex;
             const targetIndex = columnIndex;
+            const sourceCategory = droppedData.sourceCategory;
 
-            if (droppedValue.isInternalDrag && 
-                droppedValue.sourceCategory === currentCategory && 
+            if (debug) {
+                console.log('📥 Drop data:', {
+                    droppedData,
+                    sourceIndex,
+                    targetIndex,
+                    sourceCategory,
+                    currentCategory
+                });
+            }
+
+            // Handle internal category reordering
+            if (droppedData.isInternalDrag && 
+                sourceCategory === currentCategory && 
                 sourceIndex !== undefined && 
                 targetIndex !== undefined) {
                 
@@ -85,8 +101,18 @@ const Card = memo(function Card({
                 } else if (sourceIndex > targetIndex) {
                     onMoveUp?.();
                 }
-            } else if (onDrop) {
-                onDrop(droppedValue);
+            } 
+            // Handle between category movement
+            else if (sourceCategory && currentCategory && sourceCategory !== currentCategory) {
+                onMoveBetweenCategories?.(
+                    { id: droppedData.id, title: droppedData.title, description: droppedData.description },
+                    sourceCategory,
+                    currentCategory
+                );
+            }
+            // Handle new card drop
+            else if (onDrop) {
+                onDrop(droppedData);
             }
         } catch (error) {
             console.error('Error handling drop:', error);
@@ -123,13 +149,22 @@ const Card = memo(function Card({
 
     const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
 
+    const cardContainerClasses = `
+    ${postItBaseStyles} 
+    ${tapeEffect} 
+    ${isInCategory ? 'w-full max-w-full min-h-[40px]' : 'w-48 h-48'}
+    relative select-none cursor-move
+    ${isMobile ? 'touch-manipulation' : ''}
+    ${isOver ? 'border-2 border-blue-300' : ''}
+`;
+
     if (isInCategory) {
         return (
             <div
                 id={`card-${value.id}`}
                 data-index={columnIndex}
                 data-dropzone="true"
-                draggable={!isMobile}
+                draggable="true"
                 onClick={handleCardClick}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
@@ -137,9 +172,7 @@ const Card = memo(function Card({
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                className={`${postItBaseStyles} ${tapeEffect} w-full max-w-full min-h-[40px] relative
-                    ${isMobile ? 'touch-manipulation' : ''}
-                    ${isOver ? 'border-2 border-blue-300' : ''}`}
+                className={cardContainerClasses}
                 role="article"
                 aria-label={`Value card: ${value.title}`}
                 tabIndex={0}
@@ -149,23 +182,25 @@ const Card = memo(function Card({
                     }
                 }}
             >
-                <CardContent
-                    title={value.title}
-                    description={value.description}
-                    isExpanded={isExpanded}
-                    controls={!isMobile ? 
-                        <CardControls
-                            onMoveUp={onMoveUp}
-                            onMoveDown={onMoveDown}
-                            onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
-                            currentCategory={currentCategory}
-                            isExpanded={isExpanded}
-                            onToggleExpand={() => setIsExpanded(!isExpanded)}
-                            value={value}
-                        />
-                        : null
-                    }
-                />
+                <div className="pointer-events-none">
+                    <CardContent
+                        title={value.title}
+                        description={value.description}
+                        isExpanded={isExpanded}
+                        controls={!isMobile ? 
+                            <CardControls
+                                onMoveUp={onMoveUp}
+                                onMoveDown={onMoveDown}
+                                onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
+                                currentCategory={currentCategory}
+                                isExpanded={isExpanded}
+                                onToggleExpand={() => setIsExpanded(!isExpanded)}
+                                value={value}
+                            />
+                            : null
+                        }
+                    />
+                </div>
                 {!isMobile && showMoveOptions && onMoveBetweenCategories && currentCategory && (
                     <div 
                         className="absolute right-2 top-8 z-50"
@@ -186,7 +221,7 @@ const Card = memo(function Card({
 
     return (
         <div
-            draggable={!isMobile}
+            draggable="true"
             onClick={handleCardClick}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
@@ -194,8 +229,7 @@ const Card = memo(function Card({
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className={`${postItBaseStyles} ${tapeEffect} w-48 h-48 
-                ${isMobile ? 'touch-manipulation active:scale-95 transition-transform' : ''}`}
+            className={cardContainerClasses}
             role="article"
             aria-label={`Value card: ${value.title}`}
             tabIndex={0}
@@ -206,7 +240,7 @@ const Card = memo(function Card({
             }}
         >
             <div 
-                className="relative z-10"
+                className="relative z-10 pointer-events-none"
                 role="region"
                 aria-label={`Content for ${value.title}`}
             >

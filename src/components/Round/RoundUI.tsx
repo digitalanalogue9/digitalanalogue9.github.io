@@ -207,7 +207,7 @@ const RoundUI = memo(function RoundUI() {
 
   return (
     <div
-      className="flex flex-col h-[calc(100vh-128px)]"
+      className="flex flex-col h-full overflow-hidden"
       role="application"
       aria-label="Core Values Sorting Exercise"
     >
@@ -291,7 +291,7 @@ const RoundUI = memo(function RoundUI() {
 
       {/* Scrollable Game Content */}
       <div
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-auto"
         role="region"
         aria-label="Value categories"
       >
