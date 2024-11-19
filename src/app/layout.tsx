@@ -1,17 +1,15 @@
 // layout.tsx
-'use client'
+'use client';
 
-import './globals.css'
-import Navigation from '../components/Navigation'
-import { MobileProvider } from '@/contexts/MobileContext'
-
+import '@/styles/globals.css';
+import Navigation from "@/components/common/Navigation";
+import { MobileProvider } from "@/lib/contexts/MobileContext";
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
+  return <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
@@ -27,40 +25,28 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#3b82f6" />
         <title>Core Values</title>
         <meta name="description" content="Discover and prioritise your personal values" />
-        {process.env.NODE_ENV === 'development' && (
-          <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        )}
+        {process.env.NODE_ENV === 'development' && <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />}
       </head>
       <body className="bg-gray-50">
         <MobileProvider>
           <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <header 
-              className="bg-blue-500 text-white shadow-md flex-shrink-0"
-              role="banner"
-              aria-label="Site header"
-            >
+            <header className="bg-blue-500 text-white shadow-md flex-shrink-0" role="banner" aria-label="Site header">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Navigation />
               </div>
             </header>
 
             {/* Main content */}
-            <main 
-              className="flex-1 flex flex-col md:overflow-hidden" // Only hide overflow on desktop
-              role="main"
-              aria-label="Main content"
-            >
+            <main className="flex-1 flex flex-col md:overflow-hidden" // Only hide overflow on desktop
+          role="main" aria-label="Main content">
               {children}
               <div id="portal-root" />
             </main>
 
             {/* Footer */}
-            <footer 
-              className="bg-blue-500 text-white md:flex-shrink-0" // Only shrink on desktop
-              role="contentinfo"
-              aria-label="Site footer"
-            >
+            <footer className="bg-blue-500 text-white md:flex-shrink-0" // Only shrink on desktop
+          role="contentinfo" aria-label="Site footer">
               <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 <p className="text-center text-white/90 text-sm">
                   © {new Date().getFullYear()} Core Values App
@@ -70,6 +56,5 @@ export default function RootLayout({
           </div>
         </MobileProvider>
       </body>
-    </html>
-  )
+    </html>;
 }
