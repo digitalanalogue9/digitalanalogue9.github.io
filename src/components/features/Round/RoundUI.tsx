@@ -153,7 +153,7 @@ const RoundUI = memo(function RoundUI() {
       }
       setRoundNumber(nextRound);
       setCategories(nextCategories);
-      setRemainingCards(getRandomValues(cardsForNextRound));
+      setRemainingCards(getRandomValues(cardsForNextRound as Value[]));
     } catch (error) {
       console.error('Failed to handle next round:', error);
     }

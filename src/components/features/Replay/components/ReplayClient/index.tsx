@@ -231,11 +231,11 @@ export default function ReplayClient() {
     }
 
     setCurrentCommandIndex(prev => prev + 1);
-  }, [currentRound, currentCommandIndex, rounds, executeCommand, resetCategories, isRoundTransition, allCards, playbackSpeed, getCommandDescription, setAnimatingCard]);
+  }, [currentRound, currentCommandIndex, rounds, executeCommand, resetCategories, isRoundTransition, getCommandDescription, setAnimatingCard]);
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPlaying && rounds.length > 0 && !isAnimating && !isRoundTransition) {
-      timer = setInterval(playNextCommand, 1000 / playbackSpeed); // 1000ms base interval
+      timer = setInterval(playNextCommand, 1000 / playbackSpeed);
     }
     return () => clearInterval(timer);
   }, [isPlaying, rounds, playbackSpeed, isAnimating, playNextCommand, isRoundTransition]);
