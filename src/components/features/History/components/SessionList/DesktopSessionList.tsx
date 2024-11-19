@@ -243,7 +243,8 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                 >
                                     Delete
                                 </button>
-                            </td>            </tr>
+                            </td>
+                        </tr>
                     ))}
                 </tbody>
             </table>
