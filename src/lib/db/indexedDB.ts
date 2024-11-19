@@ -209,3 +209,21 @@ export async function getCompletedSession(sessionId: string): Promise<CompletedS
     throw error;
   }
 }
+
+export const deleteSession = async (sessionId: string): Promise<void> => {
+  try {
+    const db = await initDB();
+    const tx = db.transaction(['sessions', 'completedSessions'], 'readwrite');
+    
+    // Delete from both sessions and completedSessions stores
+    await Promise.all([
+      tx.objectStore('sessions').delete(sessionId),
+      tx.objectStore('completedSessions').delete(sessionId)
+    ]);
+    
+    await tx.done;
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    throw error;
+  }
+};

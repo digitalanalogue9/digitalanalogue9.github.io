@@ -5,13 +5,13 @@ import { useSearchParams } from 'next/navigation';
 import { getRoundsBySession } from "@/lib/db/indexedDB";
 import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from "@/lib/types";
 import { getEnvBoolean } from "@/lib/utils/config";
-import { AnimatedCard } from "@/components/features/Cards/components";
+import { AnimatedCard } from "@/components/features/Cards/components/AnimatedCard";
 import { useReplayState } from '../../hooks/useReplayState';
 import { useCardAnimation } from '../../hooks/useCardAnimation';
 import { ReplayColumn } from '../ReplayColumn';
 import { motion, useSpring } from 'framer-motion';
 import { MobileReplayCategories } from '../MobileReplayCategories';
-import { CommandInfo} from '@/components/features/Replay/types';
+import { CommandInfo } from '@/components/features/Replay/types';
 
 export default function ReplayClient() {
   const searchParams = useSearchParams();
@@ -35,18 +35,7 @@ export default function ReplayClient() {
     setAnimatingCard,
     setAllCards: setReplayStateCards
   } = useReplayState();
-  const x = useSpring(0, {
-    stiffness: 100,
-    damping: 15,
-    mass: 1,
-    duration: 0.75
-  });
-  const y = useSpring(0, {
-    stiffness: 100,
-    damping: 15,
-    mass: 1,
-    duration: 0.75
-  });
+
   const {
     position,
     isAnimating,
@@ -66,12 +55,7 @@ export default function ReplayClient() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  useEffect(() => {
-    if (animatingCard) {
-      x.set(position.x);
-      y.set(position.y);
-    }
-  }, [animatingCard, x, y, position]);
+
   const emptyCategories = useMemo(() => ({
     'Very Important': [],
     'Important': [],
@@ -137,6 +121,7 @@ export default function ReplayClient() {
     }
     return `Command ${currentCommandIndex + 1}`;
   }, [allCards, currentCommandIndex]);
+
   const playNextCommand = useCallback(async () => {
     if (isRoundTransition) return;
     const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
@@ -198,32 +183,43 @@ export default function ReplayClient() {
     }
     let sourceElement: Element | null;
     if (command.type === 'DROP') {
-      //sourceElement = document.querySelector('.current-card-display');
       sourceElement = document.querySelector('[data-card-wrapper]');
     } else {
       const movePayload = payload as MoveCommandPayload;
       sourceElement = document.querySelector(`[data-category="${movePayload.fromCategory}"] [data-card-id="${cardId}"]`);
     }
-    const targetCategory = command.type === 'DROP' ? (payload as DropCommandPayload).category : (payload as MoveCommandPayload).toCategory;
+
+    const targetCategory = command.type === 'DROP'
+      ? (payload as DropCommandPayload).category
+      : (payload as MoveCommandPayload).toCategory;
+
     const targetElement = document.querySelector(`[data-category="${targetCategory}"]`);
+
     if (sourceElement && targetElement) {
       const sourceRect = sourceElement.getBoundingClientRect();
       const targetRect = targetElement.getBoundingClientRect();
-      const sourcePos = {
-        x: sourceRect.left + sourceRect.width / 2,
-        y: sourceRect.top + sourceRect.height / 2
+
+      // Calculate center points for source and target
+      const sourceCenter = {
+        x: sourceRect.left + (sourceRect.width / 2),
+        y: sourceRect.top + (sourceRect.height / 2)
       };
-      const targetPos = {
-        x: targetRect.left + targetRect.width / 2,
-        y: targetRect.top + targetRect.height / 2
+
+      const targetCenter = {
+        x: targetRect.left + (targetRect.width / 2),
+        y: targetRect.top + 20  // 20px from top of category
       };
+
+      // Start animation
       setAnimatingCard({
         value: cardToAnimate,
-        sourcePos,
-        targetPos
+        sourcePos: sourceCenter,
+        targetPos: targetCenter
       });
+
+      // Wait for animation to complete before executing command
       await new Promise<void>(resolve => {
-        const animationDuration = 500 / playbackSpeed;
+        const animationDuration = 500;  // Fixed duration for consistent speed
         setTimeout(() => {
           executeCommand(command);
           setAnimatingCard(null);
@@ -233,12 +229,13 @@ export default function ReplayClient() {
     } else {
       executeCommand(command);
     }
+
     setCurrentCommandIndex(prev => prev + 1);
   }, [currentRound, currentCommandIndex, rounds, executeCommand, resetCategories, isRoundTransition, allCards, playbackSpeed, getCommandDescription, setAnimatingCard]);
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isPlaying && rounds.length > 0 && !isAnimating && !isRoundTransition) {
-      timer = setInterval(playNextCommand, 2000 / playbackSpeed);
+      timer = setInterval(playNextCommand, 1000 / playbackSpeed); // 1000ms base interval
     }
     return () => clearInterval(timer);
   }, [isPlaying, rounds, playbackSpeed, isAnimating, playNextCommand, isRoundTransition]);
@@ -258,77 +255,85 @@ export default function ReplayClient() {
     return null;
   }
   return <div className="container mx-auto px-2 py-2 sm:px-4 sm:py-8" aria-label="Session replay viewer">
-      <div className={`space-y-2 sm:space-y-4 ${isMobile ? 'h-screen flex flex-col' : ''}`}>
-        <section className="bg-white rounded-lg shadow-lg p-2 sm:p-4" aria-label="Replay controls">
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-            <div className="flex gap-2">
-              <button onClick={() => setIsPlaying(!isPlaying)} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base" aria-label={isPlaying ? 'Pause replay' : 'Start replay'}>
-                {isPlaying ? 'Pause' : 'Play'}
-              </button>
-              <button onClick={handleReset} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm sm:text-base" aria-label="Reset replay to beginning">
-                Reset
-              </button>
-            </div>
-
-            <div className="flex items-center">
-              <label htmlFor="playback-speed" className="sr-only">
-                Playback speed
-              </label>
-              <select id="playback-speed" value={playbackSpeed} onChange={e => setPlaybackSpeed(Number(e.target.value))} className="px-3 py-1.5 sm:px-4 sm:py-2 border rounded bg-white text-sm sm:text-base" aria-label="Select playback speed">
-                <option value={0.5}>0.5x Speed</option>
-                <option value={1}>1x Speed</option>
-                <option value={2}>2x Speed</option>
-                <option value={4}>4x Speed</option>
-              </select>
-            </div>
-
-            <div className="flex items-center text-sm sm:text-base" aria-live="polite" role="status">
-              {!isPlaying && !commandInfo ? <span className="text-gray-600">
-                  Click Play to start the replay
-                </span> : commandInfo && <span>
-                  <span className="font-semibold">Round {commandInfo.roundNumber}:</span>
-                  {' '}{commandInfo.description}
-                </span>}
-            </div>
+    <div className={`space-y-2 sm:space-y-4 ${isMobile ? 'h-screen flex flex-col' : ''}`}>
+      <section className="bg-white rounded-lg shadow-lg p-2 sm:p-4" aria-label="Replay controls">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+          <div className="flex gap-2">
+            <button onClick={() => setIsPlaying(!isPlaying)} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base" aria-label={isPlaying ? 'Pause replay' : 'Start replay'}>
+              {isPlaying ? 'Pause' : 'Play'}
+            </button>
+            <button onClick={handleReset} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm sm:text-base" aria-label="Reset replay to beginning">
+              Reset
+            </button>
           </div>
-        </section>
 
-        <section className="relative h-32 sm:h-48" aria-label="Current card display">
-          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display" data-card-wrapper aria-live="polite">
-            {currentCard && !animatingCard && isPlaying && <AnimatedCard value={currentCard} columnIndex={undefined} onDrop={() => Promise.resolve()} currentCategory={undefined} />}
+          <div className="flex items-center">
+            <label htmlFor="playback-speed" className="sr-only">
+              Playback speed
+            </label>
+            <select id="playback-speed" value={playbackSpeed} onChange={e => setPlaybackSpeed(Number(e.target.value))} className="px-3 py-1.5 sm:px-4 sm:py-2 border rounded bg-white text-sm sm:text-base" aria-label="Select playback speed">
+              <option value={0.5}>0.5x Speed</option>
+              <option value={1}>1x Speed</option>
+              <option value={2}>2x Speed</option>
+              <option value={4}>4x Speed</option>
+            </select>
           </div>
-        </section>
 
-        <section aria-label="Card categories">
-          {isMobile ? <div className="flex-1 min-h-0">
-              <MobileReplayCategories categories={getCurrentRoundCategories()} aria-label="Mobile categories view" />
-            </div> : <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" role="grid" aria-label="Category grid">
-              {Object.entries(getCurrentRoundCategories()).map(([title]) => <ReplayColumn key={title} title={title as CategoryName} cards={categories[title as CategoryName] || []} />)}
-            </div>}
-        </section>
+          <div className="flex items-center text-sm sm:text-base" aria-live="polite" role="status">
+            {!isPlaying && !commandInfo ? <span className="text-gray-600">
+              Click Play to start the replay
+            </span> : commandInfo && <span>
+              <span className="font-semibold">Round {commandInfo.roundNumber}:</span>
+              {' '}{commandInfo.description}
+            </span>}
+          </div>
+        </div>
+      </section>
 
-        {animatingCard && <motion.div initial={{
-        x: animatingCard.sourcePos.x,
-        y: animatingCard.sourcePos.y
-      }} animate={{
-        x: animatingCard.targetPos.x,
-        y: animatingCard.targetPos.y,
-        transition: {
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-          mass: 1,
-          duration: 0.75 / playbackSpeed
-        }
-      }} style={{
-        position: 'fixed',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 1000,
-        pointerEvents: 'none'
-      }} aria-hidden="true" // Hide animated card from screen readers
-      >
-            <AnimatedCard value={animatingCard.value} columnIndex={undefined} onDrop={() => Promise.resolve()} currentCategory={undefined} />
-          </motion.div>}
-      </div>
-    </div>;
+      <section className="relative h-32 sm:h-48" aria-label="Current card display">
+        <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display" data-card-wrapper aria-live="polite">
+          {currentCard && !animatingCard && isPlaying && <AnimatedCard value={currentCard} columnIndex={undefined} onDrop={() => Promise.resolve()} currentCategory={undefined} />}
+        </div>
+      </section>
+
+      <section aria-label="Card categories">
+        {isMobile ? <div className="flex-1 min-h-0">
+          <MobileReplayCategories categories={getCurrentRoundCategories()} aria-label="Mobile categories view" />
+        </div> : <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" role="grid" aria-label="Category grid">
+          {Object.entries(getCurrentRoundCategories()).map(([title]) => <ReplayColumn key={title} title={title as CategoryName} cards={categories[title as CategoryName] || []} />)}
+        </div>}
+      </section>
+
+      {animatingCard && (
+        <motion.div
+          initial={false}
+          style={{
+            position: 'fixed',
+            left: animatingCard.sourcePos.x,
+            top: animatingCard.sourcePos.y,
+            zIndex: 1000,
+            pointerEvents: 'none',
+            transform: 'translate(-50%, -50%)',  // Center the card on its position
+          }}
+          animate={{
+            left: animatingCard.targetPos.x,
+            top: animatingCard.targetPos.y,
+          }}
+          transition={{
+            type: "tween",  // Use tween instead of spring for straight-line movement
+            duration: 0.5,
+            ease: "easeInOut"
+          }}
+          aria-hidden="true"
+        >
+          <AnimatedCard
+            value={animatingCard.value}
+            columnIndex={undefined}
+            onDrop={() => Promise.resolve()}
+            currentCategory={undefined}
+          />
+        </motion.div>
+      )}
+    </div>
+  </div>;
 }

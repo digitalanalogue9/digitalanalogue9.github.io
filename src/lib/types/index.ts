@@ -12,7 +12,7 @@ export type { PWAStatus } from './PWA';
 export type { ReconstructedState } from './Session';
 
 // Store related exports
-export type { StoreState } from './Store';
+export type { StoreState } from './store';
 
 // Existing exports (keeping these as they are)
 export type { CompletedSession, ValueWithReason } from './CompletedSession';

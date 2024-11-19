@@ -1,14 +1,36 @@
 import { useState, useCallback } from 'react';
 import { Value, Categories, CategoryName, Command, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
 import { initialCategories } from "@/components/features/Categories/constants/categories";
-import {AnimatingCard} from '@/components/features/Replay/types';
+import { AnimatingCard } from '@/components/features/Replay/types';
+
 export function useReplayState() {
   const [categories, setCategories] = useState<Categories>(initialCategories);
   const [animatingCard, setAnimatingCard] = useState<AnimatingCard | null>(null);
   const [allCards, setAllCards] = useState<Value[]>([]);
+
+  const calculatePositions = (sourceElement: Element, targetElement: Element) => {
+    const sourceRect = sourceElement.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+
+    // Calculate source position
+    const sourcePos = {
+      x: sourceRect.left,
+      y: sourceRect.top
+    };
+
+    // Calculate target position at the top of the target category
+    const targetPos = {
+      x: targetRect.left + (targetRect.width / 2) - (sourceRect.width / 2),
+      y: targetRect.top + 20 // 20px offset from top
+    };
+
+    return { sourcePos, targetPos };
+  };
+
   const resetCategories = useCallback(() => {
     setCategories(initialCategories);
   }, []);
+
   const findCardById = useCallback((cardId: string): Value | undefined => {
     // Look in allCards first
     const card = allCards.find(c => c.id === cardId);
@@ -21,74 +43,50 @@ export function useReplayState() {
     }
     return undefined;
   }, [categories, allCards]);
+
   const executeCommand = useCallback((command: Command, availableCards?: Value[]) => {
     if (availableCards && allCards.length === 0) {
       setAllCards(availableCards);
     }
-    if (command.type === 'DROP') {
-      const {
-        cardId,
-        category
-      } = command.payload as DropCommandPayload;
-      const card = findCardById(cardId);
-      if (!card) {
-        console.warn(`Card with id ${cardId} not found`);
-        return;
-      }
 
-      // Get source and target elements for animation
-      const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
-      const targetCategory = document.querySelector(`[data-category="${category}"]`);
-      if (cardElement && targetCategory) {
-        const sourceRect = cardElement.getBoundingClientRect();
-        const targetRect = targetCategory.getBoundingClientRect();
-        setAnimatingCard({
-          value: card,
-          sourcePos: {
-            x: sourceRect.left + sourceRect.width / 2,
-            y: sourceRect.top + sourceRect.height / 2
-          },
-          targetPos: {
-            x: targetRect.left + targetRect.width / 2,
-            y: targetRect.top + targetRect.height / 2
-          }
-        });
-      }
+    const { cardId, category: targetCategory } = 
+      command.type === 'DROP' 
+        ? (command.payload as DropCommandPayload)
+        : { cardId: (command.payload as MoveCommandPayload).cardId, category: (command.payload as MoveCommandPayload).toCategory };
+
+    const card = findCardById(cardId);
+    if (!card) {
+      console.warn(`Card with id ${cardId} not found`);
+      return;
+    }
+
+    // Get source and target elements for animation
+    let sourceElement: Element | null;
+    if (command.type === 'DROP') {
+      sourceElement = document.querySelector('[data-card-wrapper]');
+    } else {
+      const { fromCategory } = command.payload as MoveCommandPayload;
+      sourceElement = document.querySelector(`[data-category="${fromCategory}"] [data-card-id="${cardId}"]`);
+    }
+
+    const targetElement = document.querySelector(`[data-category="${targetCategory}"]`);
+
+    if (sourceElement && targetElement) {
+      const { sourcePos, targetPos } = calculatePositions(sourceElement, targetElement);
+      setAnimatingCard({
+        value: card,
+        sourcePos,
+        targetPos
+      });
+    }
+
+    if (command.type === 'DROP') {
       setCategories(prev => ({
         ...prev,
-        [category]: [...(prev[category] || []), card]
+        [targetCategory]: [...(prev[targetCategory] || []), card]
       }));
-    }
-    if (command.type === 'MOVE') {
-      const {
-        cardId,
-        fromCategory,
-        toCategory
-      } = command.payload as MoveCommandPayload;
-      const card = findCardById(cardId);
-      if (!card) {
-        console.warn(`Card with id ${cardId} not found`);
-        return;
-      }
-
-      // Get source and target elements for animation
-      const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
-      const targetCategory = document.querySelector(`[data-category="${toCategory}"]`);
-      if (cardElement && targetCategory) {
-        const sourceRect = cardElement.getBoundingClientRect();
-        const targetRect = targetCategory.getBoundingClientRect();
-        setAnimatingCard({
-          value: card,
-          sourcePos: {
-            x: sourceRect.left + sourceRect.width / 2,
-            y: sourceRect.top + sourceRect.height / 2
-          },
-          targetPos: {
-            x: targetRect.left + targetRect.width / 2,
-            y: targetRect.top + targetRect.height / 2
-          }
-        });
-      }
+    } else {
+      const { fromCategory, toCategory } = command.payload as MoveCommandPayload;
       setCategories(prev => ({
         ...prev,
         [fromCategory]: prev[fromCategory]?.filter(c => c.id !== cardId) || [],
@@ -96,6 +94,7 @@ export function useReplayState() {
       }));
     }
   }, [findCardById, allCards]);
+
   return {
     categories,
     animatingCard,
