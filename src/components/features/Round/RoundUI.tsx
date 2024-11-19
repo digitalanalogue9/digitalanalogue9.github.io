@@ -65,7 +65,9 @@ const RoundUI = memo(function RoundUI() {
   // Memoized calculations
   const activeCards = useMemo(() => {
     logEffect('Calculate activeCards', [categories]);
-    return Object.entries(categories).filter(([category]) => category !== 'Not Important').reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+    return Object.entries(categories).filter(([category]) => category !== 'Not Important').reduce((sum, [_, cards]) => {
+      return sum + ((cards as Array<any>)?.length || 0); // Replace `any` with the appropriate type if known
+    }, 0);
   }, [categories]);
   const roundState = useRoundState(categories, remainingCards, targetCoreValues);
   const validateRound = useRoundValidation({
