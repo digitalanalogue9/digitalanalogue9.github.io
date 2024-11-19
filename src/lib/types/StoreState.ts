@@ -1,6 +1,11 @@
 // src/lib/types/Store.ts
 import { Categories, Value, Command, Round } from './index';
 
+export interface SessionData {
+  sessionId: string;
+  targetCoreValues: number;
+  roundNumber: number;
+}
 export interface StoreState {
   sessionId: string;
   roundNumber: number;
@@ -13,11 +18,7 @@ export interface StoreState {
   currentRound: Round | null;
   currentRoundCommands: Command[];
   
-  setSession: (session: {
-    sessionId: string;
-    targetCoreValues: number;
-    roundNumber: number;
-  }) => void;
+  setSession: (session: SessionData) => void;
   setSessionId: (id: string) => void;
   setRoundNumber: (round: number) => void;
   setTargetCoreValues: (count: number) => void;

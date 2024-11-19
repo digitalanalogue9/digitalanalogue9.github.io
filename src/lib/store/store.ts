@@ -6,6 +6,7 @@ import { emptyCategories } from "@/components/features/Categories/constants/cate
 import { saveRound } from "@/lib/db/indexedDB";
 import { StoreState } from "@/lib/types";
 import { shallow } from 'zustand/shallow';
+import { SessionData } from '../types/StoreState';
 
 export const useStore = createWithEqualityFn<StoreState>()(devtools((set, get) => ({
   // Initial state
@@ -20,7 +21,7 @@ export const useStore = createWithEqualityFn<StoreState>()(devtools((set, get) =
   currentRound: null,
   currentRoundCommands: [],
   // Session methods
-  setSession: session => set({
+  setSession: (session: SessionData) => set({
     sessionId: session.sessionId,
     targetCoreValues: session.targetCoreValues,
     roundNumber: session.roundNumber
