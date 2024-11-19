@@ -173,7 +173,7 @@ const RoundUI = memo(function RoundUI() {
       await saveCompletedSession(sessionId, valuesWithReasons);
     }
     const finalCategories = Object.entries(categories).filter(([category]) => category !== 'Not Important').reduce((acc, [category, cards]) => {
-      acc[category] = cards;
+      acc[category] = cards as Value[] | undefined;
       return acc;
     }, {} as Categories);
     setCategories(finalCategories);
