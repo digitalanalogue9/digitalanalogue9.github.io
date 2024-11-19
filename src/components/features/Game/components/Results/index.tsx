@@ -28,12 +28,12 @@ export default function Results() {
           if (completedSession?.finalValues) {
             const reasonsMap = Object.fromEntries(completedSession.finalValues.map(value => [value.id, value.reason]));
             const enriched = Object.entries(categories).reduce((acc, [category, values = []]) => {
-              acc[category as CategoryName] = values.map(value => ({
+              acc[category as CategoryName] = (values as ValueWithReason[]).map(value => ({
                 ...value,
                 reason: reasonsMap[value.id]
               }));
               return acc;
-            }, {} as Categories);
+            }, {} as Record<CategoryName, ValueWithReason[]>);
             setEnrichedCategories(enriched);
           }
         } catch (error) {

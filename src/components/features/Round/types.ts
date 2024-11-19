@@ -64,6 +64,8 @@ export interface StatusMessageProps {
   remainingCards: any[];
   showDetails?: boolean;
   setShowDetails?: (show: boolean) => void;
+  totalActiveCards: number,
+  hasTargetCoreValuesInVeryImportant: boolean,
 }
 
 export interface CategoryGridProps {
@@ -122,6 +124,7 @@ export interface StatusState {
   isNearingCompletion: boolean;
   veryImportantCount: number;
   totalActiveCards: number;
+  hasTargetCoreValuesInVeryImportant : boolean;
 }
 
 export interface CategoryGridProps {

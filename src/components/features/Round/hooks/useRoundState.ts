@@ -25,13 +25,14 @@ export const useRoundState = (categories: Categories, remainingCards: Value[], t
   const notImportantCount = categories['Not Important']?.length || 0;
   const isNearingCompletion = validCategories.length === 2;
   const hasEnoughCards = totalActiveCards >= targetCoreValues;
-  const hasMinimumNotImportant = notImportantCount >= 1;
+  const hasMinimumNotImportant = (totalActiveCards === targetCoreValues && hasTargetCoreValuesInVeryImportant) || (notImportantCount >= 1);
   const hasTooManyImportantCards = isNearingCompletion && veryImportantCount > targetCoreValues;
   const hasNotEnoughImportantCards = isNearingCompletion && veryImportantCount < targetCoreValues;
 
   // New calculation for found core values
   const hasFoundCoreValues = Object.entries(categories).some(([category, cards]) => category !== 'Not Important' && cards?.length === targetCoreValues);
-  const isEndGameReady = isNearingCompletion && veryImportantCount === targetCoreValues && totalActiveCards === targetCoreValues && hasMinimumNotImportant || hasFoundCoreValues || hasTargetCoreValuesInVeryImportant;
+  const isEndGameReady = isNearingCompletion && veryImportantCount === targetCoreValues && totalActiveCards === targetCoreValues && hasMinimumNotImportant
+    || hasFoundCoreValues || hasTargetCoreValuesInVeryImportant;
   return {
     activeCards,
     totalActiveCards,

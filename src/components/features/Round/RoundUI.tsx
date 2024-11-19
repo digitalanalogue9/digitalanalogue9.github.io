@@ -78,6 +78,10 @@ const RoundUI = memo(function RoundUI() {
     totalActiveCards: roundState.totalActiveCards,
     categories
   });
+  
+  const hasTargetCoreValuesInVeryImportant = useMemo(() => {
+    return roundState.veryImportantCount === targetCoreValues;
+  }, [roundState.veryImportantCount, targetCoreValues]);
   const status = useRoundStatus({
     remainingCards,
     targetCoreValues,
@@ -85,7 +89,8 @@ const RoundUI = memo(function RoundUI() {
     hasEnoughCards: roundState.hasEnoughCards,
     isNearingCompletion: roundState.isNearingCompletion,
     veryImportantCount: roundState.veryImportantCount,
-    totalActiveCards: roundState.totalActiveCards,
+    totalActiveCards: activeCards,
+    hasTargetCoreValuesInVeryImportant,
     categories
   });
 
@@ -193,61 +198,65 @@ const RoundUI = memo(function RoundUI() {
         ${isMobile && selectedMobileCard ? 'bg-gray-100' : ''}
         transition-colors duration-200
       `} role="application" aria-label="Core Values Sorting Exercise">
-      {/* Game Header - Stays visible but faded when card selected */}
-      <div className="flex-shrink-0 relative" // Added relative positioning
-    role="banner">
-        {/* Selection instruction overlay */}
-        {isMobile && selectedMobileCard && !hasShownInstruction && <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 text-center" aria-live="polite">
-            <p className="text-sm text-blue-700 font-medium bg-white/90 py-1 px-2 rounded-full inline-block">
-              Tap a category to place this card
-            </p>
-          </div>}
+    {/* Game Header - Stays visible but faded when card selected */}
+    <div className="flex-shrink-0 relative" // Added relative positioning
+      role="banner">
+      {/* Selection instruction overlay */}
+      {isMobile && selectedMobileCard && !hasShownInstruction && <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 text-center" aria-live="polite">
+        <p className="text-sm text-blue-700 font-medium bg-white/90 py-1 px-2 rounded-full inline-block">
+          Tap a category to place this card
+        </p>
+      </div>}
 
-        <div className={`
+      <div className={`
         transition-opacity duration-200
         ${isMobile && selectedMobileCard ? 'opacity-30' : 'opacity-100'}
       `}>
-          <RoundHeader targetCoreValues={targetCoreValues} roundNumber={roundNumber} remainingCardsCount={remainingCards.length} />
-        </div>
+        <RoundHeader targetCoreValues={targetCoreValues} roundNumber={roundNumber} remainingCardsCount={remainingCards.length} />
       </div>
+    </div>
 
-      {/* Game Actions - Card remains visible when selected */}
-      <div className={`
+    {/* Game Actions - Card remains visible when selected */}
+    <div className={`
           flex-shrink-0
           ${isMobile && selectedMobileCard ? 'relative z-20' : ''}
         `} role="region" aria-label="Game controls">
-        {isMobile ? <div className="px-2 py-1 mb-4">
-            <div className="flex items-center justify-center gap-4"> {/* Changed to horizontal layout with center alignment */}
-              <div className="flex-1" /> {/* Spacer */}
-              <RoundActions remainingCards={remainingCards} canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant} onNextRound={handleNextRound} onDrop={handleDrop} isEndGame={shouldEndGame} selectedMobileCard={selectedMobileCard} onMobileCardSelect={setSelectedMobileCard} setShowDetails={setShowStatusDetails} />
-              <div role="status" aria-live="polite" className={`
+      {isMobile ? <div className="px-2 py-1 mb-4">
+        <div className="flex items-center justify-center gap-4"> {/* Changed to horizontal layout with center alignment */}
+          <div className="flex-1" /> {/* Spacer */}
+          <RoundActions remainingCards={remainingCards} canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant} onNextRound={handleNextRound} onDrop={handleDrop} isEndGame={shouldEndGame} selectedMobileCard={selectedMobileCard} onMobileCardSelect={setSelectedMobileCard} setShowDetails={setShowStatusDetails} />
+          <div role="status" aria-live="polite" className={`
           transition-opacity duration-200 flex-1 flex justify-end
           ${selectedMobileCard ? 'opacity-30' : 'opacity-100'}
         `}>
-                <StatusMessage status={status()} isNearingCompletion={roundState.isNearingCompletion} hasTooManyImportantCards={roundState.hasTooManyImportantCards} hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards} hasEnoughCards={roundState.hasEnoughCards} targetCoreValues={targetCoreValues} canProceedToNextRound={validateRound()} remainingCards={remainingCards} showDetails={showStatusDetails} setShowDetails={setShowStatusDetails} />
-              </div>
-            </div>
-          </div> : <div className="container mx-auto">
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4" role="region" aria-label="Game controls and status">
-              <div /> {/* Empty first column */}
-              <div> {/* Middle column */}
-                <RoundActions remainingCards={remainingCards} canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant} onNextRound={handleNextRound} onDrop={handleDrop} isEndGame={shouldEndGame} />
-              </div>
-              <div> {/* Third column */}
-                <StatusMessage status={status()} isNearingCompletion={roundState.isNearingCompletion} hasTooManyImportantCards={roundState.hasTooManyImportantCards} hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards} hasEnoughCards={roundState.hasEnoughCards} targetCoreValues={targetCoreValues} canProceedToNextRound={validateRound()} remainingCards={remainingCards} />
-              </div>
-            </div>
-          </div>}
-      </div>
+            <StatusMessage status={status()} isNearingCompletion={roundState.isNearingCompletion} 
+            hasTooManyImportantCards={roundState.hasTooManyImportantCards} hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards} 
+            hasEnoughCards={roundState.hasEnoughCards} targetCoreValues={targetCoreValues} canProceedToNextRound={validateRound()} 
+            remainingCards={remainingCards} showDetails={showStatusDetails} setShowDetails={setShowStatusDetails} 
+            totalActiveCards={activeCards} hasTargetCoreValuesInVeryImportant={hasTargetCoreValuesInVeryImportant} />
+          </div>
+        </div>
+      </div> : <div className="container mx-auto">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4" role="region" aria-label="Game controls and status">
+          <div /> {/* Empty first column */}
+          <div> {/* Middle column */}
+            <RoundActions remainingCards={remainingCards} canProceedToNextRound={validateRound() && roundState.hasMinimumNotImportant} onNextRound={handleNextRound} onDrop={handleDrop} isEndGame={shouldEndGame} />
+          </div>
+          <div> {/* Third column */}
+            <StatusMessage status={status()} totalActiveCards={activeCards} hasTargetCoreValuesInVeryImportant={hasTargetCoreValuesInVeryImportant} isNearingCompletion={roundState.isNearingCompletion} hasTooManyImportantCards={roundState.hasTooManyImportantCards} hasNotEnoughImportantCards={roundState.hasNotEnoughImportantCards} hasEnoughCards={roundState.hasEnoughCards} targetCoreValues={targetCoreValues} canProceedToNextRound={validateRound()} remainingCards={remainingCards} />
+          </div>
+        </div>
+      </div>}
+    </div>
 
-      {/* Scrollable Game Content */}
-      <div className="flex-1 overflow-auto" role="region" aria-label="Value categories">
-        {isMobile ? <div className="h-full flex flex-col pb-16 pt-4"> {/* Added pt-2 for top padding */}
-            <MobileCategoryList categories={roundState.visibleCategories} activeDropZone={activeDropZone} onDrop={handleMobileDropWithZone} onMoveWithinCategory={handleMoveCard} onMoveBetweenCategories={handleMoveBetweenCategories} selectedCard={selectedMobileCard} onCardSelect={setSelectedMobileCard} />
-          </div> : <div className="w-full">
-            <CategoryGrid categories={roundState.visibleCategories} onDrop={handleDrop} onMoveWithinCategory={handleMoveCard} onMoveBetweenCategories={handleMoveBetweenCategories} />
-          </div>}
-      </div>
-    </div>;
+    {/* Scrollable Game Content */}
+    <div className="flex-1 overflow-auto" role="region" aria-label="Value categories">
+      {isMobile ? <div className="h-full flex flex-col pb-16 pt-4"> {/* Added pt-2 for top padding */}
+        <MobileCategoryList categories={roundState.visibleCategories} activeDropZone={activeDropZone} onDrop={handleMobileDropWithZone} onMoveWithinCategory={handleMoveCard} onMoveBetweenCategories={handleMoveBetweenCategories} selectedCard={selectedMobileCard} onCardSelect={setSelectedMobileCard} />
+      </div> : <div className="w-full">
+        <CategoryGrid categories={roundState.visibleCategories} onDrop={handleDrop} onMoveWithinCategory={handleMoveCard} onMoveBetweenCategories={handleMoveBetweenCategories} />
+      </div>}
+    </div>
+  </div>;
 });
 export default RoundUI;
