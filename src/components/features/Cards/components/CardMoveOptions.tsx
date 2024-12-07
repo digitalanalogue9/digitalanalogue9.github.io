@@ -82,7 +82,7 @@ export function CardMoveOptions({
         {allCategories.filter(cat => cat !== currentCategory).map(category => <button key={category} type="button" onClick={() => {
         onMoveBetweenCategories(value, currentCategory, category);
         onClose();
-      }} className="block w-full text-left px-4 py-3 text-sm text-gray-700 
+      }} className="block w-full text-left px-4 py-3 text-sm text-gray-800 
                        hover:bg-gray-50 active:bg-gray-100 transition-colors
                        touch-manipulation select-none focus:outline-none focus:bg-gray-50
                        focus:ring-2 focus:ring-inset focus:ring-blue-500" role="menuitem" aria-label={`Move to ${category} category`}>

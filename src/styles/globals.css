@@ -7,6 +7,19 @@
   --background-rgb: 248, 250, 252;
 }
 
+@layer base {
+  /* Optimize text rendering */
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Ensure text remains visible during webfont load */
+  h1, p {
+    font-display: swap;
+  }
+}
+
 /* Background with a diagonal gradient */
 body {
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);

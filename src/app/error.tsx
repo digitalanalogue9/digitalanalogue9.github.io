@@ -54,7 +54,7 @@ export default function Error({
         <div className="space-y-4">
           <button
             onClick={() => reset()}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="w-full px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             aria-label="Attempt to recover from error"
           >
             Try again
