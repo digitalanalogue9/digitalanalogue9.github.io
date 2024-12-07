@@ -95,7 +95,7 @@ export default function PWAPrompt() {
                 <button onClick={promptType === 'install' ? handleInstallClick : handleUpdateClick} className="flex-1 bg-blue-600 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label={promptType === 'install' ? 'Install application' : 'Update application'}>
                   {promptType === 'install' ? 'Install' : 'Update Now'}
                 </button>
-                {promptType === 'install' && <button onClick={handleDismiss} className="flex-1 bg-white text-gray-700 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Dismiss installation prompt">
+                {promptType === 'install' && <button onClick={handleDismiss} className="flex-1 bg-white text-gray-800 px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Dismiss installation prompt">
                     Not Now
                   </button>}
               </div>

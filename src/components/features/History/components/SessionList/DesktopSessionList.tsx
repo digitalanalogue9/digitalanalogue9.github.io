@@ -115,7 +115,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             <p className="text-sm text-gray-600 mb-2">{value.description}</p>
                             {value.reason && (
                                 <div className="mt-2 pt-2 border-t border-gray-200">
-                                    <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
+                                    <p className="text-sm font-medium text-gray-800">Why it is meaningful:</p>
                                     <p className="text-sm text-gray-600 italic">{value.reason}</p>
                                 </div>
                             )}

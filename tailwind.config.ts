@@ -11,6 +11,7 @@ const config: Config = {
       // Add any custom theme extensions here
       colors: {
         // Custom colors can be added here
+        'theme-blue': '#1d4ed8'
       },
       fontFamily: {
         // Custom fonts can be added here
