@@ -42,20 +42,22 @@ export default function StartScreen({
         <span className="text-blue-700">Core Values</span>
       </h1>
 
-        <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8" aria-label="Introduction">
-          <p className="text-base sm:text-lg text-gray-700">
-            Welcome to the Core Values discovery exercise! Through this interactive experience,
-            you will discover and prioritise your personal core values, helping you identify what matters most to you.
-          </p>
-        </div>
+      <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8" aria-label="Introduction">
+        <p
+          className="text-base sm:text-lg text-gray-800 font-[system-ui]" // Added system font
+          style={{ contentVisibility: 'auto' }} // Optimize paint
+        >
+          Welcome to the Core Values discovery exercise! Through this interactive experience,
+          you will discover and prioritise your personal core values, helping you identify what matters most to you.
+        </p>
+      </div>
 
         {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-700 text-center" role="note" aria-label="Debug information">
             <div>Debug Mode: On</div>
             <div>Max Cards: {maxCards}</div>
             <div>Default Core Values: {defaultCoreValues}</div>
           </div>}
-
-        <form onSubmit={e => {
+      <form onSubmit={e => {
         e.preventDefault();
         handleStart();
       }} className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6" aria-label="Exercise configuration">
@@ -79,6 +81,17 @@ export default function StartScreen({
             <span aria-hidden="true" className="ml-1">→</span>
           </Link>
         </div>
+      </form>
+
+      <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
+        <p className="text-gray-600 mb-2 text-sm sm:text-base">
+          Have you completed this exercise before?
+        </p>
+        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
+          <span>View Your Previous Results</span>
+          <span aria-hidden="true" className="ml-1">→</span>
+        </Link>
       </div>
-    </div>;
+    </div>
+  </div>;
 }

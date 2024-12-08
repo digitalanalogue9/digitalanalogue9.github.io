@@ -49,7 +49,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
 
           <button
             onClick={handleClose}
-            className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-600 transition-colors"
           >
             Got it!
           </button>

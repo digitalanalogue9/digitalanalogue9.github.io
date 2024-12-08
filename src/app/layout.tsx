@@ -12,8 +12,7 @@ export default function RootLayout({
   return <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <meta name="theme-color" content="#3b82f6" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
@@ -25,7 +24,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#3b82f6" />
         <title>Core Values</title>
         <meta name="description" content="Discover and prioritise your personal values" />
-        {process.env.NODE_ENV === 'development' && <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />}
+        {/* {process.env.NODE_ENV === 'development' && <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />} */}
       </head>
       <body className="bg-gray-100">
         <MobileProvider>
@@ -48,7 +47,7 @@ export default function RootLayout({
             <footer className="bg-blue-700 text-white md:flex-shrink-0" // Only shrink on desktop
           role="contentinfo" aria-label="Site footer">
               <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                <p className="text-center text-white/90 text-sm">
+                <p className="text-center text-white text-sm">
                   © {new Date().getFullYear()} Core Values App
                 </p>
               </div>

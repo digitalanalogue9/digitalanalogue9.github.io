@@ -22,6 +22,20 @@
 }
 
 /* Base styles */
+@layer base {
+  /* Optimize text rendering */
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Ensure text remains visible during webfont load */
+  h1, p {
+    font-display: swap;
+  }
+}
+
+/* Background with a diagonal gradient */
 body {
   background-color: var(--background-primary);
   color: var(--text-primary);
