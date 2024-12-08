@@ -1,7 +1,7 @@
 'use client';
 
 import { getEnvBoolean } from '@/lib/utils/config';
-import { generateSessionName } from '@/components/features/Game/utils';
+import { generateSessionName } from '@/components/features/Exercise/utils';
 import { openDB, IDBPDatabase } from 'idb';
 import { Session } from "@/lib/types/Session";
 import { Round } from "@/lib/types/Round";
@@ -60,6 +60,19 @@ export async function initDB(): Promise<IDBPDatabase> {
 }
 
 // Session operations
+export async function getSession(sessionId: string): Promise<Session | undefined> {
+  if (debug) console.log('🔍 Fetching session:', sessionId);
+  try {
+    const db = await initDB();
+    const session = await db.get(storeNames.sessions, sessionId);
+    if (debug) console.log('✅ Session fetched successfully:', session);
+    return session;
+  } catch (error) {
+    console.error('❌ Error fetching session:', error);
+    throw error;
+  }
+}
+
 export async function addSession(session: Omit<Session, 'id'>): Promise<string> {
   if (debug) console.log('💾 Saving session:', session);
   try {

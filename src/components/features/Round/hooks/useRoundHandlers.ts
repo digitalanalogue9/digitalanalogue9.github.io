@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { CategoryName, Categories, Value, Command } from "@/lib/types";
-import { MoveCommand } from "@/components/features/Game/commands/MoveCommand";
-import { DropCommand } from "@/components/features/Game/commands/DropCommand";
+import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
+import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
 import { saveRound } from "@/lib/db/indexedDB";
 import { logEffect, logStateUpdate } from "@/lib/utils";
 export const useRoundHandlers = (categories: Categories, setCategories: (categories: Categories) => void, remainingCards: Value[], setRemainingCards: (cards: Value[]) => void, validCategories: CategoryName[], activeCategories: CategoryName[], sessionId: string | null, roundNumber: number, currentRoundCommands: Command[], addCommand: (command: Command) => Promise<void>, clearCommands: () => void, targetCoreValues: number, setRoundNumber: (round: number) => void, setShowResults: (show: boolean) => void, setShowStatusDetails: (isFirst: boolean) => void) => {

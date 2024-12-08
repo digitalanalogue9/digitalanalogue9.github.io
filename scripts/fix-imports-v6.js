@@ -14,32 +14,32 @@ const importMappings = {
   '@/types/Value': '@/lib/types',
 
   // Commands
-  '@/commands/DropCommand': '@/components/features/Game/commands/DropCommand',
-  '@/commands/MoveCommand': '@/components/features/Game/commands/MoveCommand',
-  '@/commands/BaseCommand': '@/components/features/Game/commands/BaseCommand',
-  '@/commands': '@/components/features/Game/commands',
+  '@/commands/DropCommand': '@/components/features/Exercise/commands/DropCommand',
+  '@/commands/MoveCommand': '@/components/features/Exercise/commands/MoveCommand',
+  '@/commands/BaseCommand': '@/components/features/Exercise/commands/BaseCommand',
+  '@/commands': '@/components/features/Exercise/commands',
 
   // Components
   '@/components/Round': '@/components/features/Round',
   '@/components/Card': '@/components/features/Cards/components',
-  '@/components/Results': '@/components/features/Game/components/Results',
-  '@/components/StartScreen': '@/components/features/Game/components/StartScreen',
+  '@/components/Results': '@/components/features/Exercise/components/Results',
+  '@/components/StartScreen': '@/components/features/Exercise/components/StartScreen',
   '@/components/Instructions': '@/components/common/Instructions',
   '@/components/PWAPrompt': '@/components/common/PWAPrompt',
   '@/components/CategoryColumn': '@/components/features/Categories/components/CategoryColumn',
   '../components/Round': '@/components/features/Round',
-  '../components/StartScreen': '@/components/features/Game/components/StartScreen',
+  '../components/StartScreen': '@/components/features/Exercise/components/StartScreen',
   '../components/Instructions': '@/components/common/Instructions',
   '../CategoryColumn': '@/components/features/Categories/components/CategoryColumn',
   './Card': '@/components/features/Cards/components',
 
   // Hooks
-  '@/hooks/useGameState': '@/components/features/Game/hooks/useGameState',
-  '@/hooks/useSession': '@/components/features/Game/hooks/useSession',
-  '@/hooks/useCommands': '@/components/features/Game/hooks/useCommands',
+  '@/hooks/useGameState': '@/components/features/Exercise/hooks/useGameState',
+  '@/hooks/useSession': '@/components/features/Exercise/hooks/useSession',
+  '@/hooks/useCommands': '@/components/features/Exercise/hooks/useCommands',
   '@/hooks/usePWA': '@/lib/hooks/usePWA',
-  '../hooks/useGameState': '@/components/features/Game/hooks/useGameState',
-  '../hooks/useSession': '@/components/features/Game/hooks/useSession',
+  '../hooks/useGameState': '@/components/features/Exercise/hooks/useGameState',
+  '../hooks/useSession': '@/components/features/Exercise/hooks/useSession',
   '../hooks/usePWA': '@/lib/hooks/usePWA',
 
   // Utils

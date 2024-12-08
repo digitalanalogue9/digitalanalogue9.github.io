@@ -217,7 +217,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                                     </button>
                                 ) : (
                                     <Link
-                                        href={`/?sessionId=${session.id}`}
+                                        href={`/exercise?sessionId=${session.id}`}
                                         className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
                                     >
                                         Resume Game

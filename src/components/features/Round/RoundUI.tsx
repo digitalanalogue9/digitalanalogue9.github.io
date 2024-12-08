@@ -2,10 +2,10 @@
 
 import { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { saveRound, updateSession, saveCompletedSession } from "@/lib/db/indexedDB";
-import Results from "@/components/features/Game/components/Results";
-import { useSession } from "@/components/features/Game/hooks/useSession";
-import { useGameState } from "@/components/features/Game/hooks/useGameState";
-import { useCommands } from "@/components/features/Game/hooks/useCommands";
+import Results from "@/components/features/Exercise/components/Results";
+import { useSession } from "@/components/features/Exercise/hooks/useSession";
+import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
+import { useCommands } from "@/components/features/Exercise/hooks/useCommands";
 import { RoundHeader } from './RoundHeader';
 import { RoundActions } from './RoundActions';
 import { CategoryGrid } from './CategoryGrid';
@@ -14,18 +14,18 @@ import { useRoundState } from './hooks/useRoundState';
 import { useRoundHandlers } from './hooks/useRoundHandlers';
 import { useRoundValidation } from './hooks/useRoundValidation';
 import { useRoundStatus } from './hooks/useRoundStatus';
-import { getRandomValues } from "@/components/features/Game/utils";
+import { getRandomValues } from "@/components/features/Home/utils";
 import { Categories, CategoryName, Value, ValueWithReason } from "@/lib/types";
 import { StatusMessage } from './components/StatusMessage';
 import { getCategoriesForRound } from "@/components/features/Categories/utils/categoryUtils";
 import { MobileCategoryList } from './components/MobileCategoryList';
-import { CoreValueReasoning } from "@/components/features/Game/components/CoreValueReasoning";
+import { CoreValueReasoning } from "@/components/features/Exercise/components/CoreValueReasoning";
 import { logRender, logStateUpdate, logEffect } from "@/lib/utils";
 
 import { useMobile } from "@/lib/contexts/MobileContext";
 import { Card } from "@/components/features/Cards/components";
 import { motion } from 'framer-motion';
-import { MoveCommand } from "@/components/features/Game/commands/MoveCommand";
+import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
 
 const RoundUI = memo(function RoundUI() {
   logRender('RoundUI');

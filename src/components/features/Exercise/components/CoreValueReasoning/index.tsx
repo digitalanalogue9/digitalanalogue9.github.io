@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Value, ValueWithReason } from "@/lib/types";
 import { motion } from 'framer-motion';
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
-import {CoreValueReasoningProps} from '@/components/features/Game/types';
+import {CoreValueReasoningProps} from '@/components/features/Exercise/types';
 
 export function CoreValueReasoning({
   values,

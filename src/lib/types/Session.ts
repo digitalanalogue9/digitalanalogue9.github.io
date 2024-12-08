@@ -8,6 +8,7 @@ export interface Session {
   targetCoreValues: number;
   currentRound: number;
   completed: boolean;
+  initialValues: Value[];
 }
 
 export interface ReconstructedState {

@@ -21,9 +21,9 @@ const importMappings = {
   '@/components/History': '@/components/features/History/components',
   '@/components/Replay': '@/components/features/Replay/components',
   '@/components/CategoryColumn': '@/components/features/Categories/components/CategoryColumn',
-  '@/components/StartScreen': '@/components/features/Game/components/StartScreen',
-  '@/components/Results': '@/components/features/Game/components/Results',
-  '@/components/CoreValueReasoning': '@/components/features/Game/components/CoreValueReasoning',
+  '@/components/StartScreen': '@/components/features/Exercise/components/StartScreen',
+  '@/components/Results': '@/components/features/Exercise/components/Results',
+  '@/components/CoreValueReasoning': '@/components/features/Exercise/components/CoreValueReasoning',
 
   // Common components
   '@/components/Navigation': '@/components/common/Navigation',
@@ -33,9 +33,9 @@ const importMappings = {
   '@/components/CentredImage': '@/components/common/CentredImage',
 
   // Hooks
-  '@/hooks/useGameState': '@/components/features/Game/hooks/useGameState',
-  '@/hooks/useCommands': '@/components/features/Game/hooks/useCommands',
-  '@/hooks/useSession': '@/components/features/Game/hooks/useSession',
+  '@/hooks/useGameState': '@/components/features/Exercise/hooks/useGameState',
+  '@/hooks/useCommands': '@/components/features/Exercise/hooks/useCommands',
+  '@/hooks/useSession': '@/components/features/Exercise/hooks/useSession',
   '@/hooks/useCardDragAnimation': '@/components/features/Cards/hooks/useCardDragAnimation',
   '@/hooks/useSessionReconstruction': '@/components/features/Replay/hooks/useSessionReconstruction',
   '@/hooks/useAnimation': '@/lib/hooks/useAnimation',
@@ -49,7 +49,7 @@ const importMappings = {
   '@/utils/config': '@/lib/utils/config',
   '@/utils/animation': '@/lib/utils/animation',
   '@/utils/debug': '@/lib/utils/debug',
-  '@/utils/game': '@/components/features/Game/utils',
+  '@/utils/game': '@/components/features/Exercise/utils',
   '@/utils/categoryUtils': '@/components/features/Categories/utils/categoryUtils',
 
   // Types
@@ -63,12 +63,12 @@ const importMappings = {
 
   // Relative path mappings
   '../components/Round': '@/components/features/Round',
-  '../components/StartScreen': '@/components/features/Game/components/StartScreen',
+  '../components/StartScreen': '@/components/features/Exercise/components/StartScreen',
   '../components/Instructions': '@/components/common/Instructions',
   '../components/Navigation': '@/components/common/Navigation',
   '../components/PWAPrompt': '@/components/common/PWAPrompt',
-  '../hooks/useGameState': '@/components/features/Game/hooks/useGameState',
-  '../hooks/useSession': '@/components/features/Game/hooks/useSession',
+  '../hooks/useGameState': '@/components/features/Exercise/hooks/useGameState',
+  '../hooks/useSession': '@/components/features/Exercise/hooks/useSession',
   '../hooks/usePWA': '@/lib/hooks/usePWA',
   '../db/indexedDB': '@/lib/db/indexedDB',
   '../utils/storage': '@/lib/utils/storage',

@@ -13,7 +13,7 @@ const SRC = path.join(ROOT, 'src');
 const moves = {
   // Game Feature
   game: {
-    base: 'src/components/features/Game',
+    base: 'src/components/features/Exercise',
     moves: [
       { from: 'src/components/Round', to: 'components/Round' },
       { from: 'src/components/Results.tsx', to: 'components/Results/index.tsx' },
@@ -116,16 +116,16 @@ const moves = {
 // Import mappings for updating import statements
 const importMappings = {
   '@/components/Card': '@/features/Cards',
-  '@/components/Round': '@/features/Game/components/Round',
+  '@/components/Round': '@/features/Exercise/components/Round',
   '@/components/Mobile': '@/features/Mobile',
   '@/components/History': '@/features/History',
   '@/components/Replay': '@/features/Replay',
-  '@/hooks/useGameState': '@/features/Game/hooks/useGameState',
-  '@/hooks/useCommands': '@/features/Game/hooks/useCommands',
-  '@/hooks/useSession': '@/features/Game/hooks/useSession',
+  '@/hooks/useGameState': '@/features/Exercise/hooks/useGameState',
+  '@/hooks/useCommands': '@/features/Exercise/hooks/useCommands',
+  '@/hooks/useSession': '@/features/Exercise/hooks/useSession',
   '@/hooks/useCardDragAnimation': '@/features/Cards/hooks/useCardDragAnimation',
   '@/contexts/MobileContext': '@/lib/contexts/MobileContext',
-  '@/utils/game': '@/features/Game/utils',
+  '@/utils/game': '@/features/Exercise/utils',
   '@/utils/categoryUtils': '@/features/Categories/utils/categoryUtils',
   '@/constants/categories': '@/features/Categories/constants/categories',
   '@/types': '@/lib/types',

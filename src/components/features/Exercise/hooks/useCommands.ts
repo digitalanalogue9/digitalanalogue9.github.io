@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 import { useStore } from "@/lib/store/store";
 import { Value, CategoryName } from "@/lib/types";
 import { getRound, saveRound } from "@/lib/db/indexedDB";
-import { DropCommand } from "@/components/features/Game/commands/DropCommand";
-import { MoveCommand } from "@/components/features/Game/commands/MoveCommand";
+import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
+import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
 import { shallow } from 'zustand/shallow';
 export function useCommands() {
   const state = useStore(state => ({

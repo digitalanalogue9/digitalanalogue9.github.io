@@ -1,40 +1,56 @@
-// src/components/StartScreen.tsx
 'use client';
 
 import { useState } from 'react';
-import { StartScreenProps } from './types';
+import { useRouter } from 'next/navigation';
+import { StartScreenProps } from '@/components/features/Home/types';
 import { getEnvNumber, getEnvBoolean } from "@/lib/utils/config";
 import Link from 'next/link';
 import { addSession } from "@/lib/db/indexedDB";
 import { initializeGameState } from "@/lib/utils/storage";
 import valuesData from '@/data/values.json';
-import { getRandomValues } from "../../utils";
-export default function StartScreen({
-  onStart
-}: StartScreenProps) {
+import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
+
+export default function StartScreen() {
+  const router = useRouter();
   const isDebug = getEnvBoolean('debug', false);
   const maxCards = getEnvNumber('maxCards', 35);
   const defaultCoreValues = getEnvNumber('numCoreValues', 5);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
+  const [isInitializing, setIsInitializing] = useState(false);
+
   const handleStart = async () => {
-    const session = {
-      timestamp: Date.now(),
-      targetCoreValues: coreValuesCount,
-      currentRound: 1,
-      completed: false
-    };
-    const sessionId = await addSession(session);
-    const shuffledValues = getRandomValues(valuesData.values);
-    const limitedValues = shuffledValues.slice(0, maxCards);
-    initializeGameState(sessionId, coreValuesCount, limitedValues, {
-      'Very Important': [],
-      'Quite Important': [],
-      'Important': [],
-      'Of Some Importance': [],
-      'Not Important': []
-    });
-    onStart();
+    setIsInitializing(true);
+    try {
+      const shuffledValues = getRandomValues(valuesData.values);
+      const limitedValues = shuffledValues.slice(0, maxCards);
+
+      const session = {
+        timestamp: Date.now(),
+        targetCoreValues: coreValuesCount,
+        currentRound: 1,
+        completed: false,
+        initialValues: limitedValues // Store the initial values
+      };
+      
+      const sessionId = await addSession(session);
+      
+      initializeGameState(sessionId, coreValuesCount, limitedValues, {
+        'Very Important': [],
+        'Quite Important': [],
+        'Important': [],
+        'Of Some Importance': [],
+        'Not Important': []
+      });
+      
+      router.push(`/exercise?sessionId=${sessionId}`);
+    } catch (error) {
+      console.error('Error initializing game:', error);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsInitializing(false);
+    }
   };
+  
   return <div role="main" aria-labelledby="welcome-heading">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
       <h1 id="welcome-heading" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6">
@@ -57,6 +73,7 @@ export default function StartScreen({
         <div>Max Cards: {maxCards}</div>
         <div>Default Core Values: {defaultCoreValues}</div>
       </div>}
+
       <form onSubmit={e => {
         e.preventDefault();
         handleStart();
@@ -65,9 +82,25 @@ export default function StartScreen({
           How many core values do you want to end up with?
         </label>
         <div className="flex gap-3 sm:gap-4 items-center">
-          <input id="core-values-count" type="number" min="1" max="10" value={coreValuesCount} onChange={e => setCoreValuesCount(Number(e.target.value))} className="border rounded p-2 w-16 sm:w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Number of core values" required />
-          <button type="submit" className="px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Begin the core values exercise">
-            Start Exercise
+          <input 
+            id="core-values-count" 
+            type="number" 
+            min="1" 
+            max="10" 
+            value={coreValuesCount} 
+            onChange={e => setCoreValuesCount(Number(e.target.value))} 
+            className="border rounded p-2 w-16 sm:w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            aria-label="Number of core values" 
+            required 
+            disabled={isInitializing}
+          />
+          <button 
+            type="submit" 
+            className={`px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
+            aria-label="Begin the core values exercise"
+            disabled={isInitializing}
+          >
+            {isInitializing ? 'Initializing...' : 'Start Exercise'}
           </button>
         </div>
       </form>
@@ -82,5 +115,5 @@ export default function StartScreen({
         </Link>
       </div>
     </div>
-  </div>
+  </div>;
 }

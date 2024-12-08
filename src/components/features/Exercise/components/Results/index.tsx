@@ -5,10 +5,10 @@ import { getPostItStyles } from "@/components/features/Cards/components/styles";
 import { useRef, useEffect, useState } from 'react';
 import { ValueWithReason, Categories, CategoryName } from "@/lib/types";
 import Link from 'next/link';
-import { useGameState } from "@/components/features/Game/hooks/useGameState";
+import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
 import { clearGameState } from "@/lib/utils/storage";
 import { getCompletedSession } from "@/lib/db/indexedDB";
-import { useSession } from "@/components/features/Game/hooks/useSession";
+import { useSession } from "@/components/features/Exercise/hooks/useSession";
 export default function Results() {
   const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
