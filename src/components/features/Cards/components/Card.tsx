@@ -141,7 +141,7 @@ const Card = memo(function Card({
     relative select-none cursor-move
     ${isMobile ? 'touch-manipulation' : ''}
     ${isOver ? 'border-2 border-blue-300' : ''}
-    ${isMobile && onClick && !isInCategory ? 'hover:bg-yellow-50 active:bg-yellow-200' : ''}
+    ${isMobile && onClick && !isInCategory ? 'hover:bg-yellow-100 active:bg-yellow-200' : ''}
     ${selectedMobileCard ? 'bg-yellow-200' : ''} // Add this for selected state
 `;
   if (isInCategory) {

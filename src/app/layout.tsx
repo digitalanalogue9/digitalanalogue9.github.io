@@ -27,11 +27,11 @@ export default function RootLayout({
         <meta name="description" content="Discover and prioritise your personal values" />
         {process.env.NODE_ENV === 'development' && <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />}
       </head>
-      <body className="bg-gray-50">
+      <body className="bg-gray-100">
         <MobileProvider>
           <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <header className="bg-blue-500 text-white shadow-md flex-shrink-0" role="banner" aria-label="Site header">
+            <header className="bg-blue-700 text-white shadow-md flex-shrink-0" role="banner" aria-label="Site header">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Navigation />
               </div>
@@ -45,7 +45,7 @@ export default function RootLayout({
             </main>
 
             {/* Footer */}
-            <footer className="bg-blue-500 text-white md:flex-shrink-0" // Only shrink on desktop
+            <footer className="bg-blue-700 text-white md:flex-shrink-0" // Only shrink on desktop
           role="contentinfo" aria-label="Site footer">
               <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 <p className="text-center text-white/90 text-sm">

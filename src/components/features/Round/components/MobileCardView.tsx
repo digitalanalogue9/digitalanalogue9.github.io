@@ -16,7 +16,7 @@ export const MobileCardView: React.FC<MobileCardViewProps> = ({
           </div>)}
       </div>
       
-      {cards.length === 0 && <div className="text-center text-gray-600 py-4" role="status" aria-live="polite">
+      {cards.length === 0 && <div className="text-center text-gray-700 py-4" role="status" aria-live="polite">
           No cards available
         </div>}
     </div>;

@@ -72,7 +72,7 @@ export const StatusMessage = ({
         flex flex-col justify-center 
         rounded-lg 
         overflow-hidden
-        ${!canProceedToNextRound && remainingCards.length === 0 ? 'bg-red-50 text-red-800' : status.type === 'warning' ? 'bg-yellow-100 text-yellow-800' : status.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}
+        ${!canProceedToNextRound && remainingCards.length === 0 ? 'bg-red-100 text-red-800' : status.type === 'warning' ? 'bg-yellow-100 text-yellow-800' : status.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}
       `} role="status" aria-live="polite">
     <div className="space-y-1">
       {messageContent}

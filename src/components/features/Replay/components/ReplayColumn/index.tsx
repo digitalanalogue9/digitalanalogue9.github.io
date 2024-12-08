@@ -16,12 +16,12 @@ export function ReplayColumn({
         </h3>
 
         <div className="space-y-2" role="list" aria-label={`Values in ${title} category`}>
-          {cards.map(card => <article key={card.id} data-card-id={card.id} className="bg-yellow-50 rounded-lg p-3 shadow" role="listitem">
+          {cards.map(card => <article key={card.id} data-card-id={card.id} className="bg-yellow-100 rounded-lg p-3 shadow" role="listitem">
               <div className="space-y-1" role="group" aria-labelledby={`card-title-${card.id}`}>
                 <h4 id={`card-title-${card.id}`} className="font-medium">
                   {card.title}
                 </h4>
-                <p className="text-sm text-gray-600" aria-label={`Description: ${card.description}`}>
+                <p className="text-sm text-gray-700" aria-label={`Description: ${card.description}`}>
                   {card.description}
                 </p>
               </div>

@@ -18,7 +18,7 @@ export function CardControls({
     action();
   };
   const buttonBaseClass = `
-    p-1.5 text-gray-600 hover:text-gray-900 rounded text-sm 
+    p-1.5 text-gray-700 hover:text-gray-900 rounded text-sm 
     hover:bg-gray-100 active:bg-gray-200 transition-colors touch-none select-none
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
   `;

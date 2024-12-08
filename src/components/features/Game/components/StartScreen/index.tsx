@@ -36,12 +36,12 @@ export default function StartScreen({
     onStart();
   };
   return <div className="h-[calc(100vh-4rem)] overflow-y-auto" // Changed this line
-  role="main" aria-labelledby="welcome-heading">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <h1 id="welcome-heading" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6">
-          <span className="text-gray-900">Discover Your </span>
-          <span className="text-blue-600">Core Values</span>
-        </h1>
+    role="main" aria-labelledby="welcome-heading">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <h1 id="welcome-heading" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6">
+        <span className="text-gray-900">Discover Your </span>
+        <span className="text-blue-700">Core Values</span>
+      </h1>
 
         <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8" aria-label="Introduction">
           <p className="text-base sm:text-lg text-gray-700">
@@ -50,7 +50,7 @@ export default function StartScreen({
           </p>
         </div>
 
-        {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-600 text-center" role="note" aria-label="Debug information">
+        {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-700 text-center" role="note" aria-label="Debug information">
             <div>Debug Mode: On</div>
             <div>Max Cards: {maxCards}</div>
             <div>Default Core Values: {defaultCoreValues}</div>
@@ -72,10 +72,10 @@ export default function StartScreen({
         </form>
 
         <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
-          <p className="text-gray-600 mb-2 text-sm sm:text-base">
+          <p className="text-gray-700 mb-2 text-sm sm:text-base">
             Have you completed this exercise before?
           </p>
-          <Link href="/history" className="text-blue-600 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
+          <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-7  00 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
             <span>View Your Previous Results</span>
             <span aria-hidden="true" className="ml-1">→</span>
           </Link>

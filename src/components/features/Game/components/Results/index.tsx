@@ -79,7 +79,7 @@ export default function Results() {
         </h1>
 
         <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
-          {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-50 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
+          {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
                 <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-800">
                   {category}
                 </h2>
@@ -88,14 +88,14 @@ export default function Results() {
                       <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
                         {value.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600 mb-3">
+                      <p className="text-sm sm:text-base text-gray-700 mb-3">
                         {value.description}
                       </p>
                       {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
                           <p className="text-sm font-medium text-gray-700 mb-1">
                             Why it is meaningful:
                           </p>
-                          <p className="text-sm sm:text-base text-gray-600 italic">
+                          <p className="text-sm sm:text-base text-gray-700 italic">
                             {value.reason}
                           </p>
                         </div>}
@@ -106,15 +106,15 @@ export default function Results() {
       </div>
 
       <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-        <button onClick={handlePrint} className="w-full sm:w-auto px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Print your results">
+        <button onClick={handlePrint} className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2" aria-label="Print your results">
           Print Results
         </button>
 
-        <Link href="/" onClick={handleNewExercise} className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" aria-label="Start a new values exercise">
+        <Link href="/" onClick={handleNewExercise} className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2" aria-label="Start a new values exercise">
           Start New Exercise
         </Link>
 
-        <Link href="/history" className="text-blue-600 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1" aria-label="View all your previous results">
+        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" aria-label="View all your previous results">
           View All Previous Results
         </Link>
       </div>

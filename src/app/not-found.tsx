@@ -20,14 +20,14 @@ export default function NotFound() {
           Page Not Found
         </h1>
         <p 
-          className="mb-4 text-gray-600"
+          className="mb-4 text-gray-700"
           aria-live="polite"
         >
           Could not find requested resource
         </p>
         <Link 
           href="/"
-          className="text-blue-600 hover:text-blue-800 underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
+          className="text-blue-700 hover:text-blue-800 underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 rounded px-2 py-1"
           aria-label="Return to homepage"
         >
           <span aria-hidden="true">←</span>

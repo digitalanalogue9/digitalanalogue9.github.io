@@ -8,7 +8,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const getActiveClass = (path: string) => {
     return pathname === path 
-      ? 'bg-white text-blue-600 font-semibold rounded-md' 
+      ? 'bg-white text-blue-700 font-semibold rounded-md' 
       : 'text-white hover:bg-white/20 rounded-md transition-colors';
   };
 
