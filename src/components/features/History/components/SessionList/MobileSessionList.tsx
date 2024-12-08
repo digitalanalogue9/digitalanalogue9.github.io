@@ -118,13 +118,13 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                     </div>
                     <div className="space-y-4">
                         {values.map(value => (
-                            <div key={value.id} className="p-4 bg-yellow-50 rounded shadow">
+                            <div key={value.id} className="p-4 bg-yellow-100 rounded shadow">
                                 <h4 className="font-medium">{value.title}</h4>
-                                <p className="text-sm text-gray-600 mb-2">{value.description}</p>
+                                <p className="text-sm text-gray-700 mb-2">{value.description}</p>
                                 {value.reason && (
                                     <div className="mt-2 pt-2 border-t border-gray-200">
-                                        <p className="text-sm font-medium text-gray-800">Why it is meaningful:</p>
-                                        <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                                        <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
+                                        <p className="text-sm text-gray-700 italic">{value.reason}</p>
                                     </div>
                                 )}
                             </div>
@@ -147,7 +147,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 <div className="flex justify-between items-center p-4">
                     <button
                         onClick={toggleSelectionMode}
-                        className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-600'
+                        className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-700'
                             }`}
                     >
                         {isSelectionMode ? 'Cancel' : 'Select'}
@@ -186,7 +186,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                                     type="checkbox"
                                     checked={isSelected(session.id)}
                                     onChange={() => toggleSession(session.id)}
-                                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    className="h-5 w-5 rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                                 />
                             </div>
                         )}
@@ -202,7 +202,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                                     Round: {session.currentRound}
                                 </div>
                             </div>
-                            <div className={`text-sm ${session.completed ? 'text-green-600' : 'text-blue-600'}`}>
+                            <div className={`text-sm ${session.completed ? 'text-green-700' : 'text-blue-700'}`}>
                                 {session.completed ? 'Completed' : 'In Progress'}
                             </div>
                         </div>

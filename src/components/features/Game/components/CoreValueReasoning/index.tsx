@@ -36,7 +36,7 @@ export function CoreValueReasoning({
             <h1 id="reasoning-title" className="text-2xl font-bold mb-6">
                 Why are these values meaningful to you?
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-700 mb-6">
                 Optionally, explain why each value is meaningful to you. This can help you reflect on your choices.
             </p>
             
@@ -53,7 +53,7 @@ export function CoreValueReasoning({
                                 <h2 id={`value-title-${value.id}`} className="font-bold text-lg mb-2">
                                     {value.title}
                                 </h2>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-gray-700 mb-4">
                                     {value.description}
                                 </p>
                                 <div>

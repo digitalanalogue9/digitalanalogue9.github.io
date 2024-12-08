@@ -27,7 +27,7 @@ export default function About() {
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               About Core Values
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-700">
               Discover and prioritise what matters most to you
             </p>
             <p className="text-sm text-gray-500 mt-2" aria-label="Application version">
@@ -38,7 +38,7 @@ export default function About() {
             <h2 id="why-matters-heading" className="text-2xl font-bold text-gray-900">
               Why Core Values Matter
             </h2>
-            <div className="prose prose-lg text-gray-600">
+            <div className="prose prose-lg text-gray-700">
               <p>
                 Understanding your core values is essential for making meaningful life decisions
                 and living authentically. This app helps you explore and organize your values
@@ -79,8 +79,8 @@ export default function About() {
                   className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
                   role="listitem"
                 >
-                  <div className="text-blue-600 text-xl mb-2">{step.title}</div>
-                  <p className="text-gray-600">{step.description}</p>
+                  <div className="text-blue-700 text-xl mb-2">{step.title}</div>
+                  <p className="text-gray-700">{step.description}</p>
                 </div>
               ))}
             </div>
@@ -118,14 +118,14 @@ export default function About() {
               ].map((benefit) => (
                 <div
                   key={benefit.title}
-                  className="bg-gray-50 p-4 rounded-lg"
+                  className="bg-gray-100 p-4 rounded-lg"
                   role="listitem"
                 >
                   <h3 className="font-semibold text-gray-900 mb-2">
                     <span aria-hidden="true">{benefit.icon} </span>
                     {benefit.title}
                   </h3>
-                  <p className="text-gray-600">{benefit.description}</p>
+                  <p className="text-gray-700">{benefit.description}</p>
                 </div>
               ))}
             </div>
@@ -144,28 +144,28 @@ export default function About() {
                   icon: "📱",
                   title: "Private & Local Storage",
                   description: "All your selections and progress are stored directly on your device. Think of it like having a personal notebook that only exists on your phone or computer.",
-                  bgColor: "bg-blue-50",
+                  bgColor: "bg-blue-100",
                   textColor: "text-blue-900"
                 },
                 {
                   icon: "🔒",
                   title: "Complete Privacy",
                   description: "Your data never leaves your device - we do not use any external servers or cloud storage. Your personal journey stays completely private.",
-                  bgColor: "bg-green-50",
+                  bgColor: "bg-green-100",
                   textColor: "text-green-900"
                 },
                 {
                   icon: "💾",
                   title: "Automatic Saving",
                   description: "Every change you make is automatically saved on your device. You can close the app and come back later - your progress will be waiting for you.",
-                  bgColor: "bg-purple-50",
+                  bgColor: "bg-purple-100",
                   textColor: "text-purple-900"
                 },
                 {
                   icon: "⚡",
                   title: "Works Offline",
                   description: "Because everything is stored on your device, you can use the app even without an internet connection. Perfect for deep reflection anywhere.",
-                  bgColor: "bg-yellow-50",
+                  bgColor: "bg-yellow-100",
                   textColor: "text-yellow-900"
                 }
               ].map((item) => (
@@ -178,7 +178,7 @@ export default function About() {
                     <span aria-hidden="true">{item.icon} </span>
                     {item.title}
                   </h3>
-                  <p className="text-gray-600">{item.description}</p>
+                  <p className="text-gray-700">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -188,26 +188,26 @@ export default function About() {
             <h2 id="notes-heading" className="sr-only">Important Notes</h2>
             <div className="space-y-4">
               <div
-                className="bg-red-50 p-4 rounded-lg"
+                className="bg-red-100 p-4 rounded-lg"
                 role="alert"
               >
                 <h3 className="font-semibold text-red-900 mb-2">
                   <span aria-hidden="true">⚠️ </span>
                   Important Note
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-700">
                   If you clear your browser data or uninstall the app, your stored
                   information will be deleted. Consider taking screenshots or noting down
                   important results if you want to keep them long-term.
                 </p>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-2">
                   <span aria-hidden="true">💡 </span>
                   Pro Tip
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-700">
                   For the best experience, install this as an app on your device
                   (look for the Install App button in your browser). This makes it easier
                   to access and use, just like any other app on your device!
@@ -220,7 +220,7 @@ export default function About() {
               Instructions Preference
             </h2>
             <div
-              className="bg-gray-50 p-4 rounded-lg"
+              className="bg-gray-100 p-4 rounded-lg"
               role="group"
               aria-labelledby="instructions-heading"
             >
@@ -236,7 +236,7 @@ export default function About() {
                       id="show-instructions"
                       checked={showInstructions}
                       onChange={handleToggleInstructions}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                       aria-describedby="instructions-description"
                       aria-checked={showInstructions}
                     />
@@ -251,7 +251,7 @@ export default function About() {
                     </label>
                     <p
                       id="instructions-description"
-                      className="text-gray-600 mt-2"
+                      className="text-gray-700 mt-2"
                     >
                       <span className="sr-only">
                         Current status:

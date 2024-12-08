@@ -20,7 +20,7 @@ export function MobileReplayCategory({
                 </span>
             </div>
             {cards.length > 0 && <div className="mt-1 space-y-1" role="list" aria-label={`Values in ${title}`}>
-                    {cards.map(card => <div key={card.id} className="text-xs text-gray-600 truncate" role="listitem" aria-label={card.title}>
+                    {cards.map(card => <div key={card.id} className="text-xs text-gray-700 truncate" role="listitem" aria-label={card.title}>
                             {card.title}
                         </div>)}
                 </div>}

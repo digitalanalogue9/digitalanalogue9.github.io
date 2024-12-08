@@ -58,7 +58,7 @@ export default function CategoryColumn({
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 flex items-center justify-between w-full">
           <span>{title}</span>
-          <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-sm font-medium text-gray-600 ml-2">
+          <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-sm font-medium text-gray-700 ml-2">
             {cards.length}
           </span>
         </h2>

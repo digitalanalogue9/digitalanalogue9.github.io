@@ -21,7 +21,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
   }, [shouldShowAgain, onClose]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center p-2 sm:p-4 z-50">
       <div className="bg-white p-4 sm:p-6 rounded-lg max-w-xs sm:max-w-sm md:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">How to Use Core Values</h2>
         <ol className="list-decimal ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base">
@@ -37,12 +37,12 @@ export default function Instructions({ onClose }: InstructionsProps) {
         </ol>
 
         <div className="mt-4 sm:mt-6 space-y-4">
-          <label className="flex items-center gap-2 text-gray-600">
+          <label className="flex items-center gap-2 text-gray-700">
             <input
               type="checkbox"
               checked={!shouldShowAgain}
               onChange={(e) => setShouldShowAgain(!e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
             />
             <span className="text-sm">Don&apos;t show these instructions again</span>
           </label>

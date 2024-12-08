@@ -26,7 +26,7 @@ export default function RootLayout({
         <meta name="description" content="Discover and prioritise your personal values" />
         {/* {process.env.NODE_ENV === 'development' && <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />} */}
       </head>
-      <body className="bg-gray-50">
+      <body className="bg-gray-100">
         <MobileProvider>
           <div className="min-h-screen flex flex-col">
             {/* Header */}

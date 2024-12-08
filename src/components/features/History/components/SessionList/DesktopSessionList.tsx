@@ -112,11 +112,11 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             exit={{ opacity: 0, y: -20 }}
                         >
                             <h4 className="font-medium">{value.title}</h4>
-                            <p className="text-sm text-gray-600 mb-2">{value.description}</p>
+                            <p className="text-sm text-gray-700 mb-2">{value.description}</p>
                             {value.reason && (
                                 <div className="mt-2 pt-2 border-t border-gray-200">
-                                    <p className="text-sm font-medium text-gray-800">Why it is meaningful:</p>
-                                    <p className="text-sm text-gray-600 italic">{value.reason}</p>
+                                    <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
+                                    <p className="text-sm text-gray-700 italic">{value.reason}</p>
                                 </div>
                             )}
                         </motion.article>
@@ -134,9 +134,9 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         type="checkbox"
                         checked={selectedSessions.size === sessions.length && sessions.length > 0}
                         onChange={handleSelectAll}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                     />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-700">
                         {selectedSessions.size} selected
                     </span>
                 </div>
@@ -152,7 +152,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
 
             <table className="min-w-full bg-white shadow-md rounded-lg">
                 <thead>
-                    <tr className="bg-gray-50 border-b">
+                    <tr className="bg-gray-100 border-b">
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <span className="sr-only">Select</span>
                         </th>
@@ -178,13 +178,13 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                     {sessions.map(session => (
-                        <tr key={session.id} className="hover:bg-gray-50">
+                        <tr key={session.id} className="hover:bg-gray-100">
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
                                     type="checkbox"
                                     checked={isSelected(session.id)}
                                     onChange={() => toggleSession(session.id)}
-                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                                 />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
@@ -203,7 +203,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                  ${session.completed ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'}`}>
+                  ${session.completed ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
                                     {session.completed ? 'Completed' : 'In Progress'}
                                 </span>
                             </td>
