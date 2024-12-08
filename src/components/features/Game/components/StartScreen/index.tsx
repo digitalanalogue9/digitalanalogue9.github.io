@@ -44,54 +44,43 @@ export default function StartScreen({
 
       <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8" aria-label="Introduction">
         <p
-          className="text-base sm:text-lg text-gray-800 font-[system-ui]" // Added system font
-          style={{ contentVisibility: 'auto' }} // Optimize paint
+          className="text-base sm:text-lg text-gray-800 font-[system-ui]"
+          style={{ contentVisibility: 'auto' }}
         >
           Welcome to the Core Values discovery exercise! Through this interactive experience,
           you will discover and prioritise your personal core values, helping you identify what matters most to you.
         </p>
       </div>
 
-        {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-700 text-center" role="note" aria-label="Debug information">
-            <div>Debug Mode: On</div>
-            <div>Max Cards: {maxCards}</div>
-            <div>Default Core Values: {defaultCoreValues}</div>
-          </div>}
+      {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-700 text-center" role="note" aria-label="Debug information">
+        <div>Debug Mode: On</div>
+        <div>Max Cards: {maxCards}</div>
+        <div>Default Core Values: {defaultCoreValues}</div>
+      </div>}
       <form onSubmit={e => {
         e.preventDefault();
         handleStart();
       }} className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6" aria-label="Exercise configuration">
-          <label htmlFor="core-values-count" className="text-base sm:text-lg font-medium text-center sm:text-left whitespace-normal sm:whitespace-nowrap">
-            How many core values do you want to end up with?
-          </label>
-          <div className="flex gap-3 sm:gap-4 items-center">
-            <input id="core-values-count" type="number" min="1" max="10" value={coreValuesCount} onChange={e => setCoreValuesCount(Number(e.target.value))} className="border rounded p-2 w-16 sm:w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Number of core values" required />
-            <button type="submit" className="px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Begin the core values exercise">
-              Start Exercise
-            </button>
-          </div>
-        </form>
-
-        <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
-          <p className="text-gray-700 mb-2 text-sm sm:text-base">
-            Have you completed this exercise before?
-          </p>
-          <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-7  00 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
-            <span>View Your Previous Results</span>
-            <span aria-hidden="true" className="ml-1">→</span>
-          </Link>
+        <label htmlFor="core-values-count" className="text-base sm:text-lg font-medium text-center sm:text-left whitespace-normal sm:whitespace-nowrap">
+          How many core values do you want to end up with?
+        </label>
+        <div className="flex gap-3 sm:gap-4 items-center">
+          <input id="core-values-count" type="number" min="1" max="10" value={coreValuesCount} onChange={e => setCoreValuesCount(Number(e.target.value))} className="border rounded p-2 w-16 sm:w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" aria-label="Number of core values" required />
+          <button type="submit" className="px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Begin the core values exercise">
+            Start Exercise
+          </button>
         </div>
       </form>
 
       <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
-        <p className="text-gray-600 mb-2 text-sm sm:text-base">
+        <p className="text-gray-700 mb-2 text-sm sm:text-base">
           Have you completed this exercise before?
         </p>
-        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
+        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-7  00 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
           <span>View Your Previous Results</span>
           <span aria-hidden="true" className="ml-1">→</span>
         </Link>
       </div>
     </div>
-  </div>;
+  </div>
 }
