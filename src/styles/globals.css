@@ -36,9 +36,18 @@
 }
 
 /* Background with a diagonal gradient */
-body {
+/* body {
   background-color: var(--background-primary);
   color: var(--text-primary);
+  line-height: 1.5;
+} */
+
+body {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: var(--text-primary);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   line-height: 1.5;
 }
 
