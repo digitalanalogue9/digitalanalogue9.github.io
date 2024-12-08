@@ -35,8 +35,7 @@ export default function StartScreen({
     });
     onStart();
   };
-  return <div className="h-[calc(100vh-4rem)] overflow-y-auto" // Changed this line
-    role="main" aria-labelledby="welcome-heading">
+  return <div role="main" aria-labelledby="welcome-heading">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
       <h1 id="welcome-heading" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6">
         <span className="text-gray-900">Discover Your </span>
