@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import RoundUIDebug from "@/components/features/Round/RoundUIDebug";
 import RoundUI from "@/components/features/Round/RoundUI";
@@ -12,7 +12,7 @@ import { useGameState } from "@/components/features/Exercise/hooks/useGameState"
 import { forceReload } from "@/lib/utils/cache";
 import { useGameInit } from "@/components/features/Exercise/hooks/useGameInit";
 
-export default function ExercisePage() {
+function ExerciseContent() {
   const router = useRouter();
   const { showInstructions, setShowInstructions } = useGameState();
   const { isLoading, error, shouldRedirect } = useGameInit();
@@ -70,5 +70,18 @@ export default function ExercisePage() {
         <PWAPrompt />
       </div>
     </DndProvider>
+  );
+}
+
+export default function ExercisePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center flex-1">
+        <span className="sr-only">Loading exercise...</span>
+        Loading...
+      </div>
+    }>
+      <ExerciseContent />
+    </Suspense>
   );
 }

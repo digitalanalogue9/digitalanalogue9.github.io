@@ -21,24 +21,31 @@ export function useGameInit() {
       try {
         await initDB();
         
-        // Check for sessionId in URL first
+        // If we already have a sessionId, just set game as started
+        if (sessionId) {
+          setGameStarted(true);
+          return;
+        }
+
+        // Only check URL params if we don't have a session
         const urlSessionId = searchParams?.get('sessionId');
-        
         if (urlSessionId) {
           await loadSessionState(urlSessionId);
           setGameStarted(true);
-        } else if (!sessionId) {
-          if (isOffline) {
-            const cachedSession = await cacheUtils.getCachedData<{
-              sessionId: string;
-            }>('currentSession');
-            
-            if (!cachedSession) {
-              throw new Error('No session found');
-            }
-          } else {
+          return;
+        }
+
+        // No session found, check offline cache
+        if (isOffline) {
+          const cachedSession = await cacheUtils.getCachedData<{
+            sessionId: string;
+          }>('currentSession');
+          
+          if (!cachedSession) {
             throw new Error('No session found');
           }
+        } else {
+          throw new Error('No session found');
         }
       } catch (error) {
         setError(error instanceof Error ? error : new Error('Failed to initialize game'));
