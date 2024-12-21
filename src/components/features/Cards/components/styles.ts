@@ -1,7 +1,7 @@
 export const getPostItStyles = (isDragging: boolean, isOver: boolean) => {
   const postItBaseStyles = `
     relative
-    p-4
+    p-2
     rounded-sm
     transform
     transition-all

@@ -9,6 +9,7 @@ export interface Session {
   currentRound: number;
   completed: boolean;
   initialValues: Value[];
+  remainingValues: Value[];
 }
 
 export interface ReconstructedState {

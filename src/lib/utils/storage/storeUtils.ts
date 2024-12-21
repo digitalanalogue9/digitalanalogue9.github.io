@@ -1,14 +1,14 @@
 import { useStore } from "@/lib/store/store";
 import { Value, Categories } from "@/lib/types";
 import { emptyCategories } from "@/components/features/Categories/constants/categories";
-export const initializeGameState = (sessionId: string, targetCoreValues: number, initialCards: Value[], initialCategories: Categories = emptyCategories) => {
+export const initializeGameState = (sessionId: string, currentRound: number, targetCoreValues: number, initialCards: Value[], initialCategories: Categories = emptyCategories) => {
   const store = useStore.getState();
 
   // Session state
   store.setSession({
     sessionId,
     targetCoreValues,
-    roundNumber: 1 // updated from currentRound
+    roundNumber: currentRound // updated from currentRound
   });
 
   // Game state

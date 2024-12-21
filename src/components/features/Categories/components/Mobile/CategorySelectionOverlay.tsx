@@ -9,6 +9,7 @@ export const CategorySelectionOverlay: React.FC<CategorySelectionOverlayProps> =
   instruction = "Select a category for this card"
 }) => {
   if (!isVisible) return null;
+
   return <div className="fixed inset-0 bg-white z-50 flex flex-col" role="dialog" aria-modal="true" aria-labelledby="category-selection-title">
       <div className="p-4 text-center" role="heading" aria-level={2}>
         <h2 id="category-selection-title" className="text-lg font-semibold">

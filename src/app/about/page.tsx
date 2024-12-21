@@ -2,12 +2,16 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { clearGameState } from "@/lib/utils/storage";
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
 export default function About() {
-  const [showInstructions, setShowInstructions] = useState(true);
+  useEffect(() => {
+    clearGameState();
+  }, []);
 
+  const [showInstructions, setShowInstructions] = useState(true);  
   useEffect(() => {
     const savedPreference = localStorage.getItem('showInstructions');
     setShowInstructions(savedPreference !== 'false');

@@ -54,7 +54,7 @@ export default function CategoryColumn({
       console.error('Error handling drop:', error);
     }
   };
-  return <div className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 w-full" data-category={title}>
+  return <div className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 w-full" data-category={title} aria-label={`${title} category`}>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 flex items-center justify-between w-full">
           <span>{title}</span>
@@ -64,14 +64,14 @@ export default function CategoryColumn({
         </h2>
       </div>
 
-      <div className="border-2 border-dashed border-gray-200 rounded-lg p-2 min-h-[400px] transition-colors duration-200" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} role="region" aria-label={`Drop zone for ${title} category`}>
+      <div className="border-2 border-dashed border-gray-400 rounded-lg p-2 min-h-[400px] transition-colors duration-200" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} role="region" aria-label={`Drop zone for ${title} category`}>
         <div className="space-y-2">
           {cards.map((card, index) => <div key={card.id} className="transition-all duration-200">
               <Card value={card} columnIndex={index} currentCategory={title} onDrop={value => onDrop(value, title)} onMoveUp={index > 0 ? () => onMoveWithinCategory(index, index - 1) : undefined} onMoveDown={index < cards.length - 1 ? () => onMoveWithinCategory(index, index + 1) : undefined} onMoveBetweenCategories={onMoveBetweenCategories} />
             </div>)}
         </div>
 
-        <div className={`text-gray-400 text-sm text-center py-4 mt-2 ${cards.length === 0 ? '' : 'border-t-2 border-dashed border-gray-200'}`}>
+        <div className={`text-gray-700 text-sm text-center py-4 mt-2 ${cards.length === 0 ? '' : 'border-t-2 border-dashed border-gray-400'}`}>
           Drop values here
         </div>
       </div>

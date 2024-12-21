@@ -127,10 +127,13 @@ const RoundUI = memo(function RoundUI() {
       }
 
       // Check if we have exactly the target number in Very Important
-      const hasExactTargetInVeryImportant = (categories['Very Important']?.length || 0) === targetCoreValues;
+      // const hasExactTargetInVeryImportant = (categories['Very Important']?.length || 0) === targetCoreValues;
       if (shouldEndGame) {
         if (sessionId) {
           const finalValues = categories['Very Important'] || [];
+          await updateSession(sessionId, {
+            remainingValues : finalValues
+          });          
           setFinalValuesWithoutReasons(finalValues);
           setShowReasoning(true);
           return;
@@ -138,15 +141,22 @@ const RoundUI = memo(function RoundUI() {
       }
 
       // If not ending game, prepare for next round
-      clearCommands();
-      const nextRound = roundNumber + 1;
-
       // Get all cards from non-Not Important categories
       const cardsForNextRound = Object.entries(categories).filter(([category]) => category !== 'Not Important').flatMap(([_, cards]) => cards || []);
       if (cardsForNextRound.length < targetCoreValues) {
         console.error('Not enough cards to proceed');
         return;
       }
+
+      clearCommands();
+      const nextRound = roundNumber + 1;
+      if (sessionId) {
+        await updateSession(sessionId, {
+          currentRound: nextRound,
+          remainingValues : cardsForNextRound
+        });
+      }
+      
       const nextCategories = getCategoriesForRound(cardsForNextRound.length, targetCoreValues);
       if (sessionId) {
         await saveRound(sessionId, nextRound, [], nextCategories);
@@ -158,6 +168,7 @@ const RoundUI = memo(function RoundUI() {
       console.error('Failed to handle next round:', error);
     }
   }, [validateRound, sessionId, roundNumber, currentRoundCommands, categories, shouldEndGame, targetCoreValues, clearCommands, setRoundNumber, setCategories, setRemainingCards]);
+  
   const handleReasoningComplete = useCallback(async (valuesWithReasons: ValueWithReason[]) => {
     logStateUpdate('handleReasoningComplete', {
       valuesWithReasons

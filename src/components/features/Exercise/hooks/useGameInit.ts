@@ -10,7 +10,6 @@ import { useGameState } from './useGameState';
 export function useGameInit() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { sessionId } = useSession();
   const { isOffline } = usePWA();
@@ -20,17 +19,13 @@ export function useGameInit() {
     const initialize = async () => {
       try {
         await initDB();
-        
-        // If we already have a sessionId, just set game as started
-        if (sessionId) {
-          setGameStarted(true);
-          return;
-        }
 
-        // Only check URL params if we don't have a session
+        // Check for existing session or URL param session
         const urlSessionId = searchParams?.get('sessionId');
-        if (urlSessionId) {
-          await loadSessionState(urlSessionId);
+        const activeSessionId = sessionId || urlSessionId;
+
+        if (activeSessionId) {
+          await loadSessionState(activeSessionId);
           setGameStarted(true);
           return;
         }
@@ -40,7 +35,7 @@ export function useGameInit() {
           const cachedSession = await cacheUtils.getCachedData<{
             sessionId: string;
           }>('currentSession');
-          
+
           if (!cachedSession) {
             throw new Error('No session found');
           }

@@ -158,7 +158,7 @@ const Card = memo(function Card({
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`${cardContainerClasses} group`}
+        className={`${cardContainerClasses} group relative`}
         role="article"
         aria-label={`Value card: ${value.title}`}
         tabIndex={0}
@@ -168,30 +168,29 @@ const Card = memo(function Card({
           }
         }}
       >
-        <div className="relative flex">
-          <div className="flex-1 pr-10">
-            <CardContent
-              title={value.title}
-              description={value.description}
+        {/* Content component */}
+        <CardContent
+          title={value.title}
+          description={value.description}
+          isExpanded={isExpanded}
+        />
+        {!isMobile && (
+          <div className="flex justify-end mt-2">
+            <CardControls
+              onMoveUp={onMoveUp}
+              onMoveDown={onMoveDown}
+              onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
+              currentCategory={currentCategory}
               isExpanded={isExpanded}
-              controls={!isMobile ? (
-                <div className="absolute -right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <CardControls
-                    onMoveUp={onMoveUp}
-                    onMoveDown={onMoveDown}
-                    onShowMoveOptions={() => setShowMoveOptions(!showMoveOptions)}
-                    currentCategory={currentCategory}
-                    isExpanded={isExpanded}
-                    onToggleExpand={() => setIsExpanded(!isExpanded)}
-                    value={value}
-                  />
-                </div>
-              ) : null}
+              onToggleExpand={() => setIsExpanded(!isExpanded)}
+              value={value}
             />
           </div>
-        </div>
+        )}
+
+        {/* Move options dialog */}
         {!isMobile && showMoveOptions && onMoveBetweenCategories && currentCategory && (
-          <div className="absolute right-2 top-8 z-50" role="dialog" aria-label="Move options">
+          <div className="absolute right-2 top-12 z-50" role="dialog" aria-label="Move options">
             <CardMoveOptions
               value={value}
               currentCategory={currentCategory}

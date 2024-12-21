@@ -1,0 +1,10 @@
+# Add patterns to ignore here, one per line
+# Example:
+*.log
+tmp/
+repomix/
+public/
+out/
+node_modules/
+.vscode/
+.github/

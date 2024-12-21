@@ -1,4 +1,4 @@
-// src/components/Card/CardContent.tsx
+// src/components/features/Cards/components/CardContent.tsx
 import { motion, AnimatePresence } from 'framer-motion';
 import { CardContentProps } from '@/components/features/Cards/types';
 
@@ -6,38 +6,27 @@ export function CardContent({
   title,
   description,
   isExpanded,
-  controls
-}: Omit<CardContentProps, 'onToggle'> & { controls?: React.ReactNode }) {
+}: Omit<CardContentProps, 'onToggle'>) {
   const headingId = `heading-${title.toLowerCase().replace(/\s+/g, '-')}`;
   const descriptionId = `description-${title.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
     <div
-      className="flex flex-col w-full p-2"
+      className="flex flex-col w-full pl-2" // Added pt-10 to account for controls
       role="region"
       aria-labelledby={headingId}
     >
       <div
-        className="flex items-start justify-between gap-2 w-full"
+        className="flex items-start w-full"
         role="heading"
         aria-level={3}
       >
         <h3
           id={headingId}
-          className="font-medium text-gray-800 text-sm sm:text-base flex-1 break-words pr-2"
+          className="font-medium text-gray-800 text-sm sm:text-base flex-1 break-words"
         >
           {title}
         </h3>
-
-        {controls && (
-          <div
-            className="flex-shrink-0 ml-auto pointer-events-auto" // Add pointer-events-auto here
-            role="toolbar"
-            aria-label={`Controls for ${title}`}
-          >
-            {controls}
-          </div>
-        )}
       </div>
 
       <AnimatePresence>
@@ -53,7 +42,7 @@ export function CardContent({
           >
             <p
               id={descriptionId}
-              className="px-4 pb-3 text-base text-gray-800 leading-relaxed"
+              className="text-base text-gray-800 leading-relaxed"
               aria-expanded={isExpanded}
             >
               <span className="sr-only">Description: </span>

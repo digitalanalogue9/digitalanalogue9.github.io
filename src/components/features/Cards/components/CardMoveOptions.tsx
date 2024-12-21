@@ -62,7 +62,15 @@ export function CardMoveOptions({
       document.removeEventListener('keydown', handleEscape);
     };
   }, [value.id, onClose]);
-  const menuContent = <motion.div className="move-options-menu w-48 bg-white rounded-md shadow-lg border 
+  const buttonBaseClass = `
+  p-1.5 text-sm bg-white
+  text-black // Changed to black for better visibility
+  hover:bg-blue-300 // More subtle hover state that works with post-it style
+  active:bg-blue-300 
+  transition-colors touch-none select-none
+  focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1
+`;
+  const menuContent = <motion.div className="move-options-menu w-52 bg-white rounded-md shadow-lg border 
                 border-gray-200 py-1 touch-manipulation" initial={{
     opacity: 0,
     y: -10
@@ -79,13 +87,10 @@ export function CardMoveOptions({
     zIndex: 9999
   }} role="dialog" aria-label={`Move options for ${value.title}`} aria-modal="true">
       <div role="menu" aria-label="Available categories">
-        {allCategories.filter(cat => cat !== currentCategory).map(category => <button key={category} type="button" onClick={() => {
+        {allCategories.filter(cat => cat !== currentCategory).map(category => <button  key={category} type="button" onClick={() => {
         onMoveBetweenCategories(value, currentCategory, category);
         onClose();
-      }} className="block w-full text-left px-4 py-3 text-sm text-gray-700 
-                       hover:bg-gray-100 active:bg-gray-100 transition-colors
-                       touch-manipulation select-none focus:outline-none focus:bg-gray-50
-                       focus:ring-2 focus:ring-inset focus:ring-blue-500" role="menuitem" aria-label={`Move to ${category} category`}>
+      }} className={buttonBaseClass} role="menuitem" aria-label={`Move to ${category} category`}>
               Move to {category}
             </button>)}
       </div>

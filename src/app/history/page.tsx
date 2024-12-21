@@ -5,8 +5,12 @@ import { Session } from "@/lib/types";
 import { getSessions } from "@/lib/db/indexedDB";
 import { SessionList } from "@/components/features/History/components/SessionList";
 import { SessionSelectionProvider } from '@/components/features/History/contexts/SessionSelectionContext';
-
+import { clearGameState } from "@/lib/utils/storage";
 export default function HistoryPage() {
+  useEffect(() => {
+    clearGameState();
+  }, []);
+
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

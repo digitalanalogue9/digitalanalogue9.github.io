@@ -1,5 +1,6 @@
 import { Categories } from "./Categories";
 import { Command } from "./Command";
+import { Value } from "./Value";
 
 
 export interface Round {

@@ -73,16 +73,37 @@ export async function getSession(sessionId: string): Promise<Session | undefined
   }
 }
 
-export async function addSession(session: Omit<Session, 'id'>): Promise<string> {
+export async function addSession(session: Omit<Session, 'id'>, initialCategories: Categories): Promise<string> {
   if (debug) console.log('💾 Saving session:', session);
   try {
     const db = await initDB();
     const sessionId = await generateSessionName(db);
-    await db.put(storeNames.sessions, {
+    
+    // Start a transaction that includes both stores
+    const tx = db.transaction([storeNames.sessions, storeNames.rounds], 'readwrite');
+    
+    // Save the session
+    await tx.objectStore(storeNames.sessions).put({
       ...session,
       id: sessionId
     });
-    if (debug) console.log('✅ Session saved successfully');
+
+    // Create initial round
+    const initialRound: Round = {
+      sessionId,
+      roundNumber: 1,
+      commands: [],
+      availableCategories : initialCategories,
+      timestamp: Date.now()
+    };
+
+    // Save the initial round
+    await tx.objectStore(storeNames.rounds).add(initialRound);
+
+    // Wait for the transaction to complete
+    await tx.done;
+
+    if (debug) console.log('✅ Session and initial round saved successfully');
     return sessionId;
   } catch (error) {
     console.error('❌ Error saving session:', error);
@@ -224,19 +245,32 @@ export async function getCompletedSession(sessionId: string): Promise<CompletedS
 }
 
 export const deleteSession = async (sessionId: string): Promise<void> => {
+  if (debug) console.log('🗑️ Deleting session and associated rounds:', sessionId);
   try {
     const db = await initDB();
-    const tx = db.transaction(['sessions', 'completedSessions'], 'readwrite');
     
-    // Delete from both sessions and completedSessions stores
-    await Promise.all([
-      tx.objectStore('sessions').delete(sessionId),
-      tx.objectStore('completedSessions').delete(sessionId)
-    ]);
+    // Start a transaction that includes both stores
+    const tx = db.transaction([storeNames.sessions, storeNames.rounds, storeNames.completedSessions], 'readwrite');
     
+    // Delete the session
+    await tx.objectStore(storeNames.sessions).delete(sessionId);
+    await tx.objectStore(storeNames.completedSessions).delete(sessionId);
+    // Delete all rounds for this session using the index
+    const roundsStore = tx.objectStore(storeNames.rounds);
+    const sessionRoundsIndex = roundsStore.index('sessionId');
+    const roundsToDelete = await sessionRoundsIndex.getAllKeys(sessionId);
+    
+    // Delete each round
+    for (const roundKey of roundsToDelete) {
+      await roundsStore.delete(roundKey);
+    }
+
+    // Wait for the transaction to complete
     await tx.done;
+
+    if (debug) console.log('✅ Successfully deleted session and rounds');
   } catch (error) {
-    console.error('Error deleting session:', error);
+    console.error('❌ Error deleting session and rounds:', error);
     throw error;
   }
 };

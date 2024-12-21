@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { StartScreenProps } from '@/components/features/Home/types';
 import { getEnvNumber, getEnvBoolean } from "@/lib/utils/config";
 import Link from 'next/link';
-import { addSession } from "@/lib/db/indexedDB";
+import { addSession, saveRound  } from "@/lib/db/indexedDB";
 import { initializeGameState } from "@/lib/utils/storage";
+import { initialCategories } from "@/components/features/Categories/constants/categories";
 import valuesData from '@/data/values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
 
@@ -29,18 +30,13 @@ export default function StartScreen() {
         targetCoreValues: coreValuesCount,
         currentRound: 1,
         completed: false,
-        initialValues: limitedValues // Store the initial values
+        initialValues: limitedValues,
+        remainingValues: limitedValues
       };
       
-      const sessionId = await addSession(session);
-      
-      initializeGameState(sessionId, coreValuesCount, limitedValues, {
-        'Very Important': [],
-        'Quite Important': [],
-        'Important': [],
-        'Of Some Importance': [],
-        'Not Important': []
-      });
+      const sessionId = await addSession(session,initialCategories);
+
+      initializeGameState(sessionId, 1, coreValuesCount, limitedValues, initialCategories);
       
       router.push(`/exercise?sessionId=${sessionId}`);
     } catch (error) {
