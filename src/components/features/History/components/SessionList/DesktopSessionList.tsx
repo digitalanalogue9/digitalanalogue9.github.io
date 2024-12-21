@@ -17,6 +17,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
     const [isDeleting, setIsDeleting] = useState(false);
     const [deletingCount, setDeletingCount] = useState(0);
     const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
+    const [copySuccess, setCopySuccess] = useState(false);
     const {
         selectedSessions,
         toggleSession,
@@ -94,6 +95,25 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
         isSelected(session.id)
     );
 
+    const formatValueForClipboard = (value: ValueWithReason): string => {
+        return `Title: ${value.title}\nDescription: ${value.description}${value.reason ? `\nWhy: ${value.reason}` : ''}\n\n`;
+    };
+
+    const handleCopyToClipboard = (values: ValueWithReason[]) => {
+        const formattedText = `My Core Values\n--------------\n\n`
+            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://digitalanalogue9.github.io`;
+
+        navigator.clipboard.writeText(formattedText)
+            .then(() => {
+                // You might want to add a toast notification here
+                console.log('Copied to clipboard');
+                setCopySuccess(true);
+            })
+            .catch(err => {
+                console.error('Failed to copy:', err);
+                setCopySuccess(false);
+            });
+    };
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
             return (
@@ -103,6 +123,82 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
             );
         }
 
+        const handlePrint = () => {
+            const printWindow = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+            if (!printWindow) return;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @media print {
+                    @page { margin: 2cm; }
+                    
+                    body { 
+                        font-family: 'Arial', sans-serif;
+                        line-height: 1.6;
+                        color: #000;
+                        background: #fff;
+                    }
+    
+                    h1 { 
+                        font-size: 24pt;
+                        color: #1a365d;
+                        text-align: center;
+                        margin-bottom: 20pt;
+                    }
+    
+                    article {
+                        page-break-inside: avoid;
+                        border: 1pt solid #e2e8f0;
+                        padding: 10pt;
+                        margin: 10pt 0;
+                        background: #fff;
+                        border-radius: 4pt;
+                        box-shadow: 2pt 2pt 4pt rgba(0,0,0,0.1);
+                    }
+    
+                    .grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 15pt;
+                    }
+    
+                    button { display: none !important; }
+                }
+            `;
+
+            const content = `
+                <html>
+                    <head>
+                        <title>Core Values</title>
+                        ${style.outerHTML}
+                    </head>
+                    <body>
+                        <h1>Selected Core Values</h1>
+                        <div class="grid">
+                            ${values.map(value => `
+                                <article>
+                                    <h3 style="font-size: 16pt; margin-bottom: 8pt;">${value.title}</h3>
+                                    <p style="margin-bottom: 8pt;">${value.description}</p>
+                                    ${value.reason ? `
+                                        <div style="border-top: 1pt solid #e2e8f0; padding-top: 8pt; margin-top: 8pt;">
+                                            <p style="font-weight: bold;">Why it is meaningful:</p>
+                                            <p style="font-style: italic;">${value.reason}</p>
+                                        </div>
+                                    ` : ''}
+                                </article>
+                            `).join('')}
+                        </div>
+                    </body>
+                </html>
+            `;
+
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+
         return (
             <section className="space-y-4" aria-labelledby="desktop-values-title">
                 <div className="flex justify-between items-center">
@@ -110,6 +206,27 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                     <span className="text-sm text-gray-500">
                         {values.length} value{values.length !== 1 ? 's' : ''}
                     </span>
+                </div>
+                <div className="flex justify-end gap-2">
+                    <button
+                        onClick={() => {setCopySuccess(!copySuccess);handleCopyToClipboard(values);}}
+                        className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                        aria-label="Copy values to clipboard"
+                    >
+                        <span>Copy to Clipboard</span>
+                        {copySuccess && (
+                            <span aria-hidden="true" className="text-white">
+                                ✓
+                            </span>
+                        )}
+                    </button>
+                    <button
+                        onClick={handlePrint}
+                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                        aria-label="Print values"
+                    >
+                        Print Values
+                    </button>
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
                     {values.map(value => (

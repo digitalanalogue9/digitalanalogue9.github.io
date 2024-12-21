@@ -13,8 +13,9 @@ import { useRouter } from 'next/navigation';
 
 export default function Results() {
   const router = useRouter();
-    const printRef = useRef<HTMLDivElement>(null);
+  const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
   const {
     categories
   } = useGameState();
@@ -134,7 +135,27 @@ export default function Results() {
     winPrint.close();
   };
 
-  
+  // Add this utility function at the top of both files
+  const formatValueForClipboard = (value: ValueWithReason): string => {
+    return `Title: ${value.title}\nDescription: ${value.description}${value.reason ? `\nWhy: ${value.reason}` : ''}\n\n`;
+  };
+
+  const handleCopyToClipboard = (values: ValueWithReason[]) => {
+    const formattedText = `My Core Values\n--------------\n\n`
+      + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://digitalanalogue9.github.io`;
+
+    navigator.clipboard.writeText(formattedText)
+      .then(() => {
+        // You might want to add a toast notification here
+        console.log('Copied to clipboard');
+        setCopySuccess(true);
+      })
+      .catch(err => {
+        console.error('Failed to copy:', err);
+        setCopySuccess(false);
+      });
+  };
+
   const handleNewExercise = () => {
     clearGameState();
     router.push('/');
@@ -149,62 +170,76 @@ export default function Results() {
   } = getPostItStyles(false, false);
   if (!mounted) return null;
   return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12" role="region" aria-labelledby="results-title">
-      <div ref={printRef} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
-        <h1 id="results-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gray-900">
-          Your Core Values Results
-        </h1>
+    <div ref={printRef} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+      <h1 id="results-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gray-900">
+        Your Core Values Results
+      </h1>
 
-        <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
-          {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
-                <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
-                  {category}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6" role="list" aria-label={`Values in ${category}`}>
-                  {values.map((value: ValueWithReason) => <article key={value.id} className={`${postItBaseStyles} ${tapeEffect} p-4`} role="listitem">
-                      <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
-                        {value.title}
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-800 mb-3">
-                        {value.description}
-                      </p>
-                      {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
-                          <p className="text-sm font-medium text-black mb-1">
-                            Why it is meaningful:
-                          </p>
-                          <p className="text-sm sm:text-base text-gray-800 italic">
-                            {value.reason}
-                          </p>
-                        </div>}
-                    </article>)}
-                </div>
-              </section>)}
-        </div>
+      <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
+        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
+          <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
+            {category}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6" role="list" aria-label={`Values in ${category}`}>
+            {values.map((value: ValueWithReason) => <article key={value.id} className={`${postItBaseStyles} ${tapeEffect} p-4`} role="listitem">
+              <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
+                {value.title}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-800 mb-3">
+                {value.description}
+              </p>
+              {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
+                <p className="text-sm font-medium text-black mb-1">
+                  Why it is meaningful:
+                </p>
+                <p className="text-sm sm:text-base text-gray-800 italic">
+                  {value.reason}
+                </p>
+              </div>}
+            </article>)}
+          </div>
+        </section>)}
       </div>
+    </div>
 
-      <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-        <button 
-          onClick={handlePrint} 
-          className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2" 
-          aria-label="Print your results"
-        >
-          Print Results
-        </button>
+    <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
+      <button
+        onClick={handlePrint}
+        className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+        aria-label="Print your results"
+      >
+        Print Results
+      </button>
+      <button
+        onClick={() => {
+          setCopySuccess(!copySuccess);
+          handleCopyToClipboard(Object.values(enrichedCategories).flat().filter((value): value is ValueWithReason => value !== undefined));
+        }}
+        className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+        aria-label="Copy results to clipboard"
+      >
+        <span>Copy to Clipboard</span>
+        {copySuccess && (
+          <span aria-hidden="true" className="text-white">
+            ✓
+          </span>
+        )}
+      </button>
+      <button
+        onClick={handleNewExercise}
+        className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
+        aria-label="Start a new values exercise"
+      >
+        Start New Exercise
+      </button>
 
-        <button 
-          onClick={handleNewExercise}
-          className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2" 
-          aria-label="Start a new values exercise"
-        >
-          Start New Exercise
-        </button>
-
-        <button 
-          onClick={handleViewHistory}
-          className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" 
-          aria-label="View all your previous results"
-        >
-          View All Previous Results
-        </button>
-      </div>
-    </div>;
+      <button
+        onClick={handleViewHistory}
+        className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1"
+        aria-label="View all your previous results"
+      >
+        View All Previous Results
+      </button>
+    </div>
+  </div>;
 }
