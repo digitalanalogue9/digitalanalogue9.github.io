@@ -268,7 +268,7 @@ export default function About() {
             </div>
 
             <div
-              className="mt-4 text-sm text-gray-500"
+              className="mt-4 text-sm text-gray-700"
               role="status"
               aria-live="polite"
             >

@@ -27,29 +27,6 @@ const withPWA = require('next-pwa')({
   ]
 })
 
-/** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   reactStrictMode: true,
-//   output: 'export',
-//   images: {
-//     unoptimized: true
-//   },
-//   basePath: process.env.NODE_ENV === 'production' ? '' : '',
-//   webpack: (config) => {
-//     config.experiments = {
-//       ...config.experiments,
-//       asyncWebAssembly: false,
-//       syncWebAssembly: false,
-//     };
-//     return config;
-//   },
-//   env: {
-//     BUILD_TIME: new Date().toISOString(),
-//     CACHE_VERSION: Date.now().toString(),
-//     NEXT_PUBLIC_VERSION: process.env.NEXT_PUBLIC_VERSION || require('./package.json').version
-//   }
-// }
-
 const nextConfig = {
   reactStrictMode: true,
   webpack: (config, { dev, isServer }) => {

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "rimraf .next && rimraf node_modules/.cache",
+    "generate-meta": "node scripts/generate-meta-files.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
