@@ -8,8 +8,8 @@ export default function Navigation() {
   const pathname = usePathname();
   const getActiveClass = (path: string) => {
     return pathname === path 
-      ? 'bg-white text-blue-700 font-semibold rounded-md' 
-      : 'text-white hover:bg-white/20 rounded-md transition-colors';
+      ? 'bg-white text-blue-700 font-bold rounded-md no-underline' 
+      : 'text-white font-semibold hover:bg-white/80 hover:text-blue-700 rounded-md transition-colors no-underline';
   };
 
   return (
@@ -18,9 +18,9 @@ export default function Navigation() {
       role="navigation"
       aria-label="Main navigation"
     >
-      <Link 
+            <Link 
         href="/" 
-        className="text-xl font-bold text-white"
+        className="text-xl font-bold text-white no-underline hover:text-green-400 transition-colors"
         aria-label="Core Values Home"
       >
         Core Values

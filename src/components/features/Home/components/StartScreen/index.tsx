@@ -19,6 +19,10 @@ export default function StartScreen() {
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const [isInitializing, setIsInitializing] = useState(false);
 
+  const handleViewPreviousResults = () => {
+    router.push('/history');
+  };
+
   const handleStart = async () => {
     setIsInitializing(true);
     try {
@@ -105,10 +109,13 @@ export default function StartScreen() {
         <p className="text-gray-700 mb-2 text-sm sm:text-base">
           Have you completed this exercise before?
         </p>
-        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline font-medium text-sm sm:text-base inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-7  00 focus:ring-offset-2 rounded px-2 py-1" aria-label="View your previous exercise results">
-          <span>View Your Previous Results</span>
-          <span aria-hidden="true" className="ml-1">→</span>
-        </Link>
+        <button
+        onClick={handleViewPreviousResults}
+        className={`px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
+        aria-label="View your previous exercise results"
+      >
+        View Your Previous Results
+      </button>
       </div>
     </div>
   </div>;

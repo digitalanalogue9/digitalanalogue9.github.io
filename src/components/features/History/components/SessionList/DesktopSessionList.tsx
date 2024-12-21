@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
 import { getCompletedSession, deleteSession } from "@/lib/db/indexedDB";
@@ -9,6 +9,7 @@ import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 
 export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListProps) {
+    const router = useRouter(); // Add router
     const [showValuesFor, setShowValuesFor] = useState<string | null>(null);
     const [currentValues, setCurrentValues] = useState<Value[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +44,14 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
         }
     };
 
+    // Add navigation handlers
+    const handleReplay = (sessionId: string) => {
+        router.push(`/replay?sessionId=${sessionId}`);
+    };
+
+    const handleResumeGame = (sessionId: string) => {
+        router.push(`/exercise?sessionId=${sessionId}`);
+    };
 
     const handleDeleteSelected = async () => {
         setIsDeleting(true);
@@ -217,21 +226,21 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                             Show Values
                                         </button>
                                         {process.env.NODE_ENV === 'development' && (
-                                            <Link
-                                                href={`/replay?sessionId=${session.id}`}
+                                            <button
+                                                onClick={() => handleReplay(session.id)}
                                                 className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                             >
                                                 Replay
-                                            </Link>
+                                            </button>
                                         )}
                                     </>
                                 ) : (
-                                    <Link
-                                        href={`/exercise?sessionId=${session.id}`}
+                                    <button
+                                        onClick={() => handleResumeGame(session.id)}
                                         className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                     >
                                         Resume Game
-                                    </Link>
+                                    </button>
                                 )}
                                 <button
                                     onClick={() => {

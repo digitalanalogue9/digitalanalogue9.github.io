@@ -9,8 +9,11 @@ import { useGameState } from "@/components/features/Exercise/hooks/useGameState"
 import { clearGameState } from "@/lib/utils/storage";
 import { getCompletedSession } from "@/lib/db/indexedDB";
 import { useSession } from "@/components/features/Exercise/hooks/useSession";
+import { useRouter } from 'next/navigation';
+
 export default function Results() {
-  const printRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+    const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const {
     categories
@@ -51,10 +54,76 @@ export default function Results() {
     const style = document.createElement('style');
     style.textContent = `
       @media print {
-        body { font-size: 12pt; }
-        h1 { font-size: 24pt; }
-        h2 { font-size: 18pt; }
-        h3 { font-size: 14pt; }
+        @page {
+          margin: 2cm;
+        }
+        
+        body { 
+          font-family: 'Arial', sans-serif;
+          line-height: 1.6;
+          color: #000;
+          background: #fff;
+        }
+
+        h1 { 
+          font-size: 24pt;
+          color: #1a365d;
+          text-align: center;
+          margin-bottom: 20pt;
+        }
+
+        h2 { 
+          font-size: 18pt;
+          color: #2c5282;
+          border-bottom: 1pt solid #2c5282;
+          padding-bottom: 5pt;
+          margin: 15pt 0;
+        }
+
+        h3 { 
+          font-size: 14pt;
+          color: #2d3748;
+          margin: 10pt 0;
+        }
+
+        p { 
+          font-size: 11pt;
+          margin: 5pt 0;
+        }
+
+        article {
+          page-break-inside: avoid;
+          border: 1pt solid #e2e8f0;
+          padding: 10pt;
+          margin: 10pt 0;
+          background: #fff;
+          border-radius: 4pt;
+          box-shadow: 2pt 2pt 4pt rgba(0,0,0,0.1);
+        }
+
+        section {
+          margin: 20pt 0;
+          page-break-inside: avoid;
+        }
+
+        .value-reason {
+          font-style: italic;
+          color: #4a5568;
+          margin-top: 8pt;
+          padding-top: 8pt;
+          border-top: 1pt solid #e2e8f0;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15pt;
+        }
+
+        /* Hide non-printable elements */
+        button, .no-print {
+          display: none !important;
+        }
       }
     `;
     winPrint.document.head.appendChild(style);
@@ -64,8 +133,15 @@ export default function Results() {
     winPrint.print();
     winPrint.close();
   };
+
+  
   const handleNewExercise = () => {
     clearGameState();
+    router.push('/');
+  };
+
+  const handleViewHistory = () => {
+    router.push('/history');
   };
   const {
     postItBaseStyles,
@@ -106,17 +182,29 @@ export default function Results() {
       </div>
 
       <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-        <button onClick={handlePrint} className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2" aria-label="Print your results">
+        <button 
+          onClick={handlePrint} 
+          className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2" 
+          aria-label="Print your results"
+        >
           Print Results
         </button>
 
-        <Link href="/" onClick={handleNewExercise} className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2" aria-label="Start a new values exercise">
+        <button 
+          onClick={handleNewExercise}
+          className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2" 
+          aria-label="Start a new values exercise"
+        >
           Start New Exercise
-        </Link>
+        </button>
 
-        <Link href="/history" className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" aria-label="View all your previous results">
+        <button 
+          onClick={handleViewHistory}
+          className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1" 
+          aria-label="View all your previous results"
+        >
           View All Previous Results
-        </Link>
+        </button>
       </div>
     </div>;
 }
