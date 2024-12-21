@@ -67,8 +67,8 @@ export function AnimatedCard({
   }
   return <motion.div variants={cardVariants} initial="initial" animate="animate" exit="exit" whileHover="hover" transition={cardTransition} className={`${postItBaseStyles} ${tapeEffect} w-full sm:w-48 h-auto sm:h-48 max-w-sm mx-auto p-3 sm:p-4`}>
       <div className="relative z-10">
-        <h3 className="font-medium text-gray-800 text-sm sm:text-base mb-2 sm:mb-3">{value.title}</h3>
-        <p className="text-xs sm:text-sm text-gray-800 leading-relaxed">{value.description}</p>
+        <h3 className="font-medium text-black text-sm sm:text-base mb-2 sm:mb-3">{value.title}</h3>
+        <p className="text-xs sm:text-sm text-black leading-relaxed">{value.description}</p>
       </div>
     </motion.div>;
 }

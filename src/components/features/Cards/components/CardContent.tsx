@@ -23,7 +23,7 @@ export function CardContent({
       >
         <h3
           id={headingId}
-          className="font-medium text-gray-800 text-sm sm:text-base flex-1 break-words"
+          className="font-medium text-black text-sm sm:text-base flex-1 break-words"
         >
           {title}
         </h3>
@@ -42,7 +42,7 @@ export function CardContent({
           >
             <p
               id={descriptionId}
-              className="text-base text-gray-800 leading-relaxed"
+              className="text-base text-black leading-relaxed"
               aria-expanded={isExpanded}
             >
               <span className="sr-only">Description: </span>

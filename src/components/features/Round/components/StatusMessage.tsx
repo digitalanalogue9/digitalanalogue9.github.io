@@ -27,18 +27,18 @@ export const StatusMessage = ({
     }
   };
   const messageContent = <div role="status">
-    <p className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight`} aria-live="polite">
+    <p className={`${isMobile ? 'text-sm' : 'text-base'} font-medium leading-tight text-center`} aria-live="polite">
       {status.text}
     </p>
-    {isNearingCompletion && (hasTooManyImportantCards || hasNotEnoughImportantCards) && <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`} aria-live="polite">
+    {isNearingCompletion && (hasTooManyImportantCards || hasNotEnoughImportantCards) && <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight text-center`} aria-live="polite">
       You need exactly {targetCoreValues} values in Very Important
     </p>}
     {totalActiveCards === targetCoreValues && !hasTargetCoreValuesInVeryImportant && (
-      <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`} aria-live="polite">
+      <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight text-center`} aria-live="polite">
         You need exactly {targetCoreValues} values in Very Important
       </p>
     )}
-    {!hasEnoughCards && <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight`} aria-live="polite">
+    {!hasEnoughCards && <p className={`mt-1 ${isMobile ? 'text-xs' : 'text-sm'} leading-tight text-center`} aria-live="polite">
       You must keep at least {targetCoreValues} values outside of Not Important
     </p>}
   </div>;

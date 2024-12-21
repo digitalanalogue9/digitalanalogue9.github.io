@@ -147,7 +147,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 <div className="flex justify-between items-center p-4">
                     <button
                         onClick={toggleSelectionMode}
-                        className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-700'
+                        className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-black' : 'bg-gray-100 text-gray-700'
                             }`}
                     >
                         {isSelectionMode ? 'Cancel' : 'Select'}

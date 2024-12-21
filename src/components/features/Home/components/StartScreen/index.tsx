@@ -60,7 +60,7 @@ export default function StartScreen() {
 
       <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-6 sm:mb-8" aria-label="Introduction">
         <p
-          className="text-base sm:text-lg text-gray-800 font-[system-ui]"
+          className="text-base sm:text-lg text-black font-[system-ui]"
           style={{ contentVisibility: 'auto' }}
         >
           Welcome to the Core Values discovery exercise! Through this interactive experience,

@@ -57,7 +57,7 @@ export function CoreValueReasoning({
                                     {value.description}
                                 </p>
                                 <div>
-                                    <label htmlFor={`reason-${value.id}`} className="block text-sm font-medium text-gray-800 mb-2">
+                                    <label htmlFor={`reason-${value.id}`} className="block text-sm font-medium text-black mb-2">
                                         Why is this value meaningful to you? (Optional)
                                     </label>
                                     <textarea id={`reason-${value.id}`} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" rows={3} value={reasons[value.id] || ''} onChange={e => handleReasonChange(value.id, e.target.value)} placeholder="Share your thoughts... (optional)" aria-label={`Reasoning for ${value.title}`} />

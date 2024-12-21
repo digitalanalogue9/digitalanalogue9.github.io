@@ -156,7 +156,7 @@ export default function Results() {
 
         <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
           {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
-                <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-800">
+                <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
                   {category}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6" role="list" aria-label={`Values in ${category}`}>
@@ -168,7 +168,7 @@ export default function Results() {
                         {value.description}
                       </p>
                       {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
-                          <p className="text-sm font-medium text-gray-800 mb-1">
+                          <p className="text-sm font-medium text-black mb-1">
                             Why it is meaningful:
                           </p>
                           <p className="text-sm sm:text-base text-gray-700 italic">

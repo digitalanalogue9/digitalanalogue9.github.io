@@ -208,8 +208,8 @@ const Card = memo(function Card({
     }
   }}>
     <div className="relative z-10 pointer-events-none" role="region" aria-label={`Content for ${value.title}`}>
-      <h3 className="font-medium text-gray-800 mb-3">{value.title}</h3>
-      <p className="text-sm text-gray-800 leading-relaxed">{value.description}</p>
+      <h3 className="font-medium text-black mb-3">{value.title}</h3>
+      <p className="text-sm text-black leading-relaxed">{value.description}</p>
     </div>
   </div>;
 });
