@@ -121,11 +121,11 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             exit={{ opacity: 0, y: -20 }}
                         >
                             <h4 className="font-medium">{value.title}</h4>
-                            <p className="text-sm text-gray-700 mb-2">{value.description}</p>
+                            <p className="text-sm text-gray-800 mb-2">{value.description}</p>
                             {value.reason && (
                                 <div className="mt-2 pt-2 border-t border-gray-200">
-                                    <p className="text-sm font-medium text-gray-700">Why it is meaningful:</p>
-                                    <p className="text-sm text-gray-700 italic">{value.reason}</p>
+                                    <p className="text-sm font-medium text-gray-800">Why it is meaningful:</p>
+                                    <p className="text-sm text-gray-800 italic">{value.reason}</p>
                                 </div>
                             )}
                         </motion.article>
@@ -145,7 +145,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         onChange={handleSelectAll}
                         className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                     />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm text-gray-800">
                         {selectedSessions.size} selected
                     </span>
                 </div>

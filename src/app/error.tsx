@@ -35,7 +35,7 @@ export default function Error({
         
         <div className="mb-6">
           <p 
-            className="text-gray-700 mb-2"
+            className="text-gray-800 mb-2"
             aria-live="polite"
           >
             We encountered an unexpected error. 

@@ -68,7 +68,7 @@ export default function StartScreen() {
         </p>
       </div>
 
-      {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-700 text-center" role="note" aria-label="Debug information">
+      {isDebug && <div className="mb-4 text-xs sm:text-sm text-gray-800 text-center" role="note" aria-label="Debug information">
         <div>Debug Mode: On</div>
         <div>Max Cards: {maxCards}</div>
         <div>Default Core Values: {defaultCoreValues}</div>
@@ -106,7 +106,7 @@ export default function StartScreen() {
       </form>
 
       <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
-        <p className="text-gray-700 mb-2 text-sm sm:text-base">
+        <p className="text-gray-800 mb-2 text-sm sm:text-base">
           Have you completed this exercise before?
         </p>
         <button

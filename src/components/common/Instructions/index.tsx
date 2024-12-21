@@ -37,7 +37,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
         </ol>
 
         <div className="mt-4 sm:mt-6 space-y-4">
-          <label className="flex items-center gap-2 text-gray-700">
+          <label className="flex items-center gap-2 text-gray-800">
             <input
               type="checkbox"
               checked={!shouldShowAgain}

@@ -164,14 +164,14 @@ export default function Results() {
                       <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
                         {value.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-700 mb-3">
+                      <p className="text-sm sm:text-base text-gray-800 mb-3">
                         {value.description}
                       </p>
                       {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
                           <p className="text-sm font-medium text-black mb-1">
                             Why it is meaningful:
                           </p>
-                          <p className="text-sm sm:text-base text-gray-700 italic">
+                          <p className="text-sm sm:text-base text-gray-800 italic">
                             {value.reason}
                           </p>
                         </div>}

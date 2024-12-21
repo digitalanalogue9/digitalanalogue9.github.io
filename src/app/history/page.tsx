@@ -45,7 +45,7 @@ export default function HistoryPage() {
                 Loading...
               </div>
             ) : sessions.length === 0 ? (
-              <p role="status" aria-live="polite" className="text-gray-700 text-center py-4">
+              <p role="status" aria-live="polite" className="text-gray-800 text-center py-4">
                 No sessions found. Complete a value sorting exercise to see your history.
               </p>
             ) : (

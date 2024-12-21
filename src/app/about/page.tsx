@@ -30,10 +30,10 @@ export default function About() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             About Core Values
           </h1>
-          <p className="text-xl text-gray-700">
+          <p className="text-xl text-gray-800">
             Discover and prioritise what matters most to you
           </p>
-          <p className="text-sm text-gray-500 mt-2" aria-label="Application version">
+          <p className="text-sm text-gray-600 mt-2" aria-label="Application version">
             Version {appVersion}
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function About() {
           <h2 id="why-matters-heading" className="text-2xl font-bold text-gray-900">
             Why Core Values Matter
           </h2>
-          <div className="prose prose-lg text-gray-700">
+          <div className="prose prose-lg text-gray-800">
             <p>
               Understanding your core values is essential for making meaningful life decisions
               and living authentically. This app helps you explore and organize your values
@@ -83,7 +83,7 @@ export default function About() {
                 role="listitem"
               >
                 <div className="text-blue-700 text-xl mb-2">{step.title}</div>
-                <p className="text-gray-700">{step.description}</p>
+                <p className="text-gray-800">{step.description}</p>
               </div>
             ))}
           </div>
@@ -128,7 +128,7 @@ export default function About() {
                   <span aria-hidden="true">{benefit.icon} </span>
                   {benefit.title}
                 </h3>
-                <p className="text-gray-700">{benefit.description}</p>
+                <p className="text-gray-800">{benefit.description}</p>
               </div>
             ))}
           </div>
@@ -181,7 +181,7 @@ export default function About() {
                   <span aria-hidden="true">{item.icon} </span>
                   {item.title}
                 </h3>
-                <p className="text-gray-700">{item.description}</p>
+                <p className="text-gray-800">{item.description}</p>
               </div>
             ))}
           </div>
@@ -198,7 +198,7 @@ export default function About() {
                 <span aria-hidden="true">⚠️ </span>
                 Important Note
               </h3>
-              <p className="text-gray-700">
+              <p className="text-gray-800">
                 If you clear your browser data or uninstall the app, your stored
                 information will be deleted. Consider taking screenshots or noting down
                 important results if you want to keep them long-term.
@@ -210,7 +210,7 @@ export default function About() {
                 <span aria-hidden="true">💡 </span>
                 Pro Tip
               </h3>
-              <p className="text-gray-700">
+              <p className="text-gray-800">
                 For the best experience, install this as an app on your device
                 (look for the Install App button in your browser). This makes it easier
                 to access and use, just like any other app on your device!
@@ -254,7 +254,7 @@ export default function About() {
                   </label>
                   <p
                     id="instructions-description"
-                    className="text-gray-700 mt-2"
+                    className="text-gray-800 mt-2"
                   >
                     <span className="sr-only">
                       Current status:
@@ -268,7 +268,7 @@ export default function About() {
             </div>
 
             <div
-              className="mt-4 text-sm text-gray-700"
+              className="mt-4 text-sm text-gray-800"
               role="status"
               aria-live="polite"
             >

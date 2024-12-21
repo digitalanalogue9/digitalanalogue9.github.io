@@ -21,7 +21,7 @@ export function ReplayColumn({
                 <h4 id={`card-title-${card.id}`} className="font-medium">
                   {card.title}
                 </h4>
-                <p className="text-sm text-gray-700" aria-label={`Description: ${card.description}`}>
+                <p className="text-sm text-gray-800" aria-label={`Description: ${card.description}`}>
                   {card.description}
                 </p>
               </div>

@@ -280,7 +280,7 @@ export default function ReplayClient() {
           </div>
 
           <div className="flex items-center text-sm sm:text-base" aria-live="polite" role="status">
-            {!isPlaying && !commandInfo ? <span className="text-gray-700">
+            {!isPlaying && !commandInfo ? <span className="text-gray-800">
               Click Play to start the replay
             </span> : commandInfo && <span>
               <span className="font-semibold">Round {commandInfo.roundNumber}:</span>

@@ -20,7 +20,7 @@ export default function NotFound() {
           Page Not Found
         </h1>
         <p 
-          className="mb-4 text-gray-700"
+          className="mb-4 text-gray-800"
           aria-live="polite"
         >
           Could not find requested resource
