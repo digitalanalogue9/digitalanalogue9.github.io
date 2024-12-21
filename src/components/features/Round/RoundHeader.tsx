@@ -12,7 +12,7 @@ export function RoundHeader({
         {/* Both Mobile and Desktop use the same lozenge style */}
         <div>
           <div className="bg-blue-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-blue-700 uppercase tracking-wide">
+            <h2 className="text-xs sm:text-sm font-semibold text-blue-800 uppercase tracking-wide">
               Target
             </h2>
             <p className="text-lg sm:text-2xl font-bold text-blue-900">
@@ -22,7 +22,7 @@ export function RoundHeader({
         </div>
         <div>
           <div className="bg-purple-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-purple-700 uppercase tracking-wide">
+            <h2 className="text-xs sm:text-sm font-semibold text-purple-800 uppercase tracking-wide">
               Round
             </h2>
             <p className="text-lg sm:text-2xl font-bold text-purple-900">
@@ -32,7 +32,7 @@ export function RoundHeader({
         </div>
         <div>
           <div className="bg-green-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-green-700 uppercase tracking-wide">
+            <h2 className="text-xs sm:text-sm font-semibold text-green-800 uppercase tracking-wide">
               Cards
             </h2>
             <p className="text-lg sm:text-2xl font-bold text-green-900">
