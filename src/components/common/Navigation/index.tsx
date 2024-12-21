@@ -88,7 +88,7 @@ export default function Navigation() {
           >
             <Link 
               href="/" 
-              className="block px-4 py-2 text-white hover:bg-gray-100"
+              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
               role="menuitem"
             >
@@ -96,7 +96,7 @@ export default function Navigation() {
             </Link>
             <Link 
               href="/about" 
-              className="block px-4 py-2 text-white hover:bg-gray-100"
+              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
               role="menuitem"
             >
@@ -104,7 +104,7 @@ export default function Navigation() {
             </Link>
             <Link 
               href="/history" 
-              className="block px-4 py-2 text-white hover:bg-gray-100"
+              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
               role="menuitem"
             >

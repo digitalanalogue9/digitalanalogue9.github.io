@@ -97,24 +97,24 @@ export default function StartScreen() {
           <button 
             type="submit" 
             className={`px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
-            aria-label="Begin the core values exercise"
+            aria-label="Begin discovery of my core values"
             disabled={isInitializing}
           >
-            {isInitializing ? 'Initializing...' : 'Start Exercise'}
+            {isInitializing ? 'Initializing...' : 'Start'}
           </button>
         </div>
       </form>
 
       <div className="mt-6 sm:mt-8 text-center" aria-label="Previous results navigation">
         <p className="text-gray-800 mb-2 text-sm sm:text-base">
-          Have you completed this exercise before?
+          Have you completed this before?
         </p>
         <button
         onClick={handleViewPreviousResults}
         className={`px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
-        aria-label="View your previous exercise results"
+        aria-label="View previous results"
       >
-        View Your Previous Results
+        View Previous Results
       </button>
       </div>
     </div>

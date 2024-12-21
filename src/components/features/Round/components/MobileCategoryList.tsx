@@ -30,8 +30,7 @@ export function MobileCategoryList({
     setExpandedCategory(expandedCategory === category ? null : category);
   };
   return <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto px-1" // Changed from -mx-2 to px-3
-    role="region" aria-label="Categories list">
+      <div className="flex-1 overflow-y-auto px-1 py-1" role="region" aria-label="Categories list">
         <div className="space-y-2"> {/* Removed px-2 since padding is now on parent */}
           {categoryNames.map(category => <div key={category}>
               <MobileCategoryRow category={category} cards={categories[category] ?? []} availableCategories={categoryNames} isActive={activeDropZone === category} isExpanded={expandedCategory === category} onCategoryTap={handleCategoryTap} onCategorySelect={handleCategorySelect} showingCardSelection={!!selectedCard} onMoveWithinCategory={(fromIndex, toIndex) => onMoveWithinCategory(category, fromIndex, toIndex)} onMoveBetweenCategories={onMoveBetweenCategories} lastDroppedCategory={lastDroppedCategory} />

@@ -338,14 +338,14 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                     <>
                                         <button
                                             onClick={() => handleShowValues(session.id)}
-                                            className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                                            className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
                                         >
-                                            Show Values
+                                            My Values
                                         </button>
                                         {process.env.NODE_ENV === 'development' && (
                                             <button
                                                 onClick={() => handleReplay(session.id)}
-                                                className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                                                className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                             >
                                                 Replay
                                             </button>
@@ -356,7 +356,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                         onClick={() => handleResumeGame(session.id)}
                                         className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                     >
-                                        Resume Game
+                                        Resume
                                     </button>
                                 )}
                                 <button
