@@ -69,7 +69,7 @@ export default function About() {
                 description: "Browse through carefully curated value cards and begin sorting them based on their importance to you."
               },
               {
-                title: "2. prioritise",
+                title: "2. Prioritise",
                 description: "Organize values into categories, helping you identify which ones resonate most strongly with your personal beliefs."
               },
               {
