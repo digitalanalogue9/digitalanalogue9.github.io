@@ -29,6 +29,10 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
+  distDir: 'out', 
+  trailingSlash: true, 
+  assetPrefix: '/digitalanalogue9.github.io/', 
   webpack: (config, { dev, isServer }) => {
     // Production optimizations only
     if (!dev && !isServer) {
