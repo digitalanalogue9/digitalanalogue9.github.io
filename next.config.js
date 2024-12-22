@@ -35,7 +35,6 @@ const nextConfig = {
   output: isGitHubPages ? 'export' : undefined, // GitHub Pages needs static export
   distDir: isGitHubPages ? 'out' : '.next', // Different output directories
   trailingSlash: isGitHubPages, // Trailing slashes for GitHub Pages
-  assetPrefix: isGitHubPages ? '/digitalanalogue9.github.io/' : undefined, // GitHub Pages asset prefix
 }
 
 module.exports = withPWA(nextConfig);
