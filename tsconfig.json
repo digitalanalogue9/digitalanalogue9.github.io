@@ -7,7 +7,7 @@
       "esnext",
       "webworker"
     ],
-    "noImplicitAny" : true,
+    "noImplicitAny": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -50,10 +50,11 @@
     }
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "out/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

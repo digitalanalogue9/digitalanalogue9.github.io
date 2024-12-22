@@ -27,13 +27,14 @@ const withPWA = require('next-pwa')({
   ]
 })
 
+const isDevelopment = process.env.NODE_ENV === 'development';
 const isGitHubPages = process.env.NEXT_PUBLIC_DEPLOYMENT_TARGET === 'github';
 const isVercel = process.env.NEXT_PUBLIC_DEPLOYMENT_TARGET === 'vercel';
 
 const nextConfig = {
   reactStrictMode: true,
   output: isGitHubPages ? 'export' : undefined, // GitHub Pages needs static export
-  distDir: isGitHubPages ? 'out' : '.next', // Different output directories
+  distDir: isGitHubPages || isDevelopment ? 'out' : '.next', // Different output directories
   trailingSlash: isGitHubPages, // Trailing slashes for GitHub Pages
 }
 
