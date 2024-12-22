@@ -132,6 +132,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                     </div>
                     <button
                         onClick={() => setShowValuesFor(null)}
+                        aria-label={`Close`}
                         className="w-full px-4 py-2 bg-blue-600 text-white rounded"
                     >
                         Close
@@ -147,6 +148,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 <div className="flex justify-between items-center p-4">
                     <button
                         onClick={toggleSelectionMode}
+                        aria-label={isSelectionMode ? 'Cancel' : 'Select'}
                         className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-black' : 'bg-gray-100 text-black'
                             }`}
                     >
@@ -156,6 +158,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         <div className="flex items-center space-x-2">
                             <button
                                 onClick={handleSelectAll}
+                                aria-label={selectedSessions.size === sessions.length ? 'Deselect all sessions' : 'Select all sessions'}
                                 className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-md text-sm font-medium"
                             >
                                 {selectedSessions.size === sessions.length ? 'Deselect All' : 'Select All'}
@@ -163,6 +166,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                             {selectedSessions.size > 0 && (
                                 <button
                                     onClick={() => setIsDeleteModalOpen(true)}
+                                    aria-label={`Delete ${selectedSessions.size} sessions`}
                                     className="px-3 py-1.5 bg-red-600 text-white rounded-md text-sm font-medium"
                                 >
                                     Delete ({selectedSessions.size})
@@ -211,6 +215,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                                 {session.completed ? (
                                     <button
                                         onClick={() => handleShowValues(session.id)}
+                                        aria-label={`Show values for ${session.id}`}
                                         className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
                                     >
                                         Show Values

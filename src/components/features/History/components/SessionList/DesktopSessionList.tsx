@@ -276,6 +276,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 {selectedSessions.size > 0 && (
                     <button
                         onClick={() => setIsDeleteModalOpen(true)}
+                        aria-label='Delete selected sessions'
                         className="px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
                     >
                         Delete Selected
@@ -352,6 +353,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                     <>
                                         <button
                                             onClick={() => handleShowValues(session.id)}
+                                            aria-label={`Show values for session ${session.id}`}
                                             className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
                                         >
                                             My Values
@@ -359,6 +361,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                         {process.env.NODE_ENV === 'development' && (
                                             <button
                                                 onClick={() => handleReplay(session.id)}
+                                                aria-label={`Replay session ${session.id}`}
                                                 className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                             >
                                                 Replay
@@ -368,6 +371,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                 ) : (
                                     <button
                                         onClick={() => handleResumeGame(session.id)}
+                                        aria-label={`Resume session ${session.id}`}
                                         className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                                     >
                                         Resume

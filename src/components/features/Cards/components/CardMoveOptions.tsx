@@ -87,7 +87,7 @@ export function CardMoveOptions({
     zIndex: 9999
   }} role="dialog" aria-label={`Move options for ${value.title}`} aria-modal="true">
       <div role="menu" aria-label="Available categories">
-        {allCategories.filter(cat => cat !== currentCategory).map(category => <button  key={category} type="button" onClick={() => {
+        {allCategories.filter(cat => cat !== currentCategory).map(category => <button key={category} type="button" onClick={() => {
         onMoveBetweenCategories(value, currentCategory, category);
         onClose();
       }} className={buttonBaseClass} role="menuitem" aria-label={`Move to ${category} category`}>
