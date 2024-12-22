@@ -59,6 +59,34 @@ const Card = memo(function Card({
     e.dataTransfer.dropEffect = 'move';
     setIsOver(true);
   };
+
+  const findDropIndex = (mouseY: number, container: HTMLElement): number => {
+    const cardElements = container.querySelectorAll('[data-card-id]');
+    const containerRect = container.getBoundingClientRect();
+    
+    // If no cards or mouse is above all cards, return 0
+    if (cardElements.length === 0 || mouseY < containerRect.top) {
+      return 0;
+    }
+    
+    // If mouse is below all cards, return length
+    if (mouseY > containerRect.bottom) {
+      return cardElements.length;
+    }
+
+    // Find the card the mouse is closest to
+    for (let i = 0; i < cardElements.length; i++) {
+      const cardRect = cardElements[i].getBoundingClientRect();
+      const cardMiddle = cardRect.top + (cardRect.height / 2);
+      
+      if (mouseY < cardMiddle) {
+        return i;
+      }
+    }
+
+    // If we get here, the mouse is below the middle of the last card
+    return cardElements.length;
+  };
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     if (isMobile) return;
     e.preventDefault();
@@ -67,7 +95,12 @@ const Card = memo(function Card({
     try {
       const droppedData = JSON.parse(e.dataTransfer.getData('text/plain'));
       const sourceIndex = droppedData.sourceIndex;
-      const targetIndex = columnIndex;
+
+      const dropContainer = e.currentTarget.closest('.space-y-2') as HTMLElement | null;;
+      
+      if (!dropContainer) return;
+      const targetIndex = findDropIndex(e.clientY, dropContainer);
+
       const sourceCategory = droppedData.sourceCategory;
       if (debug) {
         console.log('📥 Drop data:', {
@@ -148,6 +181,7 @@ const Card = memo(function Card({
     return (
       <div
         id={`card-${value.id}`}
+        data-card-id={value.id}
         data-index={columnIndex}
         data-dropzone="true"
         draggable="true"
