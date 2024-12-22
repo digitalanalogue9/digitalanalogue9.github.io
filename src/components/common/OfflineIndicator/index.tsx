@@ -1,7 +1,25 @@
-// src/components/OfflineIndicator.tsx
 'use client';
-
 import { usePWA } from "@/lib/hooks/usePWA";
+/**
+ * OfflineIndicator component displays a notification when the user is offline.
+ * It uses the `usePWA` hook to determine the offline status.
+ * 
+ * @component
+ * @example
+ * // Usage example:
+ * // import OfflineIndicator from '@/components/common/OfflineIndicator';
+ * // 
+ * // function App() {
+ * //   return (
+ * //     <div>
+ * //       <OfflineIndicator />
+ * //     </div>
+ * //   );
+ * // }
+ * 
+ * @returns {JSX.Element | null} A JSX element displaying the offline notification or null if online.
+ */
+// src/components/OfflineIndicator.tsx
 export default function OfflineIndicator() {
   const {
     isOffline

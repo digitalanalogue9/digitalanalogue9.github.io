@@ -11,6 +11,27 @@ import { getCompletedSession } from "@/lib/db/indexedDB";
 import { useSession } from "@/components/features/Exercise/hooks/useSession";
 import { useRouter } from 'next/navigation';
 
+/**
+ * The `Results` component displays the core values results for a user.
+ * It fetches and enriches the categories with reasons from a completed session,
+ * and provides options to print the results, copy them to the clipboard, start a new exercise, or view previous results.
+ *
+ * @component
+ * @returns {JSX.Element | null} The rendered component or null if not mounted.
+ *
+ * @example
+ * <Results />
+ *
+ * @remarks
+ * This component uses several hooks:
+ * - `useRouter` for navigation.
+ * - `useRef` to reference the printable content.
+ * - `useState` to manage component state.
+ * - `useEffect` to fetch and enrich categories with reasons.
+ *
+ * @function
+ * @name Results
+ */
 export default function Results() {
   const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
@@ -226,19 +247,18 @@ export default function Results() {
         )}
       </button>
       <button
+        onClick={handleViewHistory}
+        className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+        aria-label="View all your previous results"
+      >
+        View All Previous Results
+      </button>
+      <button
         onClick={handleNewExercise}
         className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
         aria-label="Start a new values exercise"
       >
         Start New Exercise
-      </button>
-
-      <button
-        onClick={handleViewHistory}
-        className="text-blue-700 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 rounded px-2 py-1"
-        aria-label="View all your previous results"
-      >
-        View All Previous Results
       </button>
     </div>
   </div>;

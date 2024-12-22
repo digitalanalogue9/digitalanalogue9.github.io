@@ -3,6 +3,22 @@ import type { CategorySelectionOverlayProps } from '@/components/features/Catego
 import React from 'react';
 import { allCategories } from "@/components/features/Categories/constants/categories";
 import { CategoryName } from "@/lib/types";
+/**
+ * CategorySelectionOverlay component renders an overlay for selecting categories.
+ * 
+ * @param {CategorySelectionOverlayProps} props - The props for the component.
+ * @param {function} props.onCategorySelect - Callback function to handle category selection.
+ * @param {boolean} props.isVisible - Determines if the overlay is visible.
+ * @param {string} [props.instruction="Select a category for this card"] - Instruction text displayed at the top of the overlay.
+ * 
+ * @returns {JSX.Element | null} The rendered overlay component or null if not visible.
+ * 
+ * @example
+ * <CategorySelectionOverlay
+ *   onCategorySelect={(category) => console.log(category)}
+ *   isVisible={true}
+ * />
+ */
 export const CategorySelectionOverlay: React.FC<CategorySelectionOverlayProps> = ({
   onCategorySelect,
   isVisible,

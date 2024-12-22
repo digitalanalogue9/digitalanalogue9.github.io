@@ -9,11 +9,33 @@ import { initialCategories } from "@/components/features/Categories/constants/ca
 import valuesData from '@/data/values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
 
+/**
+ * The `StartScreen` component is the entry point for users to begin discovering their core values.
+ * It provides an interface for users to configure the number of core values they want to identify
+ * and start the exercise. The component also adapts its layout based on the screen size (mobile or desktop).
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <StartScreen />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered StartScreen component.
+ *
+ * @remarks
+ * - The component uses the `useRouter` hook from Next.js for navigation.
+ * - It initializes the game state and navigates to the exercise screen upon starting.
+ * - The number of core values can be configured between 1 and 10.
+ * - The component adapts its layout for mobile and desktop views.
+ *
+ * @function
+ * @name StartScreen
+ */
 export default function StartScreen() {
   const router = useRouter();
   const isDebug = getEnvBoolean('debug', false);
   const maxCards = getEnvNumber('maxCards', 35);
-  const defaultCoreValues = getEnvNumber('numCoreValues', 5);
+  const defaultCoreValues = getEnvNumber('numCoreValues', 10);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const [isInitializing, setIsInitializing] = useState(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -90,10 +112,10 @@ export default function StartScreen() {
         aria-label="Introduction"
       >
         <p className={`${isMobile ? 'text-sm' : 'text-lg sm:text-xl'} text-black font-medium`}>
-          Your core values define who you are and guide your decisions. Uncover what truly drives you with this interactive tool.
+        Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Let’s find the ones that define you best!
         </p>
         <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} text-black`}>
-          You will start with 35 values and refine them to focus on the ones that truly resonate with your core values.
+        You'll start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
         </p>
       </div>
 

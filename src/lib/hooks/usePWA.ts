@@ -3,6 +3,32 @@
 import { useState, useEffect } from 'react';
 import { PWAStatus } from "@/lib/types";
 
+/**
+ * Custom hook to manage Progressive Web App (PWA) status.
+ * 
+ * This hook provides the current status of the PWA, including whether it needs an update
+ * and whether the application is offline. It also provides a method to update the service worker.
+ * 
+ * @returns {Object} An object containing:
+ * - `needsUpdate` (boolean): Indicates if the service worker needs an update.
+ * - `isOffline` (boolean): Indicates if the application is currently offline.
+ * - `updateServiceWorker` (function): A function to manually update the service worker and reload the page.
+ * 
+ * @example
+ * const { needsUpdate, isOffline, updateServiceWorker } = usePWA();
+ * 
+ * useEffect(() => {
+ *   if (needsUpdate) {
+ *     // Notify the user about the update
+ *   }
+ * }, [needsUpdate]);
+ * 
+ * useEffect(() => {
+ *   if (isOffline) {
+ *     // Handle offline status
+ *   }
+ * }, [isOffline]);
+ */
 export function usePWA() {
   const [status, setStatus] = useState<PWAStatus>({
     needsUpdate: false,

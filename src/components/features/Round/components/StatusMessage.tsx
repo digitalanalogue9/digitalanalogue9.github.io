@@ -4,6 +4,26 @@
 import { ReactNode } from 'react';
 import { StatusMessageProps } from '@/components/features/Round/types';
 import { useMobile } from "@/lib/contexts/MobileContext";
+/**
+ * StatusMessage component displays a status message with optional details.
+ * It adapts its layout based on the device type (mobile or desktop).
+ *
+ * @param {Object} props - The properties object.
+ * @param {Object} props.status - The status object containing the status text and type.
+ * @param {boolean} props.isNearingCompletion - Flag indicating if the task is nearing completion.
+ * @param {boolean} props.hasTooManyImportantCards - Flag indicating if there are too many important cards.
+ * @param {boolean} props.hasNotEnoughImportantCards - Flag indicating if there are not enough important cards.
+ * @param {boolean} props.hasEnoughCards - Flag indicating if there are enough cards.
+ * @param {number} props.targetCoreValues - The target number of core values.
+ * @param {boolean} props.canProceedToNextRound - Flag indicating if the user can proceed to the next round.
+ * @param {Array} props.remainingCards - The array of remaining cards.
+ * @param {boolean} [props.showDetails=true] - Flag indicating if the details should be shown.
+ * @param {number} props.totalActiveCards - The total number of active cards.
+ * @param {boolean} props.hasTargetCoreValuesInVeryImportant - Flag indicating if the target core values are in the "Very Important" category.
+ * @param {Function} props.setShowDetails - Function to toggle the visibility of the details.
+ *
+ * @returns {ReactNode} The rendered StatusMessage component.
+ */
 export const StatusMessage = ({
   status,
   isNearingCompletion,

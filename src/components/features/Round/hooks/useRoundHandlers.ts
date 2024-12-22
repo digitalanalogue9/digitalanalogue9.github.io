@@ -4,6 +4,32 @@ import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand
 import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
 import { saveRound, getRound } from "@/lib/db/indexedDB";
 import { logEffect, logStateUpdate } from "@/lib/utils";
+/**
+ * Custom hook that provides handlers for managing round-related actions such as dropping a card into a category,
+ * moving a card between categories, and moving a card within a category.
+ *
+ * @param {Categories} categories - The current state of categories with their respective cards.
+ * @param {Function} setCategories - Function to update the state of categories.
+ * @param {Value[]} remainingCards - The list of cards that are yet to be categorized.
+ * @param {Function} setRemainingCards - Function to update the state of remaining cards.
+ * @param {CategoryName[]} validCategories - List of valid category names.
+ * @param {CategoryName[]} activeCategories - List of active category names.
+ * @param {string | null} sessionId - The current session ID.
+ * @param {number} roundNumber - The current round number.
+ * @param {Command[]} currentRoundCommands - The list of commands executed in the current round.
+ * @param {Function} addCommand - Function to add a new command.
+ * @param {Function} clearCommands - Function to clear all commands.
+ * @param {number} targetCoreValues - The target number of core values.
+ * @param {Function} setRoundNumber - Function to update the round number.
+ * @param {Function} setShowResults - Function to show or hide the results.
+ * @param {Function} setShowStatusDetails - Function to show or hide the status details.
+ *
+ * @returns {Object} An object containing the handlers:
+ * - `handleMoveCard`: Handler to move a card within a category.
+ * - `handleDrop`: Handler to drop a card into a category.
+ * - `handleMoveBetweenCategories`: Handler to move a card between categories.
+ * - `saveRoundData`: Handler to save round data.
+ */
 export const useRoundHandlers = (categories: Categories, setCategories: (categories: Categories) => void, remainingCards: Value[], setRemainingCards: (cards: Value[]) => void, validCategories: CategoryName[], activeCategories: CategoryName[], sessionId: string | null, roundNumber: number, currentRoundCommands: Command[], addCommand: (command: Command) => Promise<void>, clearCommands: () => void, targetCoreValues: number, setRoundNumber: (round: number) => void, setShowResults: (show: boolean) => void, setShowStatusDetails: (isFirst: boolean) => void) => {
   useEffect(() => {
     const loadRoundCommands = async () => {

@@ -3,6 +3,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+/**
+ * Navigation component that provides both desktop and mobile navigation menus.
+ * 
+ * @component
+ * @example
+ * // Usage example:
+ * <Navigation /> 
+ */
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();

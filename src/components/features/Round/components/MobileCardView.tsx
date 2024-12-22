@@ -4,6 +4,17 @@ import { Value, CategoryName, Categories } from "@/lib/types";
 import { Card } from "@/components/features/Cards/components";
 import { MobileCardViewProps} from '@/components/features/Round/types';
 
+/**
+ * MobileCardView component displays a list of value cards in a mobile-friendly view.
+ * It shows the cards in a scrollable container and provides accessibility features.
+ *
+ * @component
+ * @param {MobileCardViewProps} props - The properties for the MobileCardView component.
+ * @param {Array<CardType>} props.cards - The list of cards to be displayed.
+ * @param {Array<CategorizedCardType>} props.categorizedCards - The categorized cards.
+ * @param {Function} props.onCardPlace - Callback function when a card is placed.
+ * @returns {JSX.Element} The rendered MobileCardView component.
+ */
 export const MobileCardView: React.FC<MobileCardViewProps> = ({
   cards,
   categorizedCards,

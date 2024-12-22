@@ -1,5 +1,17 @@
 import { useCallback } from 'react';
 import { Value, Categories } from "@/lib/types";
+/**
+ * Represents the state of validation for a round.
+ * 
+ * @property {Value[]} remainingCards - The list of remaining cards to be validated.
+ * @property {boolean} hasMinimumNotImportant - Indicates if the minimum number of not important cards is met.
+ * @property {boolean} hasEnoughCards - Indicates if there are enough cards to proceed.
+ * @property {boolean} isNearingCompletion - Indicates if the validation process is nearing completion.
+ * @property {number} veryImportantCount - The count of very important cards.
+ * @property {number} targetCoreValues - The target number of core values to be achieved.
+ * @property {number} totalActiveCards - The total number of active cards in the round.
+ * @property {Categories} categories - The categories associated with the validation state.
+ */
 export type ValidationState = {
   remainingCards: Value[];
   hasMinimumNotImportant: boolean;

@@ -3,6 +3,12 @@
 
 import Link from 'next/link';
 
+/**
+ * NotFound component renders a user-friendly message indicating that the requested page could not be found.
+ * It includes a heading, a descriptive message, and a link to return to the homepage.
+ *
+ * @returns {JSX.Element} A React component that displays a "Page Not Found" message.
+ */
 export default function NotFound() {
   return (
     <div 

@@ -8,6 +8,43 @@ import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 
+/**
+ * Component for displaying a list of sessions in a desktop view.
+ *
+ * @component
+ * @param {SessionListProps} props - The properties for the component.
+ * @param {Session[]} props.sessions - The list of sessions to display.
+ * @param {function} [props.onSessionDeleted] - Callback function to handle session deletion.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * <DesktopSessionList
+ *   sessions={sessions}
+ *   onSessionDeleted={handleSessionDeleted}
+ * />
+ *
+ * @remarks
+ * This component provides functionalities to:
+ * - Show values for a selected session.
+ * - Replay or resume a session.
+ * - Delete selected sessions.
+ * - Copy session values to clipboard.
+ * - Print session values.
+ *
+ * @internal
+ * This component uses several hooks and helper functions:
+ * - `useRouter` for navigation.
+ * - `useState` for managing local state.
+ * - `useSessionSelection` for session selection management.
+ * - `getPostItStyles` for styling.
+ * - `getCompletedSession` for fetching session data.
+ * - `deleteSession` for deleting sessions.
+ *
+ * @todo
+ * - Add toast notifications for clipboard copy success/failure.
+ * - Improve error handling for async operations.
+ */
 export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListProps) {
     const router = useRouter(); // Add router
     const [showValuesFor, setShowValuesFor] = useState<string | null>(null);

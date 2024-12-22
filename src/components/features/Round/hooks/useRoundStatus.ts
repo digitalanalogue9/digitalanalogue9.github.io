@@ -3,6 +3,30 @@ import { useCallback } from 'react';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import {StatusState, Status, StatusType} from '@/components/features/Round/types';
 
+/**
+ * Custom hook that determines the status of the current round based on the provided state.
+ *
+ * @param {StatusState} state - The current state of the round.
+ * @returns {() => Status} A callback function that returns the current status of the round.
+ *
+ * The returned status object contains:
+ * - `text` (string): A message describing the current status.
+ * - `type` ('info' | 'warning' | 'success'): The type of status message.
+ * - `isEndGame` (boolean): A flag indicating whether the game has ended.
+ *
+ * The status is determined based on the following conditions:
+ * 1. If there are remaining cards:
+ *    - On mobile: instructs the user to tap the yellow card and place it in a category.
+ *    - On desktop: instructs the user to drag the remaining values to a category.
+ * 2. If there are no remaining cards and the minimum number of values in "Not Important" is not met:
+ *    - Warns the user to place at least one value in "Not Important".
+ * 3. If the number of active cards outside "Not Important" is less than the target core values:
+ *    - Warns the user to have at least the target number of values outside "Not Important".
+ * 4. If the number of "Very Important" values equals the target core values:
+ *    - Indicates that the user can end the game.
+ * 5. Otherwise:
+ *    - Informs the user that they can continue to the next round or refine their choices.
+ */
 export const useRoundStatus = (state: StatusState) => {
   const {
     isMobile

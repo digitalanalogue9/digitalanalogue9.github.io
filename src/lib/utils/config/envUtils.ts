@@ -2,10 +2,10 @@ export function getEnvNumber(key: string, defaultValue: number): number {
   // In development, return default values
   if (process.env.NODE_ENV === 'development') {
     if (key === 'maxCards') {
-      return 10;
+      return 15;
     }
     if (key === 'numCoreValues') {
-      return 5;
+      return 10;
     }
     return defaultValue;
   }

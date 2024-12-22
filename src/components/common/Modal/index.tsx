@@ -3,7 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ModalProps } from '@/components/common/Modal/types';
 
 
-export function Modal({ 
+/**
+ * Modal component that displays a modal dialog.
+ *
+ * @param {Object} props - The properties object.
+ * @param {boolean} props.isOpen
+ */
+ export function Modal({ 
     isOpen, 
     onClose, 
     title, 

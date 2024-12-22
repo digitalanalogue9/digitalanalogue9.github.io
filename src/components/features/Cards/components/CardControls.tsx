@@ -3,6 +3,23 @@ import { TouchEvent as ReactTouchEvent, MouseEvent as ReactMouseEvent } from 're
 import { Value } from "@/lib/types";
 import { ExtendedCardControlsProps } from '@/components/features/Cards/types';
 
+/**
+ * CardControls component provides a set of controls for managing card actions such as moving up, moving down,
+ * expanding/collapsing details, and showing move options.
+ *
+ * @param {Object} props - The properties object.
+ * @param {Function} props.onMoveUp - Callback function to handle the move up action.
+ * @param {Function} props.onMoveDown - Callback function to handle the move down action.
+ * @param {Function} props.onShowMoveOptions - Callback function to handle showing move options.
+ * @param {string} props.currentCategory - The current category of the card.
+ * @param {boolean} props.isExpanded - Flag indicating whether the card details are expanded.
+ * @param {Function} props.onToggleExpand - Callback function to handle toggling the expand/collapse state.
+ * @param {Object} props.value - The value object containing card details.
+ * @param {string} props.value.title - The title of the card.
+ * @param {string} props.value.id - The unique identifier of the card.
+ *
+ * @returns {JSX.Element} The rendered CardControls component.
+ */
 export function CardControls({
   onMoveUp,
   onMoveDown,

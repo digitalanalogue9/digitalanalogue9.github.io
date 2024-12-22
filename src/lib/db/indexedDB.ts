@@ -18,6 +18,26 @@ const storeNames = {
 const debug = getEnvBoolean('debug', false);
 
 // Database initialization
+/**
+ * Initializes the IndexedDB database with the specified schema.
+ * 
+ * This function opens the IndexedDB database with the given name and version.
+ * If the database needs to be upgraded, it creates the necessary object stores
+ * and indexes.
+ * 
+ * @returns {Promise<IDBPDatabase>} A promise that resolves to the initialized IndexedDB database instance.
+ * 
+ * @throws Will throw an error if the database initialization fails.
+ * 
+ * @example
+ * ```typescript
+ * initDB().then(db => {
+ *   console.log('Database initialized:', db);
+ * }).catch(error => {
+ *   console.error('Failed to initialize database:', error);
+ * });
+ * ```
+ */
 export async function initDB(): Promise<IDBPDatabase> {
   if (debug) console.log('🔵 Initializing IndexedDB');
   try {
@@ -60,6 +80,13 @@ export async function initDB(): Promise<IDBPDatabase> {
 }
 
 // Session operations
+/**
+ * Retrieves a session from the IndexedDB using the provided session ID.
+ *
+ * @param sessionId - The unique identifier of the session to fetch.
+ * @returns A promise that resolves to the session object if found, or undefined if not found.
+ * @throws Will throw an error if there is an issue fetching the session from the database.
+ */
 export async function getSession(sessionId: string): Promise<Session | undefined> {
   if (debug) console.log('🔍 Fetching session:', sessionId);
   try {
@@ -73,6 +100,14 @@ export async function getSession(sessionId: string): Promise<Session | undefined
   }
 }
 
+/**
+ * Adds a new session to the IndexedDB and creates an initial round for it.
+ *
+ * @param session - The session object to be added, excluding the 'id' property.
+ * @param initialCategories - The initial categories to be used in the first round.
+ * @returns A promise that resolves to the generated session ID.
+ * @throws Will throw an error if there is an issue saving the session or initial round.
+ */
 export async function addSession(session: Omit<Session, 'id'>, initialCategories: Categories): Promise<string> {
   if (debug) console.log('💾 Saving session:', session);
   try {
@@ -110,6 +145,21 @@ export async function addSession(session: Omit<Session, 'id'>, initialCategories
     throw error;
   }
 }
+/**
+ * Fetches all sessions from the IndexedDB.
+ *
+ * @returns {Promise<Session[]>} A promise that resolves to an array of sessions.
+ * @throws Will throw an error if there is an issue fetching the sessions.
+ *
+ * @example
+ * ```typescript
+ * getSessions().then(sessions => {
+ *   console.log(sessions);
+ * }).catch(error => {
+ *   console.error('Error fetching sessions:', error);
+ * });
+ * ```
+ */
 export async function getSessions(): Promise<Session[]> {
   if (debug) console.log('🔍 Fetching all sessions');
   try {
@@ -122,6 +172,14 @@ export async function getSessions(): Promise<Session[]> {
     throw error;
   }
 }
+/**
+ * Updates a session in the IndexedDB with the given updates.
+ *
+ * @param {string} sessionId - The ID of the session to update.
+ * @param {Partial<Session>} updates - An object containing the updates to apply to the session.
+ * @returns {Promise<void>} A promise that resolves when the session has been updated.
+ * @throws Will throw an error if the update operation fails.
+ */
 export async function updateSession(sessionId: string, updates: Partial<Session>) {
   if (debug) console.log('🔄 Updating session:', {
     sessionId,
@@ -147,6 +205,17 @@ export async function updateSession(sessionId: string, updates: Partial<Session>
 }
 
 // Round operations
+/**
+ * Saves a round to the IndexedDB.
+ *
+ * @param {string} sessionId - The ID of the session.
+ * @param {number} roundNumber - The number of the round.
+ * @param {Command[]} commands - The list of commands executed in the round.
+ * @param {Categories} availableCategories - The available categories for the round.
+ * @returns {Promise<void>} A promise that resolves when the round is saved.
+ *
+ * @throws Will throw an error if there is an issue saving the round.
+ */
 export async function saveRound(sessionId: string, roundNumber: number, commands: Command[], availableCategories: Categories // Add this parameter
 ): Promise<void> {
   if (debug) console.log('💾 Saving round:', {
@@ -183,6 +252,14 @@ export async function saveRound(sessionId: string, roundNumber: number, commands
     throw error;
   }
 }
+/**
+ * Fetches a specific round from the IndexedDB based on the given session ID and round number.
+ *
+ * @param sessionId - The ID of the session to which the round belongs.
+ * @param roundNumber - The number of the round to fetch.
+ * @returns A promise that resolves to the fetched round, or undefined if the round is not found.
+ * @throws Will throw an error if there is an issue fetching the round from the database.
+ */
 export async function getRound(sessionId: string, roundNumber: number): Promise<Round | undefined> {
   if (debug) console.log('🔍 Fetching round:', {
     sessionId,
@@ -198,6 +275,13 @@ export async function getRound(sessionId: string, roundNumber: number): Promise<
     throw error;
   }
 }
+/**
+ * Fetches all rounds associated with a given session ID from the IndexedDB.
+ *
+ * @param {string} sessionId - The ID of the session for which to fetch rounds.
+ * @returns {Promise<Round[]>} A promise that resolves to an array of rounds associated with the session ID.
+ * @throws Will throw an error if there is an issue fetching the rounds from the database.
+ */
 export async function getRoundsBySession(sessionId: string): Promise<Round[]> {
   if (debug) console.log('🔍 Fetching all rounds for session:', sessionId);
   try {
@@ -212,6 +296,14 @@ export async function getRoundsBySession(sessionId: string): Promise<Round[]> {
 }
 
 // Completed sessions operations
+/**
+ * Saves a completed session to the IndexedDB.
+ *
+ * @param {string} sessionId - The unique identifier for the session.
+ * @param {Value[]} finalValues - An array of final values associated with the session.
+ * @returns {Promise<void>} A promise that resolves when the session is successfully saved.
+ * @throws Will throw an error if there is an issue saving the session.
+ */
 export async function saveCompletedSession(sessionId: string, finalValues: Value[]) {
   if (debug) console.log('💾 Saving completed session:', {
     sessionId,
@@ -231,6 +323,13 @@ export async function saveCompletedSession(sessionId: string, finalValues: Value
     throw error;
   }
 }
+/**
+ * Fetches a completed session from the IndexedDB.
+ *
+ * @param {string} sessionId - The ID of the session to fetch.
+ * @returns {Promise<CompletedSession | undefined>} A promise that resolves to the completed session if found, or undefined if not found.
+ * @throws Will throw an error if there is an issue fetching the session from the database.
+ */
 export async function getCompletedSession(sessionId: string): Promise<CompletedSession | undefined> {
   if (debug) console.log('🔍 Fetching completed session:', sessionId);
   try {
@@ -244,6 +343,19 @@ export async function getCompletedSession(sessionId: string): Promise<CompletedS
   }
 }
 
+/**
+ * Deletes a session and its associated rounds from the IndexedDB.
+ *
+ * @param sessionId - The ID of the session to be deleted.
+ * @returns A promise that resolves when the session and its rounds have been deleted.
+ *
+ * @throws Will throw an error if there is an issue deleting the session or rounds.
+ *
+ * @example
+ * ```typescript
+ * await deleteSession('sessionId123');
+ * ```
+ */
 export const deleteSession = async (sessionId: string): Promise<void> => {
   if (debug) console.log('🗑️ Deleting session and associated rounds:', sessionId);
   try {

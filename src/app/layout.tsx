@@ -4,6 +4,16 @@
 import '@/styles/globals.css';
 import Navigation from "@/components/common/Navigation";
 import { MobileProvider } from "@/lib/contexts/MobileContext";
+/**
+ * RootLayout component that serves as the main layout for the application.
+ * It includes the HTML structure, head metadata, and the main layout structure
+ * with a header, main content area, and footer.
+ *
+ * @param {Object} props - The properties object.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the main content area.
+ *
+ * @returns {JSX.Element} The RootLayout component.
+ */
 export default function RootLayout({
   children
 }: {

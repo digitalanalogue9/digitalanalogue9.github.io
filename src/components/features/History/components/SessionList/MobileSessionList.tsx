@@ -8,6 +8,24 @@ import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
 
+/**
+ * MobileSessionList component renders a list of sessions with options to view details, select, and delete sessions.
+ * 
+ * @param {SessionListProps} props - The props for the MobileSessionList component.
+ * @param {Session[]} props.sessions - The list of session objects to be displayed.
+ * @param {(sessionId: string) => void} [props.onSessionDeleted] - Optional callback function to be called when a session is deleted.
+ * 
+ * @returns {JSX.Element} The rendered MobileSessionList component.
+ * 
+ * @component
+ * 
+ * @example
+ * // Example usage of MobileSessionList component
+ * <MobileSessionList 
+ *   sessions={sessions} 
+ *   onSessionDeleted={handleSessionDeleted} 
+ * />
+ */
 export function MobileSessionList({ sessions, onSessionDeleted }: SessionListProps) {
     const [showValuesFor, setShowValuesFor] = useState<string | null>(null);
     const [currentValues, setCurrentValues] = useState<Value[]>([]);

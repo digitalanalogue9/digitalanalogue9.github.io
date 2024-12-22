@@ -4,6 +4,22 @@ import { Card } from "@/components/features/Cards/components";
 import { RoundActionsPropsWithActiveZone } from './types';
 import { useMobile } from "@/lib/contexts/MobileContext";
 
+/**
+ * Component that renders actions for the current round in the game.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {Array} props.remainingCards - The list of remaining cards in the current round.
+ * @param {boolean} props.canProceedToNextRound - Flag indicating if the user can proceed to the next round.
+ * @param {Function} props.onNextRound - Callback function to proceed to the next round.
+ * @param {Function} props.onDrop - Callback function when a card is dropped.
+ * @param {boolean} props.isEndGame - Flag indicating if the game has ended.
+ * @param {Function} props.onActiveDropZoneChange - Callback function when the active drop zone changes.
+ * @param {Object} props.selectedMobileCard - The currently selected card on mobile.
+ * @param {Function} props.onMobileCardSelect - Callback function when a card is selected on mobile.
+ * @param {Function} props.setShowDetails - Callback function to set the visibility of card details.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export function RoundActions({
   remainingCards,
   canProceedToNextRound,

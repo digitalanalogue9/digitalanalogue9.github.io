@@ -6,6 +6,25 @@ import { clearGameState } from "@/lib/utils/storage";
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
+/**
+ * The `About` component provides detailed information about the Core Values application.
+ * It includes sections that explain the purpose, functionality, and benefits of the app.
+ * Additionally, it offers privacy information and user preferences for displaying instructions.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <About />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered About component.
+ *
+ * @remarks
+ * - The component uses `useEffect` to clear the game state on mount and to manage the user's preference for showing instructions.
+ * - User preferences for showing instructions are stored in `localStorage`.
+ * - The component includes multiple sections with headings and descriptions, each providing specific information about the app.
+ * - Accessibility features such as `aria-label`, `aria-labelledby`, and `role` attributes are used to enhance the user experience.
+ */
 export default function About() {
   useEffect(() => {
     clearGameState();

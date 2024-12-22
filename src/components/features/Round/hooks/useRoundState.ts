@@ -1,5 +1,29 @@
 import { useMemo } from 'react';
 import { Categories, CategoryName, Value } from "@/lib/types";
+/**
+ * Custom hook to manage the state of a round in the Core Values game.
+ *
+ * @param {Categories} categories - The current categories and their associated cards.
+ * @param {Value[]} remainingCards - The cards that are yet to be categorized.
+ * @param {number} targetCoreValues - The target number of core values to be achieved.
+ * @returns {object} The state of the round including various calculated properties.
+ * @returns {number} return.activeCards - The number of active cards (excluding 'Not Important').
+ * @returns {number} return.totalActiveCards - The total number of active cards including remaining cards.
+ * @returns {CategoryName[]} return.validCategories - The list of valid categories.
+ * @returns {CategoryName[]} return.activeCategories - The list of active categories with cards.
+ * @returns {Categories} return.visibleCategories - The categories that are visible.
+ * @returns {number} return.veryImportantCount - The count of cards in the 'Very Important' category.
+ * @returns {number} return.notImportantCount - The count of cards in the 'Not Important' category.
+ * @returns {boolean} return.isNearingCompletion - Whether the game is nearing completion (only two valid categories left).
+ * @returns {boolean} return.hasEnoughCards - Whether there are enough cards to meet the target core values.
+ * @returns {boolean} return.hasMinimumNotImportant - Whether the minimum 'Not Important' condition is met.
+ * @returns {boolean} return.hasTooManyImportantCards - Whether there are too many important cards when nearing completion.
+ * @returns {boolean} return.hasNotEnoughImportantCards - Whether there are not enough important cards when nearing completion.
+ * @returns {boolean} return.isEndGameReady - Whether the game is ready to end based on various conditions.
+ * @returns {boolean} return.hasFoundCoreValues - Whether the target core values have been found in any category.
+ * @returns {boolean} return.hasTargetCoreValuesInVeryImportant - Whether the 'Very Important' category has the target core values.
+ * @returns {Categories} return.categories - The current state of categories.
+ */
 export const useRoundState = (categories: Categories, remainingCards: Value[], targetCoreValues: number) => {
   const hasTargetCoreValuesInVeryImportant = categories['Very Important']?.length === targetCoreValues;
 

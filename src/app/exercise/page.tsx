@@ -14,6 +14,12 @@ import { useGameInit } from "@/components/features/Exercise/hooks/useGameInit";
 
 function ExerciseContent() {
   const router = useRouter();
+  /**
+   * Destructures `showInstructions` and `setShowInstructions` from the `useGameState` hook.
+   * 
+   * `showInstructions` - A state variable that indicates whether the instructions should be shown.
+   * `setShowInstructions` - A function to update the `showInstructions` state.
+   */
   const { showInstructions, setShowInstructions } = useGameState();
   const { isLoading, error, shouldRedirect } = useGameInit();
 

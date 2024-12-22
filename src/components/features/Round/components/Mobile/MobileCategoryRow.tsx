@@ -6,6 +6,24 @@ import { ChevronDownIcon, ChevronUpIcon, ArrowUpIcon, ArrowDownIcon } from '@her
 import { useState } from 'react';
 import { MobileCategoryRowProps } from '@/components/features/Round/types';
 
+/**
+ * Component representing a row of categories in a mobile view.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {string} props.category - The name of the category.
+ * @param {Array} props.cards - The list of cards within the category.
+ * @param {Array} props.availableCategories - The list of all available categories.
+ * @param {boolean} props.isActive - Indicates if the category is currently active.
+ * @param {boolean} props.isExpanded - Indicates if the category is currently expanded.
+ * @param {Function} props.onCategoryTap - Callback function when a category is tapped.
+ * @param {Function} props.onCategorySelect - Callback function when a category is selected.
+ * @param {boolean} props.showingCardSelection - Indicates if card selection is being shown.
+ * @param {Function} props.onMoveWithinCategory - Callback function to move a card within the category.
+ * @param {Function} props.onMoveBetweenCategories - Callback function to move a card between categories.
+ * @param {string} props.lastDroppedCategory - The last category where a card was dropped.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export function MobileCategoryRow({
   category,
   cards,

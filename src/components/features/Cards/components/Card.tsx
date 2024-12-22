@@ -11,6 +11,36 @@ import { CategoryName, Value } from "@/lib/types";
 import { useMobile } from "@/lib/contexts/MobileContext";
 
 
+/**
+ * A memoized Card component that supports drag-and-drop functionality.
+ * 
+ * @component
+ * @param {CardProps} props - The properties for the Card component.
+ * @param {Object} props.value - The value object containing card details.
+ * @param {Function} props.onDrop - Callback function to handle drop events.
+ * @param {Function} props.onMoveUp - Callback function to handle moving the card up.
+ * @param {Function} props.onMoveDown - Callback function to handle moving the card down.
+ * @param {Function} props.onMoveBetweenCategories - Callback function to handle moving the card between categories.
+ * @param {string} props.currentCategory - The current category of the card.
+ * @param {number} props.columnIndex - The index of the column where the card is located.
+ * @param {Function} props.onClick - Callback function to handle click events.
+ * @param {boolean} props.selectedMobileCard - Indicates if the card is selected on mobile.
+ * 
+ * @returns {JSX.Element | null} The rendered Card component or null if no value is provided.
+ * 
+ * @example
+ * <Card
+ *   value={cardValue}
+ *   onDrop={handleDrop}
+ *   onMoveUp={handleMoveUp}
+ *   onMoveDown={handleMoveDown}
+ *   onMoveBetweenCategories={handleMoveBetweenCategories}
+ *   currentCategory="category1"
+ *   columnIndex={0}
+ *   onClick={handleClick}
+ *   selectedMobileCard={true}
+ * />
+ */
 const Card = memo(function Card({
   value,
   onDrop,

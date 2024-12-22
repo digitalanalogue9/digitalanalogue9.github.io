@@ -1,10 +1,56 @@
-// src/components/PWAPrompt.tsx
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePWA } from "@/lib/hooks/usePWA";
 type PromptType = 'install' | 'update' | null;
+
+/**
+ * PWAPrompt component handles the display of a prompt to the user for installing
+ * the Progressive Web App (PWA) or updating it if a new version is available.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <PWAPrompt />
+ * )
+ * 
+ * @returns {JSX.Element | null} The rendered component or null if in development mode or no prompt is needed.
+ * 
+ * @remarks
+ * This component uses the `usePWA` hook to determine if an update is needed and handles the `beforeinstallprompt` event
+ * to show the install prompt. It also manages the state for showing the prompt and the type of prompt (install or update).
+ * 
+ * @function
+ * @name PWAPrompt
+ * 
+ * @hook
+ * @name useEffect
+ * @description Sets up event listeners for `beforeinstallprompt` and handles the prompt display logic.
+ * 
+ * @hook
+ * @name useState
+ * @description Manages the state for showing the prompt, the type of prompt, and the deferred prompt event.
+ * 
+ * @param {boolean} showPrompt - State to control the visibility of the prompt.
+ * @param {PromptType | null} promptType - State to determine the type of prompt ('install' or 'update').
+ * @param {any} deferredPrompt - State to store the deferred prompt event.
+ * 
+ * @event beforeinstallprompt
+ * @description Prevents the default prompt and shows a custom prompt if no update is needed.
+ * 
+ * @function handleInstallClick
+ * @description Handles the click event for the install button, triggers the install prompt, and logs the user's choice.
+ * 
+ * @function handleUpdateClick
+ * @description Handles the click event for the update button, triggers the service worker update, and hides the prompt.
+ * 
+ * @function handleDismiss
+ * @description Handles the click event for the dismiss button, hides the prompt, and stores the dismissal in local storage.
+ * 
+ * @returns {null} Returns null if in development mode or if no prompt is needed.
+ */
 export default function PWAPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [promptType, setPromptType] = useState<PromptType>(null);

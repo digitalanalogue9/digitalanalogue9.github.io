@@ -6,6 +6,29 @@ import { getSessions } from "@/lib/db/indexedDB";
 import { SessionList } from "@/components/features/History/components/SessionList";
 import { SessionSelectionProvider } from '@/components/features/History/contexts/SessionSelectionContext';
 import { clearGameState } from "@/lib/utils/storage";
+/**
+ * The `HistoryPage` component is responsible for displaying the history of sessions.
+ * It fetches and displays a list of sessions sorted by timestamp in descending order.
+ * 
+ * @component
+ * 
+ * @example
+ * ```tsx
+ * <HistoryPage />
+ * ```
+ * 
+ * @returns {JSX.Element} The rendered component.
+ * 
+ * @remarks
+ * - Uses `useEffect` to clear the game state on mount and to load sessions asynchronously.
+ * - Displays a loading indicator while sessions are being fetched.
+ * - Displays a message if no sessions are found.
+ * - Displays a list of sessions if available.
+ * 
+ * @function
+ * 
+ * @name HistoryPage
+ */
 export default function HistoryPage() {
   useEffect(() => {
     clearGameState();

@@ -27,6 +27,66 @@ import { Card } from "@/components/features/Cards/components";
 import { motion } from 'framer-motion';
 import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
 
+/**
+ * `RoundUI` is a memoized functional component that represents the user interface for a round in the Core Values Sorting Exercise.
+ * It manages the state and behavior of the game, including handling card movements, validating rounds, and transitioning between rounds.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ * 
+ * @example
+ * <RoundUI />
+ * 
+ * @remarks
+ * This component uses various hooks to manage state and side effects, including:
+ * - `useState` for managing local state variables.
+ * - `useMemo` for memoizing calculations.
+ * - `useCallback` for memoizing event handlers.
+ * - `useEffect` for handling side effects.
+ * 
+ * The component conditionally renders different UI elements based on the current state, such as showing reasoning or results screens.
+ * It also includes handlers for moving cards, dropping cards, and proceeding to the next round.
+ * 
+ * @hook
+ * - `useSession` to access session-related data.
+ * - `useGameState` to access game state data.
+ * - `useCommands` to manage round commands.
+ * - `useMobile` to determine if the user is on a mobile device.
+ * - `useRoundState` to calculate the current state of the round.
+ * - `useRoundValidation` to validate the current round.
+ * - `useRoundStatus` to get the status of the current round.
+ * - `useRoundHandlers` to get handlers for card movements and drops.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isMobile - Indicates if the user is on a mobile device.
+ * @param {Value | null} props.selectedMobileCard - The currently selected card on mobile.
+ * @param {boolean} props.hasShownInstruction - Indicates if the instruction has been shown on mobile.
+ * @param {boolean} props.showStatusDetails - Indicates if the status message details should be shown.
+ * @param {CategoryName | null} props.activeDropZone - The currently active drop zone.
+ * @param {boolean} props.showResults - Indicates if the results screen should be shown.
+ * @param {boolean} props.shouldEndGame - Indicates if the game should end.
+ * @param {boolean} props.showReasoning - Indicates if the reasoning screen should be shown.
+ * @param {Value[]} props.finalValuesWithoutReasons - The final values without reasons.
+ * @param {Function} props.setActiveDropZone - Sets the active drop zone.
+ * @param {Function} props.setShowResults - Sets the show results state.
+ * @param {Function} props.setShouldEndGame - Sets the should end game state.
+ * @param {Function} props.setShowReasoning - Sets the show reasoning state.
+ * @param {Function} props.setFinalValuesWithoutReasons - Sets the final values without reasons.
+ * @param {Function} props.setSelectedMobileCard - Sets the selected mobile card.
+ * @param {Function} props.setHasShownInstruction - Sets the has shown instruction state.
+ * @param {Function} props.setShowStatusDetails - Sets the show status details state.
+ * @param {Function} props.setRoundNumber - Sets the round number.
+ * @param {Function} props.setCategories - Sets the categories.
+ * @param {Function} props.setRemainingCards - Sets the remaining cards.
+ * @param {Function} props.addCommand - Adds a command to the current round commands.
+ * @param {Function} props.clearCommands - Clears the current round commands.
+ * @param {Function} props.handleMoveCard - Handles moving a card within a category.
+ * @param {Function} props.handleDrop - Handles dropping a card into a category.
+ * @param {Function} props.handleMoveBetweenCategories - Handles moving a card between categories.
+ * @param {Function} props.handleMobileDropWithZone - Handles dropping a card into a category on mobile.
+ * @param {Function} props.handleNextRound - Handles proceeding to the next round.
+ * @param {Function} props.handleReasoningComplete - Handles completing the reasoning step.
+ */
 const RoundUI = memo(function RoundUI() {
   logRender('RoundUI');
 

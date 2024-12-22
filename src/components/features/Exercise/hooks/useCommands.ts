@@ -7,6 +7,18 @@ import { getRound, saveRound } from "@/lib/db/indexedDB";
 import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
 import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
 import { shallow } from 'zustand/shallow';
+/**
+ * Custom hook that provides command handling functionalities for the Exercise feature.
+ *
+ * @returns {Object} An object containing the following properties and methods:
+ * - `handleDrop`: A function to handle the drop action, which adds a new DropCommand.
+ * - `handleMoveBetweenCategories`: A function to handle moving a value between categories, which adds a new MoveCommand.
+ * - `handleMoveWithinCategory`: A function to handle moving a value within a category, which adds a new MoveCommand.
+ * - `loadCommands`: A function to load commands for the current round from the server.
+ * - `currentRoundCommands`: The list of commands for the current round.
+ * - `addCommand`: A function to add a new command to the state.
+ * - `clearCommands`: A function to clear all commands from the state.
+ */
 export function useCommands() {
   const state = useStore(state => ({
     addCommand: state.addCommand,

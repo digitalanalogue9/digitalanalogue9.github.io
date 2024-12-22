@@ -2,6 +2,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MobileSelectionOverlayProps} from '@/components/features/Round/types';
 
 
+/**
+ * MobileSelectionOverlay component displays an overlay with a message when visible.
+ * It uses Framer Motion for animations.
+ *
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isVisible - Determines if the overlay is visible.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 export function MobileSelectionOverlay({ isVisible }: MobileSelectionOverlayProps) {
   return (
     <AnimatePresence>

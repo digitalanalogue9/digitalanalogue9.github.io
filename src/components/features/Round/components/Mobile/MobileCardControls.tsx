@@ -7,6 +7,21 @@ import {
 
 import { MobileCardControlsProps } from '@/components/features/Round/types';
 
+/**
+ * MobileCardControls component provides a set of controls for navigating and moving items within and across categories.
+ *
+ * @param {Object} props - The properties object.
+ * @param {boolean} props.canMoveUp - Indicates if the item can be moved up within the category.
+ * @param {boolean} props.canMoveDown - Indicates if the item can be moved down within the category.
+ * @param {Function} props.onMoveUp - Callback function to handle the move up action.
+ * @param {Function} props.onMoveDown - Callback function to handle the move down action.
+ * @param {boolean} props.canMoveToPrevCategory - Indicates if the item can be moved to the previous category.
+ * @param {boolean} props.canMoveToNextCategory - Indicates if the item can be moved to the next category.
+ * @param {Function} props.onMoveToPrevCategory - Callback function to handle the move to the previous category action.
+ * @param {Function} props.onMoveToNextCategory - Callback function to handle the move to the next category action.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 export function MobileCardControls({ 
   canMoveUp, 
   canMoveDown, 

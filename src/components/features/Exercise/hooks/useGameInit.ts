@@ -7,6 +7,22 @@ import { cacheUtils } from "@/lib/utils/storage";
 import { loadSessionState } from "../utils/sessionLoader";
 import { useGameState } from './useGameState';
 
+/**
+ * Custom hook to initialize the game state.
+ *
+ * This hook performs the following tasks:
+ * - Initializes the database.
+ * - Checks for an existing session ID from the URL parameters or the current session.
+ * - Loads the session state if a session ID is found.
+ * - Checks the offline cache for a session if no session ID is found and the app is offline.
+ * - Sets the game as started if a session is successfully loaded.
+ * - Handles errors during initialization and sets the loading state accordingly.
+ *
+ * @returns An object containing:
+ * - `isLoading`: A boolean indicating if the initialization is in progress.
+ * - `error`: An error object if an error occurred during initialization, otherwise null.
+ * - `shouldRedirect`: A boolean indicating if the user should be redirected due to no session being found.
+ */
 export function useGameInit() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

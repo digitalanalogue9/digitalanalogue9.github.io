@@ -3,6 +3,21 @@ import { Value, CategoryName } from "@/lib/types";
 import { Card } from "@/components/features/Cards/components"; // Change this import
 import {CategoryColumnProps} from "@/components/features/Categories/types";
 
+/**
+ * CategoryColumn component represents a column in a Kanban-style board.
+ * It allows for drag-and-drop functionality to reorder cards within the column
+ * or move cards between different columns.
+ *
+ * @param {Object} props - The properties object.
+ * @param {string} props.title - The title of the category.
+ * @param {Array} props.cards - The list of cards in the category.
+ * @param {Function} props.onDrop - Callback function when a card is dropped into the category.
+ * @param {Function} props.onMoveWithinCategory - Callback function when a card is moved within the same category.
+ * @param {Function} props.onMoveBetweenCategories - Callback function when a card is moved between different categories.
+ * @param {number} props.columnIndex - The index of the column.
+ *
+ * @returns {JSX.Element} The rendered CategoryColumn component.
+ */
 export default function CategoryColumn({
   title,
   cards,

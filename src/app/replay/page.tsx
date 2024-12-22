@@ -1,3 +1,13 @@
+/**
+ * ReplayPage component renders the session replay page.
+ * 
+ * This component uses React's Suspense to handle the loading state
+ * while the ReplayClient component is being loaded. During the loading
+ * state, it displays a loading message with appropriate accessibility
+ * attributes.
+ * 
+ * @returns {JSX.Element} The rendered ReplayPage component.
+ */
 // src/app/replay/page.tsx
 'use client';
 

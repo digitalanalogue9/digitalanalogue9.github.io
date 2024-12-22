@@ -3,6 +3,20 @@ import { Categories, CategoryName, Value } from "@/lib/types";
 import { MobileCategoryRow } from './Mobile/MobileCategoryRow';
 import { MobileCategoryListProps} from '@/components/features/Round/types';
 
+/**
+ * Component for rendering a list of categories in a mobile-friendly view.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {Record<CategoryName, Card[]>} props.categories - An object containing the categories and their associated cards.
+ * @param {CategoryName | null} props.activeDropZone - The currently active drop zone category.
+ * @param {Function} props.onDrop - Callback function to handle dropping a card into a category.
+ * @param {Function} props.onMoveWithinCategory - Callback function to handle moving a card within the same category.
+ * @param {Function} props.onMoveBetweenCategories - Callback function to handle moving a card between different categories.
+ * @param {Card | null} props.selectedCard - The currently selected card.
+ * @param {Function} props.onCardSelect - Callback function to handle selecting a card.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export function MobileCategoryList({
   categories,
   activeDropZone,

@@ -9,6 +9,28 @@ import PWAPrompt from "@/components/common/PWAPrompt";
 import { clearGameState } from "@/lib/utils/storage";
 import { forceReload } from "@/lib/utils/cache";
 
+/**
+ * The Home component is the main entry point for the Core Values application.
+ * It handles version checking and game state clearing on initial load.
+ *
+ * @returns {JSX.Element} The rendered Home component.
+ *
+ * @remarks
+ * - Uses `useRouter` for navigation.
+ * - Checks the application version stored in localStorage and forces a reload if it has changed.
+ * - Clears the game state on initial load.
+ * - Utilizes `DndProvider` for drag-and-drop functionality.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * import Home from './page';
+ * 
+ * function App() {
+ *   return <Home />;
+ * }
+ * ```
+ */
 export default function Home() {
   const router = useRouter();
 

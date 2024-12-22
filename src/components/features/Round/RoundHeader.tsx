@@ -1,6 +1,16 @@
 import { RoundHeaderProps } from '@/features/Round/types';
 
 
+/**
+ * Component that displays the header for a round, including target core values, round number, and remaining cards count.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {number} props.targetCoreValues - The target core values for the round.
+ * @param {number} props.roundNumber - The current round number.
+ * @param {number} props.remainingCardsCount - The number of remaining cards.
+ * @returns {JSX.Element} The rendered component.
+ */
 export function RoundHeader({
   targetCoreValues,
   roundNumber,
@@ -11,7 +21,7 @@ export function RoundHeader({
       <div className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4">
         {/* Both Mobile and Desktop use the same lozenge style */}
         <div>
-          <div className="bg-blue-100 rounded-full px-3 py-1.5 text-center shadow-sm">
+          <div className="bg-red-100 rounded-full px-3 py-1.5 text-center shadow-sm">
             <h2 className="text-xs sm:text-sm font-semibold text-blue-800 uppercase tracking-wide">
               Target
             </h2>
@@ -21,7 +31,7 @@ export function RoundHeader({
           </div>
         </div>
         <div>
-          <div className="bg-purple-100 rounded-full px-3 py-1.5 text-center shadow-sm">
+          <div className="bg-amber-100 rounded-full px-3 py-1.5 text-center shadow-sm">
             <h2 className="text-xs sm:text-sm font-semibold text-purple-800 uppercase tracking-wide">
               Round
             </h2>
