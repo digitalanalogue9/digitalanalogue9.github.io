@@ -93,7 +93,7 @@ export default function StartScreen() {
           Your core values define who you are and guide your decisions. Uncover what truly drives you with this interactive tool.
         </p>
         <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} text-black`}>
-          You'll start with 35 values and refine them to focus on the ones that truly resonate with your core values.
+          You will start with 35 values and refine them to focus on the ones that truly resonate with your core values.
         </p>
       </div>
 
