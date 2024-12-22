@@ -37,9 +37,6 @@ export default function ReplayClient() {
     }
   }, [sessionId, router]);
 
-  // If no sessionId, return null to prevent rendering while redirecting
-  if (!sessionId) return null;
-
   const {
     categories,
     animatingCard,
@@ -268,7 +265,8 @@ export default function ReplayClient() {
     setCurrentCommandType(null);
   };
 
-  if (isMobile === null) {
+  // If no sessionId, return null to prevent rendering while redirecting
+  if (!sessionId || isMobile === null) {
     return null;
   }
 

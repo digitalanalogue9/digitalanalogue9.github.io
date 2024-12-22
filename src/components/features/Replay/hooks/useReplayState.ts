@@ -8,24 +8,24 @@ export function useReplayState() {
   const [animatingCard, setAnimatingCard] = useState<AnimatingCard | null>(null);
   const [allCards, setAllCards] = useState<Value[]>([]);
 
-  const calculatePositions = (sourceElement: Element, targetElement: Element) => {
+  const calculatePositions = useCallback((sourceElement: Element, targetElement: Element) => {
     const sourceRect = sourceElement.getBoundingClientRect();
     const targetRect = targetElement.getBoundingClientRect();
-
+  
     // Calculate source position
     const sourcePos = {
       x: sourceRect.left,
       y: sourceRect.top
     };
-
+  
     // Calculate target position at the top of the target category
     const targetPos = {
       x: targetRect.left + (targetRect.width / 2) - (sourceRect.width / 2),
       y: targetRect.top + 20 // 20px offset from top
     };
-
+  
     return { sourcePos, targetPos };
-  };
+  }, []);
 
   const resetCategories = useCallback(() => {
     setCategories(initialCategories);
