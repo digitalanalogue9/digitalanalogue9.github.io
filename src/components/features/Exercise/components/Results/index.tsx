@@ -171,7 +171,7 @@ export default function Results() {
   if (!mounted) return null;
   return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12" role="region" aria-labelledby="results-title">
     <div ref={printRef} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
-      <h1 id="results-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gray-900">
+      <h1 id="results-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-black">
         Your Core Values Results
       </h1>
 
@@ -182,17 +182,17 @@ export default function Results() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6" role="list" aria-label={`Values in ${category}`}>
             {values.map((value: ValueWithReason) => <article key={value.id} className={`${postItBaseStyles} ${tapeEffect} p-4`} role="listitem">
-              <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-2">
+              <h3 className="font-medium text-base sm:text-lg text-black mb-2">
                 {value.title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-800 mb-3">
+              <p className="text-sm sm:text-base text-black mb-3">
                 {value.description}
               </p>
               {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
                 <p className="text-sm font-medium text-black mb-1">
                   Why it is meaningful:
                 </p>
-                <p className="text-sm sm:text-base text-gray-800 italic">
+                <p className="text-sm sm:text-base text-black italic">
                   {value.reason}
                 </p>
               </div>}

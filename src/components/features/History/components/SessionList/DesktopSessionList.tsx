@@ -203,7 +203,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
             <section className="space-y-4" aria-labelledby="desktop-values-title">
                 <div className="flex justify-between items-center">
                     <h3 id="desktop-values-title" className="text-lg font-bold">Selected Core Values</h3>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-black">
                         {values.length} value{values.length !== 1 ? 's' : ''}
                     </span>
                 </div>
@@ -238,11 +238,11 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             exit={{ opacity: 0, y: -20 }}
                         >
                             <h4 className="font-medium">{value.title}</h4>
-                            <p className="text-sm text-gray-800 mb-2">{value.description}</p>
+                            <p className="text-sm text-black mb-2">{value.description}</p>
                             {value.reason && (
                                 <div className="mt-2 pt-2 border-t border-gray-200">
-                                    <p className="text-sm font-medium text-gray-800">Why it is meaningful:</p>
-                                    <p className="text-sm text-gray-800 italic">{value.reason}</p>
+                                    <p className="text-sm font-medium text-black">Why it is meaningful:</p>
+                                    <p className="text-sm text-black italic">{value.reason}</p>
                                 </div>
                             )}
                         </motion.article>
@@ -262,7 +262,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         onChange={handleSelectAll}
                         className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                     />
-                    <span className="text-sm text-gray-800">
+                    <span className="text-sm text-black">
                         {selectedSessions.size} selected
                     </span>
                 </div>
@@ -279,25 +279,25 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
             <table className="min-w-full bg-white shadow-md rounded-lg">
                 <thead>
                     <tr className="bg-gray-100 border-b">
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             <span className="sr-only">Select</span>
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Session ID
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Last Updated
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Target Values
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Current Round
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Status
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
@@ -313,18 +313,18 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                     className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                                 />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                            <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-mono">
                                 {session.id}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                                 <time dateTime={new Date(session.timestamp).toISOString()}>
                                     {formatDate(session.timestamp)}
                                 </time>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                                 {session.targetCoreValues}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                                 {session.currentRound}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">

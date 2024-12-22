@@ -35,7 +35,7 @@ export default function Error({
         
         <div className="mb-6">
           <p 
-            className="text-gray-800 mb-2"
+            className="text-black mb-2"
             aria-live="polite"
           >
             We encountered an unexpected error. 
@@ -62,7 +62,7 @@ export default function Error({
           
           {error.digest && (
             <p 
-              className="text-xs text-gray-500"
+              className="text-xs text-black"
               aria-label="Error reference code"
             >
               Error Reference: {error.digest}

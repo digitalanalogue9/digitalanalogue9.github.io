@@ -85,10 +85,10 @@ export default function PWAPrompt() {
     }} className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-11/12 sm:w-96 bg-white rounded-lg shadow-lg p-4 border border-gray-200 z-50">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 id="pwa-prompt-title" className="text-base font-semibold text-gray-900">
+              <h2 id="pwa-prompt-title" className="text-base font-semibold text-black">
                 {promptTitle}
               </h2>
-              <p id="pwa-prompt-description" className="mt-1 text-sm text-gray-500">
+              <p id="pwa-prompt-description" className="mt-1 text-sm text-black">
                 {promptDescription}
               </p>
               <div className="mt-4 flex space-x-3" role="group" aria-label="PWA prompt actions">

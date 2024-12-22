@@ -10,7 +10,7 @@ export function ReplayColumn({
   return <div data-category={title} className="bg-white rounded-lg shadow p-4" role="region" aria-labelledby={columnId}>
         <h3 id={columnId} className="text-lg font-semibold mb-4">
           {title}
-          <span className="ml-2 text-sm text-gray-500" aria-label={`${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`}>
+          <span className="ml-2 text-sm text-black" aria-label={`${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`}>
             ({cards.length})
           </span>
         </h3>
@@ -21,14 +21,14 @@ export function ReplayColumn({
                 <h4 id={`card-title-${card.id}`} className="font-medium">
                   {card.title}
                 </h4>
-                <p className="text-sm text-gray-800" aria-label={`Description: ${card.description}`}>
+                <p className="text-sm text-black" aria-label={`Description: ${card.description}`}>
                   {card.description}
                 </p>
               </div>
             </article>)}
         </div>
 
-        {cards.length === 0 && <div className="text-gray-500 text-sm text-center py-4" role="status" aria-label={`No cards in ${title} category`}>
+        {cards.length === 0 && <div className="text-black text-sm text-center py-4" role="status" aria-label={`No cards in ${title} category`}>
             No cards in this category
           </div>}
       </div>;

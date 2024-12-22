@@ -56,9 +56,9 @@ export default function CategoryColumn({
   };
   return <div className="bg-white rounded-lg shadow-sm p-4 transition-colors duration-200 w-full" data-category={title} aria-label={`${title} category`}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center justify-between w-full">
+        <h2 className="text-lg font-semibold text-black flex items-center justify-between w-full">
           <span>{title}</span>
-          <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-sm font-medium text-gray-800 ml-2">
+          <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-sm font-medium text-black ml-2">
             {cards.length}
           </span>
         </h2>
@@ -71,7 +71,7 @@ export default function CategoryColumn({
             </div>)}
         </div>
 
-        <div className={`text-gray-800 text-sm text-center py-4 mt-2 ${cards.length === 0 ? '' : 'border-t-2 border-dashed border-gray-400'}`}>
+        <div className={`text-black text-sm text-center py-4 mt-2 ${cards.length === 0 ? '' : 'border-t-2 border-dashed border-gray-400'}`}>
           Drop values here
         </div>
       </div>

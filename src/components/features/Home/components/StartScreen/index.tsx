@@ -103,7 +103,7 @@ export default function StartScreen() {
           <h2 className="text-lg sm:text-xl font-semibold text-black">
             Why Discover Your Core Values?
           </h2>
-          <ul className="list-disc list-inside text-gray-700 text-sm sm:text-base space-y-2">
+          <ul className="list-disc list-inside text-black text-sm sm:text-base space-y-2">
             <li><strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you.</li>
             <li><strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.</li>
             <li><strong>Enhanced Relationships:</strong> Communicate your values clearly and understand others better.</li>

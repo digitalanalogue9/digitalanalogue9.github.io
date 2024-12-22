@@ -27,21 +27,21 @@ export default function About() {
     <div className="flex-1 overflow-y-scroll">
       <div className="max-w-3xl mx-auto p-6 space-y-8">
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-bold text-black mb-4">
             About Core Values
           </h1>
-          <p className="text-xl text-gray-800">
+          <p className="text-xl text-black">
             Discover and prioritise what matters most to you
           </p>
-          <p className="text-sm text-gray-600 mt-2" aria-label="Application version">
+          <p className="text-sm text-black mt-2" aria-label="Application version">
             Version {appVersion}
           </p>
         </div>
         <section aria-labelledby="why-matters-heading">
-          <h2 id="why-matters-heading" className="text-2xl font-bold text-gray-900">
+          <h2 id="why-matters-heading" className="text-2xl font-bold text-black">
             Why Core Values Matter
           </h2>
-          <div className="prose prose-lg text-gray-800">
+          <div className="prose prose-lg text-black">
             <p>
               Understanding your core values is essential for making meaningful life decisions
               and living authentically. This app helps you explore and organize your values
@@ -56,7 +56,7 @@ export default function About() {
         </section>
 
         <section aria-labelledby="how-it-works-heading">
-          <h2 id="how-it-works-heading" className="text-2xl font-bold text-gray-900">
+          <h2 id="how-it-works-heading" className="text-2xl font-bold text-black">
             How It Works
           </h2>
           <div
@@ -83,14 +83,14 @@ export default function About() {
                 role="listitem"
               >
                 <div className="text-blue-700 text-xl mb-2">{step.title}</div>
-                <p className="text-gray-800">{step.description}</p>
+                <p className="text-black">{step.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section aria-labelledby="benefits-heading">
-          <h2 id="benefits-heading" className="text-2xl font-bold text-gray-900">
+          <h2 id="benefits-heading" className="text-2xl font-bold text-black">
             Benefits
           </h2>
           <div
@@ -124,18 +124,18 @@ export default function About() {
                 className="bg-gray-100 p-4 rounded-lg"
                 role="listitem"
               >
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-black mb-2">
                   <span aria-hidden="true">{benefit.icon} </span>
                   {benefit.title}
                 </h3>
-                <p className="text-gray-800">{benefit.description}</p>
+                <p className="text-black">{benefit.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section aria-labelledby="privacy-heading">
-          <h2 id="privacy-heading" className="text-2xl font-bold text-gray-900">
+          <h2 id="privacy-heading" className="text-2xl font-bold text-black">
             Your Data & Privacy
           </h2>
           <div
@@ -181,7 +181,7 @@ export default function About() {
                   <span aria-hidden="true">{item.icon} </span>
                   {item.title}
                 </h3>
-                <p className="text-gray-800">{item.description}</p>
+                <p className="text-black">{item.description}</p>
               </div>
             ))}
           </div>
@@ -198,7 +198,7 @@ export default function About() {
                 <span aria-hidden="true">⚠️ </span>
                 Important Note
               </h3>
-              <p className="text-gray-800">
+              <p className="text-black">
                 If you clear your browser data or uninstall the app, your stored
                 information will be deleted. Consider taking screenshots or noting down
                 important results if you want to keep them long-term.
@@ -206,11 +206,11 @@ export default function About() {
             </div>
 
             <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-black mb-2">
                 <span aria-hidden="true">💡 </span>
                 Pro Tip
               </h3>
-              <p className="text-gray-800">
+              <p className="text-black">
                 For the best experience, install this as an app on your device
                 (look for the Install App button in your browser). This makes it easier
                 to access and use, just like any other app on your device!
@@ -219,7 +219,7 @@ export default function About() {
           </div>
         </section>
         <section aria-labelledby="instructions-heading">
-          <h2 id="instructions-heading" className="text-2xl font-bold text-gray-900">
+          <h2 id="instructions-heading" className="text-2xl font-bold text-black">
             Instructions Preference
           </h2>
           <div
@@ -248,13 +248,13 @@ export default function About() {
                   <label
                     id="instructions-label"
                     htmlFor="show-instructions"
-                    className="font-medium text-gray-900"
+                    className="font-medium text-black"
                   >
                     Show instructions when starting the exercise
                   </label>
                   <p
                     id="instructions-description"
-                    className="text-gray-800 mt-2"
+                    className="text-black mt-2"
                   >
                     <span className="sr-only">
                       Current status:
@@ -268,7 +268,7 @@ export default function About() {
             </div>
 
             <div
-              className="mt-4 text-sm text-gray-800"
+              className="mt-4 text-sm text-black"
               role="status"
               aria-live="polite"
             >

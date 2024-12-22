@@ -23,7 +23,7 @@ export function DeleteConfirmationModal({
     >
       <div className="space-y-4">
         {!isDeleting ? (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             {sessionCount === 1
               ? 'Are you sure you want to delete this session? This action cannot be undone.'
               : `Are you sure you want to delete these ${sessionCount} sessions? This action cannot be undone.`}
@@ -34,7 +34,7 @@ export function DeleteConfirmationModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-sm text-gray-500 text-center"
+            className="text-sm text-black text-center"
           >
             {deletingCount > 0 
               ? `Deleting ${deletingCount} session${deletingCount !== 1 ? 's' : ''}...`
@@ -46,7 +46,7 @@ export function DeleteConfirmationModal({
           <div className="mt-4 bg-gray-100 rounded-md p-4 max-h-48 overflow-y-auto">
             <ul className="space-y-2">
               {selectedSessions.map(session => (
-                <li key={session.id} className="text-sm text-gray-800">
+                <li key={session.id} className="text-sm text-black">
                   <span className="font-medium">
                     {new Date(session.timestamp).toLocaleDateString()}
                   </span>
@@ -76,7 +76,7 @@ export function DeleteConfirmationModal({
           </button>
           <button
             type="button"
-            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm disabled:opacity-100"
+            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm disabled:opacity-100"
             onClick={onClose}
             disabled={isDeleting}
           >
