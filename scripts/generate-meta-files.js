@@ -3,7 +3,7 @@ const path = require('path');
 
 function generateSitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  
+  const lastmodDate = process.env.LASTMOD_DATE || new Date().toISOString();
   const routes = [
     '',
     '/about',
@@ -15,7 +15,7 @@ function generateSitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes.map(route => `  <url>
     <loc>${baseUrl}${route}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${lastmodDate}</lastmod>
   </url>`).join('\n')}
 </urlset>`;
 

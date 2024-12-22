@@ -35,6 +35,8 @@ jobs:
         run: npm ci
 
       - name: Generate meta files
+        env: 
+          LASTMOD_DATE: ${{ env.LASTMOD_DATE }}
         run: npm run generate-meta
 
       - name: Update Version
