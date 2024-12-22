@@ -209,7 +209,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 </div>
                 <div className="flex justify-end gap-2">
                     <button
-                        onClick={() => {setCopySuccess(!copySuccess);handleCopyToClipboard(values);}}
+                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
                         className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                         aria-label="Copy values to clipboard"
                     >
@@ -256,7 +256,14 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
         <div className="space-y-4">
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-4">
+                    <label
+                        htmlFor='select-all-sessions'
+                        className="sr-only"
+                    >
+                        Check to select all sessions
+                    </label>
                     <input
+                        id='select-all-sessions'
                         type="checkbox"
                         checked={selectedSessions.size === sessions.length && sessions.length > 0}
                         onChange={handleSelectAll}
@@ -306,7 +313,14 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                     {sessions.map(session => (
                         <tr key={session.id} className="hover:bg-gray-100">
                             <td className="px-6 py-4 whitespace-nowrap">
+                                <label
+                                    htmlFor={`session-${session.id}`}
+                                    className="sr-only"
+                                >
+                                    Check {session.id} to select for deletion
+                                </label>
                                 <input
+                                    id={`session-${session.id}`}
                                     type="checkbox"
                                     checked={isSelected(session.id)}
                                     onChange={() => toggleSession(session.id)}
