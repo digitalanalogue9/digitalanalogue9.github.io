@@ -34,6 +34,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
     const [isDeleting, setIsDeleting] = useState(false);
     const [isSelectionMode, setIsSelectionMode] = useState(false);
     const [deletingCount, setDeletingCount] = useState<number>(0);
+    const [copySuccess, setCopySuccess] = useState(false);
 
 
     const {
@@ -113,6 +114,26 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         setIsSelectionMode(!isSelectionMode);
     };
 
+    const formatValueForClipboard = (value: ValueWithReason): string => {
+        return `Title: ${value.title}\nDescription: ${value.description}${value.reason ? `\nWhy: ${value.reason}` : ''}\n\n`;
+    };
+
+    const handleCopyToClipboard = (values: ValueWithReason[]) => {
+        const formattedText = `My Core Values\n--------------\n\n`
+            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://digitalanalogue9.github.io`;
+
+        navigator.clipboard.writeText(formattedText)
+            .then(() => {
+                // You might want to add a toast notification here
+                console.log('Copied to clipboard');
+                setCopySuccess(true);
+            })
+            .catch(err => {
+                console.error('Failed to copy:', err);
+                setCopySuccess(false);
+            });
+    };
+
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
             return (
@@ -121,19 +142,41 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 </div>
             );
         }
-    
+
         return (
             <Modal
                 isOpen={!!showValuesFor}
-                onClose={() => setShowValuesFor(null)}
+                onClose={() => {setCopySuccess(false);setShowValuesFor(null)}}
                 title="Core Values"
             >
+                <div className="flex gap-2 justify-center mb-4">
+                    <button
+                        onClick={() => {setCopySuccess(false);setShowValuesFor(null);}}
+                        aria-label={`Close`}
+                        className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                    >
+                        Close
+                    </button>
+                    <button
+                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
+                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                        aria-label="Copy values to clipboard"
+                    >
+                        <span>Copy to Clipboard</span>
+                        {copySuccess && (
+                            <span aria-hidden="true" className="text-white">
+                                ✓
+                            </span>
+                        )}
+                    </button>
+                </div>
+
                 <div className="space-y-4">
-                    <div className="flex justify-end">
+                    {/* <div className="flex justify-end">
                         <span className="text-sm text-black">
                             {values.length} value{values.length !== 1 ? 's' : ''}
                         </span>
-                    </div>
+                    </div> */}
                     <div className="space-y-4">
                         {values.map(value => (
                             <div key={value.id} className="p-4 bg-yellow-100 rounded shadow">
@@ -149,9 +192,9 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         ))}
                     </div>
                     <button
-                        onClick={() => setShowValuesFor(null)}
+                        onClick={() => {setCopySuccess(false);setShowValuesFor(null);}}
                         aria-label={`Close`}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded"
+                        className="w-full px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                     >
                         Close
                     </button>
@@ -167,29 +210,28 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                     <button
                         onClick={toggleSelectionMode}
                         aria-label={isSelectionMode ? 'Cancel' : 'Select'}
-                        className={`px-3 py-1.5 rounded-md text-sm font-medium ${isSelectionMode ? 'bg-gray-200 text-black' : 'bg-gray-100 text-black'
-                            }`}
+                        className="px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors duration-200"
                     >
                         {isSelectionMode ? 'Cancel' : 'Select'}
                     </button>
                     {isSelectionMode && (
                         <div className="flex items-center space-x-2">
-                            <button
-                                onClick={handleSelectAll}
-                                aria-label={selectedSessions.size === sessions.length ? 'Deselect all sessions' : 'Select all sessions'}
-                                className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-md text-sm font-medium"
-                            >
-                                {selectedSessions.size === sessions.length ? 'Deselect All' : 'Select All'}
-                            </button>
                             {selectedSessions.size > 0 && (
                                 <button
                                     onClick={() => setIsDeleteModalOpen(true)}
                                     aria-label={`Delete ${selectedSessions.size} sessions`}
-                                    className="px-3 py-1.5 bg-red-600 text-white rounded-md text-sm font-medium"
+                                    className="px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
                                 >
                                     Delete ({selectedSessions.size})
                                 </button>
                             )}
+                            <button
+                                onClick={handleSelectAll}
+                                aria-label={selectedSessions.size === sessions.length ? 'Deselect all sessions' : 'Select all sessions'}
+                                className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                            >
+                                {selectedSessions.size === sessions.length ? 'Select None' : 'Select All'}
+                            </button>
                         </div>
                     )}
                 </div>
@@ -232,19 +274,20 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                             <div className="mt-3 flex justify-end space-x-2">
                                 {session.completed ? (
                                     <button
-                                        onClick={() => handleShowValues(session.id)}
+                                        onClick={() => {setCopySuccess(false);handleShowValues(session.id)}}
                                         aria-label={`Show values for ${session.id}`}
-                                        className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
                                     >
                                         Show Values
                                     </button>
                                 ) : (
-                                    <Link
-                                        href={`/exercise?sessionId=${session.id}`}
-                                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                                    >
-                                        Resume
-                                    </Link>
+                                    <button
+                                    onClick={() => window.location.href = `/exercise?sessionId=${session.id}`}
+                                    aria-label="Resume session"
+                                    className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                                  >
+                                    Resume
+                                  </button>
                                 )}
                             </div>
                         )}
@@ -259,8 +302,8 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
             <DeleteConfirmationModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => {
-                  setIsDeleteModalOpen(false);
-                  setDeletingCount(0);
+                    setIsDeleteModalOpen(false);
+                    setDeletingCount(0);
                 }}
                 onConfirm={handleDeleteSelected}
                 selectedSessions={selectedSessionObjects}

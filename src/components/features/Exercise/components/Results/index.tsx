@@ -37,13 +37,25 @@ export default function Results() {
   const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const {
-    categories
-  } = useGameState();
-  const {
-    sessionId
-  } = useSession();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const { categories } = useGameState();
+  const { sessionId } = useSession();
   const [enrichedCategories, setEnrichedCategories] = useState<Categories>(categories);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add event listener for window resizing
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup event listener
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     setMounted(true);
     const enrichCategoriesWithReasons = async () => {
@@ -197,7 +209,7 @@ export default function Results() {
       </h1>
 
       <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
-        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([_, values]) => values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
+        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
           <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
             {category}
           </h2>
@@ -224,13 +236,13 @@ export default function Results() {
     </div>
 
     <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-      <button
+      {!isMobile && (<button
         onClick={handlePrint}
         className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
         aria-label="Print your results"
       >
         Print Results
-      </button>
+      </button>)}
       <button
         onClick={() => {
           setCopySuccess(!copySuccess);

@@ -65,7 +65,7 @@ export default function About() {
       aria-labelledby="about-heading"
       className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${isMobile ? 'flex flex-col justify-center py-2' : 'py-8'
         }`}
-    >        <div className="text-center mb-12">
+    >        <div className="text-center">
         {/* Header */}
         <h1
           id="about-heading"
@@ -75,7 +75,7 @@ export default function About() {
           About Core <span className="text-blue-700">Values</span>
         </h1>
         <div
-          className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
+          className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-2' : 'space-y-4 sm:space-y-6 mb-6'
             }`}
           aria-label="Version"
         >
@@ -84,8 +84,8 @@ export default function About() {
           </p>
         </div>
       </div>
-      <section aria-labelledby="why-matters-heading">
-        <h2 id="why-matters-heading" className="text-2xl font-bold text-black">
+      <section aria-labelledby="why-matters-heading" className="pt-2">
+        <h2 id="why-matters-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Why Core Values Matter
         </h2>
         <div className="prose prose-lg text-black">
@@ -102,8 +102,8 @@ export default function About() {
         </div>
       </section>
 
-      <section aria-labelledby="how-it-works-heading">
-        <h2 id="how-it-works-heading" className="text-2xl font-bold text-black">
+      <section aria-labelledby="how-it-works-heading"className="pt-2">
+        <h2 id="how-it-works-heading" className="text-2xl font-bold text-black pb-2 text-center">
           How It Works
         </h2>
         <div
@@ -136,8 +136,8 @@ export default function About() {
         </div>
       </section>
 
-      <section aria-labelledby="benefits-heading">
-        <h2 id="benefits-heading" className="text-2xl font-bold text-black">
+      <section aria-labelledby="benefits-heading" className="pt-2">
+        <h2 id="benefits-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Benefits
         </h2>
         <div
@@ -181,8 +181,8 @@ export default function About() {
         </div>
       </section>
 
-      <section aria-labelledby="privacy-heading">
-        <h2 id="privacy-heading" className="text-2xl font-bold text-black">
+      <section aria-labelledby="privacy-heading" className="pt-2">
+        <h2 id="privacy-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Your Data & Privacy
         </h2>
         <div
@@ -234,7 +234,7 @@ export default function About() {
         </div>
       </section>
 
-      <section aria-labelledby="notes-heading">
+      <section aria-labelledby="notes-heading" className="pt-2">
         <h2 id="notes-heading" className="sr-only">Important Notes</h2>
         <div className="space-y-4">
           <div
@@ -265,8 +265,8 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section aria-labelledby="instructions-heading">
-        <h2 id="instructions-heading" className="text-2xl font-bold text-black">
+      <section aria-labelledby="instructions-heading" className="pt-2">
+        <h2 id="instructions-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Instructions Preference
         </h2>
         <div
