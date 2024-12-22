@@ -16,6 +16,7 @@ concurrency:
 
 env:
   NEXT_PUBLIC_BASE_URL: https://digitalanalogue9.github.io
+  NEXT_PUBLIC_DEPLOYMENT_TARGET: github
 
 jobs:
   build:
@@ -40,23 +41,23 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_VERSION=$(node -p "require('./package.json').version")-$(date +'%Y%m%d.%H%M')" >> $GITHUB_ENV
 
-      - name: Build and Export with Next.js
+      - name: Build with Next.js
         env:
           NODE_ENV: production
         run: |
           npm run build
-          npm run export
 
       - name: Post Build Adjustments
-        env:
-          NODE_ENV: production
         run: |
-          mkdir -p out
+          if [ -d out ]; then
+            echo "out directory exists. Proceeding with post-build adjustments."
+          else
+            echo "Error: out directory not found!" >&2
+            exit 1
+          fi
           touch out/.nojekyll
-          # Add cache control headers
           echo '/*' > out/_headers
           echo '  Cache-Control: no-cache, no-store, must-revalidate' >> out/_headers
-          # Ensure manifest has correct content type
           echo '/manifest.webmanifest' >> out/_headers
           echo '  Content-Type: application/manifest+json' >> out/_headers
 

@@ -27,12 +27,15 @@ const withPWA = require('next-pwa')({
   ]
 })
 
+const isGitHubPages = process.env.NEXT_PUBLIC_DEPLOYMENT_TARGET === 'github';
+const isVercel = process.env.NEXT_PUBLIC_DEPLOYMENT_TARGET === 'vercel';
+
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
-  distDir: 'out', 
-  trailingSlash: true, 
-  assetPrefix: '/digitalanalogue9.github.io/', 
+  output: isGitHubPages ? 'export' : undefined, // GitHub Pages needs static export
+  distDir: isGitHubPages ? 'out' : '.next', // Different output directories
+  trailingSlash: isGitHubPages, // Trailing slashes for GitHub Pages
+  assetPrefix: isGitHubPages ? '/digitalanalogue9.github.io/' : undefined, // GitHub Pages asset prefix
   webpack: (config, { dev, isServer }) => {
     // Production optimizations only
     if (!dev && !isServer) {
