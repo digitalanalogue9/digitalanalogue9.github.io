@@ -112,10 +112,10 @@ export default function StartScreen() {
         aria-label="Introduction"
       >
         <p className={`${isMobile ? 'text-sm' : 'text-lg sm:text-xl'} text-black font-medium`}>
-        Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Let’s find the ones that define you best!
+        Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
         </p>
         <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} text-black`}>
-        You'll start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
+        You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
         </p>
       </div>
 

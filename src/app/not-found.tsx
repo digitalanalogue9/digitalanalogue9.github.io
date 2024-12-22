@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 /**
  * NotFound component renders a user-friendly message indicating that the requested page could not be found.
@@ -10,6 +11,23 @@ import Link from 'next/link';
  * @returns {JSX.Element} A React component that displays a "Page Not Found" message.
  */
 export default function NotFound() {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      // Initial check
+      checkMobile();
+  
+      // Add event listener for window resizing
+      window.addEventListener('resize', checkMobile);
+  
+      // Cleanup event listener
+      return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+    
   return (
     <div 
       className="flex-1 flex items-center justify-center p-4"

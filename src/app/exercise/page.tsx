@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RoundUIDebug from "@/components/features/Round/RoundUIDebug";
 import RoundUI from "@/components/features/Round/RoundUI";
@@ -22,6 +22,22 @@ function ExerciseContent() {
    */
   const { showInstructions, setShowInstructions } = useGameState();
   const { isLoading, error, shouldRedirect } = useGameInit();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add event listener for window resizing
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup event listener
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const lastVersion = localStorage.getItem('app-version');
@@ -61,18 +77,15 @@ function ExerciseContent() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex-1 flex flex-col" aria-label="Core Values Exercise">
-        <h1 className="sr-only">Core Values - Exercise In Progress</h1>
-        
         <GameComponent />
-        
         {showInstructions && (
-          <Instructions 
+          <Instructions
             onClose={() => setShowInstructions(false)}
-            onStart={() => {}} 
+            onStart={() => { }}
             aria-label="Exercise Instructions"
           />
         )}
-        
+
         <PWAPrompt />
       </div>
     </DndProvider>

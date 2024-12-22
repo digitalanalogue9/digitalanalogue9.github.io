@@ -1,7 +1,7 @@
 // src/app/error.tsx
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * Error component to display error messages and provide a way to reset the application state.
@@ -29,6 +29,23 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add event listener for window resizing
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup event listener
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     // Log error for debugging but ensure no sensitive info is exposed
     console.error('App Error:', {
@@ -39,29 +56,29 @@ export default function Error({
   }, [error])
 
   return (
-    <main 
+    <main
       className="flex-1 flex items-center justify-center p-4"
       role="alert"
       aria-labelledby="error-heading"
     >
       <div className="text-center max-w-md">
-        <h1 
+        <h1
           id="error-heading"
           className="text-2xl font-bold mb-4"
         >
           Something went wrong!
         </h1>
-        
+
         <div className="mb-6">
-          <p 
+          <p
             className="text-black mb-2"
             aria-live="polite"
           >
-            We encountered an unexpected error. 
+            We encountered an unexpected error.
             You can try again or return to the home page.
           </p>
           {process.env.NODE_ENV === 'development' && error.message && (
-            <p 
+            <p
               className="text-red-600 text-sm mt-2"
               aria-label="Error details"
             >
@@ -78,9 +95,9 @@ export default function Error({
           >
             Try again
           </button>
-          
+
           {error.digest && (
-            <p 
+            <p
               className="text-xs text-black"
               aria-label="Error reference code"
             >
