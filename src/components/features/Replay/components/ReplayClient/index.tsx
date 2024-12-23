@@ -17,7 +17,7 @@ export default function ReplayClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('sessionId');
-  const debug = getEnvBoolean('debug', false);
+  const debug = getEnvBoolean('DEBUG', false);
   const [rounds, setRounds] = useState<Round[]>([]);
   const [currentRound, setCurrentRound] = useState<number>(1);
   const [currentCommandIndex, setCurrentCommandIndex] = useState<number>(0);

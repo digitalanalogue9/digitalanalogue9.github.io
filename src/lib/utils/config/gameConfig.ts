@@ -1,8 +1,8 @@
 import { getEnvNumber } from './envUtils';
 
 export const getGameConfig = () => ({
-  maxCards: getEnvNumber('maxCards', 35),
-  defaultCoreValues: getEnvNumber('numCoreValues', 10),
+  maxCards: getEnvNumber('CARDS_IN_GAME', 35),
+  defaultCoreValues: getEnvNumber('DEFAULT_CORE_VALUES', 10),
   minNotImportant: 1,  // Minimum cards that must be in Not Important
   ratioThresholds: {
     final: 1.5,     // Ratio for final round (2 categories)

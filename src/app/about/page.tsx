@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { clearGameState } from "@/lib/utils/storage";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
@@ -28,6 +29,23 @@ const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 export default function About() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [cookieConsent, setCookieConsent] = useState(false);
+
+  useEffect(() => {
+    const storedCookieConsent = getLocalStorage("cookie_consent", null);
+
+    setCookieConsent(storedCookieConsent);
+  }, [setCookieConsent]);
+
+  useEffect(() => {
+    const newValue = cookieConsent ? "granted" : "denied";
+
+    window.gtag("consent", "update", {
+      analytics_storage: newValue,
+    });
+
+    setLocalStorage("cookie_consent", cookieConsent);
+  }, [cookieConsent]);
 
   useEffect(() => {
     clearGameState();
@@ -88,7 +106,8 @@ export default function About() {
         <h2 id="why-matters-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Why Core Values Matter
         </h2>
-        <div className="prose prose-lg text-black">
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 prose prose-lg text-black">
           <p>
             Understanding your core values is essential for making meaningful life decisions
             and living authentically. This app helps you explore and organize your values
@@ -100,9 +119,10 @@ export default function About() {
             for decision-making and personal growth.
           </p>
         </div>
+
       </section>
 
-      <section aria-labelledby="how-it-works-heading"className="pt-2">
+      <section aria-labelledby="how-it-works-heading" className="pt-2">
         <h2 id="how-it-works-heading" className="text-2xl font-bold text-black pb-2 text-center">
           How It Works
         </h2>
@@ -180,7 +200,6 @@ export default function About() {
           ))}
         </div>
       </section>
-
       <section aria-labelledby="privacy-heading" className="pt-2">
         <h2 id="privacy-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Your Data & Privacy
@@ -233,7 +252,6 @@ export default function About() {
           ))}
         </div>
       </section>
-
       <section aria-labelledby="notes-heading" className="pt-2">
         <h2 id="notes-heading" className="sr-only">Important Notes</h2>
         <div className="space-y-4">
@@ -265,6 +283,38 @@ export default function About() {
           </div>
         </div>
       </section>
+      <section aria-labelledby="analytics-heading" className="pt-2" id="analytics">
+        <h2 id="analytics-heading" className="text-2xl font-bold text-black pb-2 text-center">
+          Analytics
+        </h2>
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 prose prose-lg text-black">
+          <p className='pb-2'>
+            This application uses Google Analytics to improve the user experience by tracking
+            anonymous usage data. Analytics is limited to essential metrics, and no personal data
+            is collected.
+          </p>
+          <p>
+            We respect your privacy preferences. You can manage your consent settings for analytics
+            through the cookie banner or by clicking the button below.
+          </p>
+          <div className="flex gap-2 justify-center">
+
+
+            {cookieConsent && <button
+              className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              onClick={() => setCookieConsent(false)}
+            >
+              Stop tracking
+            </button>}
+            {!cookieConsent && <button
+              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              onClick={() => setCookieConsent(true)}
+            >
+              Allow tracking
+            </button>}
+          </div>
+        </div>
+      </section>      
       <section aria-labelledby="instructions-heading" className="pt-2">
         <h2 id="instructions-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Instructions Preference

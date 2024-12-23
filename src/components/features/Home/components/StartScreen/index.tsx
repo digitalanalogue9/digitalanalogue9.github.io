@@ -33,9 +33,9 @@ import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
  */
 export default function StartScreen() {
   const router = useRouter();
-  const isDebug = getEnvBoolean('debug', false);
-  const maxCards = getEnvNumber('maxCards', 35);
-  const defaultCoreValues = getEnvNumber('numCoreValues', 10);
+  const isDebug = getEnvBoolean('DEBUG', false);
+  const maxCards = getEnvNumber('CARDS_IN_GAME', 35);
+  const defaultCoreValues = getEnvNumber('DEFAULT_CORE_VALUES_TO_CHOOSE', 10);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const [isInitializing, setIsInitializing] = useState(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -112,10 +112,10 @@ export default function StartScreen() {
         aria-label="Introduction"
       >
         <p className={`${isMobile ? 'text-sm' : 'text-lg sm:text-xl'} text-black font-medium`}>
-        Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
+          Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
         </p>
         <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} text-black`}>
-        You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
+          You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
         </p>
       </div>
 
@@ -125,7 +125,7 @@ export default function StartScreen() {
           <h2 className="text-lg sm:text-xl font-semibold text-black">
             Why Discover Your Core Values?
           </h2>
-          <ul className="list-disc list-inside text-black text-sm sm:text-base space-y-2">
+          <ul className="list-disc list-inside text-black text-sm sm:text-base space-y-2 text-left">
             <li><strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you.</li>
             <li><strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.</li>
             <li><strong>Enhanced Relationships:</strong> Communicate your values clearly and understand others better.</li>
@@ -145,7 +145,7 @@ export default function StartScreen() {
       >
         <label
           htmlFor="core-values-count"
-          className={`text-center ${isMobile ? 'text-sm' : 'text-base font-medium'}`}
+          className={`text-center ${isMobile ? 'text-sm' : 'text-base font-semibold'}`}
         >
           Choose the number of values that define you:
         </label>

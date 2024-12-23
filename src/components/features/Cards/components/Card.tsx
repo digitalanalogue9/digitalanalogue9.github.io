@@ -52,7 +52,7 @@ const Card = memo(function Card({
   onClick,
   selectedMobileCard
 }: CardProps) {
-  const debug = getEnvBoolean('debug', false);
+  const debug = getEnvBoolean('DEBUG', false);
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);

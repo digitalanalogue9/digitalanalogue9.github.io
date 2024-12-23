@@ -15,7 +15,7 @@ const storeNames = {
   rounds: 'rounds',
   completedSessions: 'completedSessions'
 };
-const debug = getEnvBoolean('debug', false);
+const debug = getEnvBoolean('DEBUG', false);
 
 // Database initialization
 /**

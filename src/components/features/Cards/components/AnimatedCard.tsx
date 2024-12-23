@@ -59,7 +59,7 @@ export function AnimatedCard({
   currentCategory,
   columnIndex
 }: CardProps) {
-  const debug = getEnvBoolean('debug', false);
+  const debug = getEnvBoolean('DEBUG', false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMoveOptions, setShowMoveOptions] = useState(false);
   if (!value) return null;

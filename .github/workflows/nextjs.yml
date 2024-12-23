@@ -46,6 +46,10 @@ jobs:
       - name: Build with Next.js
         env:
           NODE_ENV: production
+          GA_MEASUREMENT_ID: G-JZPX5JCP5D
+          DEBUG: false
+          CARDS_IN_GAME: 35
+          DEFAULT_CORE_VALUES_TO_CHOOSE: 10
         run: |
           npm run build
 
