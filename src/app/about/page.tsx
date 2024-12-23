@@ -32,7 +32,7 @@ export default function About() {
   const [cookieConsent, setCookieConsent] = useState(false);
 
   useEffect(() => {
-    const storedCookieConsent = getLocalStorage("cookie_consent", null);
+    const storedCookieConsent = getLocalStorage("cookie-consent", null);
 
     setCookieConsent(storedCookieConsent);
   }, [setCookieConsent]);
@@ -44,7 +44,7 @@ export default function About() {
       analytics_storage: newValue,
     });
 
-    setLocalStorage("cookie_consent", cookieConsent);
+    setLocalStorage("cookie-consent", cookieConsent);
   }, [cookieConsent]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function About() {
   }, []);
 
   useEffect(() => {
-    const savedPreference = localStorage.getItem('showInstructions');
+    const savedPreference = localStorage.getItem('show-instructions');
     setShowInstructions(savedPreference !== 'false');
   }, []);
 

@@ -8,7 +8,7 @@ export default function CookieBanner() {
   const [cookieConsent, setCookieConsent] = useState(false);
 
   useEffect(() => {
-    const storedCookieConsent = getLocalStorage("cookie_consent", null);
+    const storedCookieConsent = getLocalStorage("cookie-consent", null);
 
     setCookieConsent(storedCookieConsent);
   }, [setCookieConsent]);
@@ -20,7 +20,7 @@ export default function CookieBanner() {
       analytics_storage: newValue,
     });
 
-    setLocalStorage("cookie_consent", cookieConsent);
+    setLocalStorage("cookie-consent", cookieConsent);
   }, [cookieConsent]);
 
 

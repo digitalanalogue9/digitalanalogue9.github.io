@@ -20,7 +20,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
   const [shouldShowAgain, setShouldShowAgain] = useState(true);
 
   useEffect(() => {
-    const savedPreference = localStorage.getItem('showInstructions');
+    const savedPreference = localStorage.getItem('show-instructions');
     if (savedPreference === 'false') {
       onClose();
     }
