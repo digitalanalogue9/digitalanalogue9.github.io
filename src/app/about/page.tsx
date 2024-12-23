@@ -356,9 +356,6 @@ export default function About() {
                   <span className="sr-only">
                     Current status:
                   </span>
-                  {showInstructions
-                    ? "Instructions will be shown when you start a new exercise."
-                    : "Instructions are currently hidden. Enable this to see them again."}
                 </p>
               </div>
             </div>
