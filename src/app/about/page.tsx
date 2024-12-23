@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { clearGameState } from "@/lib/utils/storage";
 import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
+import Link from 'next/link';
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
@@ -291,15 +292,13 @@ export default function About() {
           <p className='pb-2'>
             This application uses Google Analytics to improve the user experience by tracking
             anonymous usage data. Analytics is limited to essential metrics, and no personal data
-            is collected.
+            is collected. The <Link href="/privacy" className="text-blue hover:text-200 transition-colors">privacy policy</Link> contains more information.
           </p>
           <p>
             We respect your privacy preferences. You can manage your consent settings for analytics
             through the cookie banner or by clicking the button below.
           </p>
           <div className="flex gap-2 justify-center">
-
-
             {cookieConsent && <button
               className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               onClick={() => setCookieConsent(false)}
@@ -341,7 +340,7 @@ export default function About() {
                   aria-checked={showInstructions}
                 />
               </div>
-              <div className="ml-3 text-sm">
+              <div className="ml-3">
                 <label
                   id="instructions-label"
                   htmlFor="show-instructions"
@@ -362,7 +361,7 @@ export default function About() {
           </div>
 
           <div
-            className="mt-4 text-sm text-black"
+            className="mt-4 text-black"
             role="status"
             aria-live="polite"
           >

@@ -23,7 +23,6 @@ export default function CookieBanner() {
     setLocalStorage("cookie-consent", cookieConsent);
   }, [cookieConsent]);
 
-
   return (
     <div
       className={`my-10 mx-auto max-w-max md:max-w-screen-sm
@@ -32,7 +31,7 @@ export default function CookieBanner() {
                   bg-gray-700 rounded-lg shadow z-50
                   ${cookieConsent ? "hidden" : "flex"}`}
     >
-      <div className="text-cente text-white-200">
+      <div className="text-center text-white-200">
         <Link href="/about#analytics" className="text-xl font-bold text-white no-underline hover:text-green-400 transition-colors"
         aria-label="Cookie Policy">
           <p>

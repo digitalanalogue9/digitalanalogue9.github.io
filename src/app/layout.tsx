@@ -8,6 +8,7 @@ import CookieBanner from '@/components/common/CookieBanner';
 import GoogleAnalytics from '@/components/common/GoogleAnalytics';
 import { getEnvString } from "@/lib/utils/config/envUtils";
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 /**
  * RootLayout component that serves as the main layout for the application.
  * It includes the HTML structure, head metadata, and the main layout structure
@@ -64,6 +65,7 @@ export default function RootLayout({
             <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
               <p className="text-center text-white text-sm">
                 © {new Date().getFullYear()} Core Values App
+                <Link href="/privacy" className="ml-2 text-white hover:text-blue-200 transition-colors">Privacy Policy</Link>
               </p>
             </div>
           </footer>
