@@ -126,7 +126,7 @@ export default function About() {
           Your Data & Privacy
         </h2>
         <div className="space-y-4" role="list">
-          <div className="bg-blue-100 p-4 rounded-lg">
+          <div className="bg-blue-100 p-4 rounded-lg" role="listitem">
             <h3 className={`${styles.paragraph} font-semibold text-blue-900 mb-2`}>
               <span aria-hidden="true">📱 </span>Private & Local Storage
             </h3>
@@ -134,7 +134,7 @@ export default function About() {
               Your selections and progress are stored locally on your device, ensuring your data remains private and accessible only to you.
             </p>
           </div>
-          <div className="bg-green-100 p-4 rounded-lg">
+          <div className="bg-green-100 p-4 rounded-lg" role="listitem">
             <h3 className={`${styles.paragraph} font-semibold text-green-900 mb-2`}>
               <span aria-hidden="true">🔒 </span>Secure Analytics
             </h3>
@@ -142,7 +142,7 @@ export default function About() {
               Anonymous usage data is collected only with your explicit consent to improve the app&apos;s experience. No personal information is shared or stored externally.
             </p>
           </div>
-          <div className="bg-yellow-100 p-4 rounded-lg">
+          <div className="bg-yellow-100 p-4 rounded-lg" role="listitem">
             <h3 className={`${styles.paragraph} font-semibold text-yellow-900 mb-2`}>
               <span aria-hidden="true">⚡ </span>Works Offline
             </h3>
@@ -150,7 +150,7 @@ export default function About() {
               All functionality works offline, so you can use the app anywhere without an internet connection.
             </p>
           </div>
-          <div className="bg-red-100 p-4 rounded-lg">
+          <div className="bg-red-100 p-4 rounded-lg" role="listitem">
             <h3 className={`${styles.paragraph} font-semibold text-red-900 mb-2`}>
               <span aria-hidden="true">⚠️ </span>Important Note
             </h3>
