@@ -68,7 +68,7 @@ export default function HistoryPage() {
     >
       <h1
         id="history-heading"
-        className={`${styles.heading} font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap`}
+          className={`${isMobile ? 'text-2xl' : 'text-4xl sm:text-5xl'} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
       >
         Core <span className="text-blue-700">Values</span> Session History
       </h1>
