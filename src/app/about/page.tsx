@@ -41,7 +41,7 @@ export default function About() {
       <div className="text-center">
         <h1
           id="about-heading"
-          className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
+          className={`${isMobile ? 'text-2xl' : 'text-4xl sm:text-5xl'} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
         >
           About Core <span className="text-blue-700">Values</span>
         </h1>
