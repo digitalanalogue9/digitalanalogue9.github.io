@@ -53,6 +53,7 @@ body {
   background-attachment: fixed;
   line-height: 1.5;
   overflow-y: scroll;
+  -webkit-text-size-adjust: auto;
 }
 
 /* Ensure all interactive elements have sufficient contrast */
