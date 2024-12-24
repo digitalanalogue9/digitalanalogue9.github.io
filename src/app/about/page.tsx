@@ -191,6 +191,7 @@ export default function About() {
           </div>
         </div>
       </section>
+      
       <section aria-labelledby="instructions-heading" className="pt-2">
         <h2 id="instructions-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Instructions Preference
