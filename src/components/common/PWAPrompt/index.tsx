@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePWA } from "@/lib/hooks/usePWA";
 import { useMobile } from "@/lib/contexts/MobileContext";
 import { getResponsiveTextStyles } from "@/lib/utils/styles/textStyles";
-
+import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
 type PromptType = 'install' | 'update' | null;
 
 /**
@@ -61,61 +61,73 @@ export default function PWAPrompt() {
   const { needsUpdate, updateServiceWorker } = usePWA();
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
+
   useEffect(() => {
-    // Handle installation prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      // Only show install prompt if there's no update needed
-      if (!needsUpdate) {
+
+      const isDismissed = getLocalStorage('pwa-prompt-dismissed', false);
+      if (!needsUpdate && !isDismissed) {
         setPromptType('install');
         setShowPrompt(true);
       }
     };
 
-    // Handle update availability
     if (needsUpdate) {
       setPromptType('update');
       setShowPrompt(true);
     }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Hide prompts if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setShowPrompt(false);
     }
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, [needsUpdate]);
+
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
+
     deferredPrompt.prompt();
-    const {
-      outcome
-    } = await deferredPrompt.userChoice;
+    const { outcome } = await deferredPrompt.userChoice;
+
     setDeferredPrompt(null);
     setShowPrompt(false);
+
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
     } else {
       console.log('User dismissed the install prompt');
     }
   };
+
   const handleUpdateClick = async () => {
     await updateServiceWorker();
     setShowPrompt(false);
   };
+
   const handleDismiss = () => {
     setShowPrompt(false);
+
     if (promptType === 'install') {
-      localStorage.setItem('pwa-prompt-dismissed', 'true');
+      setLocalStorage('pwa-prompt-dismissed', true);
     }
   };
 
   if (!showPrompt) return null;
-  const promptTitle = promptType === 'install' ? 'Install Core Values App' : 'Update Available';
-  const promptDescription = promptType === 'install' ? 'Install our app for a better experience with offline access and faster loading times.' : 'A new version is available. Update now for the latest features and improvements.';
+
+  const promptTitle =
+    promptType === 'install' ? 'Install Core Values App' : 'Update Available';
+  const promptDescription =
+    promptType === 'install'
+      ? 'Install our app for a better experience with offline access and faster loading times.'
+      : 'A new version is available. Update now for the latest features and improvements.';
+
   return (
     <AnimatePresence>
       {showPrompt && (
@@ -136,26 +148,26 @@ export default function PWAPrompt() {
         >
           <div className="flex flex-col">
             <div className="flex-1">
-              <h2 
-                id="pwa-prompt-title" 
+              <h2
+                id="pwa-prompt-title"
                 className={`${styles.subheading} font-semibold text-black`}
               >
                 {promptTitle}
               </h2>
-              <p 
-                id="pwa-prompt-description" 
+              <p
+                id="pwa-prompt-description"
                 className={`${styles.paragraph} mt-1 text-black`}
               >
                 {promptDescription}
               </p>
             </div>
 
-            <div 
+            <div
               className={`
                 mt-4 
                 ${isMobile ? 'flex flex-col space-y-2' : 'flex flex-row space-x-3'}
-              `} 
-              role="group" 
+              `}
+              role="group"
               aria-label="PWA prompt actions"
             >
               <button
@@ -172,7 +184,7 @@ export default function PWAPrompt() {
               >
                 {promptType === 'install' ? 'Install' : 'Update Now'}
               </button>
-              
+
               {promptType === 'install' && (
                 <button
                   onClick={handleDismiss}
