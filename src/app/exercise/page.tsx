@@ -11,6 +11,7 @@ import PWAPrompt from "@/components/common/PWAPrompt";
 import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
 import { forceReload } from "@/lib/utils/cache";
 import { useGameInit } from "@/components/features/Exercise/hooks/useGameInit";
+import { useMobile } from "@/lib/contexts/MobileContext";
 
 function ExerciseContent() {
   const router = useRouter();
@@ -22,22 +23,8 @@ function ExerciseContent() {
    */
   const { showInstructions, setShowInstructions } = useGameState();
   const { isLoading, error, shouldRedirect } = useGameInit();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const { isMobile } = useMobile();
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   useEffect(() => {
     const lastVersion = localStorage.getItem('app-version');

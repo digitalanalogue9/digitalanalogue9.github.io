@@ -12,6 +12,7 @@ import { ReplayColumn } from '../ReplayColumn';
 import { motion } from 'framer-motion';
 import { MobileReplayCategories } from '../MobileReplayCategories';
 import { CommandInfo } from '@/components/features/Replay/types';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 export default function ReplayClient() {
   const searchParams = useSearchParams();
@@ -25,11 +26,11 @@ export default function ReplayClient() {
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const [commandInfo, setCommandInfo] = useState<CommandInfo | null>(null);
   const [currentCard, setCurrentCard] = useState<Value | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [isRoundTransition, setIsRoundTransition] = useState(false);
   const [allCards, setAllCards] = useState<Value[]>([]);
   const [currentCommandType, setCurrentCommandType] = useState<'DROP' | 'MOVE' | null>(null);
-
+  const { isMobile } = useMobile();
+  
   // Add redirect if no sessionId
   useEffect(() => {
     if (!sessionId) {
@@ -58,13 +59,6 @@ export default function ReplayClient() {
     y: 0
   }, 1000 / playbackSpeed);
   
-  // Mobile detection after mount
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const emptyCategories = useMemo(() => ({
     'Very Important': [],

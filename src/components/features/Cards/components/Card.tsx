@@ -58,9 +58,7 @@ const Card = memo(function Card({
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMoveOptions, setShowMoveOptions] = useState(false);
   const draggedIndexRef = useRef<number | null>(null);
-  const {
-    isMobile
-  } = useMobile();
+  const { isMobile } = useMobile();
   if (!value) return null;
   const isInCategory = columnIndex !== undefined;
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -93,12 +91,12 @@ const Card = memo(function Card({
   const findDropIndex = (mouseY: number, container: HTMLElement): number => {
     const cardElements = container.querySelectorAll('[data-card-id]');
     const containerRect = container.getBoundingClientRect();
-    
+
     // If no cards or mouse is above all cards, return 0
     if (cardElements.length === 0 || mouseY < containerRect.top) {
       return 0;
     }
-    
+
     // If mouse is below all cards, return length
     if (mouseY > containerRect.bottom) {
       return cardElements.length;
@@ -108,7 +106,7 @@ const Card = memo(function Card({
     for (let i = 0; i < cardElements.length; i++) {
       const cardRect = cardElements[i].getBoundingClientRect();
       const cardMiddle = cardRect.top + (cardRect.height / 2);
-      
+
       if (mouseY < cardMiddle) {
         return i;
       }
@@ -127,7 +125,7 @@ const Card = memo(function Card({
       const sourceIndex = droppedData.sourceIndex;
 
       const dropContainer = e.currentTarget.closest('.space-y-2') as HTMLElement | null;;
-      
+
       if (!dropContainer) return;
       const targetIndex = findDropIndex(e.clientY, dropContainer);
 

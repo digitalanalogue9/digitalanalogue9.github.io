@@ -237,7 +237,7 @@ async function analyzeComponentStructure(filePath) {
   }
 }
 
-async function reorganizeComponent(filePath) {
+async function reorganiseComponent(filePath) {
   const content = await fs.readFile(filePath, 'utf-8');
   
   try {
@@ -398,7 +398,7 @@ async function main() {
       case '2':
         console.log('\nFixing all components...');
         for (const { file } of analysisResults) {
-          const success = await reorganizeComponent(file);
+          const success = await reorganiseComponent(file);
           console.log(`${success ? '✓' : '✗'} ${path.relative(ROOT, file)}`);
         }
         break;
@@ -408,7 +408,7 @@ async function main() {
         for (const { file } of analysisResults) {
           const shouldFix = await question(`Fix ${path.relative(ROOT, file)}? (y/n): `);
           if (shouldFix.toLowerCase() === 'y') {
-            const success = await reorganizeComponent(file);
+            const success = await reorganiseComponent(file);
             console.log(`${success ? '✓' : '✗'} ${path.relative(ROOT, file)}`);
           }
         }

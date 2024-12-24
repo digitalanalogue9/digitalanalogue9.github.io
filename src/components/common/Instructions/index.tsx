@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { InstructionsProps } from './types';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
  * Instructions component displays a modal with instructions on how to use the Core Values application.
@@ -18,7 +19,7 @@ import { InstructionsProps } from './types';
  */
 export default function Instructions({ onClose }: InstructionsProps) {
   const [shouldShowAgain, setShouldShowAgain] = useState(true);
-
+  const { isMobile } = useMobile();
   useEffect(() => {
     const savedPreference = localStorage.getItem('show-instructions');
     if (savedPreference === 'false') {

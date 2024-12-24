@@ -6,6 +6,9 @@ import { getSessions } from "@/lib/db/indexedDB";
 import { SessionList } from "@/components/features/History/components/SessionList";
 import { SessionSelectionProvider } from '@/components/features/History/contexts/SessionSelectionContext';
 import { clearGameState } from "@/lib/utils/storage";
+import { useMobile } from "@/lib/contexts/MobileContext";
+import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
+
 /**
  * The `HistoryPage` component is responsible for displaying the history of sessions.
  * It fetches and displays a list of sessions sorted by timestamp in descending order.
@@ -36,22 +39,8 @@ export default function HistoryPage() {
 
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile } = useMobile();
+  const styles = getResponsiveTextStyles(isMobile);
   
   useEffect(() => {
     const loadSessions = async () => {
@@ -75,38 +64,35 @@ export default function HistoryPage() {
     <div
       role="main"
       aria-labelledby="history-heading"
-      className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${isMobile ? 'flex flex-col justify-center py-2' : 'py-8'
-        }`}
+      className={getContainerClassName(isMobile)}
     >
-          {/* Header */}
-          <h1
-            id="history-heading"
-            className={`${isMobile ? 'text-2xl' : 'text-4xl sm:text-5xl'
-              } font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap`}
-          >
-            Core <span className="text-blue-700">Values</span> Session History
-          </h1>
+      <h1
+        id="history-heading"
+        className={`${styles.heading} font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap`}
+      >
+        Core <span className="text-blue-700">Values</span> Session History
+      </h1>
 
-        <section aria-label="Value sorting sessions history" className="space-y-4">
-          <SessionSelectionProvider>
-            {isLoading ? (
-              <div role="status" aria-live="polite" className="text-center py-4">
-                <span className="sr-only">Loading session history...</span>
-                Loading...
-              </div>
-            ) : sessions.length === 0 ? (
-              <p role="status" aria-live="polite" className="text-black text-center py-4">
-                No sessions found. Complete a value sorting exercise to see your history.
-              </p>
-            ) : (
-              <SessionList
-                sessions={sessions}
-                onSessionDeleted={handleSessionDeleted}
-                aria-label="List of completed value sorting sessions"
-              />
-            )}
-          </SessionSelectionProvider>
-        </section>
-      </div>
+      <section aria-label="Value sorting sessions history" className={styles.spacing}>
+        <SessionSelectionProvider>
+          {isLoading ? (
+            <div role="status" aria-live="polite" className="text-center py-4">
+              <span className="sr-only">Loading session history...</span>
+              <p className={styles.paragraph}>Loading...</p>
+            </div>
+          ) : sessions.length === 0 ? (
+            <p role="status" aria-live="polite" className={`${styles.paragraph} text-black text-center py-4`}>
+              No sessions found. Complete a value sorting exercise to see your history.
+            </p>
+          ) : (
+            <SessionList
+              sessions={sessions}
+              onSessionDeleted={handleSessionDeleted}
+              aria-label="List of completed value sorting sessions"
+            />
+          )}
+        </SessionSelectionProvider>
+      </section>
+    </div>
   );
 }

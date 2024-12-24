@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from '@/components/features/Cards/types';
 import { CategoryName } from "@/lib/types";
 import { allCategories } from "@/components/features/Categories/constants/categories"; // Use centralized categories
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
  * Component for displaying move options for a card.
@@ -33,6 +34,8 @@ export function CardMoveOptions({
   onClose
 }: CardMoveOptionsProps) {
   const [mounted, setMounted] = useState(false);
+  const { isMobile } = useMobile();
+
   const [position, setPosition] = useState({
     top: 0,
     left: 0
@@ -41,7 +44,6 @@ export function CardMoveOptions({
     const button = document.getElementById(`options-${value.id}`);
     if (button) {
       const rect = button.getBoundingClientRect();
-      const isMobile = window.innerWidth < 768;
       if (isMobile) {
         setPosition({
           top: rect.bottom + window.scrollY,
@@ -54,7 +56,7 @@ export function CardMoveOptions({
         });
       }
     }
-  }, [value.id]);
+  }, [value.id, isMobile]);
   useEffect(() => {
     setMounted(true);
     updatePosition();

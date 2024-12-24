@@ -1,52 +1,21 @@
 // src/app/about/page.tsx
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { clearGameState } from "@/lib/utils/storage";
 import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
+import { useMobile } from "@/lib/contexts/MobileContext";
+import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
+import { useConsent } from "@/lib/hooks/useConsent";
 import Link from 'next/link';
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
-/**
- * The `About` component provides detailed information about the Core Values application.
- * It includes sections that explain the purpose, functionality, and benefits of the app.
- * Additionally, it offers privacy information and user preferences for displaying instructions.
- *
- * @component
- * @example
- * ```tsx
- * <About />
- * ```
- *
- * @returns {JSX.Element} The rendered About component.
- *
- * @remarks
- * - The component uses `useEffect` to clear the game state on mount and to manage the user's preference for showing instructions.
- * - User preferences for showing instructions are stored in `localStorage`.
- * - The component includes multiple sections with headings and descriptions, each providing specific information about the app.
- * - Accessibility features such as `aria-label`, `aria-labelledby`, and `role` attributes are used to enhance the user experience.
- */
 export default function About() {
   const [showInstructions, setShowInstructions] = useState(true);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [cookieConsent, setCookieConsent] = useState(false);
-
-  useEffect(() => {
-    const storedCookieConsent = getLocalStorage("cookie-consent", null);
-
-    setCookieConsent(storedCookieConsent);
-  }, [setCookieConsent]);
-
-  useEffect(() => {
-    const newValue = cookieConsent ? "granted" : "denied";
-
-    window.gtag("consent", "update", {
-      analytics_storage: newValue,
-    });
-
-    setLocalStorage("cookie-consent", cookieConsent);
-  }, [cookieConsent]);
+  const { consent, updateConsent } = useConsent(); 
+  const { isMobile } = useMobile();
+  const styles = getResponsiveTextStyles(isMobile);
 
   useEffect(() => {
     clearGameState();
@@ -55,21 +24,6 @@ export default function About() {
   useEffect(() => {
     const savedPreference = localStorage.getItem('show-instructions');
     setShowInstructions(savedPreference !== 'false');
-  }, []);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleToggleInstructions = () => {
@@ -82,238 +36,161 @@ export default function About() {
     <div
       role="main"
       aria-labelledby="about-heading"
-      className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${isMobile ? 'flex flex-col justify-center py-2' : 'py-8'
-        }`}
-    >        <div className="text-center">
-        {/* Header */}
+      className={getContainerClassName(isMobile)}
+    >
+      <div className="text-">
         <h1
           id="about-heading"
-          className={`${isMobile ? 'text-2xl' : 'text-4xl sm:text-5xl'
-            } font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap`}
+          className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
         >
           About Core <span className="text-blue-700">Values</span>
         </h1>
         <div
-          className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-2' : 'space-y-4 sm:space-y-6 mb-6'
-            }`}
+          className={`max-w-2xl mx-auto text- ${styles.spacing}`}
           aria-label="Version"
         >
-          <p className={`${isMobile ? 'text-sm' : 'text-lg sm:text-xl'} text-black font-medium`}>
+          <p className={`${styles.largeParagraph} text-black font-medium`}>
             Version {appVersion}
           </p>
         </div>
       </div>
+
       <section aria-labelledby="why-matters-heading" className="pt-2">
-        <h2 id="why-matters-heading" className="text-2xl font-bold text-black pb-2 text-center">
+        <h2 id="why-matters-heading" className={`${styles.subheading} font-bold text-black pb-2 text-center`}>
           Why Core Values Matter
         </h2>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 prose prose-lg text-black">
-          <p>
+        <div className={`bg-white p-6 rounded-lg shadow-sm border border-gray-100 ${styles.prose} text-black`}>
+          <p className={styles.paragraph}>
             Understanding your core values is essential for making meaningful life decisions
-            and living authentically. This app helps you explore and organize your values
+            and living authentically. This app helps you explore and organise your values
             through an interactive and thoughtful process.
           </p>
-          <p>
+          
+          {!isMobile && (<p className={styles.paragraph}>
             Whether you are at a crossroads in life, planning your future, or simply want
             to better understand yourself, identifying your core values provides a compass
             for decision-making and personal growth.
-          </p>
+          </p>)}
         </div>
-
       </section>
 
       <section aria-labelledby="how-it-works-heading" className="pt-2">
-        <h2 id="how-it-works-heading" className="text-2xl font-bold text-black pb-2 text-center">
+        <h2 id="how-it-works-heading" className={`${styles.subheading} font-bold text-black pb-2 text-center`}>
           How It Works
         </h2>
-        <div
-          className="grid gap-4 md:grid-cols-3"
-          role="list"
-        >
+        <div className="grid gap-4 md:grid-cols-3" role="list">
           {[
-            {
-              title: "1. Explore",
-              description: "Browse through carefully curated value cards and begin sorting them based on their importance to you."
-            },
-            {
-              title: "2. Prioritise",
-              description: "Organize values into categories, helping you identify which ones resonate most strongly with your personal beliefs."
-            },
-            {
-              title: "3. Reflect",
-              description: "Review your choices and gain insights into what truly matters to you, helping guide future decisions."
-            }
-          ].map((step, index) => (
+              {
+                icon: "📱",
+                title: "Private & Local Storage",
+                description: "All your selections and progress are stored directly on your device. Think of it like having a personal notebook that only exists on your phone or computer.",
+                bgColor: "bg-blue-100",
+                textColor: "text-blue-900"
+              },
+              {
+                icon: "🔒",
+                title: "Complete Privacy",
+                description: "Your data never leaves your device - we do not use any external servers or cloud storage. Your personal journey stays completely private.",
+                bgColor: "bg-green-100",
+                textColor: "text-green-900"
+              },
+              {
+                icon: "💾",
+                title: "Automatic Saving",
+                description: "Every change you make is automatically saved on your device. You can close the app and come back later - your progress will be waiting for you.",
+                bgColor: "bg-purple-100",
+                textColor: "text-purple-900"
+              },
+              {
+                icon: "⚡",
+                title: "Works Offline",
+                description: "Because everything is stored on your device, you can use the app even without an internet connection. Perfect for deep reflection anywhere.",
+                bgColor: "bg-yellow-100",
+                textColor: "text-yellow-900"
+              }
+            ].map((step) => (
             <div
               key={step.title}
               className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
               role="listitem"
             >
-              <div className="text-blue-700 text-xl mb-2">{step.title}</div>
-              <p className="text-black">{step.description}</p>
+              <div className={`${styles.largeParagraph} text-blue-700 mb-2`}>{step.title}</div>
+              <p className={styles.paragraph}>{step.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="benefits-heading" className="pt-2">
-        <h2 id="benefits-heading" className="text-2xl font-bold text-black pb-2 text-center">
-          Benefits
-        </h2>
-        <div
-          className="grid gap-4 md:grid-cols-2"
-          role="list"
-        >
-          {[
-            {
-              icon: "🎯",
-              title: "Clear Decision Making",
-              description: "Use your identified values as a framework for making choices that align with what truly matters to you."
-            },
-            {
-              icon: "🧭",
-              title: "Personal Growth",
-              description: "Gain deeper self-awareness and understanding of your motivations and priorities."
-            },
-            {
-              icon: "🤝",
-              title: "Better Relationships",
-              description: "Communicate your values clearly to others and understand what drives your interactions."
-            },
-            {
-              icon: "⚡",
-              title: "Increased Motivation",
-              description: "Align your goals with your values for more meaningful and sustainable motivation."
-            }
-          ].map((benefit) => (
-            <div
-              key={benefit.title}
-              className="bg-gray-100 p-4 rounded-lg"
-              role="listitem"
-            >
-              <h3 className="font-semibold text-black mb-2">
-                <span aria-hidden="true">{benefit.icon} </span>
-                {benefit.title}
-              </h3>
-              <p className="text-black">{benefit.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
       <section aria-labelledby="privacy-heading" className="pt-2">
-        <h2 id="privacy-heading" className="text-2xl font-bold text-black pb-2 text-center">
+        <h2 id="privacy-heading" className={`${styles.subheading} font-bold text-black pb-2 text-center`}>
           Your Data & Privacy
         </h2>
-        <div
-          className="space-y-4"
-          role="list"
-        >
-          {[
-            {
-              icon: "📱",
-              title: "Private & Local Storage",
-              description: "All your selections and progress are stored directly on your device. Think of it like having a personal notebook that only exists on your phone or computer.",
-              bgColor: "bg-blue-100",
-              textColor: "text-blue-900"
-            },
-            {
-              icon: "🔒",
-              title: "Complete Privacy",
-              description: "Your data never leaves your device - we do not use any external servers or cloud storage. Your personal journey stays completely private.",
-              bgColor: "bg-green-100",
-              textColor: "text-green-900"
-            },
-            {
-              icon: "💾",
-              title: "Automatic Saving",
-              description: "Every change you make is automatically saved on your device. You can close the app and come back later - your progress will be waiting for you.",
-              bgColor: "bg-purple-100",
-              textColor: "text-purple-900"
-            },
-            {
-              icon: "⚡",
-              title: "Works Offline",
-              description: "Because everything is stored on your device, you can use the app even without an internet connection. Perfect for deep reflection anywhere.",
-              bgColor: "bg-yellow-100",
-              textColor: "text-yellow-900"
-            }
-          ].map((item) => (
-            <div
-              key={item.title}
-              className={`${item.bgColor} p-4 rounded-lg`}
-              role="listitem"
-            >
-              <h3 className={`font-semibold ${item.textColor} mb-2`}>
-                <span aria-hidden="true">{item.icon} </span>
-                {item.title}
-              </h3>
-              <p className="text-black">{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section aria-labelledby="notes-heading" className="pt-2">
-        <h2 id="notes-heading" className="sr-only">Important Notes</h2>
-        <div className="space-y-4">
-          <div
-            className="bg-red-100 p-4 rounded-lg"
-            role="alert"
-          >
-            <h3 className="font-semibold text-red-900 mb-2">
-              <span aria-hidden="true">⚠️ </span>
-              Important Note
+        <div className="space-y-4" role="list">
+          <div className="bg-blue-100 p-4 rounded-lg">
+            <h3 className={`${styles.paragraph} font-semibold text-blue-900 mb-2`}>
+              <span aria-hidden="true">📱 </span>Private & Local Storage
             </h3>
-            <p className="text-black">
-              If you clear your browser data or uninstall the app, your stored
-              information will be deleted. Consider taking screenshots or noting down
-              important results if you want to keep them long-term.
+            <p className={styles.paragraph}>
+              Your selections and progress are stored locally on your device, ensuring your data remains private and accessible only to you.
             </p>
           </div>
+          <div className="bg-green-100 p-4 rounded-lg">
+            <h3 className={`${styles.paragraph} font-semibold text-green-900 mb-2`}>
+              <span aria-hidden="true">🔒 </span>Secure Analytics
+            </h3>
+            <p className={styles.paragraph}>
+              Anonymous usage data is collected only with your explicit consent to improve the app&apos;s experience. No personal information is shared or stored externally.
+            </p>
+          </div>
+          <div className="bg-yellow-100 p-4 rounded-lg">
+            <h3 className={`${styles.paragraph} font-semibold text-yellow-900 mb-2`}>
+              <span aria-hidden="true">⚡ </span>Works Offline
+            </h3>
+            <p className={styles.paragraph}>
+              All functionality works offline, so you can use the app anywhere without an internet connection.
+            </p>
+          </div>
+          <div className="bg-red-100 p-4 rounded-lg">
+            <h3 className={`${styles.paragraph} font-semibold text-red-900 mb-2`}>
+              <span aria-hidden="true">⚠️ </span>Important Note
+            </h3>
+            <p className={styles.paragraph}>
+              If you clear your browser data or uninstall the app, your locally stored information will be deleted.
+            </p>
+          </div>
+        </div>
+        <p className={`${styles.paragraph} mt-4 text-black`}>
+          For detailed information on how your data is handled, please visit our <Link href="/privacy" className="text-blue-700 hover:text-blue-800 transition-colours">Privacy Policy</Link>.
+        </p>
+      </section>
 
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <h3 className="font-semibold text-black mb-2">
-              <span aria-hidden="true">💡 </span>
-              Pro Tip
-            </h3>
-            <p className="text-black">
-              For the best experience, install this as an app on your device
-              (look for the Install App button in your browser). This makes it easier
-              to access and use, just like any other app on your device!
-            </p>
-          </div>
-        </div>
-      </section>
       <section aria-labelledby="analytics-heading" className="pt-2" id="analytics">
-        <h2 id="analytics-heading" className="text-2xl font-bold text-black pb-2 text-center">
+        <h2 id="analytics-heading" className={`${styles.subheading} font-bold text-black pb-2 text-center`}>
           Analytics
         </h2>
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 prose prose-lg text-black">
-          <p className='pb-2'>
-            This application uses Google Analytics to improve the user experience by tracking
-            anonymous usage data. Analytics is limited to essential metrics, and no personal data
-            is collected. The <Link href="/privacy" className="text-blue hover:text-200 transition-colors">privacy policy</Link> contains more information.
-          </p>
-          <p>
-            We respect your privacy preferences. You can manage your consent settings for analytics
-            through the cookie banner or by clicking the button below.
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <p className={`${styles.paragraph} pb-2`}>
+            This app uses Google Analytics to track anonymous usage data, such as page views and time spent, to improve the user experience. Analytics is only enabled after you provide consent via the cookie banner or Analytics section.
           </p>
           <div className="flex gap-2 justify-center">
-            {cookieConsent && <button
-              className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              onClick={() => setCookieConsent(false)}
-            >
-              Stop tracking
-            </button>}
-            {!cookieConsent && <button
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-              onClick={() => setCookieConsent(true)}
-            >
-              Allow tracking
-            </button>}
+            {consent.analytics === 'granted' ? (
+              <button
+                className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                onClick={() => updateConsent('denied')}
+              >
+                Stop tracking
+              </button>
+            ) : (
+              <button
+                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                onClick={() => updateConsent('granted')}
+              >
+                Allow tracking
+              </button>
+            )}
           </div>
         </div>
-      </section>      
+      </section>
       <section aria-labelledby="instructions-heading" className="pt-2">
         <h2 id="instructions-heading" className="text-2xl font-bold text-black pb-2 text-center">
           Instructions Preference
@@ -372,7 +249,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

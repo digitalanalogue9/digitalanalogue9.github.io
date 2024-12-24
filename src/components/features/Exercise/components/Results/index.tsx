@@ -10,6 +10,7 @@ import { clearGameState } from "@/lib/utils/storage";
 import { getCompletedSession } from "@/lib/db/indexedDB";
 import { useSession } from "@/components/features/Exercise/hooks/useSession";
 import { useRouter } from 'next/navigation';
+import { useMobile } from "@/lib/contexts/MobileContext";
 
 /**
  * The `Results` component displays the core values results for a user.
@@ -37,24 +38,10 @@ export default function Results() {
   const printRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const { categories } = useGameState();
+    const { categories } = useGameState();
   const { sessionId } = useSession();
   const [enrichedCategories, setEnrichedCategories] = useState<Categories>(categories);
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile } = useMobile();
 
   useEffect(() => {
     setMounted(true);

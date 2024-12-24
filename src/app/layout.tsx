@@ -9,6 +9,7 @@ import GoogleAnalytics from '@/components/common/GoogleAnalytics';
 import { getEnvString } from "@/lib/utils/config/envUtils";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 /**
  * RootLayout component that serves as the main layout for the application.
  * It includes the HTML structure, head metadata, and the main layout structure
@@ -40,7 +41,9 @@ export default function RootLayout({
       <link rel="icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       <title>Core Values</title>
-      <GoogleAnalytics GA_MEASUREMENT_ID={'G-JZPX5JCP5D'} />
+      <Suspense>
+        <GoogleAnalytics GA_MEASUREMENT_ID={'G-JZPX5JCP5D'} />
+      </Suspense>
     </head>
     <body className="bg-gray-100">
       <MobileProvider>
@@ -71,6 +74,7 @@ export default function RootLayout({
           </footer>
         </div>
       </MobileProvider>
+
     </body>
   </html>;
 }

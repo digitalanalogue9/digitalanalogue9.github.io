@@ -1,6 +1,7 @@
 // src/app/error.tsx
 'use client'
 
+import { useMobile } from '@/lib/contexts/MobileContext';
 import { useEffect, useState } from 'react'
 
 /**
@@ -29,22 +30,7 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile } = useMobile();
 
   useEffect(() => {
     // Log error for debugging but ensure no sensitive info is exposed

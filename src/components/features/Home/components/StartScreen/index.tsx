@@ -8,6 +8,8 @@ import { initializeGameState } from "@/lib/utils/storage";
 import { initialCategories } from "@/components/features/Categories/constants/categories";
 import valuesData from '@/data/values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
+import { useMobile } from '@/lib/contexts/MobileContext';
+import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
 
 /**
  * The `StartScreen` component is the entry point for users to begin discovering their core values.
@@ -38,22 +40,8 @@ export default function StartScreen() {
   const defaultCoreValues = getEnvNumber('DEFAULT_CORE_VALUES_TO_CHOOSE', 10);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
   const [isInitializing, setIsInitializing] = useState(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Add event listener for window resizing
-    window.addEventListener('resize', checkMobile);
-
-    // Cleanup event listener
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile } = useMobile();
+  const styles = getResponsiveTextStyles(isMobile);
 
   const handleViewPreviousResults = () => {
     router.push('/history');
@@ -93,28 +81,27 @@ export default function StartScreen() {
     <div
       role="main"
       aria-labelledby="welcome-heading"
-      className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${isMobile ? 'flex flex-col justify-center py-2' : 'py-8'
-        }`}
+      className={getContainerClassName(isMobile)}
     >
       {/* Header */}
       <h1
         id="welcome-heading"
-        className={`${isMobile ? 'text-2xl' : 'text-4xl sm:text-5xl'
-          } font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap`}
+        className={`font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap ${styles.heading}`}
       >
         Discover Your <span className="text-blue-700">Core Values</span>
       </h1>
 
       {/* Introduction */}
       <div
-        className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
-          }`}
+        className={`max-w-2xl mx-auto text-center ${
+          isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
+        }`}
         aria-label="Introduction"
       >
-        <p className={`${isMobile ? 'text-sm' : 'text-lg sm:text-xl'} text-black font-medium`}>
+         <p className={styles.paragraph}>
           Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
         </p>
-        <p className={`${isMobile ? 'text-sm' : 'text-base sm:text-lg'} text-black`}>
+        <p className={styles.paragraph}>
           You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
         </p>
       </div>

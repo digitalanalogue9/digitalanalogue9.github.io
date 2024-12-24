@@ -1,59 +1,69 @@
 "use client";
 
-import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
-import Link from "next/link";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useConsent } from "@/lib/hooks/useConsent";
+import { ConsentStatus } from "@/lib/types/Consent";
 
 export default function CookieBanner() {
-  const [cookieConsent, setCookieConsent] = useState(false);
+  const { consent, updateConsent, isInitialized } = useConsent();
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const storedCookieConsent = getLocalStorage("cookie-consent", null);
+    if (isInitialized && consent.analytics === 'pending') {
+      setIsVisible(true);
+    }
+  }, [isInitialized, consent.analytics]);
 
-    setCookieConsent(storedCookieConsent);
-  }, [setCookieConsent]);
+  const handleConsent = (status: ConsentStatus) => {
+    updateConsent(status);
+    setIsVisible(false);
+  };
 
-  useEffect(() => {
-    const newValue = cookieConsent ? "granted" : "denied";
-
-    window.gtag("consent", "update", {
-      analytics_storage: newValue,
-    });
-
-    setLocalStorage("cookie-consent", cookieConsent);
-  }, [cookieConsent]);
+  if (!isVisible) return null;
 
   return (
     <div
-      className={`my-10 mx-auto max-w-max md:max-w-screen-sm
-                  fixed bottom-0 left-0 right-0 
-                  flex px-3 md:px-4 py-3 justify-between items-center flex-col sm:flex-row gap-4  
-                  bg-gray-700 rounded-lg shadow z-50
-                  ${cookieConsent ? "hidden" : "flex"}`}
+      role="dialog"
+      aria-labelledby="cookie-consent-title"
+      aria-describedby="cookie-consent-description"
+      className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gray-900 bg-opacity-95 shadow-lg"
     >
-      <div className="text-center text-white-200">
-        <Link href="/about#analytics" className="text-xl font-bold text-white no-underline hover:text-green-400 transition-colors"
-        aria-label="Cookie Policy">
-          <p>
-            We use <span className="font-bold text-sky-400">cookies</span> on
-            our site.
-          </p>
-        </Link>
-      </div>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-white">
+          <div className="flex-1 space-y-2">
+            <h2 id="cookie-consent-title" className="text-xl font-semibold text-white">
+              Cookie Preferences
+            </h2>
+            <p id="cookie-consent-description" className="text-gray-300">
+              We use cookies to enhance your browsing experience and analyze our traffic.
+              <Link
+                href="/privacy"
+                className="ml-1 text-blue-400 hover:text-blue-300 underline focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Learn more about our Privacy Policy
+              </Link>
+            </p>
+          </div>
 
-      <div className="flex gap-2">
-        <button
-          className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          onClick={() => setCookieConsent(false)}
-        >
-          Decline
-        </button>
-        <button
-          className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          onClick={() => setCookieConsent(true)}
-        >
-          Allow Cookies
-        </button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => handleConsent('denied')}
+              className="px-6 py-2 text-sm font-medium text-gray-300 hover:text-white bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+              aria-label="Decline all cookies"
+            >
+              Decline All
+            </button>
+            <button
+              onClick={() => handleConsent('granted')}
+              className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+              aria-label="Accept all cookies"
+            >
+              Accept All
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

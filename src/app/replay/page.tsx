@@ -13,24 +13,10 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import ReplayClient from "@/components/features/Replay/components/ReplayClient";
+import { useMobile } from '@/lib/contexts/MobileContext';
 export default function ReplayPage() {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  
-    useEffect(() => {
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      // Initial check
-      checkMobile();
-  
-      // Add event listener for window resizing
-      window.addEventListener('resize', checkMobile);
-  
-      // Cleanup event listener
-      return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-    
+  const { isMobile } = useMobile();
+      
   return <div className="flex-1">
       <Suspense fallback={<div role="status" aria-live="polite" className="flex items-center justify-center h-full">
             <span className="sr-only">Loading session replay...</span>
