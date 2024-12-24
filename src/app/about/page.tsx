@@ -38,7 +38,7 @@ export default function About() {
       aria-labelledby="about-heading"
       className={getContainerClassName(isMobile)}
     >
-      <div className="text-">
+      <div className="text-center">
         <h1
           id="about-heading"
           className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
