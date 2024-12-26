@@ -271,13 +271,13 @@ export default function Results() {
           size={22} fill='white'
         />
         <TwitterShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url="https://digitalanalogue9.github.io"
           title={formatTextForPlatform(veryImportantValues, 'twitter')}
         >
           <TwitterIcon size={32} />
         </TwitterShareButton>
         <LinkedinShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url="https://digitalanalogue9.github.io"
           title="Check out Core Values!"
           summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
         >
@@ -349,13 +349,13 @@ export default function Results() {
           size={22} fill='white'
         />
         <TwitterShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url="https://digitalanalogue9.github.io"
           title={formatTextForPlatform(veryImportantValues, 'twitter')}
         >
           <TwitterIcon size={32} />
         </TwitterShareButton>
         <LinkedinShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url="https://digitalanalogue9.github.io"
           title="Check out Core Values!"
           summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
         >
