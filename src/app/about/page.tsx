@@ -13,7 +13,7 @@ const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
 export default function About() {
   const [showInstructions, setShowInstructions] = useState(true);
-  const { consent, updateConsent } = useConsent(); 
+  const { consent, updateConsent } = useConsent();
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
 
@@ -22,14 +22,14 @@ export default function About() {
   }, []);
 
   useEffect(() => {
-    const savedPreference = localStorage.getItem('show-instructions');
-    setShowInstructions(savedPreference !== 'false');
+    const savedPreference = getLocalStorage('show-instructions', true);
+    setShowInstructions(savedPreference !== false);
   }, []);
 
   const handleToggleInstructions = () => {
     const newValue = !showInstructions;
     setShowInstructions(newValue);
-    localStorage.setItem('showInstructions', newValue ? 'true' : 'false');
+    setLocalStorage('showInstructions', newValue ? true : false);
   };
 
   return (
@@ -65,7 +65,7 @@ export default function About() {
             and living authentically. This app helps you explore and organise your values
             through an interactive and thoughtful process.
           </p>
-          
+
           {!isMobile && (<p className={styles.paragraph}>
             Whether you are at a crossroads in life, planning your future, or simply want
             to better understand yourself, identifying your core values provides a compass
@@ -80,35 +80,35 @@ export default function About() {
         </h2>
         <div className="grid gap-4 md:grid-cols-3" role="list">
           {[
-              {
-                icon: "📱",
-                title: "Private & Local Storage",
-                description: "All your selections and progress are stored directly on your device. Think of it like having a personal notebook that only exists on your phone or computer.",
-                bgColor: "bg-blue-100",
-                textColor: "text-blue-900"
-              },
-              {
-                icon: "🔒",
-                title: "Complete Privacy",
-                description: "Your data never leaves your device - we do not use any external servers or cloud storage. Your personal journey stays completely private.",
-                bgColor: "bg-green-100",
-                textColor: "text-green-900"
-              },
-              {
-                icon: "💾",
-                title: "Automatic Saving",
-                description: "Every change you make is automatically saved on your device. You can close the app and come back later - your progress will be waiting for you.",
-                bgColor: "bg-purple-100",
-                textColor: "text-purple-900"
-              },
-              {
-                icon: "⚡",
-                title: "Works Offline",
-                description: "Because everything is stored on your device, you can use the app even without an internet connection. Perfect for deep reflection anywhere.",
-                bgColor: "bg-yellow-100",
-                textColor: "text-yellow-900"
-              }
-            ].map((step) => (
+            {
+              icon: "📱",
+              title: "Private & Local Storage",
+              description: "All your selections and progress are stored directly on your device. Think of it like having a personal notebook that only exists on your phone or computer.",
+              bgColor: "bg-blue-100",
+              textColor: "text-blue-900"
+            },
+            {
+              icon: "🔒",
+              title: "Complete Privacy",
+              description: "Your data never leaves your device - we do not use any external servers or cloud storage. Your personal journey stays completely private.",
+              bgColor: "bg-green-100",
+              textColor: "text-green-900"
+            },
+            {
+              icon: "💾",
+              title: "Automatic Saving",
+              description: "Every change you make is automatically saved on your device. You can close the app and come back later - your progress will be waiting for you.",
+              bgColor: "bg-purple-100",
+              textColor: "text-purple-900"
+            },
+            {
+              icon: "⚡",
+              title: "Works Offline",
+              description: "Because everything is stored on your device, you can use the app even without an internet connection. Perfect for deep reflection anywhere.",
+              bgColor: "bg-yellow-100",
+              textColor: "text-yellow-900"
+            }
+          ].map((step) => (
             <div
               key={step.title}
               className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
@@ -230,22 +230,13 @@ export default function About() {
                   className="text-black mt-2"
                 >
                   <span className="sr-only">
-                    Current status:
+                    Current status: {showInstructions
+                      ? "Instructions will appear at the start of each new exercise"
+                      : "Instructions will not appear automatically. You can change this setting at any time"}
                   </span>
                 </p>
               </div>
             </div>
-          </div>
-
-          <div
-            className="mt-4 text-black"
-            role="status"
-            aria-live="polite"
-          >
-            <span className="sr-only">Preference saved: </span>
-            {showInstructions
-              ? "Instructions will appear at the start of each new exercise"
-              : "Instructions will not appear automatically. You can change this setting at any time"}
           </div>
         </div>
       </section>
