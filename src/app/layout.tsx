@@ -38,6 +38,11 @@ export default function RootLayout({
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="msapplication-tap-highlight" content="no" />
       <meta name="msapplication-TileColor" content="#3b82f6" />
+      <meta property="og:url" content={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'} />
+      <meta property="og:title" content="Core Values" />
+      <meta property="og:description" content="Discover and prioritise your personal values" />
+      <meta property="og:image" content="https://www.example.com/og-image.jpg" />
+      <meta property="og:site_name" content="Core Values" />
       <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
       <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       <link rel="icon" href="/favicon.ico" />
@@ -80,7 +85,7 @@ export default function RootLayout({
                 />
                 <TwitterShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
-                  text="Check out Core Values at https://digitalanalogue9.github.io" size={20} fill='currentColor' round />
+                  text="Check out Core Values!" size={20} fill='currentColor' round />
                 <LinkedInShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                   text="Check out Core Values at https://digitalanalogue9.github.io" size={32} fill='currentColor' round />
