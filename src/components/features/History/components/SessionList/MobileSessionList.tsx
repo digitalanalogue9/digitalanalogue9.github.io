@@ -216,7 +216,6 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                     </button>
                     <BlueskyShareButton
                         text={formatTextForPlatform(currentValues, 'bluesky')}
-                        url={''}
                         size={22}
                         fill={'white'} />
                     <TwitterShareButton

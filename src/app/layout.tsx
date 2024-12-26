@@ -82,7 +82,6 @@ export default function RootLayout({
               <div className="flex space-x-4">
                 <BlueskyShareButton
                   text="Check out Core Values!"
-                  url={typeof window !== 'undefined' ? window.location.href : ''}
                   size={22} fill='currentColor'
                   round
                 />

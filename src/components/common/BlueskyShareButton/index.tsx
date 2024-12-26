@@ -2,14 +2,13 @@ import React from 'react';
 
 interface BlueskyShareButtonProps {
   text: string;
-  url: string;
   fill : string;
   size?: number;
   round?: boolean;
 }
 
-const BlueskyShareButton: React.FC<BlueskyShareButtonProps> = ({ text, url, fill='currentColor', size = 32, round = false }) => {
-    const shareText = encodeURIComponent(`${text} ${url}`);
+const BlueskyShareButton: React.FC<BlueskyShareButtonProps> = ({ text,fill='currentColor', size = 32, round = false }) => {
+    const shareText = encodeURIComponent(`${text}`);
     const shareUrl = `https://bsky.app/intent/compose?text=${shareText}`;
     const handleClick = () => {
         window.open(shareUrl, '_blank', 'noopener,noreferrer');

@@ -268,7 +268,6 @@ export default function Results() {
         </button>
         <BlueskyShareButton
           text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-          url={''}
           size={22} fill='white'
         />
         <TwitterShareButton
@@ -286,7 +285,7 @@ export default function Results() {
         </LinkedinShareButton>
       </div>
       <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
-        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
+        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" role="listitem" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
           <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
             {category}
           </h2>
@@ -347,7 +346,6 @@ export default function Results() {
         </button>
         <BlueskyShareButton
           text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-          url={''}
           size={22} fill='white'
         />
         <TwitterShareButton

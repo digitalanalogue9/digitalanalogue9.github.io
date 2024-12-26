@@ -312,14 +312,13 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                     </button>
                     <BlueskyShareButton
                         text={formatTextForPlatform(values, 'bluesky')}
-                        url={typeof window !== 'undefined' ? window.location.href : ''}
                         size={22} fill='white'
                     />
                     <TwitterShareButton
                         url={typeof window !== 'undefined' ? window.location.href : ''}
                         title={formatTextForPlatform(values, 'twitter')}
                     >
-                        <TwitterIcon size={32}/>
+                        <TwitterIcon size={32} />
                     </TwitterShareButton>
                     <LinkedinShareButton
                         url={typeof window !== 'undefined' ? window.location.href : ''}
@@ -337,16 +336,18 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            role="listitem"
+
                         >
-                            <h4 className="font-medium">{value.title}</h4>
-                            <p className="text-sm text-black mb-2">{value.description}</p>
-                            {value.reason && (
-                                <div className="mt-2 pt-2 border-t border-gray-200">
-                                    <p className="text-sm font-medium text-black">Why it is meaningful:</p>
-                                    <p className="text-sm text-black italic">{value.reason}</p>
-                                </div>
-                            )}
+                            <div role="listitem">
+                                <h4 className="font-medium">{value.title}</h4>
+                                <p className="text-sm text-black mb-2">{value.description}</p>
+                                {value.reason && (
+                                    <div className="mt-2 pt-2 border-t border-gray-200">
+                                        <p className="text-sm font-medium text-black">Why it is meaningful:</p>
+                                        <p className="text-sm text-black italic">{value.reason}</p>
+                                    </div>
+                                )}
+                            </div>
                         </motion.article>
                     ))}
                 </div>
