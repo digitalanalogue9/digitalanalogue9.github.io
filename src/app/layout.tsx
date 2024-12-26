@@ -10,6 +10,16 @@ import { getEnvString } from "@/lib/utils/config/envUtils";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+} from 'next-share';
+
+
 /**
  * RootLayout component that serves as the main layout for the application.
  * It includes the HTML structure, head metadata, and the main layout structure
@@ -63,11 +73,23 @@ export default function RootLayout({
           {/* Footer */}
           <footer className="bg-blue-700 text-white md:flex-shrink-0" // Only shrink on desktop
             role="contentinfo" aria-label="Site footer">
-            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-              <p className="text-center text-white text-sm">
-                © {new Date().getFullYear()} Core Values App
-                <Link href="/privacy" className="ml-2 text-white hover:text-blue-200 transition-colors">Privacy Policy</Link>
-              </p>
+            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full text-white text-sm">
+              <span>
+              © {new Date().getFullYear()} Core Values App
+              </span>
+              {/* Share Buttons */}
+              <div className="flex space-x-4">
+              <FacebookShareButton url={window.location.href} quote="Check out Core Values!">
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <TwitterShareButton url={window.location.href} title="Check out Core Values!">
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+              <LinkedinShareButton url={window.location.href} title="Check out Core Values!" summary="Discover the core values that drive us.">
+                <LinkedinIcon size={32} round />
+              </LinkedinShareButton>
+              {/* Add Bluesky share button here when available */}
+              </div>
             </div>
           </footer>
         </div>
