@@ -85,12 +85,12 @@ export default function RootLayout({
                   size={22} fill='currentColor'
                   round
                 />
-                {/* <TwitterShareButton url={typeof window !== 'undefined' ? window.location.href : ''}title="Check out Core Values!">
+                <TwitterShareButton url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'} title="Check out Core Values!">
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
-                <LinkedinShareButton url={typeof window !== 'undefined' ? window.location.href : ''} title="Check out Core Values!" summary="Discover the core values that drive us.">
+                <LinkedinShareButton url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'} title="Check out Core Values!" summary="Discover the core values that drive us.">
                   <LinkedinIcon size={32} round />
-                </LinkedinShareButton> */}
+                </LinkedinShareButton>
               </div>
             </div>
           </footer>

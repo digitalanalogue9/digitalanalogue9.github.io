@@ -314,19 +314,19 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         text={formatTextForPlatform(values, 'bluesky')}
                         size={22} fill='white'
                     />
-                    {/* <TwitterShareButton
-                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                    <TwitterShareButton
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                         title={formatTextForPlatform(values, 'twitter')}
                     >
                         <TwitterIcon size={32} />
                     </TwitterShareButton>
                     <LinkedinShareButton
-                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                         title="Check out Core Values!"
                         summary={formatTextForPlatform(values, 'linkedin')}
                     >
                         <LinkedinIcon size={32} />
-                    </LinkedinShareButton> */}
+                    </LinkedinShareButton>
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
                     {values.map(value => (

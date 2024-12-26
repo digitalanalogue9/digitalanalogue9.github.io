@@ -218,19 +218,19 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         text={formatTextForPlatform(currentValues, 'bluesky')}
                         size={22}
                         fill={'white'} />
-                    {/* <TwitterShareButton
-                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                    <TwitterShareButton
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                         title={formatTextForPlatform(currentValues, 'twitter')}
                     >
                         <TwitterIcon size={32} />
                     </TwitterShareButton>
                     <LinkedinShareButton
-                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                         title="Check out Core Values!"
                         summary={formatTextForPlatform(currentValues, 'linkedin')}
                     >
                         <LinkedinIcon size={32} />
-                    </LinkedinShareButton> */}
+                    </LinkedinShareButton>
                 </div>
 
                 <div className="space-y-4">

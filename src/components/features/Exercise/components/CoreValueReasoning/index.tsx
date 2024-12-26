@@ -37,7 +37,7 @@ export function CoreValueReasoning({
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
-  
+
   const {
     postItBaseStyles,
     tapeEffect
@@ -81,19 +81,21 @@ export function CoreValueReasoning({
         }} animate={{
           opacity: 1,
           y: 0
-        }} role="listitem">
-          <div role="group" aria-labelledby={`value-title-${value.id}`}>
-            <h2 id={`value-title-${value.id}`} className="font-bold text-lg mb-2">
-              {value.title}
-            </h2>
-            <p className="text-black mb-4">
-              {value.description}
-            </p>
-            <div>
-              <label htmlFor={`reason-${value.id}`} className="block text-sm font-medium text-black mb-2">
-                Why is this value meaningful to you? (Optional)
-              </label>
-              <textarea id={`reason-${value.id}`} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" rows={3} value={reasons[value.id] || ''} onChange={e => handleReasonChange(value.id, e.target.value)} placeholder="Share your thoughts... (optional)" aria-label={`Reasoning for ${value.title}`} />
+        }}>
+          <div role="listitem">
+            <div role="group" aria-labelledby={`value-title-${value.id}`}>
+              <h2 id={`value-title-${value.id}`} className="font-bold text-lg mb-2">
+                {value.title}
+              </h2>
+              <p className="text-black mb-4">
+                {value.description}
+              </p>
+              <div>
+                <label htmlFor={`reason-${value.id}`} className="block text-sm font-medium text-black mb-2">
+                  Why is this value meaningful to you? (Optional)
+                </label>
+                <textarea id={`reason-${value.id}`} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" rows={3} value={reasons[value.id] || ''} onChange={e => handleReasonChange(value.id, e.target.value)} placeholder="Share your thoughts... (optional)" aria-label={`Reasoning for ${value.title}`} />
+              </div>
             </div>
           </div>
         </motion.div>)}
