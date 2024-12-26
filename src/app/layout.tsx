@@ -10,15 +10,7 @@ import { getEnvString } from "@/lib/utils/config/envUtils";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
-  FacebookIcon,
-  TwitterIcon,
-  LinkedinIcon,
-} from 'next-share';
-import BlueskyShareButton from '@/components/common/BlueskyShareButton';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 
 /**
@@ -82,15 +74,16 @@ export default function RootLayout({
               <div className="flex space-x-4">
                 <BlueskyShareButton
                   text="Check out Core Values!"
-                  size={22} fill='currentColor'
+                  size={22} fill='none'
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                   round
                 />
-                <TwitterShareButton url="https://digitalanalogue9.github.io" title="Check out Core Values!">
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-                <LinkedinShareButton url="https://digitalanalogue9.github.io" title="Check out Core Values!" summary="Discover the core values that drive us.">
-                  <LinkedinIcon size={32} round />
-                </LinkedinShareButton>
+                <TwitterShareButton
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                  text="Check out Core Values at https://digitalanalogue9.github.io" size={20} fill='currentColor' round />
+                <LinkedInShareButton
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                  text="Check out Core Values at https://digitalanalogue9.github.io" size={32} fill='currentColor' round />
               </div>
             </div>
           </footer>

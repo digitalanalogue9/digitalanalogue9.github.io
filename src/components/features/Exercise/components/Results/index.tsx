@@ -12,8 +12,7 @@ import { useSession } from "@/components/features/Exercise/hooks/useSession";
 import { useRouter } from 'next/navigation';
 import { useMobile } from "@/lib/contexts/MobileContext";
 import { getResponsiveTextStyles } from "@/lib/utils/styles/textStyles";
-import BlueskyShareButton from "@/components/common/BlueskyShareButton";
-import { LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "next-share";
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 /**
  * The `Results` component displays the core values results for a user.
@@ -161,9 +160,9 @@ export default function Results() {
 
 
   const veryImportantValues = Object.entries(enrichedCategories)
-  .filter(([category, values]) => category === 'Very Important' && values && values.length > 0)
-  .flatMap(([_, values]) => values)
-  .filter((value): value is ValueWithReason => value !== undefined);
+    .filter(([category, values]) => category === 'Very Important' && values && values.length > 0)
+    .flatMap(([_, values]) => values)
+    .filter((value): value is ValueWithReason => value !== undefined);
 
   // Add this utility function at the top of both files
   const formatValueForClipboard = (value: ValueWithReason): string => {
@@ -235,7 +234,7 @@ export default function Results() {
       <div className="flex space-x-2 justify-center pb-2">
         {!isMobile && (<button
           onClick={handlePrint}
-          className="p-0 mt-0.5 w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+          className="p-0  w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
           aria-label="Print values"
         >
           <svg
@@ -249,7 +248,7 @@ export default function Results() {
         </button>)}
         <button
           onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(veryImportantValues); }}
-          className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+          className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
           aria-label="Copy values to clipboard"
         >
           <svg
@@ -267,22 +266,20 @@ export default function Results() {
           )}
         </button>
         <BlueskyShareButton
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
           text={formatTextForPlatform(veryImportantValues, 'bluesky')}
           size={22} fill='white'
         />
         <TwitterShareButton
-          url="https://digitalanalogue9.github.io"
-          title={formatTextForPlatform(veryImportantValues, 'twitter')}
-        >
-          <TwitterIcon size={32} />
-        </TwitterShareButton>
-        <LinkedinShareButton
-          url="https://digitalanalogue9.github.io"
-          title="Check out Core Values!"
-          summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
-        >
-          <LinkedinIcon size={32} />
-        </LinkedinShareButton>
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          text={formatTextForPlatform(veryImportantValues, 'twitter')}
+          size={22} fill='white'
+        />
+        <LinkedInShareButton
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          text={formatTextForPlatform(veryImportantValues, 'bluesky')}
+          size={32} fill='white'
+        />
       </div>
       <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
         {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" role="listitem" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -310,75 +307,73 @@ export default function Results() {
         </section>)}
       </div>
       <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-      <div className="flex space-x-2">
-        {!isMobile && (<button
-          onClick={handlePrint}
-          className="p-0 mt-0.5 w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
-          aria-label="Print values"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        <div className="flex space-x-2">
+          {!isMobile && (<button
+            onClick={handlePrint}
+            className="p-0  w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+            aria-label="Print values"
           >
-            <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
-          </svg>
-        </button>)}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
+            </svg>
+          </button>)}
+          <button
+            onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(veryImportantValues); }}
+            className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+            aria-label="Copy values to clipboard"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
+            </svg>
+            {copySuccess && (
+              <span aria-hidden="true" className="text-white ml-2">
+                ✓
+              </span>
+            )}
+          </button>
+          <BlueskyShareButton
+            url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+            text={formatTextForPlatform(veryImportantValues, 'bluesky')}
+            size={22} fill='white'
+          />
+          <TwitterShareButton
+            url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+            text={formatTextForPlatform(veryImportantValues, 'twitter')}
+            size={22} fill='white'
+          />
+          <LinkedInShareButton
+            url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+            text={formatTextForPlatform(veryImportantValues, 'linkedin')}
+            size={22} fill='white' />
+
+        </div>
         <button
-          onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(veryImportantValues);}}
-          className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
-          aria-label="Copy values to clipboard"
+          onClick={handleViewHistory}
+          className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+          aria-label="View all your previous results"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
-          </svg>
-          {copySuccess && (
-            <span aria-hidden="true" className="text-white ml-2">
-              ✓
-            </span>
-          )}
+          View All Previous Results
         </button>
-        <BlueskyShareButton
-          text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-          size={22} fill='white'
-        />
-        <TwitterShareButton
-          url="https://digitalanalogue9.github.io"
-          title={formatTextForPlatform(veryImportantValues, 'twitter')}
+        <button
+          onClick={handleNewExercise}
+          className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
+          aria-label="Start a new values exercise"
         >
-          <TwitterIcon size={32} />
-        </TwitterShareButton>
-        <LinkedinShareButton
-          url="https://digitalanalogue9.github.io"
-          title="Check out Core Values!"
-          summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
-        >
-          <LinkedinIcon size={32} />
-        </LinkedinShareButton>
+          Start New Exercise
+        </button>
       </div>
-      <button
-        onClick={handleViewHistory}
-        className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
-        aria-label="View all your previous results"
-      >
-        View All Previous Results
-      </button>
-      <button
-        onClick={handleNewExercise}
-        className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
-        aria-label="Start a new values exercise"
-      >
-        Start New Exercise
-      </button>
-    </div>
     </div>
 
-    
+
   </div>;
 }

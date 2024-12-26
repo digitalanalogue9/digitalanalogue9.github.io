@@ -7,8 +7,7 @@ import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
-import BlueskyShareButton from '@/components/common/BlueskyShareButton';
-import { LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'next-share';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 /**
  * MobileSessionList component renders a list of sessions with options to view details, select, and delete sessions.
@@ -197,7 +196,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 <div className="flex gap-2 justify-center items-center mb-4">
                     <button
                         onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+                        className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Copy values to clipboard"
                     >
                         <svg
@@ -215,22 +214,20 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         )}
                     </button>
                     <BlueskyShareButton
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
                         text={formatTextForPlatform(currentValues, 'bluesky')}
-                        size={22}
-                        fill={'white'} />
+                        size={22} fill='white'
+                    />
                     <TwitterShareButton
-                        url="https://digitalanalogue9.github.io"
-                        title={formatTextForPlatform(currentValues, 'twitter')}
-                    >
-                        <TwitterIcon size={32} />
-                    </TwitterShareButton>
-                    <LinkedinShareButton
-                        url="https://digitalanalogue9.github.io"
-                        title="Check out Core Values!"
-                        summary={formatTextForPlatform(currentValues, 'linkedin')}
-                    >
-                        <LinkedinIcon size={32} />
-                    </LinkedinShareButton>
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        text={formatTextForPlatform(currentValues, 'twitter')}
+                        size={22} fill='white'
+                    />
+                    <LinkedInShareButton
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        text={formatTextForPlatform(currentValues, 'linkedin')}
+                        size={32} fill='white' />
+
                 </div>
 
                 <div className="space-y-4">

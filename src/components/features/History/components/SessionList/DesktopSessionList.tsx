@@ -7,8 +7,7 @@ import { SessionListProps } from '../../types';
 import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
-import BlueskyShareButton from '@/components/common/BlueskyShareButton';
-import { LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'next-share';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 /**
  * Component for displaying a list of sessions in a desktop view.
@@ -279,7 +278,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 <div className="flex justify-end gap-2 items-center">
                     <button
                         onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+                        className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Copy values to clipboard"
                     >
                         <svg
@@ -298,7 +297,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                     </button>
                     <button
                         onClick={handlePrint}
-                        className="p-0 mt-0.5 w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+                        className="p-0  w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Print values"
                     >
                         <svg
@@ -311,22 +310,19 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         </svg>
                     </button>
                     <BlueskyShareButton
-                        text={formatTextForPlatform(values, 'bluesky')}
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          text={formatTextForPlatform(values, 'bluesky')}
                         size={22} fill='white'
                     />
                     <TwitterShareButton
-                        url="https://digitalanalogue9.github.io"
-                        title={formatTextForPlatform(values, 'twitter')}
-                    >
-                        <TwitterIcon size={32} />
-                    </TwitterShareButton>
-                    <LinkedinShareButton
-                        url="https://digitalanalogue9.github.io"
-                        title="Check out Core Values!"
-                        summary={formatTextForPlatform(values, 'linkedin')}
-                    >
-                        <LinkedinIcon size={32} />
-                    </LinkedinShareButton>
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          text={formatTextForPlatform(values, 'twitter')}
+                        size={20} fill='white'
+                    />
+                    <LinkedInShareButton
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          text={formatTextForPlatform(values, 'linkedin')}
+                        size={32} fill='white' />
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
                     {values.map(value => (
