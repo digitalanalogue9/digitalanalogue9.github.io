@@ -270,7 +270,7 @@ export default function Results() {
           text={formatTextForPlatform(veryImportantValues, 'bluesky')}
           size={22} fill='white'
         />
-        <TwitterShareButton
+        {/* <TwitterShareButton
           url={typeof window !== 'undefined' ? window.location.href : ''}
           title={formatTextForPlatform(veryImportantValues, 'twitter')}
         >
@@ -282,7 +282,7 @@ export default function Results() {
           summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
         >
           <LinkedinIcon size={32} />
-        </LinkedinShareButton>
+        </LinkedinShareButton> */}
       </div>
       <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
         {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" role="listitem" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -348,7 +348,7 @@ export default function Results() {
           text={formatTextForPlatform(veryImportantValues, 'bluesky')}
           size={22} fill='white'
         />
-        <TwitterShareButton
+        {/* <TwitterShareButton
           url={typeof window !== 'undefined' ? window.location.href : ''}
           title={formatTextForPlatform(veryImportantValues, 'twitter')}
         >
@@ -360,7 +360,7 @@ export default function Results() {
           summary={formatTextForPlatform(veryImportantValues, 'linkedin')}
         >
           <LinkedinIcon size={32} />
-        </LinkedinShareButton>
+        </LinkedinShareButton> */}
       </div>
       <button
         onClick={handleViewHistory}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "clean": "rimraf .next && rimraf node_modules/.cache",
+    "clean": "rimraf .next && rimraf out && rimraf node_modules",
     "generate-meta": "node scripts/generate-meta-files.js",
     "dev": "next dev",
     "build": "next build",

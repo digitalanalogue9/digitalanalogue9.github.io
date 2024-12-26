@@ -85,13 +85,12 @@ export default function RootLayout({
                   size={22} fill='currentColor'
                   round
                 />
-                <TwitterShareButton url={typeof window !== 'undefined' ? window.location.href : ''}title="Check out Core Values!">
+                {/* <TwitterShareButton url={typeof window !== 'undefined' ? window.location.href : ''}title="Check out Core Values!">
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <LinkedinShareButton url={typeof window !== 'undefined' ? window.location.href : ''} title="Check out Core Values!" summary="Discover the core values that drive us.">
                   <LinkedinIcon size={32} round />
-                </LinkedinShareButton>
-                {/* Add Bluesky share button here when available */}
+                </LinkedinShareButton> */}
               </div>
             </div>
           </footer>

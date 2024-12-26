@@ -314,7 +314,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         text={formatTextForPlatform(values, 'bluesky')}
                         size={22} fill='white'
                     />
-                    <TwitterShareButton
+                    {/* <TwitterShareButton
                         url={typeof window !== 'undefined' ? window.location.href : ''}
                         title={formatTextForPlatform(values, 'twitter')}
                     >
@@ -326,7 +326,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         summary={formatTextForPlatform(values, 'linkedin')}
                     >
                         <LinkedinIcon size={32} />
-                    </LinkedinShareButton>
+                    </LinkedinShareButton> */}
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
                     {values.map(value => (

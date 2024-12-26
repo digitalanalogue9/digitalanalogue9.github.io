@@ -218,7 +218,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         text={formatTextForPlatform(currentValues, 'bluesky')}
                         size={22}
                         fill={'white'} />
-                    <TwitterShareButton
+                    {/* <TwitterShareButton
                         url={typeof window !== 'undefined' ? window.location.href : ''}
                         title={formatTextForPlatform(currentValues, 'twitter')}
                     >
@@ -230,7 +230,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         summary={formatTextForPlatform(currentValues, 'linkedin')}
                     >
                         <LinkedinIcon size={32} />
-                    </LinkedinShareButton>
+                    </LinkedinShareButton> */}
                 </div>
 
                 <div className="space-y-4">
