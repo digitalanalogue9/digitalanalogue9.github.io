@@ -8,6 +8,7 @@ import { ConsentStatus } from "@/lib/types/Consent";
 export default function CookieBanner() {
   const { consent, updateConsent, isInitialized } = useConsent();
   const [isVisible, setIsVisible] = useState(false);
+  const [localConsent, setLocalConsent] = useState(consent);
 
   useEffect(() => {
     if (isInitialized && consent.analytics === 'pending') {
@@ -15,8 +16,22 @@ export default function CookieBanner() {
     }
   }, [isInitialized, consent.analytics]);
 
-  const handleConsent = (status: ConsentStatus) => {
-    updateConsent(status);
+  const handleConsent = (analyticsStatus: ConsentStatus,advertisementStatus: ConsentStatus,functionalStatus: ConsentStatus) => {
+    updateConsent({
+      analytics: analyticsStatus,
+      functional: functionalStatus,
+      advertisement: advertisementStatus,
+      timestamp: Date.now()
+    });
+    setIsVisible(false);
+  };
+
+  const handleLocalConsentChange = (type: keyof typeof localConsent, status: ConsentStatus) => {
+    setLocalConsent(prev => ({ ...prev, [type]: status }));
+  };
+
+  const handleChoose = () => {
+    updateConsent(localConsent);
     setIsVisible(false);
   };
 
@@ -49,19 +64,46 @@ export default function CookieBanner() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => handleConsent('denied')}
+              onClick={() => handleConsent('denied','denied','denied')}
               className="px-6 py-2 text-sm font-medium text-gray-300 hover:text-white bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900"
               aria-label="Decline all cookies"
             >
               Decline All
             </button>
             <button
-              onClick={() => handleConsent('granted')}
+              onClick={() => handleConsent('granted','granted','granted')}
               className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
               aria-label="Accept all cookies"
             >
               Accept All
             </button>
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={localConsent.analytics === 'granted'}
+                  onChange={(e) => handleLocalConsentChange('analytics', e.target.checked ? 'granted' : 'denied')}
+                  className="mr-2"
+                />
+                Analytics
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={localConsent.functional === 'granted'}
+                  onChange={(e) => handleLocalConsentChange('functional', e.target.checked ? 'granted' : 'denied')}
+                  className="mr-2"
+                />
+                Functional
+              </label>
+              <button
+                onClick={handleChoose}
+                className="px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                aria-label="Choose cookies"
+              >
+                Choose
+              </button>
+            </div>
           </div>
         </div>
       </div>

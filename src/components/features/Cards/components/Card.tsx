@@ -189,6 +189,8 @@ const Card = memo(function Card({
   const handleCardClick = () => {
     if (isMobile && onClick) {
       onClick(value);
+    } else if (!isMobile && columnIndex !== undefined) {
+      setIsExpanded(!isExpanded);
     }
   };
   const {

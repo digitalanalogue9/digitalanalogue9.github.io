@@ -65,25 +65,26 @@ export function CardControls({
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} card details`}
           aria-expanded={isExpanded}
           aria-controls={`description-${value.id}`}
+          title={`${isExpanded ? 'Collapse' : 'Expand'} card details`}
         >
           <span className="inline-block w-4 text-center" aria-hidden="true">
-            {isExpanded ? '▼' : '▶︎'}
+            {isExpanded ? '-' : '+'}
           </span>
         </button>
 
-        {onMoveUp && <button type="button" onClick={e => handleButtonClick(e, onMoveUp)} onTouchStart={e => handleButtonClick(e, onMoveUp)} className={buttonBaseClass} aria-label={`Move ${value.title} up in ${currentCategory}`}>
+        {onMoveUp && <button type="button" onClick={e => handleButtonClick(e, onMoveUp)} onTouchStart={e => handleButtonClick(e, onMoveUp)} className={buttonBaseClass} aria-label={`Move ${value.title} up in ${currentCategory}`} title={`Move ${value.title} up in ${currentCategory}`}>
           <span className="inline-block w-4 text-center" aria-hidden="true">
             ↑
           </span>
         </button>}
 
-        {onMoveDown && <button type="button" onClick={e => handleButtonClick(e, onMoveDown)} onTouchStart={e => handleButtonClick(e, onMoveDown)} className={buttonBaseClass} aria-label={`Move ${value.title} down in ${currentCategory}`}>
+        {onMoveDown && <button type="button" onClick={e => handleButtonClick(e, onMoveDown)} onTouchStart={e => handleButtonClick(e, onMoveDown)} className={buttonBaseClass} aria-label={`Move ${value.title} down in ${currentCategory}`} title={`Move ${value.title} down in ${currentCategory}`}>
           <span className="inline-block w-4 text-center" aria-hidden="true">
             ↓
           </span>
         </button>}
 
-        {currentCategory && <button type="button" id={`options-${value.id}`} onClick={e => handleButtonClick(e, onShowMoveOptions)} onTouchStart={e => handleButtonClick(e, onShowMoveOptions)} className={buttonBaseClass} aria-label={`Show move options for ${value.title}`} aria-haspopup="true">
+        {currentCategory && <button type="button" id={`options-${value.id}`} onClick={e => handleButtonClick(e, onShowMoveOptions)} onTouchStart={e => handleButtonClick(e, onShowMoveOptions)} className={buttonBaseClass} aria-label={`Show move options for ${value.title}`} title={`Show move options for ${value.title}`} aria-haspopup="true">
           <span className="inline-block w-4 text-center" aria-hidden="true">
             ⋮
           </span>
