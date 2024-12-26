@@ -7,6 +7,8 @@ import { SessionListProps } from '../../types';
 import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
+import BlueskyShareButton from '@/components/common/BlueskyShareButton';
+import { LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'next-share';
 
 /**
  * Component for displaying a list of sessions in a desktop view.
@@ -151,6 +153,36 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 setCopySuccess(false);
             });
     };
+
+
+    const generateFullText = (values: ValueWithReason[]): string => {
+        return values.map(value => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
+    };
+
+    const generateTitles = (values: ValueWithReason[]): string => {
+        return values.map(value => value.title).join(', ');
+    };
+
+    const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
+        const baseText = `My Core Values: `;
+        const link = ` https://digitalanalogue9.github.io`;
+        const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
+
+        const fullText = baseText + generateFullText(values) + link;
+        const titlesText = baseText + generateTitles(values) + link;
+
+        if (fullText.length <= maxLength) {
+            return fullText;
+        }
+        else if (titlesText.length <= maxLength) {
+            return titlesText;
+        }
+        else {
+            return titlesText.substring(0, maxLength - 3) + '...';
+        }
+
+    };
+
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
             return (
@@ -244,26 +276,58 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         {values.length} value{values.length !== 1 ? 's' : ''}
                     </span>
                 </div>
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-2 items-center">
                     <button
                         onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                        className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Copy values to clipboard"
                     >
-                        <span>Copy to Clipboard</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
+                        </svg>
                         {copySuccess && (
-                            <span aria-hidden="true" className="text-white">
+                            <span aria-hidden="true" className="text-white ml-2">
                                 ✓
                             </span>
                         )}
                     </button>
                     <button
                         onClick={handlePrint}
-                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                        className="p-0 mt-0.5 w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Print values"
                     >
-                        Print Values
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
+                        </svg>
                     </button>
+                    <BlueskyShareButton
+                        text={formatTextForPlatform(values, 'bluesky')}
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        size={22} fill='white'
+                    />
+                    <TwitterShareButton
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        title={formatTextForPlatform(values, 'twitter')}
+                    >
+                        <TwitterIcon size={32}/>
+                    </TwitterShareButton>
+                    <LinkedinShareButton
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        title="Check out Core Values!"
+                        summary={formatTextForPlatform(values, 'linkedin')}
+                    >
+                        <LinkedinIcon size={32} />
+                    </LinkedinShareButton>
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
                     {values.map(value => (
@@ -273,6 +337,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
+                            role="listitem"
                         >
                             <h4 className="font-medium">{value.title}</h4>
                             <p className="text-sm text-black mb-2">{value.description}</p>

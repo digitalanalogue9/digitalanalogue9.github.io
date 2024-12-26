@@ -18,6 +18,7 @@ import {
   TwitterIcon,
   LinkedinIcon,
 } from 'next-share';
+import BlueskyShareButton from '@/components/common/BlueskyShareButton';
 
 
 /**
@@ -75,20 +76,23 @@ export default function RootLayout({
             role="contentinfo" aria-label="Site footer">
             <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full text-white text-sm">
               <span>
-              © {new Date().getFullYear()} Core Values App
+                © {new Date().getFullYear()} Core Values App
               </span>
               {/* Share Buttons */}
               <div className="flex space-x-4">
-              <FacebookShareButton url={window.location.href} quote="Check out Core Values!">
-                <FacebookIcon size={32} round />
-              </FacebookShareButton>
-              <TwitterShareButton url={window.location.href} title="Check out Core Values!">
-                <TwitterIcon size={32} round />
-              </TwitterShareButton>
-              <LinkedinShareButton url={window.location.href} title="Check out Core Values!" summary="Discover the core values that drive us.">
-                <LinkedinIcon size={32} round />
-              </LinkedinShareButton>
-              {/* Add Bluesky share button here when available */}
+                <BlueskyShareButton
+                  text="Check out Core Values!"
+                  url={typeof window !== 'undefined' ? window.location.href : ''}
+                  size={22} fill='currentColor'
+                  round
+                />
+                <TwitterShareButton url={typeof window !== 'undefined' ? window.location.href : ''}title="Check out Core Values!">
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+                <LinkedinShareButton url={typeof window !== 'undefined' ? window.location.href : ''} title="Check out Core Values!" summary="Discover the core values that drive us.">
+                  <LinkedinIcon size={32} round />
+                </LinkedinShareButton>
+                {/* Add Bluesky share button here when available */}
               </div>
             </div>
           </footer>

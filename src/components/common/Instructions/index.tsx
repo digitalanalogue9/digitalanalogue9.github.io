@@ -36,7 +36,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
 
   return (
     <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center p-2 sm:p-4 z-50">
-      <div className="bg-white p-4 sm:p-6 rounded-lg max-w-xs sm:max-w-sm md:max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-2 border-black">
+      <div className="bg-white p-4 sm:p-6 rounded-lg max-w-xs sm:max-w-sm md:max-w-2xl w-full max-h-[90vh] overflow-y-auto border-2 border-black">
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">How to Use Core Values</h2>
       <ol className="list-decimal ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base">
         <li>You have already entered the number of core values you want to end up with (typically 10).</li>

@@ -7,6 +7,8 @@ import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
+import BlueskyShareButton from '@/components/common/BlueskyShareButton';
+import { LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from 'next-share';
 
 /**
  * MobileSessionList component renders a list of sessions with options to view details, select, and delete sessions.
@@ -133,7 +135,33 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 setCopySuccess(false);
             });
     };
+    const generateFullText = (values: ValueWithReason[]): string => {
+        return values.map(value => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
+    };
 
+    const generateTitles = (values: ValueWithReason[]): string => {
+        return values.map(value => value.title).join(', ');
+    };
+
+    const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
+        const baseText = `My Core Values: `;
+        const link = ` https://digitalanalogue9.github.io`;
+        const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
+
+        const fullText = baseText + generateFullText(values) + link;
+        const titlesText = baseText + generateTitles(values) + link;
+
+        if (fullText.length <= maxLength) {
+            return fullText;
+        }
+        else if (titlesText.length <= maxLength) {
+            return titlesText;
+        }
+        else {
+            return titlesText.substring(0, maxLength - 3) + '...';
+        }
+
+    };
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
             return (
@@ -146,29 +174,64 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         return (
             <Modal
                 isOpen={!!showValuesFor}
-                onClose={() => {setCopySuccess(false);setShowValuesFor(null)}}
-                title="Core Values"
+                onClose={() => { setCopySuccess(false); setShowValuesFor(null) }}
+                title=""
             >
-                <div className="flex gap-2 justify-center mb-4">
+                <div className="flex justify-end mb-4">
                     <button
-                        onClick={() => {setCopySuccess(false);setShowValuesFor(null);}}
+                        onClick={() => { setCopySuccess(false); setShowValuesFor(null); }}
                         aria-label={`Close`}
-                        className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                        className="p-2 bg-white text-black  rounded-none hover:bg-white transition-colors duration-200"
                     >
-                        Close
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path fillRule="evenodd" d="M10 9.293l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414L10 8.586z" clipRule="evenodd" />
+                        </svg>
                     </button>
+                </div>
+                <h3 className="mb-2 text-lg font-medium leading-6 text-black" id="fake-modal-title">Share your Core Values</h3>
+                <div className="flex gap-2 justify-center items-center mb-4">
                     <button
                         onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                        className="mt-0.5 p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
                         aria-label="Copy values to clipboard"
                     >
-                        <span>Copy to Clipboard</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
+                        </svg>
                         {copySuccess && (
-                            <span aria-hidden="true" className="text-white">
+                            <span aria-hidden="true" className="text-white ml-2">
                                 ✓
                             </span>
                         )}
                     </button>
+                    <BlueskyShareButton
+                        text={formatTextForPlatform(currentValues, 'bluesky')}
+                        url={''}
+                        size={22}
+                        fill={'white'} />
+                    <TwitterShareButton
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        title={formatTextForPlatform(currentValues, 'twitter')}
+                    >
+                        <TwitterIcon size={32} />
+                    </TwitterShareButton>
+                    <LinkedinShareButton
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        title="Check out Core Values!"
+                        summary={formatTextForPlatform(currentValues, 'linkedin')}
+                    >
+                        <LinkedinIcon size={32} />
+                    </LinkedinShareButton>
                 </div>
 
                 <div className="space-y-4">
@@ -192,7 +255,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         ))}
                     </div>
                     <button
-                        onClick={() => {setCopySuccess(false);setShowValuesFor(null);}}
+                        onClick={() => { setCopySuccess(false); setShowValuesFor(null); }}
                         aria-label={`Close`}
                         className="w-full px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
                     >
@@ -246,7 +309,15 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                     >
                         {isSelectionMode && (
                             <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                                <label
+                                    id={`label-select-${session.id}`}
+                                    htmlFor={`select-${session.id}`}
+                                    className="sr-only"
+                                >
+                                    Show instructions when starting the exercise
+                                </label>
                                 <input
+                                    id={`select-${session.id}`}
                                     type="checkbox"
                                     checked={isSelected(session.id)}
                                     onChange={() => toggleSession(session.id)}
@@ -274,7 +345,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                             <div className="mt-3 flex justify-end space-x-2">
                                 {session.completed ? (
                                     <button
-                                        onClick={() => {setCopySuccess(false);handleShowValues(session.id)}}
+                                        onClick={() => { setCopySuccess(false); handleShowValues(session.id) }}
                                         aria-label={`Show values for ${session.id}`}
                                         className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
                                     >
@@ -282,12 +353,12 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                                     </button>
                                 ) : (
                                     <button
-                                    onClick={() => window.location.href = `/exercise?sessionId=${session.id}`}
-                                    aria-label="Resume session"
-                                    className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
-                                  >
-                                    Resume
-                                  </button>
+                                        onClick={() => window.location.href = `/exercise?sessionId=${session.id}`}
+                                        aria-label="Resume session"
+                                        className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                                    >
+                                        Resume
+                                    </button>
                                 )}
                             </div>
                         )}

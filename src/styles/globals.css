@@ -27,7 +27,6 @@
   body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: auto;
   }
   
   /* Ensure text remains visible during webfont load */
@@ -69,6 +68,19 @@ button,
 button:hover,
 .button:hover {
   background-color: #004890;
+}
+
+.icon {
+  width: 64px;
+  height: 64px;
+}
+
+.icon-round {
+  border-radius: 50%;
+}
+
+.icon-rect {
+  border-radius: 0;
 }
 
 /* Links */

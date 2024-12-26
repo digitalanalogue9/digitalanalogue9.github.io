@@ -4,6 +4,8 @@ import { Value, ValueWithReason } from "@/lib/types";
 import { motion } from 'framer-motion';
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
 import { CoreValueReasoningProps } from '@/components/features/Exercise/types';
+import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
  * CoreValueReasoning component allows users to provide reasons for why certain values are meaningful to them.
@@ -33,6 +35,9 @@ export function CoreValueReasoning({
   onComplete
 }: CoreValueReasoningProps) {
   const [reasons, setReasons] = useState<Record<string, string>>({});
+  const { isMobile } = useMobile();
+  const styles = getResponsiveTextStyles(isMobile);
+  
   const {
     postItBaseStyles,
     tapeEffect
@@ -56,11 +61,11 @@ export function CoreValueReasoning({
     onComplete(valuesWithReasons);
   };
   return <div className="container mx-auto px-4 py-8" role="region" aria-labelledby="reasoning-title">
-    <h1 id="reasoning-title" className="text-2xl font-bold mb-6">
+    <h1 id="reasoning-title" className={`${styles.heading} font-extrabold mb-4 sm:mb-6`}>
       Why are these values meaningful to you?
     </h1>
     <p className="text-black mb-6">
-      Optionally, explain why each value is meaningful to you. This can help you reflect on your choices.
+      Optionally, explain why each value is meaningful. This can help you reflect on your choices.
     </p>
 
     <form onSubmit={handleSubmit} className="space-y-6">
