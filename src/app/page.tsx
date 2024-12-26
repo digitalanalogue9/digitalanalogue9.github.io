@@ -8,6 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import PWAPrompt from "@/components/common/PWAPrompt";
 import { clearGameState } from "@/lib/utils/storage";
 import { forceReload } from "@/lib/utils/cache";
+import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
 
 /**
  * The Home component is the main entry point for the Core Values application.
@@ -35,10 +36,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const lastVersion = localStorage.getItem('app-version');
+    const lastVersion = getLocalStorage('app-version', '0.0.0');
     const currentVersion = process.env.NEXT_PUBLIC_VERSION ?? '0.0.0';
     if (lastVersion !== currentVersion) {
-      localStorage.setItem('app-version', currentVersion);
+      setLocalStorage('app-version', currentVersion);
       forceReload();
     }
   }, []);
