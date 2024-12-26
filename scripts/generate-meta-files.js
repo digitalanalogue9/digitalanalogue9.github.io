@@ -8,7 +8,8 @@ function generateSitemap() {
     '',
     '/about',
     '/history',
-    '/exercise'
+    '/exercise',
+    '/privacy'
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -31,11 +32,6 @@ Allow: /
 
 # Sitemap location
 Sitemap: ${baseUrl}/sitemap.xml
-
-# Disallow any temporary or development paths
-Disallow: /api/
-Disallow: /debug/
-Disallow: /temp/
 `;
 
   fs.writeFileSync(path.join(process.cwd(), 'public', 'robots.txt'), robots);
