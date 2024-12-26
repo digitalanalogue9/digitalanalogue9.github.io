@@ -28,8 +28,6 @@ export default function RootLayout({
 
   return <html lang="en">
     <head>
-      {/* <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
       <meta name="description" content="Discover and prioritise your personal values" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -38,8 +36,8 @@ export default function RootLayout({
       <meta name="msapplication-tap-highlight" content="no" />
       <meta name="msapplication-TileColor" content="#3b82f6" />
       <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
-      <link rel="icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      <link rel="icon" href="/favicon.ico" />
       <title>Core Values</title>
       <Suspense>
         <GoogleAnalytics GA_MEASUREMENT_ID={'G-JZPX5JCP5D'} />

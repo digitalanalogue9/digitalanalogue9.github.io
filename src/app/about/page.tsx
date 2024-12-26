@@ -37,7 +37,7 @@ export default function About() {
     updateConsent({
       analytics: status,
       functional: status,
-      advertisement: status,
+      advertisement: 'denied',
       timestamp: Date.now()
     })
   };
@@ -203,7 +203,7 @@ export default function About() {
                   onChange={handleToggleInstructions}
                   className="rounded border-gray-300 text-blue-700 focus:ring-blue-600 mt-2"
                   aria-describedby="instructions-description"
-                  aria-checked={showInstructions}
+                  aria-checked= {showInstructions}
                 />
               </div>
               <div className="ml-3">

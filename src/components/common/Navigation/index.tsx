@@ -37,7 +37,7 @@ export default function Navigation() {
       {/* Desktop Navigation */}
       <div 
         className="hidden md:flex space-x-4"
-        role="menubar"
+        role="menu"
         aria-label="Desktop navigation"
       >
         <Link 
@@ -67,7 +67,7 @@ export default function Navigation() {
       <div className="md:hidden">
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="text-white p-2"
+          className="text-white p-2 bg-blue-700"
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"

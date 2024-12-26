@@ -31,7 +31,7 @@ export function useMobileInteractions() {
       category
     }, 'MobileInteractions');
     setActiveDropZone(category);
-
+    setExpandedCategory(category); 
     // Clear the active zone after a short delay
     setTimeout(() => {
       setActiveDropZone(null);

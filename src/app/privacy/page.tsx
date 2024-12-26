@@ -7,7 +7,6 @@ import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styl
 import React, { useEffect, useState } from 'react';
 
 export default function PrivacyPolicy() {
-    const [cookieConsent] = useState(false);
     const { isMobile } = useMobile();
     const styles = getResponsiveTextStyles(isMobile);
 
@@ -17,7 +16,7 @@ export default function PrivacyPolicy() {
     updateConsent({
       analytics: status,
       functional: status,
-      advertisement: status,
+      advertisement: 'denied',
       timestamp: Date.now()
     })
   };
@@ -101,7 +100,7 @@ export default function PrivacyPolicy() {
                         the buttons below:
                     </p>
                     <div className="flex gap-2 justify-center mt-2">
-                        {cookieConsent && (
+                        {consent.analytics === 'granted' && (
                             <button
                                 className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                 onClick={() => handleConsent('denied')}
@@ -109,7 +108,7 @@ export default function PrivacyPolicy() {
                                 Stop tracking
                             </button>
                         )}
-                        {!cookieConsent && (
+                        {consent.analytics !== 'granted' && (
                             <button
                                 className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                                 onClick={() => handleConsent('granted')}

@@ -12,15 +12,16 @@ export default function CookieBanner() {
 
   useEffect(() => {
     if (isInitialized && consent.analytics === 'pending') {
+      setLocalConsent(prev => ({ ...prev, analytics: 'granted', functional: 'granted', advertisement: 'denied' }));
       setIsVisible(true);
     }
   }, [isInitialized, consent.analytics]);
 
-  const handleConsent = (analyticsStatus: ConsentStatus,advertisementStatus: ConsentStatus,functionalStatus: ConsentStatus) => {
+  const handleConsent = (analyticsStatus: ConsentStatus,functionalStatus: ConsentStatus) => {
     updateConsent({
       analytics: analyticsStatus,
       functional: functionalStatus,
-      advertisement: advertisementStatus,
+      advertisement: 'denied',
       timestamp: Date.now()
     });
     setIsVisible(false);
@@ -64,46 +65,47 @@ export default function CookieBanner() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => handleConsent('denied','denied','denied')}
+              onClick={() => handleConsent('granted','granted')}
+              className="px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+              aria-label="Accept all cookies"
+            >
+              Accept All
+            </button>
+            <div className="flex flex-row gap-2 items-center">
+              <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={localConsent.analytics === 'granted'}
+                onChange={(e) => handleLocalConsentChange('analytics', e.target.checked ? 'granted' : 'denied')}
+                className="mr-2"
+              />
+              Analytics
+              </label>
+              <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={localConsent.functional === 'granted'}
+                onChange={(e) => handleLocalConsentChange('functional', e.target.checked ? 'granted' : 'denied')}
+                className="mr-2"
+              />
+              Functional
+              </label>
+              <button
+              onClick={handleChoose}
+              className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+              aria-label="Choose cookies"
+              >
+              Accept Chosen
+              </button>
+            </div>
+            <button
+              onClick={() => handleConsent('denied','denied')}
               className="px-6 py-2 text-sm font-medium text-gray-300 hover:text-white bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900"
               aria-label="Decline all cookies"
             >
               Decline All
             </button>
-            <button
-              onClick={() => handleConsent('granted','granted','granted')}
-              className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-              aria-label="Accept all cookies"
-            >
-              Accept All
-            </button>
-            <div className="flex flex-col gap-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={localConsent.analytics === 'granted'}
-                  onChange={(e) => handleLocalConsentChange('analytics', e.target.checked ? 'granted' : 'denied')}
-                  className="mr-2"
-                />
-                Analytics
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={localConsent.functional === 'granted'}
-                  onChange={(e) => handleLocalConsentChange('functional', e.target.checked ? 'granted' : 'denied')}
-                  className="mr-2"
-                />
-                Functional
-              </label>
-              <button
-                onClick={handleChoose}
-                className="px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                aria-label="Choose cookies"
-              >
-                Choose
-              </button>
-            </div>
+
           </div>
         </div>
       </div>

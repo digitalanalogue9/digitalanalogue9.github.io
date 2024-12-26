@@ -5,6 +5,7 @@ import { CategoryName, Value } from "@/lib/types";
 import { ChevronDownIcon, ChevronUpIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { MobileCategoryRowProps } from '@/components/features/Round/types';
+import { useMobileInteractions } from '@/components/features/Round/hooks/useMobileInteractions';
 
 /**
  * Component representing a row of categories in a mobile view.
@@ -40,6 +41,8 @@ export function MobileCategoryRow({
   const currentCategoryIndex = availableCategories.indexOf(category);
   const categoryId = `category-${category.toLowerCase().replace(/\s+/g, '-')}`;
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const { handleExpand } = useMobileInteractions();
+
   const toggleCardExpansion = (cardId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     const newExpanded = new Set(expandedCards);
@@ -49,6 +52,12 @@ export function MobileCategoryRow({
       newExpanded.add(cardId);
     }
     setExpandedCards(newExpanded);
+  };
+  const handleMoveBetweenCategories = (card: Value, fromCategory: CategoryName, toCategory: CategoryName) => {
+    if (onMoveBetweenCategories) {
+      onMoveBetweenCategories(card, fromCategory, toCategory);
+    }
+    handleExpand(toCategory);
   };
   return <motion.div layout className={`
     rounded-lg 
@@ -100,10 +109,11 @@ export function MobileCategoryRow({
                     <div className="flex items-center gap-3 flex-shrink-0">
                       {/* Category Movement Controls */}
                       <div className="flex items-center gap-1 border-r border-yellow-200 pr-3">
-                        {currentCategoryIndex > 0 && <button onClick={() => onMoveBetweenCategories?.(card, category, availableCategories[currentCategoryIndex - 1])} className="p-1.5 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800" aria-label={`Move to ${availableCategories[currentCategoryIndex - 1]}`}>
+                        {currentCategoryIndex > 0 && <button onClick={() => handleMoveBetweenCategories(card, category, availableCategories[currentCategoryIndex - 1])}
+ className="p-1.5 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800" aria-label={`Move to ${availableCategories[currentCategoryIndex - 1]}`}>
                             <ArrowUpIcon className="w-4 h-4 text-black" />
                           </button>}
-                        {currentCategoryIndex < availableCategories.length - 1 && <button onClick={() => onMoveBetweenCategories?.(card, category, availableCategories[currentCategoryIndex + 1])} className="p-1.5 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800" aria-label={`Move to ${availableCategories[currentCategoryIndex + 1]}`}>
+                        {currentCategoryIndex < availableCategories.length - 1 && <button onClick={() => handleMoveBetweenCategories(card, category, availableCategories[currentCategoryIndex + 1])} className="p-1.5 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800" aria-label={`Move to ${availableCategories[currentCategoryIndex + 1]}`}>
                             <ArrowDownIcon className="w-4 h-4 text-black" />
                           </button>}
                       </div>
