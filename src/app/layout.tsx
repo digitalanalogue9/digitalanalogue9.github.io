@@ -29,7 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
 
-  return <html lang="en">
+  return (
+      <html lang="en">
     <head>
       <title>Core Values</title>
       <meta name="description" content="Discover and prioritise your personal values" />
@@ -108,7 +109,7 @@ export default function RootLayout({
           </footer>
         </div>
       </MobileProvider>
-
-    </body>
-  </html>;
+      </body>
+      </html>
+  );
 }

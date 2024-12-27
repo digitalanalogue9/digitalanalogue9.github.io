@@ -93,12 +93,11 @@ export default function StartScreen() {
 
       {/* Introduction */}
       <div
-        className={`max-w-2xl mx-auto text-center ${
-          isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
-        }`}
+        className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
+          }`}
         aria-label="Introduction"
       >
-         <p className={styles.paragraph}>
+        <p className={styles.paragraph}>
           Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
         </p>
         <p className={styles.paragraph}>
@@ -123,6 +122,7 @@ export default function StartScreen() {
 
       {/* Configuration Form */}
       <form
+        id="configuration-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleStart();
@@ -131,6 +131,7 @@ export default function StartScreen() {
         aria-label="Exercise configuration"
       >
         <label
+          id="core-values-count-label"
           htmlFor="core-values-count"
           className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
         >
@@ -145,6 +146,7 @@ export default function StartScreen() {
           onChange={(e) => setCoreValuesCount(Number(e.target.value))}
           className="border rounded-lg px-4 py-2 w-20 text-center shadow-md text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           aria-label="Number of core values"
+          aria-labelledby="core-values-count-label"
           required
           disabled={isInitializing}
         />
@@ -163,7 +165,7 @@ export default function StartScreen() {
         className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`}
         aria-label="Previous results navigation"
       >
-        <p className="text-black mb-3 text-sm sm:text-base font-semibold">
+        <p id="completed-before-description" className="text-black mb-3 text-sm sm:text-base font-semibold">
           Have you completed this before? Revisit your results!
         </p>
         <button
@@ -171,6 +173,7 @@ export default function StartScreen() {
           onClick={handleViewPreviousResults}
           className={`${sharedButtonClasses} ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
           aria-label="View previous results"
+          aria-describedby="completed-before-description"
         >
           View Previous Results
         </button>
