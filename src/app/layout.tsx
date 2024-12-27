@@ -85,7 +85,7 @@ export default function RootLayout({
                 />
                 <TwitterShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-                  text="Check out Core Values at https://core-values.me" size={20} fill='currentColor' round />
+                  text="Check out Core Values!" size={20} fill='currentColor' round />
                 <LinkedInShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                   text="Check out Core Values at https://core-values.me" size={32} fill='currentColor' round />
