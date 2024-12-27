@@ -78,14 +78,14 @@ export default function RootLayout({
               {/* Share Buttons */}
               <div className="flex space-x-4">
                 <BlueskyShareButton
-                  text="Check out Core Values!"
+                  text="Check out Core Values at https://core-values.me"
                   size={22} fill='none'
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                   round
                 />
                 <TwitterShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-                  text="Check out Core Values!" size={20} fill='currentColor' round />
+                  text="Check out Core Values at https://core-values.me" size={20} fill='currentColor' round />
                 <LinkedInShareButton
                   url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                   text="Check out Core Values at https://core-values.me" size={32} fill='currentColor' round />
