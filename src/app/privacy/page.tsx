@@ -141,7 +141,7 @@ export default function PrivacyPolicy() {
                     <p className={`${styles.paragraph} text-black`}>
                         Under GDPR and other privacy laws, you have the right to:
                     </p>
-                    <ul className="list-disc pl-6 text-black">
+                    <ul className={`list-disc pl-6 text-black ${styles.paragraph}`}>
                         <li>Access the data we collect about you.</li>
                         <li>Request the deletion of your data.</li>
                         <li>Withdraw your consent at any time.</li>
