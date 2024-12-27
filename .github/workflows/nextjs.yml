@@ -17,6 +17,7 @@ concurrency:
 env:
   NEXT_PUBLIC_BASE_URL: https://core-values.me
   NEXT_PUBLIC_DEPLOYMENT_TARGET: github
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-JZPX5JCP5D'
 
 jobs:
   build:
@@ -46,7 +47,6 @@ jobs:
       - name: Build with Next.js
         env:
           NODE_ENV: production
-          GA_MEASUREMENT_ID: G-JZPX5JCP5D
           DEBUG: false
           CARDS_IN_GAME: 35
           DEFAULT_CORE_VALUES_TO_CHOOSE: 10

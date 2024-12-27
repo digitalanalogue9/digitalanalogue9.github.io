@@ -31,7 +31,11 @@ export default function RootLayout({
 
   return <html lang="en">
     <head>
+      <title>Core Values</title>
       <meta name="description" content="Discover and prioritise your personal values" />
+      <meta name="msapplication-TileColor" content="#1d4ed8" />
+      <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+      <meta name="theme-color" content="#1d4ed8" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       <meta name="format-detection" content="telephone=no" />
@@ -57,12 +61,8 @@ export default function RootLayout({
       <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
       <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png" />
       <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-      <meta name="msapplication-TileColor" content="#1d4ed8" />
-      <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
-      <meta name="theme-color" content="#1d4ed8" />
-      <title>Core Values</title>
       <Suspense>
-        <GoogleAnalytics GA_MEASUREMENT_ID={'G-JZPX5JCP5D'} />
+        <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-JZPX5JCP5D'} />
       </Suspense>
     </head>
     <body className="bg-gray-100">

@@ -38,8 +38,8 @@ const nextConfig = {
   trailingSlash: isGitHubPages, // Trailing slashes for GitHub Pages
   env: {
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
-    GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
-    GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_VERSION,
+    NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
+    NEXT_PUBLIC_VERSION: process.env.NEXT_PUBLIC_VERSION,
     DEBUG: process.env.DEBUG,
     CARDS_IN_GAME: process.env.CARDS_IN_GAME,
     DEFAULT_CORE_VALUES_TO_CHOOSE: process.env.DEFAULT_CORE_VALUES_TO_CHOOSE

@@ -132,7 +132,7 @@ export default function StartScreen() {
       >
         <label
           htmlFor="core-values-count"
-          className={`text-center ${isMobile ? 'text-sm' : 'text-base font-semibold'}`}
+          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
         >
           What number of values feels right for defining you?
         </label>
@@ -163,7 +163,7 @@ export default function StartScreen() {
         className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`}
         aria-label="Previous results navigation"
       >
-        <p className="text-black mb-3 text-sm sm:text-base">
+        <p className="text-black mb-3 text-sm sm:text-base font-semibold">
           Have you completed this before? Revisit your results!
         </p>
         <button
