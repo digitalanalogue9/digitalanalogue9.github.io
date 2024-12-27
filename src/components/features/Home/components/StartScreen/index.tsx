@@ -167,6 +167,7 @@ export default function StartScreen() {
           Have you completed this before? Revisit your results!
         </p>
         <button
+          type="button"
           onClick={handleViewPreviousResults}
           className={`${sharedButtonClasses} ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
           aria-label="View previous results"
