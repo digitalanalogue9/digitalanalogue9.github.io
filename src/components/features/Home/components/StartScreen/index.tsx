@@ -134,7 +134,7 @@ export default function StartScreen() {
           htmlFor="core-values-count"
           className={`text-center ${isMobile ? 'text-sm' : 'text-base font-semibold'}`}
         >
-          Choose the number of values that define you:
+          What number of values feels right for defining you?
         </label>
         <input
           id="core-values-count"
