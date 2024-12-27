@@ -147,7 +147,7 @@ export default function PrivacyPolicy() {
                         <li>Withdraw your consent at any time.</li>
                     </ul>
                     <p className={`${styles.paragraph} text-black mt-4`}>
-                        To exercise these rights, please contact us at:<a href="mailto:corevaluesanalytics@gmail.com" className="text-blue-700 underline">
+                        To exercise these rights, please contact us at <a href="mailto:corevaluesanalytics@gmail.com" className="text-blue-700 underline">
                             corevaluesanalytics@gmail.com
                         </a>
                     </p>
