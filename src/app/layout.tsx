@@ -44,7 +44,7 @@ export default function RootLayout({
       <meta property="og:image" content="https://core-values.me/icons/icon-512x512.png" />
       <meta property="og:site_name" content="Core Values" />
       <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
-      <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       <link rel="shortcut icon" href="/icons/favicon.ico" />
       <title>Core Values</title>
       <Suspense>
