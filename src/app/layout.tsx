@@ -38,10 +38,10 @@ export default function RootLayout({
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="msapplication-tap-highlight" content="no" />
       <meta name="msapplication-TileColor" content="#3b82f6" />
-      <meta property="og:url" content={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'} />
+      <meta property="og:url" content={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'} />
       <meta property="og:title" content="Core Values" />
       <meta property="og:description" content="Discover and prioritise your personal values" />
-      <meta property="og:image" content="https://www.example.com/og-image.jpg" />
+      <meta property="og:image" content="https://core-values.me/icons/icon-512x512.png" />
       <meta property="og:site_name" content="Core Values" />
       <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
       <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
@@ -80,15 +80,15 @@ export default function RootLayout({
                 <BlueskyShareButton
                   text="Check out Core Values!"
                   size={22} fill='none'
-                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                   round
                 />
                 <TwitterShareButton
-                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                   text="Check out Core Values!" size={20} fill='currentColor' round />
                 <LinkedInShareButton
-                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
-                  text="Check out Core Values at https://digitalanalogue9.github.io" size={32} fill='currentColor' round />
+                  url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
+                  text="Check out Core Values at https://core-values.me" size={32} fill='currentColor' round />
               </div>
             </div>
           </footer>

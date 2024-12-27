@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NEXT_PUBLIC_BASE_URL: https://digitalanalogue9.github.io
+  NEXT_PUBLIC_BASE_URL: https://core-values.me
   NEXT_PUBLIC_DEPLOYMENT_TARGET: github
 
 jobs:

@@ -139,7 +139,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
 
     const handleCopyToClipboard = (values: ValueWithReason[]) => {
         const formattedText = `My Core Values\n--------------\n\n`
-            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://digitalanalogue9.github.io`;
+            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://core-values.me`;
 
         navigator.clipboard.writeText(formattedText)
             .then(() => {
@@ -164,7 +164,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
 
     const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
         const baseText = `My Core Values: `;
-        const link = ` https://digitalanalogue9.github.io`;
+        const link = ` https://core-values.me`;
         const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
 
         const fullText = baseText + generateFullText(values) + link;
@@ -310,17 +310,17 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         </svg>
                     </button>
                     <BlueskyShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
           text={formatTextForPlatform(values, 'bluesky')}
                         size={22} fill='white'
                     />
                     <TwitterShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
           text={formatTextForPlatform(values, 'twitter')}
                         size={20} fill='white'
                     />
                     <LinkedInShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
           text={formatTextForPlatform(values, 'linkedin')}
                         size={32} fill='white' />
                 </div>

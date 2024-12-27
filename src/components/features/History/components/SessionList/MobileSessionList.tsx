@@ -121,7 +121,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
 
     const handleCopyToClipboard = (values: ValueWithReason[]) => {
         const formattedText = `My Core Values\n--------------\n\n`
-            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://digitalanalogue9.github.io`;
+            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://core-values.me`;
 
         navigator.clipboard.writeText(formattedText)
             .then(() => {
@@ -144,7 +144,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
 
     const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
         const baseText = `My Core Values: `;
-        const link = ` https://digitalanalogue9.github.io`;
+        const link = ` https://core-values.me`;
         const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
 
         const fullText = baseText + generateFullText(values) + link;
@@ -214,17 +214,17 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         )}
                     </button>
                     <BlueskyShareButton
-                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                         text={formatTextForPlatform(currentValues, 'bluesky')}
                         size={22} fill='white'
                     />
                     <TwitterShareButton
-                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                         text={formatTextForPlatform(currentValues, 'twitter')}
                         size={22} fill='white'
                     />
                     <LinkedInShareButton
-                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
                         text={formatTextForPlatform(currentValues, 'linkedin')}
                         size={32} fill='white' />
 
