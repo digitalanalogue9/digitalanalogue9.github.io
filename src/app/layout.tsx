@@ -45,7 +45,7 @@ export default function RootLayout({
       <meta property="og:site_name" content="Core Values" />
       <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
       <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="shortcut icon" href="/icons/favicon.ico" />
       <title>Core Values</title>
       <Suspense>
         <GoogleAnalytics GA_MEASUREMENT_ID={'G-JZPX5JCP5D'} />
