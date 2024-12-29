@@ -30,7 +30,7 @@ export function RoundActions({
   };
   if (!currentCard) {
     return <div className="h-24 sm:h-48 flex items-center justify-center" role="region" aria-label="Round progression">
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center">
         <button onClick={onNextRound} disabled={!canProceedToNextRound} className={`
               ${isMobile ? 'px-3 py-1.5 text-sm' : 'px-6 py-2 text-base'}
               rounded-md text-white font-medium

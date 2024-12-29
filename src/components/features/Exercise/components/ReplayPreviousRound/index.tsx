@@ -129,7 +129,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
                     onClick={handleReplayPreviousRound}
                     disabled={isReplaying || remainingCards.length === 0}
                     className={`
-                        rounded-full p-2 flex items-center justify-center
+                        w-16 h-16 rounded-full p-2 flex items-center justify-center
                         ${isReplaying || remainingCards.length === 0 
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                             : 'bg-blue-100 text-blue-800 hover:bg-blue-200'} 
@@ -140,6 +140,9 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
                 >
                     <span aria-hidden="true" className="text-lg">
                         {isReplaying ? '⏳' : '↺'}
+                    </span>
+                    <span className="text-[10px] mt-0.5">
+                        {isReplaying ? "Replaying" : "Replay"}
                     </span>
                     <span className="sr-only">
                         {isReplaying ? "Replaying previous round..." : "Replay previous round's moves"}

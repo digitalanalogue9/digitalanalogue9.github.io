@@ -44,7 +44,7 @@ export const StatusMessage = ({
   if (isMobile) {
     return <div className="relative" role="status" aria-live="polite">
       <button type="button" onClick={handleButtonClick} className={`
-            rounded-full p-2 flex items-center justify-center
+            w-16 h-16 rounded-full p-2 flex items-center justify-center
             ${!canProceedToNextRound && remainingCards.length === 0 ? 'bg-red-100 text-red-800' : status.type === 'warning' ? 'bg-yellow-100 text-yellow-800' : status.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}
             focus:outline-none focus:ring-2 focus:ring-offset-2
             ${status.type === 'warning' ? 'focus:ring-yellow-500' : status.type === 'success' ? 'focus:ring-green-500' : 'focus:ring-blue-500'}
