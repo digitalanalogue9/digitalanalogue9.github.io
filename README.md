@@ -70,9 +70,9 @@ To configure these variables, create a `.env.local` file in the root directory w
 ```env
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 NEXT_PUBLIC_VERSION=1.0.0
-GA_MEASUREMENT_ID=G-XXXXXXXXXX
-CARDS_IN_GAME=50
-DEBUG=true
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_CARDS_IN_GAME=35
+NEXT_PUBLIC_DEBUG=false
 ```
 
 ### Getting Started

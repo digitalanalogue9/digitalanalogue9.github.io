@@ -28,18 +28,22 @@ export function useCommands() {
     roundNumber: state.roundNumber,
     currentRoundCommands: state.currentRoundCommands
   }), shallow);
+  
   const handleDrop = useCallback(async (value: Value, category: CategoryName) => {
     const command = new DropCommand(value, category);
     await state.addCommand(command);
   }, [state]);
+  
   const handleMoveBetweenCategories = useCallback(async (value: Value, fromCategory: CategoryName, toCategory: CategoryName) => {
     const command = new MoveCommand(value, fromCategory, toCategory);
     await state.addCommand(command);
   }, [state]);
+  
   const handleMoveWithinCategory = useCallback(async (category: CategoryName, fromIndex: number, toIndex: number, value: Value) => {
     const command = new MoveCommand(value, category, category, fromIndex, toIndex);
     await state.addCommand(command);
   }, [state]);
+  
   const loadCommands = useCallback(async () => {
     if (state.currentRound) {
       const savedRound = await getRound(state.currentRound.sessionId, state.roundNumber);

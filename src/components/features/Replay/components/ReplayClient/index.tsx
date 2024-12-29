@@ -4,21 +4,20 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getRoundsBySession } from "@/lib/db/indexedDB";
 import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from "@/lib/types";
-import { getEnvBoolean } from "@/lib/utils/config";
 import { AnimatedCard } from "@/components/features/Cards/components/AnimatedCard";
 import { useReplayState } from '../../hooks/useReplayState';
 import { useCardAnimation } from '../../hooks/useCardAnimation';
 import { ReplayColumn } from '../ReplayColumn';
 import { motion } from 'framer-motion';
 import { MobileReplayCategories } from '../MobileReplayCategories';
-import { CommandInfo } from '@/components/features/Replay/types';
+import { CommandInfo } from './types';
 import { useMobile } from '@/lib/contexts/MobileContext';
 
 export default function ReplayClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('sessionId');
-  const debug = getEnvBoolean('DEBUG', false);
+  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
   const [rounds, setRounds] = useState<Round[]>([]);
   const [currentRound, setCurrentRound] = useState<number>(1);
   const [currentCommandIndex, setCurrentCommandIndex] = useState<number>(0);
@@ -326,7 +325,7 @@ export default function ReplayClient() {
               />
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" role="grid" aria-label="Category grid">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" aria-label="Category grid">
               {Object.entries(getCurrentRoundCategories()).map(([title]) => (
                 <ReplayColumn 
                   key={title} 

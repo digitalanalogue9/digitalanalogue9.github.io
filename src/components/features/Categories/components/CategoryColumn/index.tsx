@@ -1,7 +1,7 @@
 // src/components/CategoryColumn.tsx
 import { Value, CategoryName } from "@/lib/types";
 import { Card } from "@/components/features/Cards/components"; // Change this import
-import {CategoryColumnProps} from "@/components/features/Categories/types";
+import {CategoryColumnProps} from "./types";
 
 /**
  * CategoryColumn component represents a column in a Kanban-style board.

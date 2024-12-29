@@ -1,33 +1,19 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { getCompletedSession, deleteSession } from "@/lib/db/indexedDB";
-import { SessionListProps } from '../../types';
-import { Value, ValueWithReason } from "@/lib/types";
+import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { getCompletedSession, deleteSession, importSession, getRoundsBySession } from "@/lib/db/indexedDB";
+import { SessionListProps } from './types';
+import { Value, ValueWithReason, Session, CompletedSession, Round } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
+import { saveAs } from 'file-saver-es';
+import { formatDate, handleImportSession, handleExportSession, handleShowValues, handleCopyToClipboard, formatTextForPlatform, generateFullText, generateTitles } from './sessionUtils';
 
 /**
  * MobileSessionList component renders a list of sessions with options to view details, select, and delete sessions.
- * 
- * @param {SessionListProps} props - The props for the MobileSessionList component.
- * @param {Session[]} props.sessions - The list of session objects to be displayed.
- * @param {(sessionId: string) => void} [props.onSessionDeleted] - Optional callback function to be called when a session is deleted.
- * 
- * @returns {JSX.Element} The rendered MobileSessionList component.
- * 
- * @component
- * 
- * @example
- * // Example usage of MobileSessionList component
- * <MobileSessionList 
- *   sessions={sessions} 
- *   onSessionDeleted={handleSessionDeleted} 
- * />
  */
-export function MobileSessionList({ sessions, onSessionDeleted }: SessionListProps) {
+export function MobileSessionList({ sessions, onSessionDeleted, onSessionImported }: SessionListProps) {
     const [showValuesFor, setShowValuesFor] = useState<string | null>(null);
     const [currentValues, setCurrentValues] = useState<Value[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +22,7 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
     const [isSelectionMode, setIsSelectionMode] = useState(false);
     const [deletingCount, setDeletingCount] = useState<number>(0);
     const [copySuccess, setCopySuccess] = useState(false);
+    const [reload, setReload] = useState(false);
 
 
     const {
@@ -45,10 +32,6 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         clearSelection,
         isSelected
     } = useSessionSelection();
-
-    const formatDate = (timestamp: number) => {
-        return new Date(timestamp).toLocaleString();
-    };
 
     const handleShowValues = async (sessionId: string) => {
         setIsLoading(true);
@@ -94,7 +77,6 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         }
     };
 
-
     const handleSelectAll = () => {
         const sessionIds = sessions.map(session => session.id);
         if (selectedSessions.size === sessions.length) {
@@ -115,52 +97,6 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         setIsSelectionMode(!isSelectionMode);
     };
 
-    const formatValueForClipboard = (value: ValueWithReason): string => {
-        return `Title: ${value.title}\nDescription: ${value.description}${value.reason ? `\nWhy: ${value.reason}` : ''}\n\n`;
-    };
-
-    const handleCopyToClipboard = (values: ValueWithReason[]) => {
-        const formattedText = `My Core Values\n--------------\n\n`
-            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://core-values.me`;
-
-        navigator.clipboard.writeText(formattedText)
-            .then(() => {
-                // You might want to add a toast notification here
-                console.log('Copied to clipboard');
-                setCopySuccess(true);
-            })
-            .catch(err => {
-                console.error('Failed to copy:', err);
-                setCopySuccess(false);
-            });
-    };
-    const generateFullText = (values: ValueWithReason[]): string => {
-        return values.map(value => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
-    };
-
-    const generateTitles = (values: ValueWithReason[]): string => {
-        return values.map(value => value.title).join(', ');
-    };
-
-    const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
-        const baseText = `My Core Values: `;
-        const link = ` https://core-values.me`;
-        const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
-
-        const fullText = baseText + generateFullText(values) + link;
-        const titlesText = baseText + generateTitles(values) + link;
-
-        if (fullText.length <= maxLength) {
-            return fullText;
-        }
-        else if (titlesText.length <= maxLength) {
-            return titlesText;
-        }
-        else {
-            return titlesText.substring(0, maxLength - 3) + '...';
-        }
-
-    };
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
             return (
@@ -195,8 +131,8 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                 <h3 className="mb-2 text-lg font-medium leading-6 text-black" id="fake-modal-title">Share your Core Values</h3>
                 <div className="flex gap-2 justify-center items-center mb-4">
                     <button
-                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values, setCopySuccess); }}
+                        className={`p-0 w-8 h-8 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center`}
                         aria-label="Copy values to clipboard"
                     >
                         <svg
@@ -207,11 +143,6 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         >
                             <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
                         </svg>
-                        {copySuccess && (
-                            <span aria-hidden="true" className="text-white ml-2">
-                                ✓
-                            </span>
-                        )}
                     </button>
                     <BlueskyShareButton
                         url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
@@ -262,6 +193,12 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
         );
     };
 
+    useEffect(() => {
+        if (reload) {
+            onSessionImported?.();
+        }
+    }, [reload, onSessionImported]);
+
     return (
         <>
             <div className="sticky top-0 z-10 bg-white shadow-sm mb-4">
@@ -293,6 +230,15 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                             </button>
                         </div>
                     )}
+                    <label className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 cursor-pointer">
+                        Import Session
+                        <input
+                            type="file"
+                            accept="application/json"
+                            onChange={(event) => handleImportSession(event, setReload, reload)}
+                            className="hidden"
+                        />
+                    </label>
                 </div>
             </div>
 
@@ -340,13 +286,22 @@ export function MobileSessionList({ sessions, onSessionDeleted }: SessionListPro
                         {!isSelectionMode && (
                             <div className="mt-3 flex justify-end space-x-2">
                                 {session.completed ? (
-                                    <button
-                                        onClick={() => { setCopySuccess(false); handleShowValues(session.id) }}
-                                        aria-label={`Show values for ${session.id}`}
-                                        className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
-                                    >
-                                        Show Values
-                                    </button>
+                                    <>
+                                        <button
+                                            onClick={() => { setCopySuccess(false); handleShowValues(session.id) }}
+                                            aria-label={`Show values for ${session.id}`}
+                                            className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                                        >
+                                            Show Values
+                                        </button>
+                                        <button
+                                            onClick={() => handleExportSession(session.id, sessions)}
+                                            className="px-3 py-1.5 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors duration-200"
+                                            aria-label={`Export session ${session.id}`}
+                                        >
+                                            Export
+                                        </button>
+                                    </>
                                 ) : (
                                     <button
                                         onClick={() => window.location.href = `/exercise?sessionId=${session.id}`}

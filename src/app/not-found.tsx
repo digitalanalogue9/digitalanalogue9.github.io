@@ -19,7 +19,6 @@ export default function NotFound() {
   return (
     <div 
       className="flex-1 flex items-center justify-center p-4"
-      role="main"
     >      
       <div 
         className="text-center"

@@ -1,7 +1,6 @@
 import { Modal } from '@/components/common/Modal';
-import { Session } from '@/lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DeleteConfirmationModalProps } from '@/components/features/History/types';
+import { DeleteConfirmationModalProps } from './types';
 
 /**
  * DeleteConfirmationModal component renders a modal dialog to confirm the deletion of sessions.

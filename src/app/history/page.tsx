@@ -41,7 +41,7 @@ export default function HistoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
-  
+
   useEffect(() => {
     const loadSessions = async () => {
       try {
@@ -60,19 +60,31 @@ export default function HistoryPage() {
     setSessions(prevSessions => prevSessions.filter(session => session.id !== sessionId));
   };
 
+  const handleSessionImported = async () => {
+    setIsLoading(true);
+    try {
+      const allSessions = await getSessions();
+      setSessions(allSessions.sort((a, b) => b.timestamp - a.timestamp));
+    } catch (error) {
+      console.error('Failed to load sessions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
-      role="main"
       aria-labelledby="history-heading"
       className={getContainerClassName(isMobile)}
     >
-      <h1
-        id="history-heading"
+      <div className="text-center">
+        <h1
+          id="history-heading"
           className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
-      >
-        Core <span className="text-blue-700">Values</span> Session History
-      </h1>
-
+        >
+          Core <span className="text-blue-700">Values</span> Session History
+        </h1>
+      </div>
       <section aria-label="Value sorting sessions history" className={styles.spacing}>
         <SessionSelectionProvider>
           {isLoading ? (
@@ -88,6 +100,7 @@ export default function HistoryPage() {
             <SessionList
               sessions={sessions}
               onSessionDeleted={handleSessionDeleted}
+              onSessionImported={handleSessionImported}
               aria-label="List of completed value sorting sessions"
             />
           )}

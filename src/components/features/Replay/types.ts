@@ -1,21 +1,14 @@
-import { Value, Categories, CategoryName } from "@/lib/types";
+import { Value } from "@/lib/types";
 
-export interface ReplayColumnProps {
-  title: CategoryName;
-  cards: Value[];
-}
-
-export interface MobileReplayCategoriesProps {
-  categories: Categories;
-}
-
+/**
+ * Represents an animating card with its value and positions.
+ */
 export interface AnimatingCard {
+  /** The value of the card. */
   value: Value;
+  /** The source position of the card. */
   sourcePos: { x: number; y: number };
+  /** The target position of the card. */
   targetPos: { x: number; y: number };
 }
 
-export interface CommandInfo {
-  roundNumber: number;
-  description: string;
-}

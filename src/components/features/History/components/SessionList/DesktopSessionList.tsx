@@ -1,30 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
-import { getCompletedSession, deleteSession } from "@/lib/db/indexedDB";
-import { SessionListProps } from '../../types';
-import { Value, ValueWithReason } from "@/lib/types";
+import { getCompletedSession, deleteSession, importSession, getRoundsBySession } from "@/lib/db/indexedDB";
+import { SessionListProps } from './types';
+import { Value, ValueWithReason, Session, CompletedSession, Round } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
+import { saveAs } from 'file-saver-es';
+import { formatDate, handleImportSession, handleExportSession, handleShowValues, handleCopyToClipboard, formatTextForPlatform, generateFullText, generateTitles } from './sessionUtils';
 
 /**
  * Component for displaying a list of sessions in a desktop view.
- *
- * @component
- * @param {SessionListProps} props - The properties for the component.
- * @param {Session[]} props.sessions - The list of sessions to display.
- * @param {function} [props.onSessionDeleted] - Callback function to handle session deletion.
- *
- * @returns {JSX.Element} The rendered component.
- *
- * @example
- * <DesktopSessionList
- *   sessions={sessions}
- *   onSessionDeleted={handleSessionDeleted}
- * />
- *
  * @remarks
  * This component provides functionalities to:
  * - Show values for a selected session.
@@ -33,20 +21,8 @@ import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/c
  * - Copy session values to clipboard.
  * - Print session values.
  *
- * @internal
- * This component uses several hooks and helper functions:
- * - `useRouter` for navigation.
- * - `useState` for managing local state.
- * - `useSessionSelection` for session selection management.
- * - `getPostItStyles` for styling.
- * - `getCompletedSession` for fetching session data.
- * - `deleteSession` for deleting sessions.
- *
- * @todo
- * - Add toast notifications for clipboard copy success/failure.
- * - Improve error handling for async operations.
  */
-export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListProps) {
+export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImported }: SessionListProps) {
     const router = useRouter(); // Add router
     const [showValuesFor, setShowValuesFor] = useState<string | null>(null);
     const [currentValues, setCurrentValues] = useState<Value[]>([]);
@@ -56,6 +32,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
     const [deletingCount, setDeletingCount] = useState(0);
     const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
     const [copySuccess, setCopySuccess] = useState(false);
+    const [reload, setReload] = useState(false);
     const {
         selectedSessions,
         toggleSession,
@@ -63,25 +40,6 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
         clearSelection,
         isSelected
     } = useSessionSelection();
-
-    const formatDate = (timestamp: number) => {
-        return new Date(timestamp).toLocaleString();
-    };
-
-    const handleShowValues = async (sessionId: string) => {
-        setIsLoading(true);
-        try {
-            const completedSession = await getCompletedSession(sessionId);
-            if (completedSession?.finalValues) {
-                setCurrentValues(completedSession.finalValues);
-                setShowValuesFor(sessionId);
-            }
-        } catch (error) {
-            console.error('Error loading values:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     // Add navigation handlers
     const handleReplay = (sessionId: string) => {
@@ -132,55 +90,6 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
     const selectedSessionObjects = sessions.filter(session =>
         isSelected(session.id)
     );
-
-    const formatValueForClipboard = (value: ValueWithReason): string => {
-        return `Title: ${value.title}\nDescription: ${value.description}${value.reason ? `\nWhy: ${value.reason}` : ''}\n\n`;
-    };
-
-    const handleCopyToClipboard = (values: ValueWithReason[]) => {
-        const formattedText = `My Core Values\n--------------\n\n`
-            + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://core-values.me`;
-
-        navigator.clipboard.writeText(formattedText)
-            .then(() => {
-                // You might want to add a toast notification here
-                console.log('Copied to clipboard');
-                setCopySuccess(true);
-            })
-            .catch(err => {
-                console.error('Failed to copy:', err);
-                setCopySuccess(false);
-            });
-    };
-
-
-    const generateFullText = (values: ValueWithReason[]): string => {
-        return values.map(value => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
-    };
-
-    const generateTitles = (values: ValueWithReason[]): string => {
-        return values.map(value => value.title).join(', ');
-    };
-
-    const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
-        const baseText = `My Core Values: `;
-        const link = ` https://core-values.me`;
-        const maxLength = platform === 'bluesky' ? 300 : platform === 'twitter' ? 144 : Infinity;
-
-        const fullText = baseText + generateFullText(values) + link;
-        const titlesText = baseText + generateTitles(values) + link;
-
-        if (fullText.length <= maxLength) {
-            return fullText;
-        }
-        else if (titlesText.length <= maxLength) {
-            return titlesText;
-        }
-        else {
-            return titlesText.substring(0, maxLength - 3) + '...';
-        }
-
-    };
 
     const renderCompletedValues = (values: ValueWithReason[]) => {
         if (isLoading) {
@@ -277,8 +186,8 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                 </div>
                 <div className="flex justify-end gap-2 items-center">
                     <button
-                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values); }}
-                        className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+                        onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(values, setCopySuccess); }}
+                        className={`p-0 w-8 h-8 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center`}
                         aria-label="Copy values to clipboard"
                     >
                         <svg
@@ -289,11 +198,6 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         >
                             <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
                         </svg>
-                        {copySuccess && (
-                            <span aria-hidden="true" className="text-white ml-2">
-                                ✓
-                            </span>
-                        )}
                     </button>
                     <button
                         onClick={handlePrint}
@@ -310,18 +214,18 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         </svg>
                     </button>
                     <BlueskyShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(values, 'bluesky')}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        text={formatTextForPlatform(values, 'bluesky')}
                         size={22} fill='white'
                     />
                     <TwitterShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(values, 'twitter')}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        text={formatTextForPlatform(values, 'twitter')}
                         size={20} fill='white'
                     />
                     <LinkedInShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(values, 'linkedin')}
+                        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://digitalanalogue9.github.io'}
+                        text={formatTextForPlatform(values, 'linkedin')}
                         size={32} fill='white' />
                 </div>
                 <div className="grid grid-cols-3 gap-4" role="list">
@@ -351,9 +255,15 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
         );
     };
 
+    useEffect(() => {
+        if (reload) {
+            onSessionImported?.();
+        }
+    }, [reload, onSessionImported]);
+
     return (
         <div className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center h-8">
                 <div className="flex items-center space-x-4">
                     <label
                         htmlFor='select-all-sessions'
@@ -366,21 +276,32 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                         type="checkbox"
                         checked={selectedSessions.size === sessions.length && sessions.length > 0}
                         onChange={handleSelectAll}
-                        className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
+                        className="rounded border-gray-300 text-blue-700 focus:ring-blue-600 mt-1"
                     />
                     <span className="text-sm text-black">
                         {selectedSessions.size} selected
                     </span>
                 </div>
-                {selectedSessions.size > 0 && (
-                    <button
-                        onClick={() => setIsDeleteModalOpen(true)}
-                        aria-label='Delete selected sessions'
-                        className="px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
-                    >
-                        Delete Selected
-                    </button>
-                )}
+                <div className="flex justify-end flex-grow space-x-2">
+                    {selectedSessions.size > 0 && (
+                        <button
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            aria-label='Delete selected sessions'
+                            className="px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
+                        >
+                            Delete Selected
+                        </button>
+                    )}
+                    <label className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 cursor-pointer">
+                        Import Session
+                        <input
+                            type="file"
+                            accept="application/json"
+                            onChange={(event) => handleImportSession(event, setReload, reload)}
+                            className="hidden"
+                        />
+                    </label>
+                </div>
             </div>
 
             <table className="min-w-full bg-white shadow-md rounded-lg">
@@ -451,7 +372,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                 {session.completed ? (
                                     <>
                                         <button
-                                            onClick={() => handleShowValues(session.id)}
+                                            onClick={() => handleShowValues(session.id, setIsLoading, setCurrentValues, setShowValuesFor)}
                                             aria-label={`Show values for session ${session.id}`}
                                             className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
                                         >
@@ -485,6 +406,13 @@ export function DesktopSessionList({ sessions, onSessionDeleted }: SessionListPr
                                     aria-label={`Delete session from ${formatDate(session.timestamp)}`}
                                 >
                                     Delete
+                                </button>
+                                <button
+                                    onClick={() => handleExportSession(session.id, sessions)}
+                                    className="px-3 py-1.5 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors duration-200"
+                                    aria-label={`Export session ${session.id}`}
+                                >
+                                    Export
                                 </button>
                             </td>
                         </tr>

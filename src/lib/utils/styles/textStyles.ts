@@ -27,6 +27,6 @@ export const getResponsiveTextStyles = (isMobile: boolean) => ({
 });
 
 export const getContainerClassName = (isMobile: boolean) => 
-  `max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 ${
+  `mx-auto px-4 sm:px-6 lg:px-8 ${
     isMobile ? 'flex flex-col justify-center py-2' : 'py-8'
   }`;

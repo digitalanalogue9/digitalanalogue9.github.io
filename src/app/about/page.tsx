@@ -30,7 +30,7 @@ export default function About() {
   const handleToggleInstructions = () => {
     const newValue = !showInstructions;
     setShowInstructions(newValue);
-    setLocalStorage('showInstructions', newValue ? true : false);
+    setLocalStorage('show-instructions', newValue ? true : false);
   };
 
   const handleConsent = (status: ConsentStatus) => {
@@ -45,9 +45,8 @@ export default function About() {
 
   return (
     <div
-      role="main"
       aria-labelledby="about-heading"
-      className={getContainerClassName(isMobile)}
+      className={`max-w-4xl ${getContainerClassName(isMobile)}`}
     >
       <div className="text-center">
         <h1
@@ -57,7 +56,7 @@ export default function About() {
           About Core <span className="text-blue-700">Values</span>
         </h1>
         <div
-          className={`max-w-2xl mx-auto text- ${styles.spacing}`}
+          className={`max-w-2xl mx-auto ${styles.spacing}`}
           aria-label="Version"
         >
           <p className={`${styles.largeParagraph} text-black font-medium`}>
@@ -203,7 +202,7 @@ export default function About() {
                   onChange={handleToggleInstructions}
                   className="rounded border-gray-300 text-blue-700 focus:ring-blue-600 mt-2"
                   aria-describedby="instructions-description"
-                  aria-checked= {showInstructions}
+                  aria-checked={showInstructions}
                 />
               </div>
               <div className="ml-3">

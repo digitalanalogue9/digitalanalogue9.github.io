@@ -12,28 +12,28 @@ export default function PrivacyPolicy() {
 
     const { consent, updateConsent, isInitialized } = useConsent();
 
-  const handleConsent = (status: ConsentStatus) => {
-    updateConsent({
-      analytics: status,
-      functional: status,
-      advertisement: 'denied',
-      timestamp: Date.now()
-    })
-  };
+    const handleConsent = (status: ConsentStatus) => {
+        updateConsent({
+            analytics: status,
+            functional: status,
+            advertisement: 'denied',
+            timestamp: Date.now()
+        })
+    };
 
     return (
         <div
-            role="main"
+            className={`max-w-4xl ${getContainerClassName(isMobile)}`}
             aria-labelledby="privacy-policy-heading"
-            className={getContainerClassName(isMobile)}
         >
-            <h1
-                id="privacy-policy-heading"
-                className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
-            >
-                Core <span className="text-blue-700">Values</span> Privacy Policy
-            </h1>
-
+            <div className="text-center">
+                <h1
+                    id="privacy-policy-heading"
+                    className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
+                >
+                    Core <span className="text-blue-700">Values</span> Privacy Policy
+                </h1>
+            </div>
             <section aria-labelledby="introduction-heading" className="pt-2">
                 <h2 id="introduction-heading" className={`${styles.subheading} font-bold text-black pb-2`}>
                     Introduction

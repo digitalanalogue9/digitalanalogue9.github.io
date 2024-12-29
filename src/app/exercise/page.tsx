@@ -2,9 +2,9 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RoundUIDebug from "@/components/features/Round/RoundUIDebug";
-import RoundUI from "@/components/features/Round/RoundUI";
-import Instructions from "@/components/common/Instructions";
+import RoundUIDebug from "@/components/features/Exercise/components/RoundUIDebug";
+import RoundUI from "@/components/features/Exercise/components/RoundUI";
+import Instructions from "@/components/features/Exercise/components/Instructions";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PWAPrompt from "@/components/common/PWAPrompt";

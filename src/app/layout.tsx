@@ -23,6 +23,7 @@ import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/c
  *
  * @returns {JSX.Element} The RootLayout component.
  */
+const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 export default function RootLayout({
   children
 }: {
@@ -88,7 +89,7 @@ export default function RootLayout({
             role="contentinfo" aria-label="Site footer">
             <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full text-white text-sm">
               <span>
-                © {new Date().getFullYear()} Core Values App
+                © {new Date().getFullYear()} Core Values App v{appVersion}
               </span>
               {/* Share Buttons */}
               <div className="flex space-x-4">

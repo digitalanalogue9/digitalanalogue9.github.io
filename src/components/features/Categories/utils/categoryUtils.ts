@@ -1,5 +1,6 @@
 import { Categories, CategoryName, Value } from "@/lib/types";
 import { getGameConfig } from "@/lib/utils/config/gameConfig";
+
 export const getImportantCards = (categories: Categories): Value[] => {
   const importantCards: Value[] = [];
 
@@ -20,6 +21,7 @@ export const getImportantCards = (categories: Categories): Value[] => {
   }
   return importantCards;
 };
+
 export const getCategoriesForRound = (cardCount: number, targetValue: number): Categories => {
   const ratio = cardCount / targetValue;
   const {
@@ -48,6 +50,18 @@ export const getCategoriesForRound = (cardCount: number, targetValue: number): C
   return categories;
 };
 export const getCategoryNames = (ratio: number): CategoryName[] => {
+  if (ratio <= 1.5) {
+    return ['Very Important', 'Not Important'];
+  } else if (ratio <= 2) {
+    return ['Very Important', 'Quite Important', 'Not Important'];
+  } else if (ratio <= 3) {
+    return ['Very Important', 'Quite Important', 'Important', 'Not Important'];
+  }
+  return ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'];
+};
+
+export const getCategories = (activeCardCount: number, targetValue: number): CategoryName[] => {
+  const ratio = activeCardCount / targetValue;
   if (ratio <= 1.5) {
     return ['Very Important', 'Not Important'];
   } else if (ratio <= 2) {

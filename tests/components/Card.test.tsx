@@ -26,7 +26,7 @@ describe('Card Component', () => {
 
   it('can override id if needed', () => {
     const testValue = createMockValue({
-      id: 35,
+      id: 'test-card-id',
       title: 'Specific ID Test',
       description: 'Test Description'
     });

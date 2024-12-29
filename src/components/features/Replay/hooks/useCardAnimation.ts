@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Position } from "@/lib/types";
 
 export const useCardAnimation = (
   sourcePosition: { x: number; y: number },

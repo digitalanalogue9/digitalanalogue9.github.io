@@ -36,45 +36,46 @@ export default function Navigation() {
       {/* Desktop Navigation */}
       <div
         className="hidden md:flex space-x-4"
-        role="menu"
         aria-label="Desktop navigation"
       >
         <Link
           href="/"
           className={`${getActiveClass('/')} text-lg px-4 py-2`}
-          role="menuitem"
+          aria-current={pathname === '/' ? 'page' : undefined}
         >
           Home
         </Link>
         <Link
-          href="/history"
-          className={`${getActiveClass('/history')} text-lg px-4 py-2`}
-          role="menuitem"
-        >
-          History
-        </Link>
-        <Link
           href="/about"
           className={`${getActiveClass('/about')} text-lg px-4 py-2`}
-          role="menuitem"
+          aria-current={pathname === '/about' ? 'page' : undefined}
         >
           About
         </Link>
         <Link
-          href="/privacy"
+          href="/history"
           className={`${getActiveClass('/history')} text-lg px-4 py-2`}
-          role="menuitem"
-        >Privacy</Link>
-
+          aria-current={pathname === '/history' ? 'page' : undefined}
+        >
+          History
+        </Link>
+        <Link
+          href="/privacy"
+          className={`${getActiveClass('/privacy')} text-lg px-4 py-2`}
+          aria-current={pathname === '/privacy' ? 'page' : undefined}
+        >
+          Privacy
+        </Link>
       </div>
-      
+
       {/* Mobile Navigation */}
       <div className="md:hidden">
         <button
+          type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="text-white p-2 bg-blue-700"
           aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
+          aria-expanded={isMenuOpen ? 'true' : 'false'}
           aria-controls="mobile-menu"
         >
           <svg
@@ -96,38 +97,38 @@ export default function Navigation() {
           <div
             id="mobile-menu"
             className="absolute top-14 right-4 bg-white shadow-lg rounded-lg py-2 z-50"
-            role="menu"
             aria-label="Mobile navigation"
           >
             <Link
               href="/"
               className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
-              role="menuitem"
+              aria-current={pathname === '/' ? 'page' : undefined}
             >
               Home
-            </Link>
-            <Link
-              href="/history"
-              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
-              onClick={() => setIsMenuOpen(false)}
-              role="menuitem"
-            >
-              History
             </Link>
             <Link
               href="/about"
               className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
+              aria-current={pathname === '/about' ? 'page' : undefined}
               role="menuitem"
             >
               About
             </Link>
             <Link
+              href="/history"
+              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
+              onClick={() => setIsMenuOpen(false)}
+              aria-current={pathname === '/history' ? 'page' : undefined}
+            >
+              History
+            </Link>
+            <Link
               href="/privacy"
               className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
               onClick={() => setIsMenuOpen(false)}
-              role="menuitem"
+              aria-current={pathname === '/privacy' ? 'page' : undefined}
             >
               Privacy
             </Link>

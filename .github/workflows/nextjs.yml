@@ -14,11 +14,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  NEXT_PUBLIC_BASE_URL: https://core-values.me
-  NEXT_PUBLIC_DEPLOYMENT_TARGET: github
-  NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-JZPX5JCP5D'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -47,9 +42,12 @@ jobs:
       - name: Build with Next.js
         env:
           NODE_ENV: production
-          DEBUG: false
-          CARDS_IN_GAME: 35
-          DEFAULT_CORE_VALUES_TO_CHOOSE: 10
+          NEXT_PUBLIC_BASE_URL: https://core-values.me
+          NEXT_PUBLIC_DEPLOYMENT_TARGET: github
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-JZPX5JCP5D'
+          NEXT_PUBLIC_DEBUG: false
+          NEXT_PUBLIC_CARDS_IN_GAME: 35
+          NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE: 10
         run: |
           npm run build
 

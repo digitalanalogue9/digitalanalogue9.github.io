@@ -11,35 +11,14 @@ import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
 
-/**
- * The `StartScreen` component is the entry point for users to begin discovering their core values.
- * It provides an interface for users to configure the number of core values they want to identify
- * and start the exercise. The component also adapts its layout based on the screen size (mobile or desktop).
- *
- * @component
- * @example
- * ```tsx
- * <StartScreen />
- * ```
- *
- * @returns {JSX.Element} The rendered StartScreen component.
- *
- * @remarks
- * - The component uses the `useRouter` hook from Next.js for navigation.
- * - It initializes the game state and navigates to the exercise screen upon starting.
- * - The number of core values can be configured between 1 and 10.
- * - The component adapts its layout for mobile and desktop views.
- *
- * @function
- * @name StartScreen
- */
 export default function StartScreen() {
   const router = useRouter();
-  const isDebug = getEnvBoolean('DEBUG', false);
-  const maxCards = getEnvNumber('CARDS_IN_GAME', 35);
-  const defaultCoreValues = getEnvNumber('DEFAULT_CORE_VALUES_TO_CHOOSE', 10);
+  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
+  const defaultMaxCards = Number(process.env.NEXT_PUBLIC_CARDS_IN_GAME || 35);
+  const defaultCoreValues = Number(process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10);
+  const [maxCards] = useState<number>(defaultMaxCards);
   const [coreValuesCount, setCoreValuesCount] = useState<number>(defaultCoreValues);
-  const [isInitializing, setIsInitializing] = useState(false);
+  const [isInitialising, setIsInitialising] = useState(false);
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
 
@@ -48,7 +27,7 @@ export default function StartScreen() {
   };
 
   const handleStart = async () => {
-    setIsInitializing(true);
+    setIsInitialising(true);
     try {
       const shuffledValues = getRandomValues(valuesData.values);
       const limitedValues = shuffledValues.slice(0, maxCards);
@@ -68,9 +47,9 @@ export default function StartScreen() {
 
       router.push(`/exercise?sessionId=${sessionId}`);
     } catch (error) {
-      console.error('Error initializing game:', error);
+      console.error('Error Initialising game:', error);
     } finally {
-      setIsInitializing(false);
+      setIsInitialising(false);
     }
   };
 
@@ -79,11 +58,9 @@ export default function StartScreen() {
 
   return (
     <div
-      role="main"
       aria-labelledby="welcome-heading"
       className={getContainerClassName(isMobile)}
     >
-      {/* Header */}
       <h1
         id="welcome-heading"
         className={`font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap ${styles.heading}`}
@@ -91,10 +68,8 @@ export default function StartScreen() {
         Discover Your <span className="text-blue-700">Core Values</span>
       </h1>
 
-      {/* Introduction */}
       <div
-        className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'
-          }`}
+        className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'}`}
         aria-label="Introduction"
       >
         <p className={styles.paragraph}>
@@ -105,7 +80,6 @@ export default function StartScreen() {
         </p>
       </div>
 
-      {/* Desktop-specific Benefits */}
       {!isMobile && (
         <div className="mt-6 text-center space-y-4 sm:space-y-6">
           <h2 className="text-lg sm:text-xl font-semibold text-black">
@@ -120,7 +94,6 @@ export default function StartScreen() {
         </div>
       )}
 
-      {/* Configuration Form */}
       <form
         id="configuration-form"
         onSubmit={(e) => {
@@ -148,19 +121,18 @@ export default function StartScreen() {
           aria-label="Number of core values"
           aria-labelledby="core-values-count-label"
           required
-          disabled={isInitializing}
+          disabled={isInitialising}
         />
         <button
           type="submit"
-          className={`${sharedButtonClasses} ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`${sharedButtonClasses} ${isInitialising ? 'opacity-50 cursor-not-allowed' : ''}`}
           aria-label="Begin discovery of my core values"
-          disabled={isInitializing}
+          disabled={isInitialising}
         >
-          {isInitializing ? 'Initializing...' : 'Start'}
+          {isInitialising ? 'Initialising...' : 'Start'}
         </button>
       </form>
 
-      {/* Previous Results Navigation */}
       <div
         className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`}
         aria-label="Previous results navigation"
@@ -171,7 +143,7 @@ export default function StartScreen() {
         <button
           type="button"
           onClick={handleViewPreviousResults}
-          className={`${sharedButtonClasses} ${isInitializing ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`${sharedButtonClasses} ${isInitialising ? 'opacity-50 cursor-not-allowed' : ''}`}
           aria-label="View previous results"
           aria-describedby="completed-before-description"
         >
