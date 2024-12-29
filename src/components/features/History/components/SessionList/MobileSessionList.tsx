@@ -290,13 +290,13 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                                         <button
                                             onClick={() => { setCopySuccess(false); handleShowValues(session.id) }}
                                             aria-label={`Show values for ${session.id}`}
-                                            className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
+                                            className="px-3 py-1.5 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors duration-200"
                                         >
                                             Show Values
                                         </button>
                                         <button
                                             onClick={() => handleExportSession(session.id, sessions)}
-                                            className="px-3 py-1.5 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors duration-200"
+                                            className="px-3 py-1.5 bg-orange-700 text-white rounded-md hover:bg-orange-800 transition-colors duration-200"
                                             aria-label={`Export session ${session.id}`}
                                         >
                                             Export
