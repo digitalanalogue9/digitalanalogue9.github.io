@@ -1,6 +1,6 @@
 // src/components/Card/CardControls.tsx
 import { TouchEvent as ReactTouchEvent, MouseEvent as ReactMouseEvent } from 'react';
-import { ExtendedCardControlsProps } from '../../types';
+import { ExtendedCardControlsProps } from '@/components/features/Cards/types';
 
 /**
  * CardControls component provides a set of controls for managing card actions such as moving up, moving down,

@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { getRound, saveRound } from '../../../../../lib/db/indexedDB';
-import { CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '../../../../../lib/types';
-import { DropCommand } from "../../commands/DropCommand";
-import { useMobile } from '../../../../common/MobileProvider';
+import { getRound, saveRound } from '@/lib/db/indexedDB';
+import { CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/lib/types';
+import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
+import { useMobile } from '@/components/common/MobileProvider';
 import { ReplayPreviousRoundProps } from './types';
 
 const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({

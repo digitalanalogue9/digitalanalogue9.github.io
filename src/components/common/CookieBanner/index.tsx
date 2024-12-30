@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useConsent } from "../../../lib/hooks/useConsent";
-import { ConsentStatus } from "../../../lib/types/Consent";
+import { useConsent } from "@/lib/hooks/useConsent";
+import { ConsentStatus } from "@/lib/types/Consent";
 
 export default function CookieBanner() {
   const { consent, updateConsent, isInitialized } = useConsent();

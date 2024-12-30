@@ -1,5 +1,5 @@
-import { Categories, CategoryName, Value } from "../../../../lib/types";
-import { getGameConfig } from "../../../../lib/utils/config/gameConfig";
+import { Categories, CategoryName, Value } from "@/lib/types";
+import { getGameConfig } from "@/lib/utils/config/gameConfig";
 
 export const getImportantCards = (categories: Categories): Value[] => {
   const importantCards: Value[] = [];

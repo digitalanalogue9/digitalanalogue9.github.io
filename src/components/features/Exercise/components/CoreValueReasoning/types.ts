@@ -1,4 +1,4 @@
-import { Value, ValueWithReason } from "../../../../../lib/types";
+import { Value, ValueWithReason } from "@/lib/types";
 
 /** Props for the component where users provide reasoning for their core value selections */
 export interface CoreValueReasoningProps {

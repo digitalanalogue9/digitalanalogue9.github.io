@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { CategoryName, Value } from "../../../../../lib/types";
-import { logStateUpdate } from "../../../../../lib/utils";
+import { CategoryName, Value } from "@/lib/types";
+import { logStateUpdate } from "@/lib/utils";
 import { MobileInteractionsResult } from '../types';
 
 /**

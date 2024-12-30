@@ -1,4 +1,4 @@
-import { CategoryName, Value } from "../../../../../lib/types";
+import { CategoryName, Value } from "@/lib/types";
 
 /** Props for mobile category row */
 export interface MobileCategoryRowProps {

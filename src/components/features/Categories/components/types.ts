@@ -1,4 +1,4 @@
-import { CategoryName, Value } from "../../../../lib/types";
+import { CategoryName, Value } from "@/lib/types";
 
 /** Result of mobile interactions */
 export interface MobileInteractionsResult {

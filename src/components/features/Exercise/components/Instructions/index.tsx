@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { InstructionsProps } from './types';
-import { useMobile } from '../../../../common/MobileProvider';
+import { useMobile } from '@/components/common/MobileProvider';
 
 /**
  * Instructions component displays a modal with instructions on how to use the Core Values application.

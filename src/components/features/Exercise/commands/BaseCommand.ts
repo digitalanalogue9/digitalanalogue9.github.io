@@ -1,5 +1,5 @@
-import { Command } from "../../../../lib/types/Command";
-import { Position } from "../../../../lib/types/Position";
+import { Command } from "@/lib/types/Command";
+import { Position } from "@/lib/types/Position";
 /**
  * Abstract base class for commands.
  * 

@@ -1,5 +1,5 @@
 // src/components/Round/CategoryGrid.tsx
-import CategoryColumn from "../CategoryColumn";
+import CategoryColumn from "@/components/features/Categories/components/CategoryColumn";
 import { CategoryGridProps } from './types';
 import { CategoryName, Value } from "@/lib/types";
 

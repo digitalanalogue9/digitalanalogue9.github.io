@@ -1,5 +1,5 @@
 'use client';
-import { usePWA } from "../../../lib/hooks/usePWA";
+import { usePWA } from "@/lib/hooks/usePWA";
 /**
  * OfflineIndicator component displays a notification when the user is offline.
  * It uses the `usePWA` hook to determine the offline status.

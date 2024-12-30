@@ -1,6 +1,6 @@
 // Generated types file
 
-import { CategoryName,Value } from "../../../../../lib/types";
+import { CategoryName,Value } from "@/lib/types";
 
 export interface CategoryColumnProps {
   title: CategoryName;

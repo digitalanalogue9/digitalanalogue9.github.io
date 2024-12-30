@@ -1,12 +1,12 @@
 'use client';
 
 import { memo, useRef, useState } from 'react';
-import type { CardProps, DroppedValue } from '../../types';
+import type { CardProps, DroppedValue } from '@/components/features/Cards/types';
 import { CardControls } from '../CardControls';
 import { CardMoveOptions } from '../CardMoveOptions';
 import { CardContent } from '../CardContent';
 import { getPostItStyles } from '../styles';
-import { useMobile } from "../../../../../components/common/MobileProvider";
+import { useMobile } from "@/components/common/MobileProvider";
 
 
 /**

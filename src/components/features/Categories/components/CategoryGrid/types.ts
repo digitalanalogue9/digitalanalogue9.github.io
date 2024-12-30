@@ -1,4 +1,4 @@
-import { Categories, CategoryName, Value } from "../../../../../lib/types";
+import { Categories, CategoryName, Value } from "@/lib/types";
 
 /** Props for category grid */
 export interface CategoryGridProps {

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePWA } from "../../../lib/hooks/usePWA";
-import { useMobile } from "../MobileProvider";
-import { getResponsiveTextStyles } from "../../../lib/utils/styles/textStyles";
-import { getLocalStorage, setLocalStorage } from "../../../lib/utils/localStorage";
+import { usePWA } from "@/lib/hooks/usePWA";
+import { useMobile } from "@/components/common/MobileProvider";
+import { getResponsiveTextStyles } from "@/lib/utils/styles/textStyles";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
 import { PromptType } from './types';
 
 /**

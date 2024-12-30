@@ -3,10 +3,10 @@
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { pageview } from "../../../lib/utils/gtagHelper";
+import { pageview } from "@/lib/utils/gtagHelper";
 import { GoogleAnalyticsProps } from "./types";
-import { initializeGtag, isGtagDefined } from "../../../lib/utils/gtagHelper/gtagWrapper";
-import { useConsent } from "../../../lib/hooks/useConsent";
+import { initializeGtag, isGtagDefined } from "@/lib/utils/gtagHelper/gtagWrapper";
+import { useConsent } from "@/lib/hooks/useConsent";
 
 export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: GoogleAnalyticsProps) {
   const [isInitialized, setIsInitialized] = useState(false);
