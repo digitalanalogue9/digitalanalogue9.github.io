@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "clean": "rimraf .next && rimraf out && rimraf node_modules && rimraf package-lock.json && npm cache clean --force && npm install",
+    "clean": "rimraf .next && rimraf out && rimraf node_modules",
     "generate-meta": "node scripts/generate-meta-files.js",
     "dev": "next dev",
     "build": "next build",
@@ -27,7 +27,6 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
-    "use-sync-external-store": "^1.4.0",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
