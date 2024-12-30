@@ -4,14 +4,18 @@ import { useMobile } from '@/lib/contexts/MobileContext';
 import { useConsent } from "@/lib/hooks/useConsent";
 import { ConsentStatus } from "@/lib/types/Consent";
 import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 export default function PrivacyPolicy() {
     const { isMobile } = useMobile();
     const styles = getResponsiveTextStyles(isMobile);
 
-    const { consent, updateConsent, isInitialized } = useConsent();
+    const { consent, updateConsent } = useConsent();
 
+    useEffect(() => {
+        document.title = "Core Values - Privacy";
+      }, []);
+    
     const handleConsent = (status: ConsentStatus) => {
         updateConsent({
             analytics: status,

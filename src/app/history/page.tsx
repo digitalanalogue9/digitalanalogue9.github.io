@@ -12,25 +12,6 @@ import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styl
 /**
  * The `HistoryPage` component is responsible for displaying the history of sessions.
  * It fetches and displays a list of sessions sorted by timestamp in descending order.
- * 
- * @component
- * 
- * @example
- * ```tsx
- * <HistoryPage />
- * ```
- * 
- * @returns {JSX.Element} The rendered component.
- * 
- * @remarks
- * - Uses `useEffect` to clear the game state on mount and to load sessions asynchronously.
- * - Displays a loading indicator while sessions are being fetched.
- * - Displays a message if no sessions are found.
- * - Displays a list of sessions if available.
- * 
- * @function
- * 
- * @name HistoryPage
  */
 export default function HistoryPage() {
   useEffect(() => {
@@ -41,6 +22,10 @@ export default function HistoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
+
+  useEffect(() => {
+      document.title = "Core Values - History";
+  }, []);
 
   useEffect(() => {
     const loadSessions = async () => {

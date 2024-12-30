@@ -36,6 +36,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
+    document.title = "Core Values - Home";
+  }, []);
+
+  useEffect(() => {
     const lastVersion = getLocalStorage('app-version', '0.0.0');
     const currentVersion = process.env.NEXT_PUBLIC_VERSION ?? '0.0.0';
     if (lastVersion !== currentVersion) {

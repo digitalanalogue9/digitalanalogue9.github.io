@@ -19,6 +19,10 @@ export default function About() {
   const styles = getResponsiveTextStyles(isMobile);
 
   useEffect(() => {
+    document.title = "Core Values - About";
+  }, []);
+
+  useEffect(() => {
     clearGameState();
   }, []);
 

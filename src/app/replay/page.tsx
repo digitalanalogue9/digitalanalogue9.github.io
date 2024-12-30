@@ -13,10 +13,12 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import ReplayClient from "@/components/features/Replay/components/ReplayClient";
-import { useMobile } from '@/lib/contexts/MobileContext';
 export default function ReplayPage() {
-  const { isMobile } = useMobile();
-      
+
+  useEffect(() => {
+    document.title = "Core Values - Replay";
+  }, []);
+    
   return <div className="flex-1">
       <Suspense fallback={<div role="status" aria-live="polite" className="flex items-center justify-center h-full">
             <span className="sr-only">Loading session replay...</span>

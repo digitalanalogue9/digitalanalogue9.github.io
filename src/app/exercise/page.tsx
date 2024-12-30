@@ -25,6 +25,9 @@ function ExerciseContent() {
   const { isLoading, error, shouldRedirect } = useGameInit();
   const { isMobile } = useMobile();
 
+  useEffect(() => {
+    document.title = "Core Values - Exercise";
+  }, []);
 
   useEffect(() => {
     const lastVersion = localStorage.getItem('app-version');

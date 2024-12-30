@@ -31,6 +31,10 @@ export default function Error({
   reset: () => void
 }) {
   const { isMobile } = useMobile();
+  
+  useEffect(() => {
+    document.title = "Core Values - Error";
+  }, []);
 
   useEffect(() => {
     // Log error for debugging but ensure no sensitive info is exposed
