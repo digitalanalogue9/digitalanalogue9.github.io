@@ -1,6 +1,5 @@
 // src/components/CategoryColumn.tsx
-import { Value, CategoryName } from "@/lib/types";
-import { Card } from "@/components/features/Cards/components"; // Change this import
+import { Card } from "../../../Cards/components"; // Change this import
 import {CategoryColumnProps} from "./types";
 
 /**

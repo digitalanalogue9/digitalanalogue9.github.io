@@ -1,11 +1,11 @@
 // src/components/CoreValueReasoning.tsx
 import { useEffect, useState } from 'react';
-import { ValueWithReason } from "@/lib/types";
+import { ValueWithReason } from "../../../../../lib/types";
 import { motion } from 'framer-motion';
-import { getPostItStyles } from "@/components/features/Cards/components/styles";
+import { getPostItStyles } from "../../../../features/Cards/components/styles";
 import { CoreValueReasoningProps } from './types';
-import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
-import { useMobile } from '@/components/common/MobileProvider';
+import { getResponsiveTextStyles } from '../../../../../lib/utils/styles/textStyles';
+import { useMobile } from '../../../../common/MobileProvider';
 
 /**
  * CoreValueReasoning component allows users to provide reasons for why certain values are meaningful to them.

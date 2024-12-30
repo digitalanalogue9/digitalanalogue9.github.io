@@ -1,11 +1,11 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { CategoryName, Value } from "@/lib/types";
+import { CategoryName, Value } from "../../../../../lib/types";
 import { ChevronDownIcon, ChevronUpIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { MobileCategoryRowProps } from './types';
-import { useMobileInteractions } from '@/components/features/Categories/components/hooks/useMobileInteractions';
+import { useMobileInteractions } from '../hooks/useMobileInteractions';
 
 /**
  * Component representing a row of categories in a mobile view.

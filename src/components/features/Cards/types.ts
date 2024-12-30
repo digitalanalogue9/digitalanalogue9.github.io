@@ -1,4 +1,4 @@
-import { Value, CategoryName } from "@/lib/types";
+import { Value, CategoryName } from "../../../lib/types";
 
 /** Extends Value type with additional properties needed during drag and drop operations */
 export interface DroppedValue extends Value {

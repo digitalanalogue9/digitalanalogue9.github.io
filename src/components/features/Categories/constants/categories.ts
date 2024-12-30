@@ -1,4 +1,4 @@
-import { Categories, CategoryName } from "@/lib/types";
+import { Categories, CategoryName } from "../../../../lib/types";
 export const allCategories: CategoryName[] = ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'] as const;
 export const emptyCategories: Categories = allCategories.reduce((acc, category) => {
   acc[category] = [];

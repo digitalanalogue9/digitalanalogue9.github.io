@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { CardProps } from '@/components/features/Cards/types';
+import type { CardProps } from '../../types';
 import { CardControls } from "../CardControls";
 import { CardMoveOptions } from "../CardMoveOptions";
 import { CardContent } from "../CardContent";
@@ -39,16 +39,6 @@ const cardTransition = {
 /**
  * AnimatedCard component renders a card with animation effects.
  * It can be expanded to show more details and provides options to move the card between categories.
- *
- * @param {CardProps} props - The properties for the AnimatedCard component.
- * @param {CardValue} props.value - The value of the card, containing title and description.
- * @param {Function} props.onMoveUp - Callback function to move the card up.
- * @param {Function} props.onMoveDown - Callback function to move the card down.
- * @param {Function} props.onMoveBetweenCategories - Callback function to move the card between categories.
- * @param {string} props.currentCategory - The current category of the card.
- * @param {number} props.columnIndex - The index of the column where the card is located.
- *
- * @returns {JSX.Element | null} The rendered AnimatedCard component or null if the value is not provided.
  */
 export function AnimatedCard({
   value,

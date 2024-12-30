@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CategoryName, Value } from "@/lib/types";
+import { CategoryName, Value } from "../../../../../lib/types";
 import { MobileCategoryRow } from '../MobileCategoryRow';
 import { MobileCategoryListProps} from './types';
 import { useMobileInteractions } from '../hooks/useMobileInteractions';

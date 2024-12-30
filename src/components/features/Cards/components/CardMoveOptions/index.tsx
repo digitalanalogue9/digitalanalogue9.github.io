@@ -2,9 +2,9 @@
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useEffect, useState, useCallback } from 'react';
-import { CardMoveOptionsProps } from '@/components/features/Cards/types';
-import { allCategories } from "@/components/features/Categories/constants/categories"; // Use centralized categories
-import { useMobile } from '@/components/common/MobileProvider';
+import { CardMoveOptionsProps } from '../../types';
+import { allCategories } from "../../../Categories/constants/categories"; // Use centralized categories
+import { useMobile } from '../../../../common/MobileProvider';
 
 /**
  * Component for displaying move options for a card.

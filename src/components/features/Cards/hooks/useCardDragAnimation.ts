@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Position } from "@/lib/types";
-import { useAnimation } from '@/lib/hooks/useAnimation';
+import { Position } from "../../../../lib/types";
+import { useAnimation } from '../../../../lib/hooks/useAnimation';
 /**
  * Custom hook to handle card drag animations.
  *

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ModalProps } from '@/components/common/Modal/types';
+import { ModalProps } from './types';
 
 
 /**

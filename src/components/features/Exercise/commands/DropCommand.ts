@@ -1,7 +1,7 @@
 import { BaseCommand } from './BaseCommand';
-import { CategoryName, Value } from "@/lib/types";
-import { getCardPosition, getCategoryPosition } from "@/lib/utils";
-import { DropCommandPayload } from "@/lib/types";
+import { CategoryName, Value } from "../../../../lib/types";
+import { getCardPosition, getCategoryPosition } from "../../../../lib/utils";
+import { DropCommandPayload } from "../../../../lib/types";
 /**
  * Represents a command to drop a card into a category.
  * Extends the BaseCommand class.

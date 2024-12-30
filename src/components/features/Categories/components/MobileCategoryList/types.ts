@@ -1,4 +1,4 @@
-import { Categories, CategoryName, Value } from "@/lib/types";
+import { Categories, CategoryName, Value } from "../../../../../lib/types";
 
 /** Props for mobile category list */
 export interface MobileCategoryListProps {

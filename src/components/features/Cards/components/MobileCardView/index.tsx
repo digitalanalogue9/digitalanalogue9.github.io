@@ -1,7 +1,7 @@
 // src/components/Round/components/MobileCardView.tsx
 import React from 'react';
-import { Card } from "@/components/features/Cards/components";
 import { MobileCardViewProps} from './types';
+import Card from '../Card';
 
 /**
  * MobileCardView component displays a list of value cards in a mobile-friendly view.

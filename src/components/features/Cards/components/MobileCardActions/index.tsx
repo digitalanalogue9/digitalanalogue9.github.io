@@ -1,6 +1,6 @@
 // src/components/Mobile/MobileCardActions.tsx
 import React from 'react';
-import {MobileCardActionsProps } from "@/components/features/Cards/types";
+import {MobileCardActionsProps } from "../../types";
 
 /**
  * MobileCardActions component provides a set of action buttons for a card
