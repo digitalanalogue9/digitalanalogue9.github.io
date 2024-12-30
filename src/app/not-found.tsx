@@ -1,9 +1,10 @@
 // src/app/not-found.tsx
 'use client'
 
-import { useMobile } from '../components/common/MobileProvider';
-import { getResponsiveTextStyles } from '../lib/utils/styles/textStyles';
+import { useMobile } from '@/components/common/MobileProvider';
+import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 import Link from 'next/link';
+import { Suspense, useEffect, useState } from 'react';
 
 /**
  * NotFound component renders a user-friendly message indicating that the requested page could not be found.

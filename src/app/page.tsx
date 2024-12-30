@@ -2,12 +2,12 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import StartScreen from "../components/features/Home/components/StartScreen";
+import StartScreen from "@/components/features/Home/components/StartScreen";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PWAPrompt from "../components/common/PWAPrompt";
-import { clearGameState } from "../lib/utils/storage";
-import { forceReload } from "../lib/utils/cache";
+import PWAPrompt from "@/components/common/PWAPrompt";
+import { clearGameState } from "@/lib/utils/storage";
+import { forceReload } from "@/lib/utils/cache";
 import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
 
 /**

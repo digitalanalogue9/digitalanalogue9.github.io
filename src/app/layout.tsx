@@ -1,13 +1,13 @@
 // layout.tsx
 'use client';
 
-import '../styles/globals.css';
-import Navigation from "../components/common/Navigation";
-import { MobileProvider } from "../components/common/MobileProvider";
-import CookieBanner from '../components/common/CookieBanner';
-import GoogleAnalytics from '../components/common/GoogleAnalytics';
+import '@/styles/globals.css';
+import Navigation from "@/common/Navigation";
+import { MobileProvider } from "@/components/common/MobileProvider";
+import CookieBanner from '@/common/CookieBanner';
+import GoogleAnalytics from '@/common/GoogleAnalytics';
 import { Suspense } from 'react';
-import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '../components/common/ShareButtons';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/common/ShareButtons';
 
 /**
  * RootLayout component that serves as the main layout for the application.
