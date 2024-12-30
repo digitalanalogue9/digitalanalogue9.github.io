@@ -35,27 +35,6 @@
       "@/*": [
         "./src/*"
       ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/features/*": [
-        "./src/components/features/*"
-      ],
-      "@/common/*": [
-        "./src/components/common/*"
-      ],
-      "@/lib/*": [
-        "./src/lib/*"
-      ],
-      "@/styles/*": [
-        "./src/styles/*"
-      ],
-      "@/hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@/assets/*": [
-        "./src/assets/*"
-      ],
       "file-saver-es": [
         "@types/file-saver"
       ]
