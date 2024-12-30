@@ -6,6 +6,22 @@ import { useEffect, useState } from 'react'
 
 /**
  * Error component to display error messages and provide a way to reset the application state.
+ *
+ * @param {Object} props - The properties object.
+ * @param {Error & { digest?: string }} props.error - The error object containing the error details.
+ * @param {() => void} props.reset - The function to reset the application state.
+ *
+ * @returns {JSX.Element} The rendered error component.
+ *
+ * @example
+ * ```tsx
+ * <Error error={new Error('Something went wrong')} reset={() => {}} />
+ * ```
+ *
+ * @remarks
+ * This component logs the error details to the console for debugging purposes.
+ * In development mode, it displays the error message to the user.
+ * It provides a button to attempt to recover from the error and optionally displays an error reference code.
  */
 export default function Error({
   error,
