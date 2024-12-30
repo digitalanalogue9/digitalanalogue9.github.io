@@ -1,4 +1,4 @@
-import "client-only";
+'use client'
 
 export function getLocalStorage(key: string, defaultValue: any) {
     const stickyValue = localStorage.getItem(key);

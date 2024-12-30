@@ -18,7 +18,7 @@ export const useCardAnimation = (
 
         // Easing function for smooth animation
         const eased = easeOutQuart(progress);
-        
+
         // Calculate direct path
         const x = sourcePosition.x + (targetPosition.x - sourcePosition.x) * eased;
         const y = sourcePosition.y + (targetPosition.y - sourcePosition.y) * eased;
