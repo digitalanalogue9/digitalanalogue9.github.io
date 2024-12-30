@@ -14,10 +14,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  NODE_ENV: production
-  NEXT_PUBLIC_BASE_URL: https://core-values.me
-
 jobs:
   build:
     runs-on: ubuntu-latest

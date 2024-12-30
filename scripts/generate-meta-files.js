@@ -8,6 +8,7 @@ function generateSitemap() {
     '',
     '/about',
     '/history',
+    '/exercise',
     '/privacy'
   ];
 
