@@ -1,4 +1,4 @@
-import { Value, ValueWithReason } from "../../../lib/types";
+import { Value, ValueWithReason } from "@/lib/types";
 export function generateEmailContent(values: ValueWithReason[]): string {
   const emailSubject = 'My Core Values Results';
   const htmlContent = `

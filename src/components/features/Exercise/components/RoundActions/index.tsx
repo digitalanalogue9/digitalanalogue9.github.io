@@ -1,8 +1,8 @@
 // src/components/Round/RoundActions.tsx
-import { CategoryName } from "../../../../../lib/types";
-import { Card } from "../../../../../components/features/Cards/components";
+import { CategoryName } from "@/lib/types";
+import { Card } from "@/components/features/Cards/components";
 import { RoundActionsPropsWithActiveZone } from './types';
-import { useMobile } from "../../../../../components/common/MobileProvider";
+import { useMobile } from "@/components/common/MobileProvider";
 
 /**
  * Component that renders actions for the current round in the game.

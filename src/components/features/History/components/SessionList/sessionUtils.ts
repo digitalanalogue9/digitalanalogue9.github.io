@@ -1,7 +1,7 @@
-import { getCompletedSession, importSession, getRoundsBySession, getSession, initDB } from "../../../../../lib/db/indexedDB";
-import { Value, ValueWithReason, Session, CompletedSession, Round } from "../../../../../lib/types";
+import { getCompletedSession, importSession, getRoundsBySession, getSession, initDB } from "@/lib/db/indexedDB";
+import { Value, ValueWithReason, Session, CompletedSession, Round } from "@/lib/types";
 import { saveAs } from 'file-saver-es';
-import { generateSessionName } from "../../../../../components/features/Exercise/utils";
+import { generateSessionName } from "@/components/features/Exercise/utils";
 
 export const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString();

@@ -2,9 +2,9 @@
 
 import { createWithEqualityFn } from 'zustand/traditional';
 import { devtools } from 'zustand/middleware';
-import { emptyCategories } from "../../components/features/Categories/constants/categories";
-import { saveRound } from "../db/indexedDB";
-import { StoreState } from "..//types";
+import { emptyCategories } from "@/components/features/Categories/constants/categories";
+import { saveRound } from "@/lib/db/indexedDB";
+import { StoreState } from "@/lib/types";
 import { shallow } from 'zustand/shallow';
 import { SessionData } from '../types/StoreState';
 

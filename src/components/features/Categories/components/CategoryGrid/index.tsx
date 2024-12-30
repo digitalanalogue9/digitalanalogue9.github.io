@@ -1,7 +1,7 @@
 // src/components/Round/CategoryGrid.tsx
 import CategoryColumn from "../CategoryColumn";
 import { CategoryGridProps } from './types';
-import { CategoryName, Value } from "../../../../../lib/types";
+import { CategoryName, Value } from "@/lib/types";
 
 /**
  * Renders a grid of categories, each containing a list of values.

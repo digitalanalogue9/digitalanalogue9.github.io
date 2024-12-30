@@ -1,4 +1,4 @@
-import { Value } from "../../src/lib/types";
+import { Value } from "@/lib/types";
 
 let currentMockId = 1;
 

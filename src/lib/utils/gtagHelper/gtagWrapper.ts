@@ -1,4 +1,4 @@
-import { CookieConsent } from "../../../lib/types/Consent";
+import { CookieConsent } from "@/lib/types/Consent";
 
 declare global {
     interface Window {

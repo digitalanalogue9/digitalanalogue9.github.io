@@ -1,4 +1,4 @@
-import { Session } from "../../../../lib/types";
+import { Session } from "@/lib/types";
 import { IDBPDatabase } from 'idb';
 export const adjectives: string[] = ['happy', 'bright', 'swift', 'clever', 'gentle', 'brave', 'calm', 'dark', 'eager', 'fair', 'wise', 'kind', 'loud', 'merry', 'nice', 'proud', 'quick', 'rare', 'soft', 'tall', 'warm', 'young', 'wild', 'bold', 'cool', 'deep', 'pure', 'rich', 'safe', 'sharp', 'strong', 'sweet', 'tough', 'vast', 'vivid', 'light', 'quiet', 'smart', 'fresh', 'grand', 'clean', 'clear', 'great', 'free', 'broad', 'keen', 'real', 'true', 'full', 'fine'];
 export const nouns: string[] = ['river', 'mountain', 'forest', 'star', 'ocean', 'cloud', 'desert', 'garden', 'island', 'lake', 'moon', 'rain', 'snow', 'storm', 'sun', 'tree', 'valley', 'wind', 'world', 'bridge', 'castle', 'city', 'door', 'field', 'fire', 'flower', 'harbor', 'home', 'light', 'path', 'road', 'rock', 'shore', 'sky', 'space', 'spring', 'stone', 'stream', 'summer', 'tide', 'tower', 'trail', 'wave', 'wood', 'dawn', 'dusk', 'echo', 'frost', 'mist', 'shadow'];

@@ -1,4 +1,4 @@
-import { Session } from "../../../../../lib/types";
+import { Session } from "@/lib/types";
 
 /** Props for the modal that confirms deletion of selected sessions */
 export interface DeleteConfirmationModalProps {

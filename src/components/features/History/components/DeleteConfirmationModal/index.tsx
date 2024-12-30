@@ -1,4 +1,4 @@
-import { Modal } from '../../../../../components/common/Modal';
+import { Modal } from '@/components/common/Modal';
 import { motion } from 'framer-motion';
 import { DeleteConfirmationModalProps } from './types';
 

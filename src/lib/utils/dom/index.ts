@@ -1,4 +1,4 @@
-import { Position } from "../../../lib/types";
+import { Position } from "@/lib/types";
 export const getElementCenter = (element: HTMLElement): Position => {
   const rect = element.getBoundingClientRect();
   return {

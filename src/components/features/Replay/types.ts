@@ -1,4 +1,4 @@
-import { Value } from "../../../lib/types";
+import { Value } from "@/lib/types";
 
 /**
  * Represents an animating card with its value and positions.

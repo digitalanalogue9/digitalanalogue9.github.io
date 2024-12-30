@@ -1,6 +1,6 @@
-import { getSession, getRoundsBySession } from "../../../../lib/db/indexedDB";
-import { initializeGameState } from "../../../../lib/utils/storage";
-import { Value, DropCommandPayload } from "../../../../lib/types";
+import { getSession, getRoundsBySession } from "@/lib/db/indexedDB";
+import { initializeGameState } from "@/lib/utils/storage";
+import { Round, Value, Categories, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
 
 export async function loadSessionState(sessionId: string) {
   const session = await getSession(sessionId);

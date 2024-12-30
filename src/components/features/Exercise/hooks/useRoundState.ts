@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Categories, CategoryName, Value, } from "../../../../lib/types";
+import { Categories, CategoryName, Value, } from "@/lib/types";
 import { RoundState } from "../types";
 /**
  * Custom hook to manage the state of a round in the Core Values game.

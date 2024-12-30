@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getPostItStyles } from "../../../../../components/features/Cards/components/styles";
-import { deleteSession} from "../../../../../lib/db/indexedDB";
+import { getPostItStyles } from "@/components/features/Cards/components/styles";
+import { deleteSession} from "@/lib/db/indexedDB";
 import { SessionListProps } from './types';
-import { Value, ValueWithReason } from "../../../../../lib/types";
+import { Value, ValueWithReason } from "@/lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
-import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '../../../../../components/common/ShareButtons';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 import { formatDate, handleImportSession, handleExportSession, handleShowValues, handleCopyToClipboard, formatTextForPlatform } from './sessionUtils';
 
 /**

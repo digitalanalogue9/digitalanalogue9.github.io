@@ -1,4 +1,4 @@
-import { CategoryName, Value } from "../../../../../lib/types";
+import { CategoryName, Value } from "@/lib/types";
 
 /** Props for round actions */
 export interface RoundActionsProps {

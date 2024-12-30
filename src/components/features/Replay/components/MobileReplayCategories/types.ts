@@ -1,4 +1,4 @@
-import { Categories } from "../../../../../lib/types";
+import { Categories } from "@/lib/types";
 
 /**
  * Props for the MobileReplayCategories component.
