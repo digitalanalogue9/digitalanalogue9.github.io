@@ -2,16 +2,16 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import RoundUIDebug from "@/components/features/Exercise/components/RoundUIDebug";
-import RoundUI from "@/components/features/Exercise/components/RoundUI";
-import Instructions from "@/components/features/Exercise/components/Instructions";
+import RoundUIDebug from "../../components/features/Exercise/components/RoundUIDebug";
+import RoundUI from "../../components/features/Exercise/components/RoundUI";
+import Instructions from "../../components/features/Exercise/components/Instructions";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PWAPrompt from "@/components/common/PWAPrompt";
-import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
-import { forceReload } from "@/lib/utils/cache";
-import { useGameInit } from "@/components/features/Exercise/hooks/useGameInit";
-import { useMobile } from "@/components/common/MobileProvider";
+import PWAPrompt from "../../components/common/PWAPrompt";
+import { useGameState } from "../../components/features/Exercise/hooks/useGameState";
+import { forceReload } from "../../lib/utils/cache";
+import { useGameInit } from "../../components/features/Exercise/hooks/useGameInit";
+import { useMobile } from "../../components/common/MobileProvider";
 
 function ExerciseContent() {
   const router = useRouter();

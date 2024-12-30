@@ -1,8 +1,8 @@
 // src/app/error.tsx
 'use client'
 
-import { useMobile } from '@/components/common/MobileProvider';
-import { useEffect, useState } from 'react'
+import { useMobile } from '../components/common/MobileProvider';
+import { useEffect } from 'react'
 
 /**
  * Error component to display error messages and provide a way to reset the application state.

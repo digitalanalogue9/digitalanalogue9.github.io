@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense } from 'react';
-import ReplayClient from "@/components/features/Replay/components/ReplayClient";
-import { useMobile } from '@/components/common/MobileProvider';
+import ReplayClient from "../../components/features/Replay/components/ReplayClient";
+import { useMobile } from '../../components/common/MobileProvider';
 
 /**
  * ReplayPage component renders the session replay page.

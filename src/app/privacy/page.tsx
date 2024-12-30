@@ -1,10 +1,10 @@
 'use client';
 
-import { useMobile } from '@/components/common/MobileProvider';
-import { useConsent } from "@/lib/hooks/useConsent";
-import { ConsentStatus } from "@/lib/types/Consent";
-import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
-import React, { useEffect, useState } from 'react';
+import { useMobile } from '../../components/common/MobileProvider';
+import { useConsent } from "../../lib/hooks/useConsent";
+import { ConsentStatus } from "../../lib/types/Consent";
+import { getContainerClassName, getResponsiveTextStyles } from '../../lib/utils/styles/textStyles';
+import React from 'react';
 
 export default function PrivacyPolicy() {
     const { isMobile } = useMobile();
