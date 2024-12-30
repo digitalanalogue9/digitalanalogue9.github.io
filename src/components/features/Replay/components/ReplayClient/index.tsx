@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getRoundsBySession } from "@/lib/db/indexedDB";
-import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command } from "@/lib/types";
+import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from "@/lib/types";
 import { AnimatedCard } from "@/components/features/Cards/components/AnimatedCard";
 import { useReplayState } from '../../hooks/useReplayState';
 import { useCardAnimation } from '../../hooks/useCardAnimation';
@@ -11,7 +11,7 @@ import { ReplayColumn } from '../ReplayColumn';
 import { motion } from 'framer-motion';
 import { MobileReplayCategories } from '../MobileReplayCategories';
 import { CommandInfo } from './types';
-import { useMobile } from '@/components/common/MobileProvider';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 export default function ReplayClient() {
   const searchParams = useSearchParams();

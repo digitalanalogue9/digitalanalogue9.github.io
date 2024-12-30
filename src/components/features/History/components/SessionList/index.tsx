@@ -1,4 +1,4 @@
-import { useMobile } from "@/components/common/MobileProvider";
+import { useMobile } from "@/lib/contexts/MobileContext";
 import { SessionListProps } from './types';
 import { MobileSessionList } from './MobileSessionList';
 import { DesktopSessionList } from './DesktopSessionList';

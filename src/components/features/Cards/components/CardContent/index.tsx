@@ -4,6 +4,13 @@ import { CardContentProps } from './types';
 
 /**
  * Renders the content of a card, including a title and an optional description that can be expanded or collapsed.
+ *
+ * @param {Object} props - The properties object.
+ * @param {string} props.title - The title of the card.
+ * @param {string} props.description - The description of the card.
+ * @param {boolean} props.isExpanded - A flag indicating whether the description is expanded.
+ *
+ * @returns {JSX.Element} The rendered card content.
  */
 export function CardContent({
   title,

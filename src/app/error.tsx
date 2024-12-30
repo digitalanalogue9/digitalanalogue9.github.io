@@ -1,7 +1,7 @@
 // src/app/error.tsx
 'use client'
 
-import { useMobile } from '@/components/common/MobileProvider';
+import { useMobile } from '@/lib/contexts/MobileContext';
 import { useEffect, useState } from 'react'
 
 /**

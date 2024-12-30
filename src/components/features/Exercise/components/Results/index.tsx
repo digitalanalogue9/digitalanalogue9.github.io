@@ -4,12 +4,13 @@
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
 import { useRef, useEffect, useState } from 'react';
 import { ValueWithReason, Categories, CategoryName } from "@/lib/types";
+import Link from 'next/link';
 import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
 import { clearGameState } from "@/lib/utils/storage";
 import { getCompletedSession } from "@/lib/db/indexedDB";
 import { useSession } from "@/components/features/Exercise/hooks/useSession";
 import { useRouter } from 'next/navigation';
-import { useMobile } from "@/components/common/MobileProvider";
+import { useMobile } from "@/lib/contexts/MobileContext";
 import { getResponsiveTextStyles } from "@/lib/utils/styles/textStyles";
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
@@ -17,6 +18,22 @@ import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/c
  * The `Results` component displays the core values results for a user.
  * It fetches and enriches the categories with reasons from a completed session,
  * and provides options to print the results, copy them to the clipboard, start a new exercise, or view previous results.
+ *
+ * @component
+ * @returns {JSX.Element | null} The rendered component or null if not mounted.
+ *
+ * @example
+ * <Results />
+ *
+ * @remarks
+ * This component uses several hooks:
+ * - `useRouter` for navigation.
+ * - `useRef` to reference the printable content.
+ * - `useState` to manage component state.
+ * - `useEffect` to fetch and enrich categories with reasons.
+ *
+ * @function
+ * @name Results
  */
 export default function Results() {
   const router = useRouter();

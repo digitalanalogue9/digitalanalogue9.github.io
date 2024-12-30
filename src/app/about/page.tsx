@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { clearGameState } from "@/lib/utils/storage";
 import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
-import { useMobile } from "@/components/common/MobileProvider";
+import { useMobile } from "@/lib/contexts/MobileContext";
 import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
 import { useConsent } from "@/lib/hooks/useConsent";
 import Link from 'next/link';

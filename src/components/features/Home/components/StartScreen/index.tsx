@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getEnvNumber, getEnvBoolean } from "@/lib/utils/config";
 import { addSession } from "@/lib/db/indexedDB";
 import { initializeGameState } from "@/lib/utils/storage";
 import { initialCategories } from "@/components/features/Categories/constants/categories";
 import valuesData from '@/data/values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
-import { useMobile } from '@/components/common/MobileProvider';
+import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
 
 export default function StartScreen() {

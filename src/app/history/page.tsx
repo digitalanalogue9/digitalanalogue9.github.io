@@ -6,7 +6,7 @@ import { getSessions } from "@/lib/db/indexedDB";
 import { SessionList } from "@/components/features/History/components/SessionList";
 import { SessionSelectionProvider } from '@/components/features/History/contexts/SessionSelectionContext';
 import { clearGameState } from "@/lib/utils/storage";
-import { useMobile } from "@/components/common/MobileProvider";
+import { useMobile } from "@/lib/contexts/MobileContext";
 import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 
 /**

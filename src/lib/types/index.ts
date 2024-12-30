@@ -2,6 +2,9 @@
 export type { AnimationConfig } from './Animation';
 export type { Position } from './Position';
 
+// Context related exports
+export type { MobileContextType } from './Context';
+
 // PWA related exports
 export type { PWAStatus } from './PWA';
 
@@ -12,7 +15,7 @@ export type { ReconstructedState } from './Session';
 export type { StoreState } from './StoreState';
 
 // Existing exports (keeping these as they are)
-export type { CompletedSession } from './CompletedSession';
+export type { CompletedSession, ValueWithReason } from './CompletedSession';
 export type { Categories } from './Categories';
 export type { Category } from './Category';
 export type { CategoryName } from './CategoryName';
@@ -23,4 +26,3 @@ export type { Round } from './Round';
 export type { Session } from './Session';
 export type { SessionReconstruction } from './SessionReconstruction';
 export type { Value } from './Value';
-export type { ValueWithReason } from './ValueWithReason';

@@ -1,9 +1,19 @@
 import { Modal } from '@/components/common/Modal';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DeleteConfirmationModalProps } from './types';
 
 /**
  * DeleteConfirmationModal component renders a modal dialog to confirm the deletion of sessions.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {boolean} props.isOpen - Indicates whether the modal is open.
+ * @param {function} props.onClose - Function to call when the modal is closed.
+ * @param {function} props.onConfirm - Function to call when the deletion is confirmed.
+ * @param {Array} props.selectedSessions - Array of selected sessions to be deleted.
+ * @param {boolean} props.isDeleting - Indicates whether the deletion process is ongoing.
+ * @param {number} [props.deletingCount] - Optional count of sessions being deleted.
+ * 
+ * @returns {JSX.Element} The rendered DeleteConfirmationModal component.
  */
 export function DeleteConfirmationModal({
   isOpen,

@@ -3,11 +3,29 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from '@/components/features/Cards/types';
+import { CategoryName } from "@/lib/types";
 import { allCategories } from "@/components/features/Categories/constants/categories"; // Use centralized categories
-import { useMobile } from '@/components/common/MobileProvider';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
  * Component for displaying move options for a card.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.value - The card value object.
+ * @param {string} props.currentCategory - The current category of the card.
+ * @param {function} props.onMoveBetweenCategories - Callback function to handle moving the card between categories.
+ * @param {function} props.onClose - Callback function to handle closing the move options menu.
+ *
+ * @returns {React.ReactPortal | null} A portal containing the move options menu, or null if the component is not mounted.
+ *
+ * @example
+ * <CardMoveOptions
+ *   value={cardValue}
+ *   currentCategory="To Do"
+ *   onMoveBetweenCategories={handleMove}
+ *   onClose={handleClose}
+ * />
  */
 export function CardMoveOptions({
   value,

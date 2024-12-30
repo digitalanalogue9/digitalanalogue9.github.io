@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { MobileContextType } from './types';
+import { MobileContextType } from '../types/Context';
 
 const MobileContext = createContext<MobileContextType | undefined>(undefined);
 
