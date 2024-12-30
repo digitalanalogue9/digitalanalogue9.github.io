@@ -2,13 +2,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { clearGameState } from "../../lib/utils/storage";
-import { getLocalStorage, setLocalStorage } from "../../lib/utils/localStorage";
-import { useMobile } from "../../components/common/MobileProvider";
-import { getResponsiveTextStyles, getContainerClassName } from "../../lib/utils/styles/textStyles";
-import { useConsent } from "../../lib/hooks/useConsent";
+import { clearGameState } from "@/lib/utils/storage";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils/localStorage";
+import { useMobile } from "@/components/common/MobileProvider";
+import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
+import { useConsent } from "@/lib/hooks/useConsent";
 import Link from 'next/link';
-import { ConsentStatus } from '../../lib/types/Consent';
+import { ConsentStatus } from '@/lib/types/Consent';
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
