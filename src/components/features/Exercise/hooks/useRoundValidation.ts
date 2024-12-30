@@ -1,4 +1,4 @@
-import { Value, Categories } from "@/lib/types";
+import { Value, Categories } from "../../../../lib/types";
 /**
  * Represents the state of validation for a round.
  * 

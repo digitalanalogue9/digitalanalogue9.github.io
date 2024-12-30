@@ -1,11 +1,11 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useStore } from "@/lib/store/store";
-import { Value, CategoryName } from "@/lib/types";
-import { getRound, saveRound } from "@/lib/db/indexedDB";
-import { DropCommand } from "@/components/features/Exercise/commands/DropCommand";
-import { MoveCommand } from "@/components/features/Exercise/commands/MoveCommand";
+import { useStore } from "../../../..//lib/store/store";
+import { Value, CategoryName } from "../../../..//lib/types";
+import { getRound, saveRound } from "../../../..//lib/db/indexedDB";
+import { DropCommand } from "../../../..//components/features/Exercise/commands/DropCommand";
+import { MoveCommand } from "../../../..//components/features/Exercise/commands/MoveCommand";
 import { shallow } from 'zustand/shallow';
 /**
  * Custom hook that provides command handling functionalities for the Exercise feature.

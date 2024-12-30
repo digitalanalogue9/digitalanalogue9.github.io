@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from "@/lib/store/store";
+import { useStore } from "../../../../lib/store/store";
 import { shallow } from 'zustand/shallow';
 /**
  * Custom hook that provides the game state and actions from the store.

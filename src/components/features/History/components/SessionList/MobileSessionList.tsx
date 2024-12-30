@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { getCompletedSession, deleteSession } from "@/lib/db/indexedDB";
+import { getCompletedSession, deleteSession } from "../../../../../lib/db/indexedDB";
 import { SessionListProps } from './types';
-import { Value, ValueWithReason } from "@/lib/types";
+import { Value, ValueWithReason } from "../../../../../lib/types";
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
-import { Modal } from '@/components/common/Modal';
-import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
+import { Modal } from '../../../../../components/common/Modal';
+import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '../../../../../components/common/ShareButtons';
 import { formatDate, handleImportSession, handleExportSession, handleCopyToClipboard, formatTextForPlatform } from './sessionUtils';
 
 /**

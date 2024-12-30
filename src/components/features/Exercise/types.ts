@@ -1,4 +1,4 @@
-import { Value, CategoryName, Categories } from "@/lib/types";
+import { Value, CategoryName, Categories } from "../../../lib/types";
 
 export interface StatusState {
   remainingCards: Value[];

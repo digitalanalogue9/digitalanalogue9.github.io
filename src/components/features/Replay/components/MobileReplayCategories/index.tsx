@@ -1,5 +1,5 @@
 // src/components/Replay/components/MobileReplayCategories.tsx
-import { Categories, CategoryName, Value } from "@/lib/types";
+import { Categories, CategoryName, Value } from "../../../../../lib/types";
 
 export function MobileReplayCategory({
   title,

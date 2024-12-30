@@ -1,4 +1,4 @@
-import { Value } from "@/lib/types";
+import { Value } from "../../../../../lib/types";
 
 /** Props for displaying the final results of a values exercise session */
 export interface ResultsProps {

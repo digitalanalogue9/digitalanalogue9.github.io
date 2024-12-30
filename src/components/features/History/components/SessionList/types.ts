@@ -1,4 +1,4 @@
-import { Session, Value } from "@/lib/types";
+import { Session, Value } from "../../../../../lib/types";
 
 /** Props for the list component that displays previous exercise sessions */
 export interface SessionListProps {

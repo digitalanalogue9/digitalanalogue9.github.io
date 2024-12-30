@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { initDB } from "@/lib/db/indexedDB";
+import { initDB } from "../../../../lib/db/indexedDB";
 
 export function useHistoryInit() {
   const [isInitialized, setIsInitialized] = useState(false);

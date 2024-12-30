@@ -1,12 +1,12 @@
 'use client';
 
-import { getEnvBoolean } from '@/lib/utils/config';
-import { generateSessionName } from '@/components/features/Exercise/utils';
+import { generateSessionName } from '../../components/features/Exercise/utils';
 import { openDB, IDBPDatabase } from 'idb';
-import { Session } from "@/lib/types/Session";
-import { Round } from "@/lib/types/Round";
-import { Command } from "@/lib/types/Command";
-import { Value, CompletedSession, Categories } from "@/lib/types";
+import { Session } from "../types/Session";
+import { Round } from "../types/Round";
+import { Command } from "../types/Command";
+import { Value, CompletedSession, Categories } from "../types";
+
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'coreValuesData';
 const dbVersion = 3;

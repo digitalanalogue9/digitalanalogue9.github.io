@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PWAStatus } from "@/lib/types";
+import { PWAStatus } from "../types";
 
 /**
  * Custom hook to manage Progressive Web App (PWA) status.

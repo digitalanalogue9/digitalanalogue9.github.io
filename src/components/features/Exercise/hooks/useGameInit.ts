@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { initDB } from "@/lib/db/indexedDB";
+import { initDB } from "../../../..//lib/db/indexedDB";
 import { useSession } from "./useSession";
-import { usePWA } from "@/lib/hooks/usePWA";
-import { cacheUtils } from "@/lib/utils/storage";
+import { usePWA } from "../../../..//lib/hooks/usePWA";
+import { cacheUtils } from "../../../..//lib/utils/storage";
 import { loadSessionState } from "../utils/sessionLoader";
 import { useGameState } from './useGameState';
 

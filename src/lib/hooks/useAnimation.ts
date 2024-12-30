@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useMotionValue, useSpring, MotionValue } from 'framer-motion';
-import { Position,AnimationConfig } from "@/lib/types";
+import { useMotionValue, useSpring } from 'framer-motion';
+import { Position,AnimationConfig } from "../types";
 
 /**
  * Custom hook to create animated motion values for x and y positions using springs.

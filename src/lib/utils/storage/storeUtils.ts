@@ -1,6 +1,6 @@
-import { useStore } from "@/lib/store/store";
-import { Value, Categories } from "@/lib/types";
-import { emptyCategories } from "@/components/features/Categories/constants/categories";
+import { useStore } from "../../store/store";
+import { Value, Categories } from "../..//types";
+import { emptyCategories } from "../../../components/features/Categories/constants/categories";
 export const initializeGameState = (sessionId: string, currentRound: number, targetCoreValues: number, initialCards: Value[], initialCategories: Categories = emptyCategories) => {
   const store = useStore.getState();
 
