@@ -1,3 +1,9 @@
+'use client';
+
+import { Suspense } from 'react';
+import ReplayClient from "@/components/features/Replay/components/ReplayClient";
+import { useMobile } from '@/components/common/MobileProvider';
+
 /**
  * ReplayPage component renders the session replay page.
  * 
@@ -5,15 +11,7 @@
  * while the ReplayClient component is being loaded. During the loading
  * state, it displays a loading message with appropriate accessibility
  * attributes.
- * 
- * @returns {JSX.Element} The rendered ReplayPage component.
  */
-// src/app/replay/page.tsx
-'use client';
-
-import { Suspense, useEffect, useState } from 'react';
-import ReplayClient from "@/components/features/Replay/components/ReplayClient";
-import { useMobile } from '@/lib/contexts/MobileContext';
 export default function ReplayPage() {
   const { isMobile } = useMobile();
       

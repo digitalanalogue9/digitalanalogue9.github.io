@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { StatusMessageProps } from './types';
-import { useMobile } from "@/lib/contexts/MobileContext";
+import { useMobile } from "@/components/common/MobileProvider";
 
 export const StatusMessage = ({
   status,

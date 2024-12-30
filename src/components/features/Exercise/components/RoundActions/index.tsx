@@ -2,7 +2,7 @@
 import { CategoryName } from "@/lib/types";
 import { Card } from "@/components/features/Cards/components";
 import { RoundActionsPropsWithActiveZone } from './types';
-import { useMobile } from "@/lib/contexts/MobileContext";
+import { useMobile } from "@/components/common/MobileProvider";
 
 /**
  * Component that renders actions for the current round in the game.

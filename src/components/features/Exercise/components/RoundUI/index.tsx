@@ -13,7 +13,7 @@ import { Categories, CategoryName, Value, ValueWithReason } from "@/lib/types";
 import { getCategoriesForRound } from "@/components/features/Categories/utils/categoryUtils";
 import { CoreValueReasoning } from "@/components/features/Exercise/components/CoreValueReasoning";
 import { logRender, logStateUpdate, logEffect } from "@/lib/utils";
-import { useMobile } from "@/lib/contexts/MobileContext";
+import { useMobile } from "@/components/common/MobileProvider";
 import { useRoundState } from '../../hooks/useRoundState';
 import { useRoundValidation } from '../../hooks/useRoundValidation';
 import { useRoundStatus } from '../../hooks/useRoundStatus';

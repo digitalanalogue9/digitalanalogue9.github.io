@@ -1,6 +1,6 @@
 'use client';
 
-import { useMobile } from '@/lib/contexts/MobileContext';
+import { useMobile } from '@/components/common/MobileProvider';
 import { useConsent } from "@/lib/hooks/useConsent";
 import { ConsentStatus } from "@/lib/types/Consent";
 import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';

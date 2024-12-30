@@ -1,8 +1,4 @@
-import { Value } from './Value';
-
-export interface ValueWithReason extends Value {
-    reason?: string;
-  }
+import { ValueWithReason } from './ValueWithReason';
 
 export interface CompletedSession {
     sessionId: string;

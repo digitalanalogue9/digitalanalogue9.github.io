@@ -1,6 +1,5 @@
 // src/components/Replay/components/MobileReplayCategories.tsx
 import { Categories, CategoryName, Value } from "@/lib/types";
-import { allCategories } from "@/components/features/Categories/constants/categories"; // Use centralized categories
 
 export function MobileReplayCategory({
   title,

@@ -1,6 +1,6 @@
 // src/components/Round/hooks/useRoundStatus.ts
 import { useCallback } from 'react';
-import { useMobile } from '@/lib/contexts/MobileContext';
+import { useMobile } from '@/components/common/MobileProvider';
 import { Status, StatusState } from '../types';
 
 /**

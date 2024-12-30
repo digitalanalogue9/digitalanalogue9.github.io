@@ -1,6 +1,5 @@
 // src/components/Round/components/MobileCardView.tsx
 import React from 'react';
-import { Value, CategoryName, Categories } from "@/lib/types";
 import { Card } from "@/components/features/Cards/components";
 import { MobileCardViewProps} from './types';
 

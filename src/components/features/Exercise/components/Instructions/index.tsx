@@ -2,20 +2,11 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { InstructionsProps } from './types';
-import { useMobile } from '@/lib/contexts/MobileContext';
+import { useMobile } from '@/components/common/MobileProvider';
 
 /**
  * Instructions component displays a modal with instructions on how to use the Core Values application.
  * It provides an option to not show the instructions again by saving the preference in localStorage.
- *
- * @component
- * @param {InstructionsProps} props - The props for the Instructions component.
- * @param {function} props.onClose - Function to call when the instructions modal is closed.
- *
- * @example
- * <Instructions onClose={handleClose} />
- *
- * @returns {JSX.Element} The rendered Instructions component.
  */
 export default function Instructions({ onClose }: InstructionsProps) {
   const [shouldShowAgain, setShouldShowAgain] = useState(true);

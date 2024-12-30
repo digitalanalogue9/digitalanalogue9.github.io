@@ -5,30 +5,10 @@ import { motion } from 'framer-motion';
 import { getPostItStyles } from "@/components/features/Cards/components/styles";
 import { CoreValueReasoningProps } from './types';
 import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
-import { useMobile } from '@/lib/contexts/MobileContext';
+import { useMobile } from '@/components/common/MobileProvider';
 
 /**
  * CoreValueReasoning component allows users to provide reasons for why certain values are meaningful to them.
- * 
- * @param {CoreValueReasoningProps} props - The properties for the CoreValueReasoning component.
- * @param {Array<Value>} props.values - An array of value objects that the user can provide reasons for.
- * @param {Function} props.onComplete - A callback function that is called when the form is submitted with the values and their corresponding reasons.
- * 
- * @returns {JSX.Element} The rendered CoreValueReasoning component.
- * 
- * @component
- * 
- * @example
- * const values = [
- *   { id: '1', title: 'Integrity', description: 'Adherence to moral and ethical principles.' },
- *   { id: '2', title: 'Excellence', description: 'Striving for the highest quality and standards.' }
- * ];
- * 
- * function handleComplete(valuesWithReasons) {
- *   console.log(valuesWithReasons);
- * }
- * 
- * <CoreValueReasoning values={values} onComplete={handleComplete} />
  */
 export function CoreValueReasoning({
   values,

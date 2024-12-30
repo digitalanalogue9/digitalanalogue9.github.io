@@ -1,21 +1,10 @@
 // src/components/Mobile/MobileCardActions.tsx
 import React from 'react';
-import { Value, CategoryName } from "@/lib/types";
 import {MobileCardActionsProps } from "@/components/features/Cards/types";
 
 /**
  * MobileCardActions component provides a set of action buttons for a card
  * that allow users to move the card up, down, or between categories.
- *
- * @param {MobileCardActionsProps} props - The properties for the component.
- * @param {Card} props.card - The card object containing details about the card.
- * @param {Function} props.onMoveUp - Callback function to move the card up.
- * @param {Function} props.onMoveDown - Callback function to move the card down.
- * @param {Function} props.onMoveBetweenCategories - Callback function to move the card to a different category.
- * @param {boolean} props.canMoveUp - Flag indicating if the card can be moved up.
- * @param {boolean} props.canMoveDown - Flag indicating if the card can be moved down.
- * @param {string} props.category - The current category of the card.
- * @returns {JSX.Element | null} The rendered component or null if no category is provided.
  */
 export const MobileCardActions: React.FC<MobileCardActionsProps> = ({
   card,

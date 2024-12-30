@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Categories, Command, Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
+import { Categories, Value, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
 import { getRoundsBySession } from "@/lib/db/indexedDB";
 import valuesData from '@/data/values.json';
-import {ReconstructedState} from '@/lib/types'
+import { ReconstructedState } from '@/lib/types'
 
 export function useSessionReconstruction(sessionId: string | null) {
   const [reconstructedState, setReconstructedState] = useState<ReconstructedState | null>(null);

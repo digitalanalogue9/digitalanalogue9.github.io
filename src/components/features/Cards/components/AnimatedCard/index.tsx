@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CardProps } from '@/components/features/Cards/types';
-import { getEnvBoolean } from "@/lib/utils/config";
 import { CardControls } from "../CardControls";
 import { CardMoveOptions } from "../CardMoveOptions";
 import { CardContent } from "../CardContent";
