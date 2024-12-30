@@ -37,6 +37,7 @@ jobs:
       - name: Generate meta files
         env: 
           LASTMOD_DATE: ${{ env.LASTMOD_DATE }}
+          NEXT_PUBLIC_BASE_URL: https://core-values.me
         run: npm run generate-meta
 
       - name: Update Version
