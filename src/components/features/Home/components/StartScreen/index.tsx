@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getEnvNumber, getEnvBoolean } from "@/lib/utils/config";
-import { addSession } from "@/lib/db/indexedDB";
-import { initializeGameState } from "@/lib/utils/storage";
-import { initialCategories } from "@/components/features/Categories/constants/categories";
+import { getEnvNumber, getEnvBoolean } from '@/lib/utils/config';
+import { addSession } from '@/lib/db/indexedDB';
+import { initializeGameState } from '@/lib/utils/storage';
+import { initialCategories } from '@/components/features/Categories/constants/categories';
 import valuesData from '@/data/values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
 import { useMobile } from '@/lib/contexts/MobileContext';
-import { getResponsiveTextStyles, getContainerClassName } from "@/lib/utils/styles/textStyles";
+import { getResponsiveTextStyles, getContainerClassName } from '@/lib/utils/styles/textStyles';
 
 export default function StartScreen() {
   const router = useRouter();
@@ -54,42 +54,47 @@ export default function StartScreen() {
   };
 
   const sharedButtonClasses =
-    "px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2";
+    'px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-transform duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
 
   return (
-    <div
-      aria-labelledby="welcome-heading"
-      className={getContainerClassName(isMobile)}
-    >
+    <div aria-labelledby="welcome-heading" className={getContainerClassName(isMobile)}>
       <h1
         id="welcome-heading"
-        className={`font-extrabold text-center mb-4 sm:mb-6 whitespace-nowrap ${styles.heading}`}
+        className={`mb-4 whitespace-nowrap text-center font-extrabold sm:mb-6 ${styles.heading}`}
       >
         Discover Your <span className="text-blue-700">Core Values</span>
       </h1>
 
       <div
-        className={`max-w-2xl mx-auto text-center ${isMobile ? 'space-y-2 mb-4' : 'space-y-4 sm:space-y-6 mb-10'}`}
+        className={`mx-auto max-w-2xl text-center ${isMobile ? 'mb-4 space-y-2' : 'mb-10 space-y-4 sm:space-y-6'}`}
         aria-label="Introduction"
       >
         <p className={styles.paragraph}>
-          Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply. Find the ones that define you best!
+          Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply.
+          Find the ones that define you best!
         </p>
         <p className={styles.paragraph}>
-          You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values, like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
+          You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values,
+          like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
         </p>
       </div>
 
       {!isMobile && (
-        <div className="mt-6 text-center space-y-4 sm:space-y-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-black">
-            Why Discover Your Core Values?
-          </h2>
-          <ul className="list-disc list-inside text-black text-sm sm:text-base space-y-2 text-left">
-            <li><strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you.</li>
-            <li><strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.</li>
-            <li><strong>Enhanced Relationships:</strong> Communicate your values clearly and understand others better.</li>
-            <li><strong>Increased Motivation:</strong> Align your goals with your values for lasting progress.</li>
+        <div className="mt-6 space-y-4 text-center sm:space-y-6">
+          <h2 className="text-lg font-semibold text-black sm:text-xl">Why Discover Your Core Values?</h2>
+          <ul className="list-inside list-disc space-y-2 text-left text-sm text-black sm:text-base">
+            <li>
+              <strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you.
+            </li>
+            <li>
+              <strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.
+            </li>
+            <li>
+              <strong>Enhanced Relationships:</strong> Communicate your values clearly and understand others better.
+            </li>
+            <li>
+              <strong>Increased Motivation:</strong> Align your goals with your values for lasting progress.
+            </li>
           </ul>
         </div>
       )}
@@ -100,7 +105,7 @@ export default function StartScreen() {
           e.preventDefault();
           handleStart();
         }}
-        className={`flex flex-col items-center ${isMobile ? 'gap-3' : 'gap-6 mt-6'}`}
+        className={`flex flex-col items-center ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}
         aria-label="Exercise configuration"
       >
         <label
@@ -117,7 +122,7 @@ export default function StartScreen() {
           max="10"
           value={coreValuesCount}
           onChange={(e) => setCoreValuesCount(Number(e.target.value))}
-          className="border rounded-lg px-4 py-2 w-20 text-center shadow-md text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-20 rounded-lg border px-4 py-2 text-center text-black shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
           aria-label="Number of core values"
           aria-labelledby="core-values-count-label"
           required
@@ -125,7 +130,7 @@ export default function StartScreen() {
         />
         <button
           type="submit"
-          className={`${sharedButtonClasses} ${isInitialising ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
           aria-label="Begin discovery of my core values"
           disabled={isInitialising}
         >
@@ -133,17 +138,14 @@ export default function StartScreen() {
         </button>
       </form>
 
-      <div
-        className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`}
-        aria-label="Previous results navigation"
-      >
-        <p id="completed-before-description" className="text-black mb-3 text-sm sm:text-base font-semibold">
+      <div className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`} aria-label="Previous results navigation">
+        <p id="completed-before-description" className="mb-3 text-sm font-semibold text-black sm:text-base">
           Have you completed this before? Revisit your results!
         </p>
         <button
           type="button"
           onClick={handleViewPreviousResults}
-          className={`${sharedButtonClasses} ${isInitialising ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
           aria-label="View previous results"
           aria-describedby="completed-before-description"
         >

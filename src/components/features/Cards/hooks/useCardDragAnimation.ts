@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Position } from "@/lib/types";
+import { Position } from '@/lib/types';
 import { useAnimation } from '@/lib/hooks/useAnimation';
 /**
  * Custom hook to handle card drag animations.
@@ -15,13 +15,10 @@ import { useAnimation } from '@/lib/hooks/useAnimation';
  */
 export const useCardDragAnimation = (initialPosition: Position, onDragEnd?: (endPosition: Position) => void) => {
   const [isDragging, setIsDragging] = useState(false);
-  const {
-    x,
-    y
-  } = useAnimation(initialPosition, {
+  const { x, y } = useAnimation(initialPosition, {
     stiffness: 500,
     damping: 35,
-    mass: 1
+    mass: 1,
   });
   const handleDragStart = () => {
     setIsDragging(true);
@@ -31,7 +28,7 @@ export const useCardDragAnimation = (initialPosition: Position, onDragEnd?: (end
     if (onDragEnd) {
       onDragEnd({
         x: x.get(),
-        y: y.get()
+        y: y.get(),
       });
     }
   };
@@ -40,6 +37,6 @@ export const useCardDragAnimation = (initialPosition: Position, onDragEnd?: (end
     x,
     y,
     handleDragStart,
-    handleDragEnd
+    handleDragEnd,
   };
 };

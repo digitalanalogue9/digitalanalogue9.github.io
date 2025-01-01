@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Categories, Command, Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
-import { getRoundsBySession } from "@/lib/db/indexedDB";
+import { Categories, Command, Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
+import { getRoundsBySession } from '@/lib/db/indexedDB';
 import valuesData from '@/data/values.json';
-import {ReconstructedState} from '@/lib/types'
+import { ReconstructedState } from '@/lib/types';
 
 export function useSessionReconstruction(sessionId: string | null) {
   const [reconstructedState, setReconstructedState] = useState<ReconstructedState | null>(null);
@@ -15,13 +15,13 @@ export function useSessionReconstruction(sessionId: string | null) {
       let categories: Categories = {
         'Very Important': [],
         'Quite Important': [],
-        'Important': [],
+        Important: [],
         'Of Some Importance': [],
-        'Not Important': []
+        'Not Important': [],
       };
 
       // Create a map of all possible values from values.json
-      const allValues = new Map<string, Value>(valuesData.values.map(value => [value.id, value]));
+      const allValues = new Map<string, Value>(valuesData.values.map((value) => [value.id, value]));
 
       // Second pass: reconstruct categories
       for (const round of rounds) {
@@ -38,7 +38,7 @@ export function useSessionReconstruction(sessionId: string | null) {
             if (value && movePayload.fromCategory in categories && movePayload.toCategory in categories) {
               // Remove from source
               const sourceCategory = categories[movePayload.fromCategory] ?? [];
-              categories[movePayload.fromCategory] = sourceCategory.filter(v => v.id !== movePayload.cardId);
+              categories[movePayload.fromCategory] = sourceCategory.filter((v) => v.id !== movePayload.cardId);
 
               // Add to target
               const targetCategory = categories[movePayload.toCategory] ?? [];
@@ -49,12 +49,12 @@ export function useSessionReconstruction(sessionId: string | null) {
       }
 
       // Calculate remaining cards
-      const usedCardIds = new Set(Object.values(categories).flatMap(cards => cards?.map(card => card.id) ?? []));
-      const remainingCards = valuesData.values.filter(value => !usedCardIds.has(value.id));
+      const usedCardIds = new Set(Object.values(categories).flatMap((cards) => cards?.map((card) => card.id) ?? []));
+      const remainingCards = valuesData.values.filter((value) => !usedCardIds.has(value.id));
       setReconstructedState({
         categories,
         currentRound: rounds.length,
-        remainingCards
+        remainingCards,
       });
     };
     reconstructState();

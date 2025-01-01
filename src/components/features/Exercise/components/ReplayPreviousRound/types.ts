@@ -1,4 +1,4 @@
-import { Categories, Command, Value } from "@/lib/types";
+import { Categories, Command, Value } from '@/lib/types';
 
 /** Props for replaying previous round */
 export interface ReplayPreviousRoundProps {

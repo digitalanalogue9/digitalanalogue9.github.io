@@ -1,8 +1,8 @@
-import { Command } from "@/lib/types/Command";
-import { Position } from "@/lib/types/Position";
+import { Command } from '@/lib/types/Command';
+import { Position } from '@/lib/types/Position';
 /**
  * Abstract base class for commands.
- * 
+ *
  * @implements {Command}
  */
 export abstract class BaseCommand implements Command {
@@ -14,11 +14,14 @@ export abstract class BaseCommand implements Command {
 
   /**
    * Creates an instance of BaseCommand.
-   * 
+   *
    * @param {string} type - The type of the command.
    * @param {unknown} payload - The payload of the command.
    */
-  constructor(public readonly type: string, public readonly payload: unknown) {
+  constructor(
+    public readonly type: string,
+    public readonly payload: unknown
+  ) {
     this.timestamp = Date.now();
   }
 
@@ -34,7 +37,7 @@ export abstract class BaseCommand implements Command {
 
   /**
    * Sets the source and target positions for the command.
-   * 
+   *
    * @param {Position} [source] - The source position.
    * @param {Position} [target] - The target position.
    * @returns {Command} The command instance.

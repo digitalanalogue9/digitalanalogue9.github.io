@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export function getEnvNumber(key: string, defaultValue: number): number {
   // In production, use environment variables
@@ -6,7 +6,7 @@ export function getEnvNumber(key: string, defaultValue: number): number {
   if (value === undefined) {
     return defaultValue;
   }
-  
+
   const numberValue = Number(value);
   return isNaN(numberValue) ? defaultValue : numberValue;
 }
@@ -16,7 +16,7 @@ export function getEnvBoolean(key: string, defaultValue: boolean): boolean {
   if (value === undefined) {
     return defaultValue;
   }
-  
+
   return value.toLowerCase() === 'true';
 }
 
@@ -26,6 +26,6 @@ export function getEnvString(key: string, defaultValue: string): string {
   if (value === undefined) {
     return defaultValue;
   }
-  
+
   return value;
 }

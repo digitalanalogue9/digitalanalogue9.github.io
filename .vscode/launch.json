@@ -1,42 +1,39 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Next.js: debug full stack",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "npm run dev",
-            "serverReadyAction": {
-                "pattern": "- Local:.+(https?://.+)",
-                "uriFormat": "%s",
-                "action": "debugWithEdge"
-            }
-        },
-        {
-            "name": "Next.js: debug server-side",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "npm run dev"
-        },
-        {
-            "name": "Next.js: debug client-side",
-            "type": "msedge",
-            "request": "launch",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "name": "Jest: debug tests",
-            "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
-            "args": [
-                "--runInBand",
-                "--watchAll=false"
-            ],
-            "cwd": "${workspaceRoot}",
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithEdge"
+      }
+    },
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Jest: debug tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["--runInBand", "--watchAll=false"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
 }

@@ -2,12 +2,12 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import StartScreen from "@/components/features/Home/components/StartScreen";
+import StartScreen from '@/components/features/Home/components/StartScreen';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PWAPrompt from "@/components/common/PWAPrompt";
-import { clearGameState } from "@/lib/utils/storage";
-import { forceReload } from "@/lib/utils/cache";
+import PWAPrompt from '@/components/common/PWAPrompt';
+import { clearGameState } from '@/lib/utils/storage';
+import { forceReload } from '@/lib/utils/cache';
 import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
 
 /**
@@ -26,7 +26,7 @@ import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
  * @example
  * ```tsx
  * import Home from './page';
- * 
+ *
  * function App() {
  *   return <Home />;
  * }
@@ -36,7 +36,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    document.title = "Core Values - Home";
+    document.title = 'Core Values - Home';
   }, []);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Home() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex-1 flex flex-col" aria-label="Core Values Application">
+      <div className="flex flex-1 flex-col" aria-label="Core Values Application">
         <h1 className="sr-only">Core Values - Personal Value Discovery Tool</h1>
         <StartScreen />
         <PWAPrompt />

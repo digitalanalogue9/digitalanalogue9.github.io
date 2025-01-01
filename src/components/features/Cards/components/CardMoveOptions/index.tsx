@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from '@/components/features/Cards/types';
-import { CategoryName } from "@/lib/types";
-import { allCategories } from "@/components/features/Categories/constants/categories"; // Use centralized categories
+import { CategoryName } from '@/lib/types';
+import { allCategories } from '@/components/features/Categories/constants/categories'; // Use centralized categories
 import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
@@ -27,18 +27,13 @@ import { useMobile } from '@/lib/contexts/MobileContext';
  *   onClose={handleClose}
  * />
  */
-export function CardMoveOptions({
-  value,
-  currentCategory,
-  onMoveBetweenCategories,
-  onClose
-}: CardMoveOptionsProps) {
+export function CardMoveOptions({ value, currentCategory, onMoveBetweenCategories, onClose }: CardMoveOptionsProps) {
   const [mounted, setMounted] = useState(false);
   const { isMobile } = useMobile();
 
   const [position, setPosition] = useState({
     top: 0,
-    left: 0
+    left: 0,
   });
   const updatePosition = useCallback(() => {
     const button = document.getElementById(`options-${value.id}`);
@@ -47,12 +42,12 @@ export function CardMoveOptions({
       if (isMobile) {
         setPosition({
           top: rect.bottom + window.scrollY,
-          left: Math.max(10, Math.min(window.innerWidth - 210, rect.right + window.scrollX - 200))
+          left: Math.max(10, Math.min(window.innerWidth - 210, rect.right + window.scrollX - 200)),
         });
       } else {
         setPosition({
           top: rect.bottom + window.scrollY,
-          left: rect.right + window.scrollX - 200
+          left: rect.right + window.scrollX - 200,
         });
       }
     }
@@ -92,34 +87,55 @@ export function CardMoveOptions({
   transition-colors touch-none select-none
   focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1
 `;
-  const menuContent = <motion.div className="move-options-menu w-52 bg-white rounded-md shadow-lg border 
-                border-gray-200 py-1 touch-manipulation" initial={{
-    opacity: 0,
-    y: -10
-  }} animate={{
-    opacity: 1,
-    y: 0
-  }} exit={{
-    opacity: 0,
-    y: -10
-  }} style={{
-    position: 'fixed',
-    top: `${position.top}px`,
-    left: `${position.left}px`,
-    zIndex: 9999
-  }} role="dialog" aria-label={`Move options for ${value.title}`} aria-modal="true">
+  const menuContent = (
+    <motion.div
+      className="move-options-menu w-52 touch-manipulation rounded-md border border-gray-200 bg-white py-1 shadow-lg"
+      initial={{
+        opacity: 0,
+        y: -10,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        y: -10,
+      }}
+      style={{
+        position: 'fixed',
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+        zIndex: 9999,
+      }}
+      role="dialog"
+      aria-label={`Move options for ${value.title}`}
+      aria-modal="true"
+    >
       <div role="menu" aria-label="Available categories">
-        {allCategories.filter(cat => cat !== currentCategory).map(category => <button key={category} type="button" onClick={() => {
-        onMoveBetweenCategories(value, currentCategory, category);
-        onClose();
-      }} className={buttonBaseClass} role="menuitem" aria-label={`Move to ${category} category`}>
+        {allCategories
+          .filter((cat) => cat !== currentCategory)
+          .map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => {
+                onMoveBetweenCategories(value, currentCategory, category);
+                onClose();
+              }}
+              className={buttonBaseClass}
+              role="menuitem"
+              aria-label={`Move to ${category} category`}
+            >
               Move to {category}
-            </button>)}
+            </button>
+          ))}
       </div>
       <button onClick={onClose} className="sr-only" aria-label="Close move options">
         Close
       </button>
-    </motion.div>;
+    </motion.div>
+  );
   if (!mounted) return null;
   return createPortal(menuContent, document.getElementById('portal-root') || document.body);
 }

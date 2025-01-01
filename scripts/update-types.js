@@ -15,7 +15,7 @@ const propsFilesToRemove = [
   'src/components/features/Round/RoundUIProps.ts',
   'src/components/features/Round/components/StatusMessageProps.tsx',
   'src/components/features/Categories/components/CategoryColumn/types.ts',
-  'src/components/features/Cards/components/types.ts'
+  'src/components/features/Cards/components/types.ts',
 ];
 
 // Update Round/types.ts with StatusState interface
@@ -28,7 +28,7 @@ async function updateRoundTypes() {
     const hookContent = await fs.readFile(statusHookPath, 'utf-8');
     const ast = parser.parse(hookContent, {
       sourceType: 'module',
-      plugins: ['typescript']
+      plugins: ['typescript'],
     });
 
     let statusStateInterface = '';
@@ -37,7 +37,7 @@ async function updateRoundTypes() {
         if (path.node.id.name === 'StatusState') {
           statusStateInterface = generate(path.node).code;
         }
-      }
+      },
     });
 
     // Add it to types.ts if it's not already there
@@ -63,7 +63,7 @@ async function updateImports(filePath) {
     const content = await fs.readFile(filePath, 'utf-8');
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     let modified = false;
@@ -88,7 +88,7 @@ async function updateImports(filePath) {
             modified = true;
           }
         }
-      }
+      },
     });
 
     if (modified) {
@@ -127,7 +127,7 @@ async function removePropsFiles() {
 async function main() {
   try {
     console.log('Updating types organization...');
-    
+
     // Remove Props files
     await removePropsFiles();
 
@@ -141,7 +141,6 @@ async function main() {
     }
 
     console.log('\nTypes update complete!');
-
   } catch (error) {
     console.error('Error during types update:', error);
     process.exit(1);

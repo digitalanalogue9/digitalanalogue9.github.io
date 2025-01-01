@@ -1,4 +1,4 @@
-import { Value, CategoryName, Categories } from "@/lib/types";
+import { Value, CategoryName, Categories } from '@/lib/types';
 
 export interface StatusState {
   remainingCards: Value[];
@@ -9,7 +9,7 @@ export interface StatusState {
   isNearingCompletion: boolean;
   veryImportantCount: number;
   totalActiveCards: number;
-  hasTargetCoreValuesInVeryImportant : boolean;
+  hasTargetCoreValuesInVeryImportant: boolean;
 }
 
 /** State interface tracking the current round's status and progress */

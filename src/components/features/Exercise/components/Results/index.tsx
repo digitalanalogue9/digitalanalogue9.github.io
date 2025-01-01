@@ -1,17 +1,17 @@
 // src/components/Results.tsx
 'use client';
 
-import { getPostItStyles } from "@/components/features/Cards/components/styles";
+import { getPostItStyles } from '@/components/features/Cards/components/styles';
 import { useRef, useEffect, useState } from 'react';
-import { ValueWithReason, Categories, CategoryName } from "@/lib/types";
+import { ValueWithReason, Categories, CategoryName } from '@/lib/types';
 import Link from 'next/link';
-import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
-import { clearGameState } from "@/lib/utils/storage";
-import { getCompletedSession } from "@/lib/db/indexedDB";
-import { useSession } from "@/components/features/Exercise/hooks/useSession";
+import { useGameState } from '@/components/features/Exercise/hooks/useGameState';
+import { clearGameState } from '@/lib/utils/storage';
+import { getCompletedSession } from '@/lib/db/indexedDB';
+import { useSession } from '@/components/features/Exercise/hooks/useSession';
 import { useRouter } from 'next/navigation';
-import { useMobile } from "@/lib/contexts/MobileContext";
-import { getResponsiveTextStyles } from "@/lib/utils/styles/textStyles";
+import { useMobile } from '@/lib/contexts/MobileContext';
+import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 /**
@@ -53,14 +53,19 @@ export default function Results() {
         try {
           const completedSession = await getCompletedSession(sessionId);
           if (completedSession?.finalValues) {
-            const reasonsMap = Object.fromEntries(completedSession.finalValues.map(value => [value.id, value.reason]));
-            const enriched = Object.entries(categories).reduce((acc, [category, values = []]) => {
-              acc[category as CategoryName] = (values as ValueWithReason[]).map(value => ({
-                ...value,
-                reason: reasonsMap[value.id]
-              }));
-              return acc;
-            }, {} as Record<CategoryName, ValueWithReason[]>);
+            const reasonsMap = Object.fromEntries(
+              completedSession.finalValues.map((value) => [value.id, value.reason])
+            );
+            const enriched = Object.entries(categories).reduce(
+              (acc, [category, values = []]) => {
+                acc[category as CategoryName] = (values as ValueWithReason[]).map((value) => ({
+                  ...value,
+                  reason: reasonsMap[value.id],
+                }));
+                return acc;
+              },
+              {} as Record<CategoryName, ValueWithReason[]>
+            );
             setEnrichedCategories(enriched);
           }
         } catch (error) {
@@ -158,7 +163,6 @@ export default function Results() {
     winPrint.close();
   };
 
-
   const veryImportantValues = Object.entries(enrichedCategories)
     .filter(([category, values]) => category === 'Very Important' && values && values.length > 0)
     .flatMap(([_, values]) => values)
@@ -170,27 +174,30 @@ export default function Results() {
   };
 
   const handleCopyToClipboard = (values: ValueWithReason[]) => {
-    const formattedText = `My Core Values\n--------------\n\n`
-      + values.map(formatValueForClipboard).join('') + `\n\nCreated with https://core-values.me`;
+    const formattedText =
+      `My Core Values\n--------------\n\n` +
+      values.map(formatValueForClipboard).join('') +
+      `\n\nCreated with https://core-values.me`;
 
-    navigator.clipboard.writeText(formattedText)
+    navigator.clipboard
+      .writeText(formattedText)
       .then(() => {
         // You might want to add a toast notification here
         console.log('Copied to clipboard');
         setCopySuccess(true);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Failed to copy:', err);
         setCopySuccess(false);
       });
   };
 
   const generateFullText = (values: ValueWithReason[]): string => {
-    return values.map(value => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
+    return values.map((value) => `${value.title}${value.description ? ` - ${value.description}` : ''}`).join(', ');
   };
 
   const generateTitles = (values: ValueWithReason[]): string => {
-    return values.map(value => value.title).join(', ');
+    return values.map((value) => value.title).join(', ');
   };
 
   const formatTextForPlatform = (values: ValueWithReason[], platform: 'bluesky' | 'twitter' | 'linkedin'): string => {
@@ -203,14 +210,11 @@ export default function Results() {
 
     if (fullText.length <= maxLength) {
       return fullText;
-    }
-    else if (titlesText.length <= maxLength) {
+    } else if (titlesText.length <= maxLength) {
       return titlesText;
-    }
-    else {
+    } else {
       return titlesText.substring(0, maxLength - 3) + '...';
     }
-
   };
 
   const handleNewExercise = () => {
@@ -221,122 +225,43 @@ export default function Results() {
   const handleViewHistory = () => {
     router.push('/history');
   };
-  const {
-    postItBaseStyles,
-    tapeEffect
-  } = getPostItStyles(false, false);
+  const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
   if (!mounted) return null;
-  return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12" role="region" aria-labelledby="results-title">
-    <div ref={printRef} className="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
-      <h1 id="results-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8 text-black">
-        Your Core Values Results
-      </h1>
-      <div className="flex space-x-2 justify-center pb-2">
-        {!isMobile && (<button
-          onClick={handlePrint}
-          className="p-0  w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
-          aria-label="Print values"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
-          </svg>
-        </button>)}
-        <button
-          onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(veryImportantValues); }}
-          className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
-          aria-label="Copy values to clipboard"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
-          </svg>
-          {copySuccess && (
-            <span aria-hidden="true" className="text-white ml-2">
-              ✓
-            </span>
-          )}
-        </button>
-        <BlueskyShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-          size={22} fill='white'
-        />
-        <TwitterShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(veryImportantValues, 'twitter')}
-          size={22} fill='white'
-        />
-        <LinkedInShareButton
-          url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-          text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-          size={32} fill='white'
-        />
-      </div>
-      <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
-        {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][]).filter(([category, values]) => category === 'Very Important' && values && values.length > 0).map(([category, values]) => <section key={category} className="bg-gray-100 rounded-lg p-4 sm:p-6" role="listitem" aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}>
-          <h2 id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">
-            {category}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6" role="list" aria-label={`Values in ${category}`}>
-            {values.map((value: ValueWithReason) => <article key={value.id} className={`${postItBaseStyles} ${tapeEffect} p-4`} role="listitem">
-              <h3 className="font-medium text-base sm:text-lg text-black mb-2">
-                {value.title}
-              </h3>
-              <p className="text-sm sm:text-base text-black mb-3">
-                {value.description}
-              </p>
-              {value.reason && <div className="mt-3 pt-3 border-t border-gray-200" aria-label={`Personal meaning for ${value.title}`}>
-                <p className="text-sm font-medium text-black mb-1">
-                  Why it is meaningful:
-                </p>
-                <p className="text-sm sm:text-base text-black italic">
-                  {value.reason}
-                </p>
-              </div>}
-            </article>)}
-          </div>
-        </section>)}
-      </div>
-      <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="group" aria-label="Result actions">
-        <div className="flex space-x-2">
-          {!isMobile && (<button
-            onClick={handlePrint}
-            className="p-0  w-8 h-8 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-none flex items-center justify-center"
-            aria-label="Print values"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+  return (
+    <div
+      className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12"
+      role="region"
+      aria-labelledby="results-title"
+    >
+      <div ref={printRef} className="rounded-lg bg-white p-4 shadow-sm sm:p-6 lg:p-8">
+        <h1 id="results-title" className="mb-4 text-2xl font-bold text-black sm:mb-6 sm:text-3xl lg:mb-8 lg:text-4xl">
+          Your Core Values Results
+        </h1>
+        <div className="flex justify-center space-x-2 pb-2">
+          {!isMobile && (
+            <button
+              onClick={handlePrint}
+              className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
+              aria-label="Print values"
             >
-              <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
-            </svg>
-          </button>)}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
+              </svg>
+            </button>
+          )}
           <button
-            onClick={() => { setCopySuccess(!copySuccess); handleCopyToClipboard(veryImportantValues); }}
-            className=" p-0 w-8 h-8 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 rounded-none flex items-center justify-center"
+            onClick={() => {
+              setCopySuccess(!copySuccess);
+              handleCopyToClipboard(veryImportantValues);
+            }}
+            className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700"
             aria-label="Copy values to clipboard"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
             </svg>
             {copySuccess && (
-              <span aria-hidden="true" className="text-white ml-2">
+              <span aria-hidden="true" className="ml-2 text-white">
                 ✓
               </span>
             )}
@@ -344,36 +269,131 @@ export default function Results() {
           <BlueskyShareButton
             url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
             text={formatTextForPlatform(veryImportantValues, 'bluesky')}
-            size={22} fill='white'
+            size={22}
+            fill="white"
           />
           <TwitterShareButton
             url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
             text={formatTextForPlatform(veryImportantValues, 'twitter')}
-            size={22} fill='white'
+            size={22}
+            fill="white"
           />
           <LinkedInShareButton
             url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
-            text={formatTextForPlatform(veryImportantValues, 'linkedin')}
-            size={22} fill='white' />
-
+            text={formatTextForPlatform(veryImportantValues, 'bluesky')}
+            size={32}
+            fill="white"
+          />
         </div>
-        <button
-          onClick={handleViewHistory}
-          className="w-full sm:w-auto px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
-          aria-label="View all your previous results"
+        <div className="space-y-6 sm:space-y-8 lg:space-y-10" role="list" aria-label="Categories and values">
+          {(Object.entries(enrichedCategories) as [CategoryName, ValueWithReason[]][])
+            .filter(([category, values]) => category === 'Very Important' && values && values.length > 0)
+            .map(([category, values]) => (
+              <section
+                key={category}
+                className="rounded-lg bg-gray-100 p-4 sm:p-6"
+                role="listitem"
+                aria-labelledby={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <h2
+                  id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="mb-3 text-xl font-semibold text-black sm:mb-4 sm:text-2xl"
+                >
+                  {category}
+                </h2>
+                <div
+                  className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-6"
+                  role="list"
+                  aria-label={`Values in ${category}`}
+                >
+                  {values.map((value: ValueWithReason) => (
+                    <article key={value.id} className={`${postItBaseStyles} ${tapeEffect} p-4`} role="listitem">
+                      <h3 className="mb-2 text-base font-medium text-black sm:text-lg">{value.title}</h3>
+                      <p className="mb-3 text-sm text-black sm:text-base">{value.description}</p>
+                      {value.reason && (
+                        <div
+                          className="mt-3 border-t border-gray-200 pt-3"
+                          aria-label={`Personal meaning for ${value.title}`}
+                        >
+                          <p className="mb-1 text-sm font-medium text-black">Why it is meaningful:</p>
+                          <p className="text-sm italic text-black sm:text-base">{value.reason}</p>
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ))}
+        </div>
+        <div
+          className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row sm:gap-4 lg:mt-10"
+          role="group"
+          aria-label="Result actions"
         >
-          View All Previous Results
-        </button>
-        <button
-          onClick={handleNewExercise}
-          className="w-full sm:w-auto px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors text-center focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
-          aria-label="Start a new values exercise"
-        >
-          Start New Exercise
-        </button>
+          <div className="flex space-x-2">
+            {!isMobile && (
+              <button
+                onClick={handlePrint}
+                className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
+                aria-label="Print values"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
+                </svg>
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setCopySuccess(!copySuccess);
+                handleCopyToClipboard(veryImportantValues);
+              }}
+              className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700"
+              aria-label="Copy values to clipboard"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
+              </svg>
+              {copySuccess && (
+                <span aria-hidden="true" className="ml-2 text-white">
+                  ✓
+                </span>
+              )}
+            </button>
+            <BlueskyShareButton
+              url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
+              text={formatTextForPlatform(veryImportantValues, 'bluesky')}
+              size={22}
+              fill="white"
+            />
+            <TwitterShareButton
+              url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
+              text={formatTextForPlatform(veryImportantValues, 'twitter')}
+              size={22}
+              fill="white"
+            />
+            <LinkedInShareButton
+              url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://core-values.me'}
+              text={formatTextForPlatform(veryImportantValues, 'linkedin')}
+              size={22}
+              fill="white"
+            />
+          </div>
+          <button
+            onClick={handleViewHistory}
+            className="w-full rounded-lg bg-blue-700 px-6 py-2 text-white transition-colors hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 sm:w-auto"
+            aria-label="View all your previous results"
+          >
+            View All Previous Results
+          </button>
+          <button
+            onClick={handleNewExercise}
+            className="w-full rounded-lg bg-green-700 px-6 py-2 text-center text-white transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 sm:w-auto"
+            aria-label="Start a new values exercise"
+          >
+            Start New Exercise
+          </button>
+        </div>
       </div>
     </div>
-
-
-  </div>;
+  );
 }

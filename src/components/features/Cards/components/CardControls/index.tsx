@@ -1,6 +1,6 @@
 // src/components/Card/CardControls.tsx
 import { TouchEvent as ReactTouchEvent, MouseEvent as ReactMouseEvent } from 'react';
-import { Value } from "@/lib/types";
+import { Value } from '@/lib/types';
 import { ExtendedCardControlsProps } from '@/components/features/Cards/types';
 
 /**
@@ -27,9 +27,12 @@ export function CardControls({
   currentCategory,
   isExpanded,
   onToggleExpand,
-  value
+  value,
 }: ExtendedCardControlsProps) {
-  const handleButtonClick = (e: ReactMouseEvent<HTMLButtonElement> | ReactTouchEvent<HTMLButtonElement>, action: () => void) => {
+  const handleButtonClick = (
+    e: ReactMouseEvent<HTMLButtonElement> | ReactTouchEvent<HTMLButtonElement>,
+    action: () => void
+  ) => {
     e.stopPropagation();
     e.preventDefault();
     action();
@@ -50,7 +53,7 @@ export function CardControls({
     focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1
   `;
   return (
-    <div 
+    <div
       role="toolbar"
       aria-label={`Controls for ${value.title}`}
       onTouchStart={(e: ReactTouchEvent) => e.stopPropagation()}
@@ -59,8 +62,8 @@ export function CardControls({
       <div className="flex gap-1.5" role="group" aria-label="Card actions">
         <button
           type="button"
-          onClick={e => handleButtonClick(e, () => onToggleExpand?.())}
-          onTouchStart={e => handleButtonClick(e, () => onToggleExpand?.())}
+          onClick={(e) => handleButtonClick(e, () => onToggleExpand?.())}
+          onTouchStart={(e) => handleButtonClick(e, () => onToggleExpand?.())}
           className={buttonBaseClass}
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} card details`}
           aria-expanded={isExpanded}
@@ -72,23 +75,53 @@ export function CardControls({
           </span>
         </button>
 
-        {onMoveUp && <button type="button" onClick={e => handleButtonClick(e, onMoveUp)} onTouchStart={e => handleButtonClick(e, onMoveUp)} className={buttonBaseClass} aria-label={`Move ${value.title} up in ${currentCategory}`} title={`Move ${value.title} up in ${currentCategory}`}>
-          <span className="inline-block w-4 text-center" aria-hidden="true">
-            ↑
-          </span>
-        </button>}
+        {onMoveUp && (
+          <button
+            type="button"
+            onClick={(e) => handleButtonClick(e, onMoveUp)}
+            onTouchStart={(e) => handleButtonClick(e, onMoveUp)}
+            className={buttonBaseClass}
+            aria-label={`Move ${value.title} up in ${currentCategory}`}
+            title={`Move ${value.title} up in ${currentCategory}`}
+          >
+            <span className="inline-block w-4 text-center" aria-hidden="true">
+              ↑
+            </span>
+          </button>
+        )}
 
-        {onMoveDown && <button type="button" onClick={e => handleButtonClick(e, onMoveDown)} onTouchStart={e => handleButtonClick(e, onMoveDown)} className={buttonBaseClass} aria-label={`Move ${value.title} down in ${currentCategory}`} title={`Move ${value.title} down in ${currentCategory}`}>
-          <span className="inline-block w-4 text-center" aria-hidden="true">
-            ↓
-          </span>
-        </button>}
+        {onMoveDown && (
+          <button
+            type="button"
+            onClick={(e) => handleButtonClick(e, onMoveDown)}
+            onTouchStart={(e) => handleButtonClick(e, onMoveDown)}
+            className={buttonBaseClass}
+            aria-label={`Move ${value.title} down in ${currentCategory}`}
+            title={`Move ${value.title} down in ${currentCategory}`}
+          >
+            <span className="inline-block w-4 text-center" aria-hidden="true">
+              ↓
+            </span>
+          </button>
+        )}
 
-        {currentCategory && <button type="button" id={`options-${value.id}`} onClick={e => handleButtonClick(e, onShowMoveOptions)} onTouchStart={e => handleButtonClick(e, onShowMoveOptions)} className={buttonBaseClass} aria-label={`Show move options for ${value.title}`} title={`Show move options for ${value.title}`} aria-haspopup="true">
-          <span className="inline-block w-4 text-center" aria-hidden="true">
-            ⋮
-          </span>
-        </button>}
+        {currentCategory && (
+          <button
+            type="button"
+            id={`options-${value.id}`}
+            onClick={(e) => handleButtonClick(e, onShowMoveOptions)}
+            onTouchStart={(e) => handleButtonClick(e, onShowMoveOptions)}
+            className={buttonBaseClass}
+            aria-label={`Show move options for ${value.title}`}
+            title={`Show move options for ${value.title}`}
+            aria-haspopup="true"
+          >
+            <span className="inline-block w-4 text-center" aria-hidden="true">
+              ⋮
+            </span>
+          </button>
+        )}
       </div>
-    </div>);
+    </div>
+  );
 }

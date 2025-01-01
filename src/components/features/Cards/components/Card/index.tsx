@@ -2,18 +2,17 @@
 
 import { memo, useRef, useState } from 'react';
 import type { CardProps, DroppedValue } from '@/components/features/Cards/types';
-import { getEnvBoolean } from "@/lib/utils/config";
+import { getEnvBoolean } from '@/lib/utils/config';
 import { CardControls } from '../CardControls';
 import { CardMoveOptions } from '../CardMoveOptions';
 import { CardContent } from '../CardContent';
 import { getPostItStyles } from '../styles';
-import { CategoryName, Value } from "@/lib/types";
-import { useMobile } from "@/lib/contexts/MobileContext";
-
+import { CategoryName, Value } from '@/lib/types';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**
  * A memoized Card component that supports drag-and-drop functionality.
- * 
+ *
  * @component
  * @param {CardProps} props - The properties for the Card component.
  * @param {Object} props.value - The value object containing card details.
@@ -25,9 +24,9 @@ import { useMobile } from "@/lib/contexts/MobileContext";
  * @param {number} props.columnIndex - The index of the column where the card is located.
  * @param {Function} props.onClick - Callback function to handle click events.
  * @param {boolean} props.selectedMobileCard - Indicates if the card is selected on mobile.
- * 
+ *
  * @returns {JSX.Element | null} The rendered Card component or null if no value is provided.
- * 
+ *
  * @example
  * <Card
  *   value={cardValue}
@@ -50,7 +49,7 @@ const Card = memo(function Card({
   currentCategory,
   columnIndex,
   onClick,
-  selectedMobileCard
+  selectedMobileCard,
 }: CardProps) {
   const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
   const [isDragging, setIsDragging] = useState(false);
@@ -74,7 +73,7 @@ const Card = memo(function Card({
       description: value.description,
       sourceCategory: currentCategory,
       sourceIndex: columnIndex,
-      isInternalDrag: isInCategory
+      isInternalDrag: isInCategory,
     };
     e.dataTransfer.setData('text/plain', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'move';
@@ -105,7 +104,7 @@ const Card = memo(function Card({
     // Find the card the mouse is closest to
     for (let i = 0; i < cardElements.length; i++) {
       const cardRect = cardElements[i].getBoundingClientRect();
-      const cardMiddle = cardRect.top + (cardRect.height / 2);
+      const cardMiddle = cardRect.top + cardRect.height / 2;
 
       if (mouseY < cardMiddle) {
         return i;
@@ -124,7 +123,7 @@ const Card = memo(function Card({
       const droppedData = JSON.parse(e.dataTransfer.getData('text/plain'));
       const sourceIndex = droppedData.sourceIndex;
 
-      const dropContainer = e.currentTarget.closest('.space-y-2') as HTMLElement | null;;
+      const dropContainer = e.currentTarget.closest('.space-y-2') as HTMLElement | null;
 
       if (!dropContainer) return;
       const targetIndex = findDropIndex(e.clientY, dropContainer);
@@ -136,12 +135,17 @@ const Card = memo(function Card({
           sourceIndex,
           targetIndex,
           sourceCategory,
-          currentCategory
+          currentCategory,
         });
       }
 
       // Handle internal category reordering
-      if (droppedData.isInternalDrag && sourceCategory === currentCategory && sourceIndex !== undefined && targetIndex !== undefined) {
+      if (
+        droppedData.isInternalDrag &&
+        sourceCategory === currentCategory &&
+        sourceIndex !== undefined &&
+        targetIndex !== undefined
+      ) {
         if (sourceIndex < targetIndex) {
           onMoveDown?.();
         } else if (sourceIndex > targetIndex) {
@@ -150,11 +154,15 @@ const Card = memo(function Card({
       }
       // Handle between category movement
       else if (sourceCategory && currentCategory && sourceCategory !== currentCategory) {
-        onMoveBetweenCategories?.({
-          id: droppedData.id,
-          title: droppedData.title,
-          description: droppedData.description
-        }, sourceCategory, currentCategory);
+        onMoveBetweenCategories?.(
+          {
+            id: droppedData.id,
+            title: droppedData.title,
+            description: droppedData.description,
+          },
+          sourceCategory,
+          currentCategory
+        );
       }
       // Handle new card drop
       else if (onDrop) {
@@ -169,10 +177,11 @@ const Card = memo(function Card({
     setIsDragging(false);
     setIsOver(false);
     draggedIndexRef.current = null;
-    if (isDebug) console.log('🏁 Card dragEnd:', {
-      value,
-      columnIndex
-    });
+    if (isDebug)
+      console.log('🏁 Card dragEnd:', {
+        value,
+        columnIndex,
+      });
   };
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     if (isMobile) return;
@@ -193,10 +202,7 @@ const Card = memo(function Card({
       setIsExpanded(!isExpanded);
     }
   };
-  const {
-    postItBaseStyles,
-    tapeEffect
-  } = getPostItStyles(isDragging, isOver);
+  const { postItBaseStyles, tapeEffect } = getPostItStyles(isDragging, isOver);
   const cardContainerClasses = `
     ${postItBaseStyles} 
     ${tapeEffect} 
@@ -226,20 +232,16 @@ const Card = memo(function Card({
         role="article"
         aria-label={`Value card: ${value.title}`}
         tabIndex={0}
-        onKeyPress={e => {
+        onKeyPress={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             handleCardClick();
           }
         }}
       >
         {/* Content component */}
-        <CardContent
-          title={value.title}
-          description={value.description}
-          isExpanded={isExpanded}
-        />
+        <CardContent title={value.title} description={value.description} isExpanded={isExpanded} />
         {!isMobile && (
-          <div className="flex justify-end mt-2">
+          <div className="mt-2 flex justify-end">
             <CardControls
               onMoveUp={onMoveUp}
               onMoveDown={onMoveDown}
@@ -266,15 +268,31 @@ const Card = memo(function Card({
       </div>
     );
   }
-  return <div draggable="true" onClick={handleCardClick} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onDrop={handleDrop} className={cardContainerClasses} role="article" aria-label={`Value card: ${value.title}`} tabIndex={0} onKeyPress={e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      handleCardClick();
-    }
-  }}>
-    <div className="relative z-10 pointer-events-none" role="region" aria-label={`Content for ${value.title}`}>
-      <h3 className="font-medium text-black mb-3">{value.title}</h3>
-      <p className="text-sm text-black leading-relaxed">{value.description}</p>
+  return (
+    <div
+      draggable="true"
+      onClick={handleCardClick}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      className={cardContainerClasses}
+      role="article"
+      aria-label={`Value card: ${value.title}`}
+      tabIndex={0}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleCardClick();
+        }
+      }}
+    >
+      <div className="pointer-events-none relative z-10" role="region" aria-label={`Content for ${value.title}`}>
+        <h3 className="mb-3 font-medium text-black">{value.title}</h3>
+        <p className="text-sm leading-relaxed text-black">{value.description}</p>
+      </div>
     </div>
-  </div>;
+  );
 });
 export default Card;

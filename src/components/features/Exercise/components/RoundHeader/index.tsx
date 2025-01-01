@@ -1,42 +1,26 @@
 import { RoundHeaderProps } from './types';
 
-export function RoundHeader({
-  targetCoreValues,
-  roundNumber,
-  remainingCardsCount
-}: RoundHeaderProps) {
+export function RoundHeader({ targetCoreValues, roundNumber, remainingCardsCount }: RoundHeaderProps) {
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 p-2 sm:p-4">
+      <div className="grid grid-cols-3 gap-2 p-2 sm:gap-4 sm:p-4">
         {/* Both Mobile and Desktop use the same lozenge style */}
         <div>
-          <div className="bg-red-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-blue-800 uppercase tracking-wide">
-              Target
-            </h2>
-            <p className="text-lg sm:text-2xl font-bold text-blue-900">
-              {targetCoreValues}
-            </p>
+          <div className="rounded-full bg-red-100 px-3 py-1.5 text-center shadow-sm">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-blue-800 sm:text-sm">Target</h2>
+            <p className="text-lg font-bold text-blue-900 sm:text-2xl">{targetCoreValues}</p>
           </div>
         </div>
         <div>
-          <div className="bg-amber-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-purple-800 uppercase tracking-wide">
-              Round
-            </h2>
-            <p className="text-lg sm:text-2xl font-bold text-purple-900">
-              {roundNumber}
-            </p>
+          <div className="rounded-full bg-amber-100 px-3 py-1.5 text-center shadow-sm">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-purple-800 sm:text-sm">Round</h2>
+            <p className="text-lg font-bold text-purple-900 sm:text-2xl">{roundNumber}</p>
           </div>
         </div>
         <div>
-          <div className="bg-green-100 rounded-full px-3 py-1.5 text-center shadow-sm">
-            <h2 className="text-xs sm:text-sm font-semibold text-green-800 uppercase tracking-wide">
-              Cards
-            </h2>
-            <p className="text-lg sm:text-2xl font-bold text-green-900">
-              {remainingCardsCount}
-            </p>
+          <div className="rounded-full bg-green-100 px-3 py-1.5 text-center shadow-sm">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-green-800 sm:text-sm">Cards</h2>
+            <p className="text-lg font-bold text-green-900 sm:text-2xl">{remainingCardsCount}</p>
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ export interface StoreState {
   commands: Command[];
   currentRound: Round | null;
   currentRoundCommands: Command[];
-  
+
   setSession: (session: SessionData) => void;
   setSessionId: (id: string) => void;
   setRoundNumber: (round: number) => void;

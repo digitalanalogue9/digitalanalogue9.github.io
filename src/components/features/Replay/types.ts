@@ -1,4 +1,4 @@
-import { Value } from "@/lib/types";
+import { Value } from '@/lib/types';
 
 /**
  * Represents an animating card with its value and positions.
@@ -11,4 +11,3 @@ export interface AnimatingCard {
   /** The target position of the card. */
   targetPos: { x: number; y: number };
 }
-

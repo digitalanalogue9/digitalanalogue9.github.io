@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { MobileContextType } from '../types/Context';
@@ -21,22 +21,18 @@ export function MobileProvider({ children }: { children: ReactNode }) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     // Initial check
     checkMobile();
-    
+
     // Add event listener
     window.addEventListener('resize', checkMobile);
-    
+
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  return (
-    <MobileContext.Provider value={{ isMobile }}>
-      {children}
-    </MobileContext.Provider>
-  );
+  return <MobileContext.Provider value={{ isMobile }}>{children}</MobileContext.Provider>;
 }
 
 export function useMobile() {

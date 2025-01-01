@@ -8,14 +8,14 @@ const ROOT = process.cwd();
 
 // Define the interface movements
 const typesMoves = {
-  'Round': {
+  Round: {
     targetFile: 'src/components/features/Round/types.ts',
     sourcesToRemove: [
       'src/components/features/Round/components/StatusMessageProps.tsx',
       'src/components/features/Round/CategoryGridProps.ts',
       'src/components/features/Round/RoundActionsProps.ts',
       'src/components/features/Round/RoundHeaderProps.ts',
-      'src/components/features/Round/RoundUIProps.ts'
+      'src/components/features/Round/RoundUIProps.ts',
     ],
     interfaces: [
       'StatusMessageProps',
@@ -23,25 +23,21 @@ const typesMoves = {
       'CategoryGridProps',
       'RoundActionsProps',
       'RoundHeaderProps',
-      'RoundUIProps'
-    ]
-  },
-  'Categories': {
-    targetFile: 'src/components/features/Categories/types.ts',
-    sourcesToRemove: [
-      'src/components/features/Categories/components/Mobile/CategorySelectionOverlay.tsx'
+      'RoundUIProps',
     ],
-    interfaces: [
-      'CategorySelectionOverlayProps'
-    ]
-  }
+  },
+  Categories: {
+    targetFile: 'src/components/features/Categories/types.ts',
+    sourcesToRemove: ['src/components/features/Categories/components/Mobile/CategorySelectionOverlay.tsx'],
+    interfaces: ['CategorySelectionOverlayProps'],
+  },
 };
 
 async function extractInterfaces(filePath) {
   const content = await fs.readFile(filePath, 'utf-8');
   const ast = parser.parse(content, {
     sourceType: 'module',
-    plugins: ['typescript', 'jsx']
+    plugins: ['typescript', 'jsx'],
   });
 
   const interfaces = [];
@@ -56,7 +52,7 @@ async function extractInterfaces(filePath) {
         const interfaceCode = generate(path.node).code;
         interfaces.push(interfaceCode);
       }
-    }
+    },
   });
 
   return { interfaces, imports: Array.from(imports) };
@@ -90,7 +86,7 @@ async function updateTypesFile(featureKey, move) {
       const content = await fs.readFile(sourcePath, 'utf-8');
       const ast = parser.parse(content, {
         sourceType: 'module',
-        plugins: ['typescript', 'jsx']
+        plugins: ['typescript', 'jsx'],
       });
 
       let modified = false;
@@ -100,7 +96,7 @@ async function updateTypesFile(featureKey, move) {
             path.remove();
             modified = true;
           }
-        }
+        },
       });
 
       if (modified) {
@@ -117,7 +113,7 @@ async function updateTypesFile(featureKey, move) {
 async function main() {
   try {
     console.log('Starting types reorganization...');
-    
+
     for (const [featureKey, move] of Object.entries(typesMoves)) {
       await updateTypesFile(featureKey, move);
     }
@@ -127,7 +123,6 @@ async function main() {
     console.log('1. Review the generated types files');
     console.log('2. Update any imports that might be affected');
     console.log('3. Run TypeScript compiler to check for any issues');
-
   } catch (error) {
     console.error('Error during types reorganization:', error);
     process.exit(1);

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { pageview } from "@/lib/utils/gtagHelper";
-import { GoogleAnalyticsProps } from "./types";
-import { initializeGtag, isGtagDefined } from "@/lib/utils/gtagHelper/gtagWrapper";
-import { useConsent } from "@/lib/hooks/useConsent";
+import Script from 'next/script';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { pageview } from '@/lib/utils/gtagHelper';
+import { GoogleAnalyticsProps } from './types';
+import { initializeGtag, isGtagDefined } from '@/lib/utils/gtagHelper/gtagWrapper';
+import { useConsent } from '@/lib/hooks/useConsent';
 
 export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: GoogleAnalyticsProps) {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -29,7 +29,7 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: GoogleAnalyticsPr
 
   const handleScriptLoad = () => {
     try {
-      initializeGtag(GA_MEASUREMENT_ID,consent);
+      initializeGtag(GA_MEASUREMENT_ID, consent);
       setIsInitialized(true);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to initialize analytics'));

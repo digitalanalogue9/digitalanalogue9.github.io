@@ -1,5 +1,3 @@
 import { getRandomValues } from './valuesUtils';
 
-export {
-    getRandomValues
-};
+export { getRandomValues };

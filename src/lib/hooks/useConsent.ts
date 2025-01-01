@@ -8,7 +8,7 @@ const DEFAULT_CONSENT: CookieConsent = {
   analytics: 'pending',
   functional: 'pending',
   advertisement: 'denied',
-  timestamp: 0
+  timestamp: 0,
 };
 
 export function useConsent() {
@@ -30,21 +30,21 @@ export function useConsent() {
     // Store consent with timestamp
     setLocalStorage(CONSENT_KEY, {
       ...consent,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }, [consent, isInitialized]);
 
   const updateConsent = (newConsent: Partial<CookieConsent>) => {
-    setConsent(prev => ({
+    setConsent((prev) => ({
       ...prev,
       ...newConsent,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }));
   };
 
   return {
     consent,
     updateConsent,
-    isInitialized
+    isInitialized,
   };
 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Session } from "@/lib/types";
-import { getSessions } from "@/lib/db/indexedDB";
-import { SessionList } from "@/components/features/History/components/SessionList";
+import { Session } from '@/lib/types';
+import { getSessions } from '@/lib/db/indexedDB';
+import { SessionList } from '@/components/features/History/components/SessionList';
 import { SessionSelectionProvider } from '@/components/features/History/contexts/SessionSelectionContext';
-import { clearGameState } from "@/lib/utils/storage";
-import { useMobile } from "@/lib/contexts/MobileContext";
+import { clearGameState } from '@/lib/utils/storage';
+import { useMobile } from '@/lib/contexts/MobileContext';
 import { getContainerClassName, getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 
 /**
@@ -24,7 +24,7 @@ export default function HistoryPage() {
   const styles = getResponsiveTextStyles(isMobile);
 
   useEffect(() => {
-      document.title = "Core Values - History";
+    document.title = 'Core Values - History';
   }, []);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function HistoryPage() {
   }, []);
 
   const handleSessionDeleted = (sessionId: string) => {
-    setSessions(prevSessions => prevSessions.filter(session => session.id !== sessionId));
+    setSessions((prevSessions) => prevSessions.filter((session) => session.id !== sessionId));
   };
 
   const handleSessionImported = async () => {
@@ -58,27 +58,21 @@ export default function HistoryPage() {
   };
 
   return (
-    <div
-      aria-labelledby="history-heading"
-      className={getContainerClassName(isMobile)}
-    >
+    <div aria-labelledby="history-heading" className={getContainerClassName(isMobile)}>
       <div className="text-center">
-        <h1
-          id="history-heading"
-          className={`${styles.heading} font-extrabold mb-4 sm:mb-6 whitespace-nowrap`}
-        >
+        <h1 id="history-heading" className={`${styles.heading} mb-4 whitespace-nowrap font-extrabold sm:mb-6`}>
           Core <span className="text-blue-700">Values</span> Session History
         </h1>
       </div>
       <section aria-label="Value sorting sessions history" className={styles.spacing}>
         <SessionSelectionProvider>
           {isLoading ? (
-            <div role="status" aria-live="polite" className="text-center py-4">
+            <div role="status" aria-live="polite" className="py-4 text-center">
               <span className="sr-only">Loading session history...</span>
               <p className={styles.paragraph}>Loading...</p>
             </div>
           ) : sessions.length === 0 ? (
-            <p role="status" aria-live="polite" className={`${styles.paragraph} text-black text-center py-4`}>
+            <p role="status" aria-live="polite" className={`${styles.paragraph} py-4 text-center text-black`}>
               No sessions found. Complete a value sorting exercise to see your history.
             </p>
           ) : (

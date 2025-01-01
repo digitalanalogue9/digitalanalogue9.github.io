@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Categories, CategoryName, Value } from "@/lib/types";
+import { Categories, CategoryName, Value } from '@/lib/types';
 import { MobileCategoryRow } from '../MobileCategoryRow';
-import { MobileCategoryListProps} from './types';
+import { MobileCategoryListProps } from './types';
 import { useMobileInteractions } from '../hooks/useMobileInteractions';
 
 /**
@@ -14,7 +14,7 @@ export function MobileCategoryList({
   onMoveWithinCategory,
   onMoveBetweenCategories,
   selectedCard,
-  onCardSelect
+  onCardSelect,
 }: MobileCategoryListProps) {
   const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
   const categoryNames = Object.keys(categories) as CategoryName[];
@@ -25,7 +25,7 @@ export function MobileCategoryList({
       setLastDroppedCategory(category);
       onDrop(selectedCard, category);
       onCardSelect(null);
-      setExpandedCategory(category)
+      setExpandedCategory(category);
       // Reset the highlight after animation
       setTimeout(() => {
         setLastDroppedCategory(null);
@@ -36,21 +36,43 @@ export function MobileCategoryList({
     setExpandedCategory(expandedCategory === category ? null : category);
   };
 
-  const handleMoveBetweenCategories = async (card: Value, fromCategory: CategoryName, toCategory: CategoryName): Promise<void> => {
+  const handleMoveBetweenCategories = async (
+    card: Value,
+    fromCategory: CategoryName,
+    toCategory: CategoryName
+  ): Promise<void> => {
     if (onMoveBetweenCategories) {
       onMoveBetweenCategories(card, fromCategory, toCategory);
     }
-    setExpandedCategory(toCategory)
+    setExpandedCategory(toCategory);
     handleExpand(toCategory);
   };
 
-  return <div className="h-full flex flex-col">
+  return (
+    <div className="flex h-full flex-col">
       <div className="flex-1 overflow-y-auto px-1 py-1" role="region" aria-label="Categories list">
-        <div className="space-y-2"> {/* Removed px-2 since padding is now on parent */}
-          {categoryNames.map(category => <div key={category}>
-              <MobileCategoryRow category={category} cards={categories[category] ?? []} availableCategories={categoryNames} isActive={activeDropZone === category} isExpanded={expandedCategory === category} onCategoryTap={handleCategoryTap} onCategorySelect={handleCategorySelect} showingCardSelection={!!selectedCard} onMoveWithinCategory={(fromIndex, toIndex) => onMoveWithinCategory(category, fromIndex, toIndex)} onMoveBetweenCategories={handleMoveBetweenCategories} lastDroppedCategory={lastDroppedCategory} />
-            </div>)}
+        <div className="space-y-2">
+          {' '}
+          {/* Removed px-2 since padding is now on parent */}
+          {categoryNames.map((category) => (
+            <div key={category}>
+              <MobileCategoryRow
+                category={category}
+                cards={categories[category] ?? []}
+                availableCategories={categoryNames}
+                isActive={activeDropZone === category}
+                isExpanded={expandedCategory === category}
+                onCategoryTap={handleCategoryTap}
+                onCategorySelect={handleCategorySelect}
+                showingCardSelection={!!selectedCard}
+                onMoveWithinCategory={(fromIndex, toIndex) => onMoveWithinCategory(category, fromIndex, toIndex)}
+                onMoveBetweenCategories={handleMoveBetweenCategories}
+                lastDroppedCategory={lastDroppedCategory}
+              />
+            </div>
+          ))}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 }

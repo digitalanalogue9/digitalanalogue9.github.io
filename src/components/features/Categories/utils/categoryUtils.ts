@@ -1,5 +1,5 @@
-import { Categories, CategoryName, Value } from "@/lib/types";
-import { getGameConfig } from "@/lib/utils/config/gameConfig";
+import { Categories, CategoryName, Value } from '@/lib/types';
+import { getGameConfig } from '@/lib/utils/config/gameConfig';
 
 export const getImportantCards = (categories: Categories): Value[] => {
   const importantCards: Value[] = [];
@@ -24,9 +24,7 @@ export const getImportantCards = (categories: Categories): Value[] => {
 
 export const getCategoriesForRound = (cardCount: number, targetValue: number): Categories => {
   const ratio = cardCount / targetValue;
-  const {
-    ratioThresholds
-  } = getGameConfig();
+  const { ratioThresholds } = getGameConfig();
   const categories = {} as Categories;
   if (ratio <= ratioThresholds.final) {
     categories['Very Important'] = [];

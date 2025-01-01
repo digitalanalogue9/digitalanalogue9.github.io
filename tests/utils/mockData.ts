@@ -1,4 +1,4 @@
-import { Value } from "@/lib/types";
+import { Value } from '@/lib/types';
 
 let currentMockId = 1;
 
@@ -12,9 +12,10 @@ export const createMockValue = (overrides?: Partial<Value>): Value => {
     description: 'Mock Description',
     ...overrides,
     // Ensure id stays within valid range even if provided in overrides
-    id: typeof overrides?.id === 'number'
-    ? String(Math.max(1, Math.min(35, overrides.id))) // Convert to string
-    : id
+    id:
+      typeof overrides?.id === 'number'
+        ? String(Math.max(1, Math.min(35, overrides.id))) // Convert to string
+        : id,
   };
 };
 

@@ -1,4 +1,4 @@
-import { getEnvBoolean } from "../config";
+import { getEnvBoolean } from '../config';
 
 const isDebug = getEnvBoolean('NEXT_PUBLIC_DEBUG', false);
 

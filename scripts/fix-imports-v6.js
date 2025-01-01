@@ -73,7 +73,7 @@ async function updateImports(filePath) {
     // Parse the file
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     // Track any imports that weren't mapped
@@ -99,7 +99,7 @@ async function updateImports(filePath) {
             unmappedImports.add(importPath);
           }
         }
-      }
+      },
     });
 
     if (modified) {
@@ -110,9 +110,8 @@ async function updateImports(filePath) {
 
     if (unmappedImports.size > 0) {
       console.log(`\n⚠️  Unmapped imports in ${filePath}:`);
-      unmappedImports.forEach(imp => console.log(`   ${imp}`));
+      unmappedImports.forEach((imp) => console.log(`   ${imp}`));
     }
-
   } catch (error) {
     console.error(`\n✗ Error processing ${filePath}:`, error.message);
     console.error(`   File: ${filePath}`);
@@ -122,15 +121,15 @@ async function updateImports(filePath) {
 async function main() {
   try {
     console.log('Starting import path updates...');
-    
+
     // Get all TypeScript/JavaScript files
     const files = glob.sync('**/*.{ts,tsx}', {
       cwd: SRC,
       absolute: true,
       nodir: true,
-      windowsPathsNoEscape: true
+      windowsPathsNoEscape: true,
     });
-    
+
     console.log(`Found ${files.length} files to process`);
 
     if (files.length === 0) {
@@ -140,10 +139,10 @@ async function main() {
 
     // Sort files to process in a predictable order
     files.sort();
-    
+
     let processedCount = 0;
     let errorCount = 0;
-    
+
     // Process each file
     for (const file of files) {
       try {
@@ -158,7 +157,6 @@ async function main() {
     console.log('\nImport updates complete!');
     console.log(`Processed ${processedCount} files`);
     if (errorCount > 0) console.log(`Encountered ${errorCount} errors`);
-
   } catch (error) {
     console.error('Error during import updates:', error);
     process.exit(1);

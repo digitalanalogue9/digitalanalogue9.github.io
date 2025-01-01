@@ -1,11 +1,11 @@
 import { Value } from './Value';
 
 export interface ValueWithReason extends Value {
-    reason?: string;
-  }
+  reason?: string;
+}
 
 export interface CompletedSession {
-    sessionId: string;
-    finalValues: ValueWithReason[];
-    timestamp: number;
+  sessionId: string;
+  finalValues: ValueWithReason[];
+  timestamp: number;
 }

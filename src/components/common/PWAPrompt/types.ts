@@ -8,4 +8,4 @@ export interface PWAPromptResult {
   handleInstallClick: () => Promise<void>;
   handleUpdateClick: () => Promise<void>;
   handleDismiss: () => void;
-} 
+}

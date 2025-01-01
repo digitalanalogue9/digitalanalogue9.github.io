@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from "@/lib/store/store";
+import { useStore } from '@/lib/store/store';
 import { shallow } from 'zustand/shallow';
 /**
  * Custom hook that provides the game state and actions from the store.
@@ -21,20 +21,23 @@ import { shallow } from 'zustand/shallow';
  * - `clearCommands`: Function to clear the commands.
  */
 export function useGameState() {
-  const state = useStore(state => ({
-    remainingCards: state.remainingCards,
-    categories: state.categories,
-    isGameStarted: state.isGameStarted,
-    showInstructions: state.showInstructions,
-    commands: state.commands,
-    currentRound: state.currentRound,
-    addCommand: state.addCommand,
-    setRemainingCards: state.setRemainingCards,
-    setCategories: state.setCategories,
-    setGameStarted: state.setGameStarted,
-    setShowInstructions: state.setShowInstructions,
-    resetGame: state.resetGame,
-    clearCommands: state.clearCommands
-  }), shallow);
+  const state = useStore(
+    (state) => ({
+      remainingCards: state.remainingCards,
+      categories: state.categories,
+      isGameStarted: state.isGameStarted,
+      showInstructions: state.showInstructions,
+      commands: state.commands,
+      currentRound: state.currentRound,
+      addCommand: state.addCommand,
+      setRemainingCards: state.setRemainingCards,
+      setCategories: state.setCategories,
+      setGameStarted: state.setGameStarted,
+      setShowInstructions: state.setShowInstructions,
+      resetGame: state.resetGame,
+      clearCommands: state.clearCommands,
+    }),
+    shallow
+  );
   return state;
 }

@@ -16,16 +16,28 @@ const moves = {
     base: 'src/components/features/Exercise',
     moves: [
       { from: 'src/components/Round', to: 'components/Round' },
-      { from: 'src/components/Results.tsx', to: 'components/Results/index.tsx' },
-      { from: 'src/components/StartScreen.tsx', to: 'components/StartScreen/index.tsx' },
-      { from: 'src/components/StartScreenProps.tsx', to: 'components/StartScreen/types.ts' },
-      { from: 'src/components/CoreValueReasoning.tsx', to: 'components/CoreValueReasoning/index.tsx' },
+      {
+        from: 'src/components/Results.tsx',
+        to: 'components/Results/index.tsx',
+      },
+      {
+        from: 'src/components/StartScreen.tsx',
+        to: 'components/StartScreen/index.tsx',
+      },
+      {
+        from: 'src/components/StartScreenProps.tsx',
+        to: 'components/StartScreen/types.ts',
+      },
+      {
+        from: 'src/components/CoreValueReasoning.tsx',
+        to: 'components/CoreValueReasoning/index.tsx',
+      },
       { from: 'src/commands', to: 'commands' },
       { from: 'src/hooks/useGameState.ts', to: 'hooks/useGameState.ts' },
       { from: 'src/hooks/useCommands.ts', to: 'hooks/useCommands.ts' },
       { from: 'src/hooks/useSession.ts', to: 'hooks/useSession.ts' },
-      { from: 'src/utils/game', to: 'utils' }
-    ]
+      { from: 'src/utils/game', to: 'utils' },
+    ],
   },
 
   // Cards Feature
@@ -33,41 +45,74 @@ const moves = {
     base: 'src/components/features/Cards',
     moves: [
       { from: 'src/components/Card', to: 'components' },
-      { from: 'src/hooks/useCardDragAnimation.ts', to: 'hooks/useCardDragAnimation.ts' },
-      { from: 'src/components/Mobile/MobileCardActions.tsx', to: 'components/MobileCardActions/index.tsx' }
-    ]
+      {
+        from: 'src/hooks/useCardDragAnimation.ts',
+        to: 'hooks/useCardDragAnimation.ts',
+      },
+      {
+        from: 'src/components/Mobile/MobileCardActions.tsx',
+        to: 'components/MobileCardActions/index.tsx',
+      },
+    ],
   },
 
   // Categories Feature
   categories: {
     base: 'src/components/features/Categories',
     moves: [
-      { from: 'src/components/CategoryColumn.tsx', to: 'components/CategoryColumn/index.tsx' },
-      { from: 'src/components/CategoryColumnProps.tsx', to: 'components/CategoryColumn/types.ts' },
+      {
+        from: 'src/components/CategoryColumn.tsx',
+        to: 'components/CategoryColumn/index.tsx',
+      },
+      {
+        from: 'src/components/CategoryColumnProps.tsx',
+        to: 'components/CategoryColumn/types.ts',
+      },
       { from: 'src/constants/categories.ts', to: 'constants/categories.ts' },
       { from: 'src/utils/categoryUtils.ts', to: 'utils/categoryUtils.ts' },
-      { from: 'src/components/Mobile/CategorySelectionOverlay.tsx', to: 'components/Mobile/CategorySelectionOverlay.tsx' }
-    ]
+      {
+        from: 'src/components/Mobile/CategorySelectionOverlay.tsx',
+        to: 'components/Mobile/CategorySelectionOverlay.tsx',
+      },
+    ],
   },
 
   // History Feature
   history: {
     base: 'src/components/features/History',
     moves: [
-      { from: 'src/components/History/SessionList.tsx', to: 'components/SessionList/index.tsx' }
-    ]
+      {
+        from: 'src/components/History/SessionList.tsx',
+        to: 'components/SessionList/index.tsx',
+      },
+    ],
   },
 
   // Replay Feature
   replay: {
     base: 'src/components/features/Replay',
     moves: [
-      { from: 'src/components/Replay/ReplayClient.tsx', to: 'components/ReplayClient/index.tsx' },
-      { from: 'src/components/Replay/components/ReplayColumn.tsx', to: 'components/ReplayColumn/index.tsx' },
-      { from: 'src/components/Replay/components/MobileReplayCategories.tsx', to: 'components/MobileReplayCategories/index.tsx' },
-      { from: 'src/components/Replay/hooks/useCardAnimation.ts', to: 'hooks/useCardAnimation.ts' },
-      { from: 'src/components/Replay/hooks/useReplayState.ts', to: 'hooks/useReplayState.ts' }
-    ]
+      {
+        from: 'src/components/Replay/ReplayClient.tsx',
+        to: 'components/ReplayClient/index.tsx',
+      },
+      {
+        from: 'src/components/Replay/components/ReplayColumn.tsx',
+        to: 'components/ReplayColumn/index.tsx',
+      },
+      {
+        from: 'src/components/Replay/components/MobileReplayCategories.tsx',
+        to: 'components/MobileReplayCategories/index.tsx',
+      },
+      {
+        from: 'src/components/Replay/hooks/useCardAnimation.ts',
+        to: 'hooks/useCardAnimation.ts',
+      },
+      {
+        from: 'src/components/Replay/hooks/useReplayState.ts',
+        to: 'hooks/useReplayState.ts',
+      },
+    ],
   },
 
   // Common Components
@@ -76,18 +121,27 @@ const moves = {
     moves: [
       { from: 'src/components/Navigation.tsx', to: 'Navigation/index.tsx' },
       { from: 'src/components/Instructions.tsx', to: 'Instructions/index.tsx' },
-      { from: 'src/components/InstructionsProps.tsx', to: 'Instructions/types.ts' },
-      { from: 'src/components/OfflineIndicator.tsx', to: 'OfflineIndicator/index.tsx' },
+      {
+        from: 'src/components/InstructionsProps.tsx',
+        to: 'Instructions/types.ts',
+      },
+      {
+        from: 'src/components/OfflineIndicator.tsx',
+        to: 'OfflineIndicator/index.tsx',
+      },
       { from: 'src/components/PWAPrompt.tsx', to: 'PWAPrompt/index.tsx' },
-      { from: 'src/components/CentredImage.tsx', to: 'CentredImage/index.tsx' }
-    ]
+      { from: 'src/components/CentredImage.tsx', to: 'CentredImage/index.tsx' },
+    ],
   },
 
   // Library
   lib: {
     base: 'src/lib',
     moves: [
-      { from: 'src/contexts/MobileContext.tsx', to: 'contexts/MobileContext.tsx' },
+      {
+        from: 'src/contexts/MobileContext.tsx',
+        to: 'contexts/MobileContext.tsx',
+      },
       { from: 'src/store', to: 'store' },
       { from: 'src/db', to: 'db' },
       { from: 'src/types', to: 'types' },
@@ -99,8 +153,8 @@ const moves = {
       { from: 'src/utils/storage', to: 'utils/storage' },
       { from: 'src/utils/debug', to: 'utils/debug' },
       { from: 'src/hooks/useAnimation.ts', to: 'hooks/useAnimation.ts' },
-      { from: 'src/hooks/usePWA.ts', to: 'hooks/usePWA.ts' }
-    ]
+      { from: 'src/hooks/usePWA.ts', to: 'hooks/usePWA.ts' },
+    ],
   },
 
   // Assets
@@ -108,9 +162,9 @@ const moves = {
     base: 'src',
     moves: [
       { from: 'src/app/globals.css', to: 'styles/globals.css' },
-      { from: 'src/app/fonts', to: 'assets/fonts' }
-    ]
-  }
+      { from: 'src/app/fonts', to: 'assets/fonts' },
+    ],
+  },
 };
 
 // Import mappings for updating import statements
@@ -131,7 +185,7 @@ const importMappings = {
   '@/types': '@/lib/types',
   '@/store': '@/lib/store',
   '@/db': '@/lib/db',
-  '@/worker': '@/lib/worker'
+  '@/worker': '@/lib/worker',
 };
 
 async function createDirectories() {
@@ -147,7 +201,7 @@ async function moveFiles() {
     for (const move of feature.moves) {
       const fromPath = path.join(ROOT, move.from);
       const toPath = path.join(ROOT, feature.base, move.to);
-      
+
       try {
         if (await fs.pathExists(fromPath)) {
           await fs.ensureDir(path.dirname(toPath));
@@ -165,11 +219,11 @@ async function moveFiles() {
 
 async function updateImports(filePath) {
   const content = await fs.readFile(filePath, 'utf-8');
-  
+
   try {
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     let modified = false;
@@ -177,7 +231,7 @@ async function updateImports(filePath) {
     traverse(ast, {
       ImportDeclaration(path) {
         const importPath = path.node.source.value;
-        
+
         for (const [oldPath, newPath] of Object.entries(importMappings)) {
           if (importPath.startsWith(oldPath)) {
             path.node.source.value = importPath.replace(oldPath, newPath);
@@ -185,7 +239,7 @@ async function updateImports(filePath) {
             break;
           }
         }
-      }
+      },
     });
 
     if (modified) {
@@ -210,13 +264,13 @@ async function updateTsConfig() {
   const tsconfig = await fs.readJSON(tsconfigPath);
 
   tsconfig.compilerOptions.paths = {
-    "@/*": ["./src/*"],
-    "@/components/*": ["./src/components/*"],
-    "@/features/*": ["./src/components/features/*"],
-    "@/common/*": ["./src/components/common/*"],
-    "@/lib/*": ["./src/lib/*"],
-    "@/styles/*": ["./src/styles/*"],
-    "@/assets/*": ["./src/assets/*"]
+    '@/*': ['./src/*'],
+    '@/components/*': ['./src/components/*'],
+    '@/features/*': ['./src/components/features/*'],
+    '@/common/*': ['./src/components/common/*'],
+    '@/lib/*': ['./src/lib/*'],
+    '@/styles/*': ['./src/styles/*'],
+    '@/assets/*': ['./src/assets/*'],
   };
 
   await fs.writeJSON(tsconfigPath, tsconfig, { spaces: 2 });

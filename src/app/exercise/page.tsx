@@ -2,31 +2,29 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RoundUIDebug from "@/components/features/Exercise/components/RoundUIDebug";
-import RoundUI from "@/components/features/Exercise/components/RoundUI";
-import Instructions from "@/components/features/Exercise/components/Instructions";
+import RoundUIDebug from '@/components/features/Exercise/components/RoundUIDebug';
+import RoundUI from '@/components/features/Exercise/components/RoundUI';
+import Instructions from '@/components/features/Exercise/components/Instructions';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PWAPrompt from "@/components/common/PWAPrompt";
-import { useGameState } from "@/components/features/Exercise/hooks/useGameState";
-import { forceReload } from "@/lib/utils/cache";
-import { useGameInit } from "@/components/features/Exercise/hooks/useGameInit";
-import { useMobile } from "@/lib/contexts/MobileContext";
+import PWAPrompt from '@/components/common/PWAPrompt';
+import { useGameState } from '@/components/features/Exercise/hooks/useGameState';
+import { forceReload } from '@/lib/utils/cache';
+import { useGameInit } from '@/components/features/Exercise/hooks/useGameInit';
+import { useMobile } from '@/lib/contexts/MobileContext';
 
 function ExerciseContent() {
   const router = useRouter();
-  /**
-   * Destructures `showInstructions` and `setShowInstructions` from the `useGameState` hook.
-   * 
-   * `showInstructions` - A state variable that indicates whether the instructions should be shown.
-   * `setShowInstructions` - A function to update the `showInstructions` state.
-   */
   const { showInstructions, setShowInstructions } = useGameState();
   const { isLoading, error, shouldRedirect } = useGameInit();
-  const { isMobile } = useMobile();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    document.title = "Core Values - Exercise";
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    document.title = 'Core Values - Exercise';
   }, []);
 
   useEffect(() => {
@@ -44,9 +42,18 @@ function ExerciseContent() {
     }
   }, [shouldRedirect, router]);
 
+  if (!mounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center" role="status" aria-live="polite">
+        <span className="sr-only">Loading exercise...</span>
+        Loading...
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center flex-1" role="status" aria-live="polite">
+      <div className="flex flex-1 items-center justify-center" role="status" aria-live="polite">
         <span className="sr-only">Loading exercise...</span>
         Loading...
       </div>
@@ -55,7 +62,7 @@ function ExerciseContent() {
 
   if (error && !shouldRedirect) {
     return (
-      <div className="flex items-center justify-center flex-1 text-red-600" role="alert">
+      <div className="flex flex-1 items-center justify-center text-red-600" role="alert">
         An error occurred while loading the exercise. Please try again.
       </div>
     );
@@ -66,12 +73,12 @@ function ExerciseContent() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex-1 flex flex-col" aria-label="Core Values Exercise">
+      <div className="flex flex-1 flex-col" aria-label="Core Values Exercise">
         <GameComponent />
         {showInstructions && (
           <Instructions
             onClose={() => setShowInstructions(false)}
-            onStart={() => { }}
+            onStart={() => {}}
             aria-label="Exercise Instructions"
           />
         )}
@@ -84,12 +91,14 @@ function ExerciseContent() {
 
 export default function ExercisePage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center flex-1">
-        <span className="sr-only">Loading exercise...</span>
-        Loading...
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex flex-1 items-center justify-center">
+          <span className="sr-only">Loading exercise...</span>
+          Loading...
+        </div>
+      }
+    >
       <ExerciseContent />
     </Suspense>
   );

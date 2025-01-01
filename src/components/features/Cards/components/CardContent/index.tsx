@@ -12,29 +12,18 @@ import { CardContentProps } from './types';
  *
  * @returns {JSX.Element} The rendered card content.
  */
-export function CardContent({
-  title,
-  description,
-  isExpanded,
-}: Omit<CardContentProps, 'onToggle'>) {
+export function CardContent({ title, description, isExpanded }: Omit<CardContentProps, 'onToggle'>) {
   const headingId = `heading-${title.toLowerCase().replace(/\s+/g, '-')}`;
   const descriptionId = `description-${title.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
     <div
-      className="flex flex-col w-full pl-2" // Added pt-10 to account for controls
+      className="flex w-full flex-col pl-2" // Added pt-10 to account for controls
       role="region"
       aria-labelledby={headingId}
     >
-      <div
-        className="flex items-start w-full"
-        role="heading"
-        aria-level={3}
-      >
-        <h3
-          id={headingId}
-          className="font-medium text-black text-sm sm:text-base flex-1 break-words"
-        >
+      <div className="flex w-full items-start" role="heading" aria-level={3}>
+        <h3 id={headingId} className="flex-1 break-words text-sm font-medium text-black sm:text-base">
           {title}
         </h3>
       </div>
@@ -50,11 +39,7 @@ export function CardContent({
             role="region"
             aria-labelledby={descriptionId}
           >
-            <p
-              id={descriptionId}
-              className="text-base text-black leading-relaxed"
-              aria-expanded={isExpanded}
-            >
+            <p id={descriptionId} className="text-base leading-relaxed text-black" aria-expanded={isExpanded}>
               <span className="sr-only">Description: </span>
               {description}
             </p>

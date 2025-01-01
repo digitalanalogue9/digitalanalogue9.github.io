@@ -1,5 +1,5 @@
 // src/app/not-found.tsx
-'use client'
+'use client';
 
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
@@ -15,31 +15,19 @@ import { Suspense, useEffect, useState } from 'react';
 export default function NotFound() {
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
-    
+
   return (
-    <div 
-      className="flex-1 flex items-center justify-center p-4"
-    >      
-      <div 
-        className="text-center"
-        role="alert"
-        aria-labelledby="not-found-title"
-      >
-        <h1 
-          id="not-found-title"
-          className={`${styles.heading} font-bold mb-4`}
-        >
+    <div className="flex flex-1 items-center justify-center p-4">
+      <div className="text-center" role="alert" aria-labelledby="not-found-title">
+        <h1 id="not-found-title" className={`${styles.heading} mb-4 font-bold`}>
           Page Not Found
         </h1>
-        <p 
-          className={`${styles.paragraph} mb-4 text-black`}
-          aria-live="polite"
-        >
+        <p className={`${styles.paragraph} mb-4 text-black`} aria-live="polite">
           Could not find requested resource
         </p>
-        <Link 
+        <Link
           href="/"
-          className={`${styles.paragraph} text-blue-700 hover:text-blue-800 underline inline-flex items-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 rounded px-2 py-1`}
+          className={`${styles.paragraph} inline-flex items-center rounded px-2 py-1 text-blue-700 underline hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2`}
           aria-label="Return to homepage"
         >
           <span aria-hidden="true">←</span>
@@ -49,4 +37,3 @@ export default function NotFound() {
     </div>
   );
 }
-

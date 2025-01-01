@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { CategoryName, Value } from "@/lib/types";
-import { logStateUpdate } from "@/lib/utils";
+import { CategoryName, Value } from '@/lib/types';
+import { logStateUpdate } from '@/lib/utils';
 import { MobileInteractionsResult } from '../types';
 
 /**
@@ -17,9 +17,13 @@ export function useMobileInteractions(): MobileInteractionsResult {
   const [expandedCategory, setExpandedCategory] = useState<CategoryName | null>(null);
   const [activeDropZone, setActiveDropZone] = useState<CategoryName | null>(null);
   const handleExpand = useCallback((category: CategoryName) => {
-    logStateUpdate('handleMobileExpand', {
-      category
-    }, 'MobileInteractions');
+    logStateUpdate(
+      'handleMobileExpand',
+      {
+        category,
+      },
+      'MobileInteractions'
+    );
     setExpandedCategory(category);
   }, []);
   const handleClose = useCallback(() => {
@@ -27,10 +31,14 @@ export function useMobileInteractions(): MobileInteractionsResult {
     setExpandedCategory(null);
   }, []);
   const handleDropWithZone = useCallback((card: Value, category: CategoryName) => {
-    logStateUpdate('handleMobileDropWithZone', {
-      card,
-      category
-    }, 'MobileInteractions');
+    logStateUpdate(
+      'handleMobileDropWithZone',
+      {
+        card,
+        category,
+      },
+      'MobileInteractions'
+    );
     setActiveDropZone(category);
     setExpandedCategory(category);
     // Clear the active zone after a short delay
@@ -38,7 +46,7 @@ export function useMobileInteractions(): MobileInteractionsResult {
       setActiveDropZone(null);
     }, 500);
     return {
-      category
+      category,
     };
   }, []);
   return {
@@ -46,6 +54,6 @@ export function useMobileInteractions(): MobileInteractionsResult {
     activeDropZone,
     handleExpand,
     handleClose,
-    handleDropWithZone
+    handleDropWithZone,
   };
 }

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Categories, CategoryName, Value, } from "@/lib/types";
-import { RoundState } from "../types";
+import { Categories, CategoryName, Value } from '@/lib/types';
+import { RoundState } from '../types';
 /**
  * Custom hook to manage the state of a round in the Core Values game.
  *
@@ -25,22 +25,32 @@ import { RoundState } from "../types";
  * @returns {boolean} return.hasTargetCoreValuesInVeryImportant - Whether the 'Very Important' category has the target core values.
  * @returns {Categories} return.categories - The current state of categories.
  */
-export const useRoundState = (categories: Categories, remainingCards: Value[], targetCoreValues: number): RoundState => {
+export const useRoundState = (
+  categories: Categories,
+  remainingCards: Value[],
+  targetCoreValues: number
+): RoundState => {
   const hasTargetCoreValuesInVeryImportant = categories['Very Important']?.length === targetCoreValues;
 
   // Calculate active cards (excluding Not Important)
-  const activeCards = Object.entries(categories).filter(([category]) => category !== 'Not Important').reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+  const activeCards = Object.entries(categories)
+    .filter(([category]) => category !== 'Not Important')
+    .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
 
   // Calculate total active including remaining cards
   const totalActiveCards = activeCards + remainingCards.length;
   const validCategories = useMemo(() => {
-    return Object.keys(categories).filter(category => categories[category] !== undefined) as CategoryName[];
+    return Object.keys(categories).filter((category) => categories[category] !== undefined) as CategoryName[];
   }, [categories]);
   const activeCategories = useMemo(() => {
-    return Object.entries(categories).filter(([_, cards]) => cards && cards.length > 0).map(([category]) => category as CategoryName);
+    return Object.entries(categories)
+      .filter(([_, cards]) => cards && cards.length > 0)
+      .map(([category]) => category as CategoryName);
   }, [categories]);
   const visibleCategories = useMemo(() => {
-    const allCategories = [...validCategories, ...activeCategories].filter((category, index, self) => self.indexOf(category) === index);
+    const allCategories = [...validCategories, ...activeCategories].filter(
+      (category, index, self) => self.indexOf(category) === index
+    );
     return allCategories.reduce((acc, category) => {
       acc[category] = categories[category] || [];
       return acc;
@@ -50,14 +60,22 @@ export const useRoundState = (categories: Categories, remainingCards: Value[], t
   const notImportantCount = categories['Not Important']?.length || 0;
   const isNearingCompletion = validCategories.length === 2;
   const hasEnoughCards = totalActiveCards >= targetCoreValues;
-  const hasMinimumNotImportant = (totalActiveCards === targetCoreValues && hasTargetCoreValuesInVeryImportant) || (notImportantCount >= 1);
+  const hasMinimumNotImportant =
+    (totalActiveCards === targetCoreValues && hasTargetCoreValuesInVeryImportant) || notImportantCount >= 1;
   const hasTooManyImportantCards = isNearingCompletion && veryImportantCount > targetCoreValues;
   const hasNotEnoughImportantCards = isNearingCompletion && veryImportantCount < targetCoreValues;
 
   // New calculation for found core values
-  const hasFoundCoreValues = Object.entries(categories).some(([category, cards]) => category !== 'Not Important' && cards?.length === targetCoreValues);
-  const isEndGameReady = isNearingCompletion && veryImportantCount === targetCoreValues && totalActiveCards === targetCoreValues && hasMinimumNotImportant
-    || hasFoundCoreValues || hasTargetCoreValuesInVeryImportant;
+  const hasFoundCoreValues = Object.entries(categories).some(
+    ([category, cards]) => category !== 'Not Important' && cards?.length === targetCoreValues
+  );
+  const isEndGameReady =
+    (isNearingCompletion &&
+      veryImportantCount === targetCoreValues &&
+      totalActiveCards === targetCoreValues &&
+      hasMinimumNotImportant) ||
+    hasFoundCoreValues ||
+    hasTargetCoreValuesInVeryImportant;
   return {
     activeCards,
     totalActiveCards,
@@ -74,6 +92,6 @@ export const useRoundState = (categories: Categories, remainingCards: Value[], t
     isEndGameReady,
     hasFoundCoreValues,
     hasTargetCoreValuesInVeryImportant,
-    categories
+    categories,
   };
 };

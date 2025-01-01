@@ -1,4 +1,4 @@
-import { Categories, CategoryName, Command, Value } from "@/lib/types";
+import { Categories, CategoryName, Command, Value } from '@/lib/types';
 
 /** Props for round UI */
 export interface RoundUIProps {

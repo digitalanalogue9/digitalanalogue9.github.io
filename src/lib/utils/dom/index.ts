@@ -1,9 +1,9 @@
-import { Position } from "@/lib/types";
+import { Position } from '@/lib/types';
 export const getElementCenter = (element: HTMLElement): Position => {
   const rect = element.getBoundingClientRect();
   return {
     x: rect.left + rect.width / 2,
-    y: rect.top + rect.height / 2
+    y: rect.top + rect.height / 2,
   };
 };
 export const getCardPosition = (cardId: string): Position | undefined => {

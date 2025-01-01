@@ -1,13 +1,17 @@
-import { CategoryName, Value } from "@/lib/types";
+import { CategoryName, Value } from '@/lib/types';
 
 /** Props for round actions */
 export interface RoundActionsProps {
   /** List of remaining cards */
   remainingCards: Value[];
+  /** Target core values */
+  targetCoreValues: number;
   /** Flag indicating if can proceed to next round */
   canProceedToNextRound: boolean;
   /** Callback to proceed to next round */
   onNextRound: () => void;
+  /** Callback to early finish */
+  onEarlyFinish: () => void;
   /** Callback when a card is dropped */
   onDrop: (card: Value, category: CategoryName) => void;
   /** Flag indicating if it is end game */

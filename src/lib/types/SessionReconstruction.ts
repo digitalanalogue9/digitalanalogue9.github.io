@@ -1,4 +1,4 @@
-import { Categories, Value } from "@/lib/types";
+import { Categories, Value } from '@/lib/types';
 export interface SessionReconstruction {
   categories: Categories;
   currentRound: number;

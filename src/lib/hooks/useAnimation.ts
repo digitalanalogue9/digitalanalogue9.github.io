@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMotionValue, useSpring, MotionValue } from 'framer-motion';
-import { Position,AnimationConfig } from "@/lib/types";
+import { Position, AnimationConfig } from '@/lib/types';
 
 /**
  * Custom hook to create animated motion values for x and y positions using springs.
@@ -18,15 +18,15 @@ export const useAnimation = (initialPosition: Position, config: AnimationConfig 
   const springX = useSpring(x, {
     stiffness: config.stiffness ?? 300,
     damping: config.damping ?? 30,
-    mass: config.mass ?? 1
+    mass: config.mass ?? 1,
   });
   const springY = useSpring(y, {
     stiffness: config.stiffness ?? 300,
     damping: config.damping ?? 30,
-    mass: config.mass ?? 1
+    mass: config.mass ?? 1,
   });
   return {
     x: springX,
-    y: springY
+    y: springY,
   };
 };

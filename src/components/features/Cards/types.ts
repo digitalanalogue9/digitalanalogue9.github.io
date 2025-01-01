@@ -1,4 +1,4 @@
-import { Value, CategoryName } from "@/lib/types";
+import { Value, CategoryName } from '@/lib/types';
 
 /** Extends Value type with additional properties needed during drag and drop operations */
 export interface DroppedValue extends Value {
@@ -43,8 +43,6 @@ export interface CardProps {
   /** Flag indicating if card is selected in mobile view */
   selectedMobileCard?: boolean;
 }
-
-
 
 /** Props for basic card movement controls */
 export interface CardControlsProps {

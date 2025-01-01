@@ -1,5 +1,5 @@
 // src/components/Round/RoundUIDebug.tsx
-'use client'
+'use client';
 
 import { Profiler, ProfilerOnRenderCallback } from 'react';
 import RoundUI from '../RoundUI';
@@ -8,7 +8,7 @@ import RoundUI from '../RoundUI';
 /**
  * Callback function for React Profiler's onRender event.
  */
-const onRender: ProfilerOnRenderCallback = function(
+const onRender: ProfilerOnRenderCallback = function (
   id: string,
   phase: 'mount' | 'update' | 'nested-update',
   actualDuration: number,
@@ -33,11 +33,10 @@ export default function RoundUIDebug() {
   }
 
   return (
-    <div> {/* Hide profiler wrapper from screen readers */}
-      <Profiler 
-        id="RoundUI" 
-        onRender={onRender}
-      >
+    <div>
+      {' '}
+      {/* Hide profiler wrapper from screen readers */}
+      <Profiler id="RoundUI" onRender={onRender}>
         <RoundUI />
       </Profiler>
     </div>

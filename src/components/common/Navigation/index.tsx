@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 /**
  * Navigation component that provides both desktop and mobile navigation menus.
- * 
+ *
  * @component
  * @example
  * // Usage example:
- * <Navigation /> 
+ * <Navigation />
  */
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,48 +20,41 @@ export default function Navigation() {
   };
 
   return (
-    <nav
-      className="flex items-center justify-between px-4 py-2"
-      role="navigation"
-      aria-label="Main navigation"
-    >
+    <nav className="flex items-center justify-between px-4 py-2" role="navigation" aria-label="Main navigation">
       <Link
         href="/"
-        className="text-xl font-bold text-white no-underline hover:text-green-400 transition-colors"
+        className="text-xl font-bold text-white no-underline transition-colors hover:text-green-400"
         aria-label="Core Values Home"
       >
         Core Values
       </Link>
 
       {/* Desktop Navigation */}
-      <div
-        className="hidden md:flex space-x-4"
-        aria-label="Desktop navigation"
-      >
+      <div className="hidden space-x-4 md:flex" aria-label="Desktop navigation">
         <Link
           href="/"
-          className={`${getActiveClass('/')} text-lg px-4 py-2`}
+          className={`${getActiveClass('/')} px-4 py-2 text-lg`}
           aria-current={pathname === '/' ? 'page' : undefined}
         >
           Home
         </Link>
         <Link
           href="/about"
-          className={`${getActiveClass('/about')} text-lg px-4 py-2`}
+          className={`${getActiveClass('/about')} px-4 py-2 text-lg`}
           aria-current={pathname === '/about' ? 'page' : undefined}
         >
           About
         </Link>
         <Link
           href="/history"
-          className={`${getActiveClass('/history')} text-lg px-4 py-2`}
+          className={`${getActiveClass('/history')} px-4 py-2 text-lg`}
           aria-current={pathname === '/history' ? 'page' : undefined}
         >
           History
         </Link>
         <Link
           href="/privacy"
-          className={`${getActiveClass('/privacy')} text-lg px-4 py-2`}
+          className={`${getActiveClass('/privacy')} px-4 py-2 text-lg`}
           aria-current={pathname === '/privacy' ? 'page' : undefined}
         >
           Privacy
@@ -73,13 +66,13 @@ export default function Navigation() {
         <button
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="text-white p-2 bg-blue-700"
+          className="bg-blue-700 p-2 text-white"
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen ? 'true' : 'false'}
           aria-controls="mobile-menu"
         >
           <svg
-            className="w-6 h-6"
+            className="h-6 w-6"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -96,12 +89,12 @@ export default function Navigation() {
         {isMenuOpen && (
           <div
             id="mobile-menu"
-            className="absolute top-14 right-4 bg-white shadow-lg rounded-lg py-2 z-50"
+            className="absolute right-4 top-14 z-50 rounded-lg bg-white py-2 shadow-lg"
             aria-label="Mobile navigation"
           >
             <Link
               href="/"
-              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
+              className="block px-4 py-2 text-black no-underline hover:bg-gray-100"
               onClick={() => setIsMenuOpen(false)}
               aria-current={pathname === '/' ? 'page' : undefined}
             >
@@ -109,7 +102,7 @@ export default function Navigation() {
             </Link>
             <Link
               href="/about"
-              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
+              className="block px-4 py-2 text-black no-underline hover:bg-gray-100"
               onClick={() => setIsMenuOpen(false)}
               aria-current={pathname === '/about' ? 'page' : undefined}
               role="menuitem"
@@ -118,7 +111,7 @@ export default function Navigation() {
             </Link>
             <Link
               href="/history"
-              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
+              className="block px-4 py-2 text-black no-underline hover:bg-gray-100"
               onClick={() => setIsMenuOpen(false)}
               aria-current={pathname === '/history' ? 'page' : undefined}
             >
@@ -126,14 +119,13 @@ export default function Navigation() {
             </Link>
             <Link
               href="/privacy"
-              className="block px-4 py-2 text-black hover:bg-gray-100 no-underline"
+              className="block px-4 py-2 text-black no-underline hover:bg-gray-100"
               onClick={() => setIsMenuOpen(false)}
               aria-current={pathname === '/privacy' ? 'page' : undefined}
             >
               Privacy
             </Link>
           </div>
-
         )}
       </div>
     </nav>

@@ -1,9 +1,8 @@
-import { Category } from "./Category";
-
+import { Category } from './Category';
 
 export type Value = {
-    id: string;
-    title: string;
-    description: string;
-    category?: Category;
+  id: string;
+  title: string;
+  description: string;
+  category?: Category;
 };

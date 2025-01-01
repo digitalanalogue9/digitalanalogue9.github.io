@@ -26,13 +26,13 @@ export const cacheUtils = {
   async clearCache(): Promise<void> {
     try {
       const cache = await caches.open('core-values-dynamic-v1');
-      await cache.keys().then(keys => {
-        keys.forEach(key => {
+      await cache.keys().then((keys) => {
+        keys.forEach((key) => {
           cache.delete(key);
         });
       });
     } catch (error) {
       console.error('Error clearing cache:', error);
     }
-  }
+  },
 };

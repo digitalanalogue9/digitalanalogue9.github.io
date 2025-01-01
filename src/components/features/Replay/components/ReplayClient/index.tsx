@@ -2,9 +2,9 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getRoundsBySession } from "@/lib/db/indexedDB";
-import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from "@/lib/types";
-import { AnimatedCard } from "@/components/features/Cards/components/AnimatedCard";
+import { getRoundsBySession } from '@/lib/db/indexedDB';
+import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from '@/lib/types';
+import { AnimatedCard } from '@/components/features/Cards/components/AnimatedCard';
 import { useReplayState } from '../../hooks/useReplayState';
 import { useCardAnimation } from '../../hooks/useCardAnimation';
 import { ReplayColumn } from '../ReplayColumn';
@@ -29,7 +29,7 @@ export default function ReplayClient() {
   const [allCards, setAllCards] = useState<Value[]>([]);
   const [currentCommandType, setCurrentCommandType] = useState<'DROP' | 'MOVE' | null>(null);
   const { isMobile } = useMobile();
-  
+
   // Add redirect if no sessionId
   useEffect(() => {
     if (!sessionId) {
@@ -43,32 +43,34 @@ export default function ReplayClient() {
     executeCommand,
     resetCategories,
     setAnimatingCard,
-    setAllCards: setReplayStateCards
+    setAllCards: setReplayStateCards,
   } = useReplayState();
 
-  const {
-    position,
-    isAnimating,
-    startAnimation
-  } = useCardAnimation(animatingCard?.sourcePos || {
-    x: 0,
-    y: 0
-  }, animatingCard?.targetPos || {
-    x: 0,
-    y: 0
-  }, 1000 / playbackSpeed);
-  
+  const { position, isAnimating, startAnimation } = useCardAnimation(
+    animatingCard?.sourcePos || {
+      x: 0,
+      y: 0,
+    },
+    animatingCard?.targetPos || {
+      x: 0,
+      y: 0,
+    },
+    1000 / playbackSpeed
+  );
 
-  const emptyCategories = useMemo(() => ({
-    'Very Important': [],
-    'Important': [],
-    'Quite Important': [],
-    'Of Some Importance': [],
-    'Not Important': []
-  }), []);
+  const emptyCategories = useMemo(
+    () => ({
+      'Very Important': [],
+      Important: [],
+      'Quite Important': [],
+      'Of Some Importance': [],
+      'Not Important': [],
+    }),
+    []
+  );
 
   const getCurrentRoundCategories = useCallback(() => {
-    const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
+    const currentRoundData = rounds.find((r) => r.roundNumber === currentRound);
     return currentRoundData?.availableCategories || emptyCategories;
   }, [currentRound, rounds, emptyCategories]);
 
@@ -81,9 +83,9 @@ export default function ReplayClient() {
         setRounds(sortedRounds);
         if (sortedRounds.length > 0) {
           const cards = new Set<Value>();
-          sortedRounds.forEach(round => {
-            Object.values(round.availableCategories).forEach(categoryCards => {
-              categoryCards?.forEach(card => {
+          sortedRounds.forEach((round) => {
+            Object.values(round.availableCategories).forEach((categoryCards) => {
+              categoryCards?.forEach((card) => {
                 cards.add(card);
               });
             });
@@ -95,7 +97,7 @@ export default function ReplayClient() {
           const firstCommand = sortedRounds[0].commands[0];
           if (firstCommand) {
             const cardId = (firstCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
-            const firstCard = cardsArray.find(card => card.id === cardId);
+            const firstCard = cardsArray.find((card) => card.id === cardId);
             if (firstCard) {
               setCurrentCard(firstCard);
               setCurrentCommandType(firstCommand.type as 'DROP' | 'MOVE');
@@ -110,49 +112,52 @@ export default function ReplayClient() {
     loadRounds();
   }, [sessionId, resetCategories, setReplayStateCards]);
 
-  const getCommandDescription = useCallback((command: Command): string => {
-    const payload = command.payload as DropCommandPayload | MoveCommandPayload;
-    const card = allCards.find(c => c.id === payload.cardId);
-    const cardTitle = card ? card.title : payload.cardId;
-    if (command.type === 'DROP') {
-      const dropPayload = payload as DropCommandPayload;
-      return `Drop '${cardTitle}' to '${dropPayload.category}'`;
-    } else if (command.type === 'MOVE') {
-      const movePayload = payload as MoveCommandPayload;
-      if (movePayload.fromCategory === movePayload.toCategory) {
-        return `Move '${cardTitle}' within '${movePayload.fromCategory}'`;
+  const getCommandDescription = useCallback(
+    (command: Command): string => {
+      const payload = command.payload as DropCommandPayload | MoveCommandPayload;
+      const card = allCards.find((c) => c.id === payload.cardId);
+      const cardTitle = card ? card.title : payload.cardId;
+      if (command.type === 'DROP') {
+        const dropPayload = payload as DropCommandPayload;
+        return `Drop '${cardTitle}' to '${dropPayload.category}'`;
+      } else if (command.type === 'MOVE') {
+        const movePayload = payload as MoveCommandPayload;
+        if (movePayload.fromCategory === movePayload.toCategory) {
+          return `Move '${cardTitle}' within '${movePayload.fromCategory}'`;
+        }
+        return `Move '${cardTitle}' from '${movePayload.fromCategory}' to '${movePayload.toCategory}'`;
       }
-      return `Move '${cardTitle}' from '${movePayload.fromCategory}' to '${movePayload.toCategory}'`;
-    }
-    return `Command ${currentCommandIndex + 1}`;
-  }, [allCards, currentCommandIndex]);
+      return `Command ${currentCommandIndex + 1}`;
+    },
+    [allCards, currentCommandIndex]
+  );
 
   const playNextCommand = useCallback(async () => {
     if (isRoundTransition) return;
-    const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
+    const currentRoundData = rounds.find((r) => r.roundNumber === currentRound);
     if (!currentRoundData) return;
     if (currentCommandIndex >= currentRoundData.commands.length) {
       if (currentRound < rounds.length) {
         setIsRoundTransition(true);
         setIsPlaying(false);
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         setCurrentRound(currentRound + 1);
         setCurrentCommandIndex(0);
         resetCategories();
         setIsRoundTransition(false);
         setIsPlaying(true);
-        const nextRound = rounds.find(r => r.roundNumber === currentRound + 1);
+        const nextRound = rounds.find((r) => r.roundNumber === currentRound + 1);
         if (nextRound && nextRound.commands.length > 0) {
           const firstCommand = nextRound.commands[0];
           setCurrentCommandType(firstCommand.type as 'DROP' | 'MOVE');
           const cardId = (firstCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
-          const nextCard = allCards.find(card => card.id === cardId);
+          const nextCard = allCards.find((card) => card.id === cardId);
           if (nextCard) {
             setCurrentCard(nextCard);
           }
           setCommandInfo({
             roundNumber: currentRound + 1,
-            description: getCommandDescription(firstCommand)
+            description: getCommandDescription(firstCommand),
           });
         }
         return;
@@ -166,7 +171,7 @@ export default function ReplayClient() {
     setCurrentCommandType(command.type as 'DROP' | 'MOVE');
     const payload = command.payload as DropCommandPayload | MoveCommandPayload;
     const cardId = payload.cardId;
-    const cardToAnimate = allCards.find(card => card.id === cardId);
+    const cardToAnimate = allCards.find((card) => card.id === cardId);
     if (!cardToAnimate) return;
 
     if (command.type === 'DROP') {
@@ -174,10 +179,10 @@ export default function ReplayClient() {
       if (nextCommand) {
         setCommandInfo({
           roundNumber: currentRound,
-          description: getCommandDescription(nextCommand)
+          description: getCommandDescription(nextCommand),
         });
         const nextCardId = (nextCommand.payload as DropCommandPayload | MoveCommandPayload).cardId;
-        const nextCard = allCards.find(card => card.id === nextCardId);
+        const nextCard = allCards.find((card) => card.id === nextCardId);
         if (nextCard) {
           setCurrentCard(nextCard);
         }
@@ -185,7 +190,7 @@ export default function ReplayClient() {
     } else {
       setCommandInfo({
         roundNumber: currentRound,
-        description: getCommandDescription(command)
+        description: getCommandDescription(command),
       });
     }
 
@@ -194,12 +199,13 @@ export default function ReplayClient() {
       sourceElement = document.querySelector('[data-card-wrapper]');
     } else {
       const movePayload = payload as MoveCommandPayload;
-      sourceElement = document.querySelector(`[data-category="${movePayload.fromCategory}"] [data-card-id="${cardId}"]`);
+      sourceElement = document.querySelector(
+        `[data-category="${movePayload.fromCategory}"] [data-card-id="${cardId}"]`
+      );
     }
 
-    const targetCategory = command.type === 'DROP'
-      ? (payload as DropCommandPayload).category
-      : (payload as MoveCommandPayload).toCategory;
+    const targetCategory =
+      command.type === 'DROP' ? (payload as DropCommandPayload).category : (payload as MoveCommandPayload).toCategory;
 
     const targetElement = document.querySelector(`[data-category="${targetCategory}"]`);
 
@@ -208,22 +214,22 @@ export default function ReplayClient() {
       const targetRect = targetElement.getBoundingClientRect();
 
       const sourceCenter = {
-        x: sourceRect.left + (sourceRect.width / 2),
-        y: sourceRect.top + (sourceRect.height / 2)
+        x: sourceRect.left + sourceRect.width / 2,
+        y: sourceRect.top + sourceRect.height / 2,
       };
 
       const targetCenter = {
-        x: targetRect.left + (targetRect.width / 2),
-        y: targetRect.top + 20
+        x: targetRect.left + targetRect.width / 2,
+        y: targetRect.top + 20,
       };
 
       setAnimatingCard({
         value: cardToAnimate,
         sourcePos: sourceCenter,
-        targetPos: targetCenter
+        targetPos: targetCenter,
       });
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         const animationDuration = 500;
         setTimeout(() => {
           executeCommand(command);
@@ -235,8 +241,18 @@ export default function ReplayClient() {
       executeCommand(command);
     }
 
-    setCurrentCommandIndex(prev => prev + 1);
-  }, [currentRound, currentCommandIndex, rounds, allCards, executeCommand, resetCategories, isRoundTransition, getCommandDescription, setAnimatingCard]);
+    setCurrentCommandIndex((prev) => prev + 1);
+  }, [
+    currentRound,
+    currentCommandIndex,
+    rounds,
+    allCards,
+    executeCommand,
+    resetCategories,
+    isRoundTransition,
+    getCommandDescription,
+    setAnimatingCard,
+  ]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -265,47 +281,68 @@ export default function ReplayClient() {
 
   return (
     <div className="container mx-auto px-2 py-2 sm:px-4 sm:py-8" aria-label="Session replay viewer">
-      <div className={`space-y-2 sm:space-y-4 ${isMobile ? 'h-screen flex flex-col' : ''}`}>
+      <div className={`space-y-2 sm:space-y-4 ${isMobile ? 'flex h-screen flex-col' : ''}`}>
         {/* Controls section */}
-        <section className="bg-white rounded-lg shadow-lg p-2 sm:p-4" aria-label="Replay controls">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-          <div className="flex gap-2">
-            <button onClick={() => setIsPlaying(!isPlaying)} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base" aria-label={isPlaying ? 'Pause replay' : 'Start replay'}>
-              {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <button onClick={handleReset} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm sm:text-base" aria-label="Reset replay to beginning">
-              Reset
-            </button>
-          </div>
+        <section className="rounded-lg bg-white p-2 shadow-lg sm:p-4" aria-label="Replay controls">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700 sm:px-4 sm:py-2 sm:text-base"
+                aria-label={isPlaying ? 'Pause replay' : 'Start replay'}
+              >
+                {isPlaying ? 'Pause' : 'Play'}
+              </button>
+              <button
+                onClick={handleReset}
+                className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-gray-700 sm:px-4 sm:py-2 sm:text-base"
+                aria-label="Reset replay to beginning"
+              >
+                Reset
+              </button>
+            </div>
 
-          <div className="flex items-center">
-            <label htmlFor="playback-speed" className="sr-only">
-              Playback speed
-            </label>
-            <select id="playback-speed" value={playbackSpeed} onChange={e => setPlaybackSpeed(Number(e.target.value))} className="px-3 py-1.5 sm:px-4 sm:py-2 border rounded bg-white text-sm sm:text-base" aria-label="Select playback speed">
-              <option value={0.5}>0.5x Speed</option>
-              <option value={1}>1x Speed</option>
-              <option value={2}>2x Speed</option>
-              <option value={4}>4x Speed</option>
-            </select>
-          </div>
+            <div className="flex items-center">
+              <label htmlFor="playback-speed" className="sr-only">
+                Playback speed
+              </label>
+              <select
+                id="playback-speed"
+                value={playbackSpeed}
+                onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
+                className="rounded border bg-white px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base"
+                aria-label="Select playback speed"
+              >
+                <option value={0.5}>0.5x Speed</option>
+                <option value={1}>1x Speed</option>
+                <option value={2}>2x Speed</option>
+                <option value={4}>4x Speed</option>
+              </select>
+            </div>
 
-          <div className="flex items-center text-sm sm:text-base" aria-live="polite" role="status">
-            {!isPlaying && !commandInfo ? <span className="text-black">
-              Click Play to start the replay
-            </span> : commandInfo && <span>
-              <span className="font-semibold">Round {commandInfo.roundNumber}:</span>
-              {' '}{commandInfo.description}
-            </span>}
+            <div className="flex items-center text-sm sm:text-base" aria-live="polite" role="status">
+              {!isPlaying && !commandInfo ? (
+                <span className="text-black">Click Play to start the replay</span>
+              ) : (
+                commandInfo && (
+                  <span>
+                    <span className="font-semibold">Round {commandInfo.roundNumber}:</span> {commandInfo.description}
+                  </span>
+                )
+              )}
+            </div>
           </div>
-        </div>
         </section>
 
         {/* Current card display */}
         <section className="relative h-32 sm:h-48" aria-label="Current card display">
-          <div className="absolute left-1/2 transform -translate-x-1/2 current-card-display" data-card-wrapper aria-live="polite">
+          <div
+            className="current-card-display absolute left-1/2 -translate-x-1/2 transform"
+            data-card-wrapper
+            aria-live="polite"
+          >
             {currentCard && !animatingCard && isPlaying && currentCommandType === 'DROP' && (
-              <AnimatedCard 
+              <AnimatedCard
                 value={currentCard}
                 columnIndex={undefined}
                 onDrop={() => Promise.resolve()}
@@ -318,19 +355,16 @@ export default function ReplayClient() {
         {/* Categories section */}
         <section aria-label="Card categories">
           {isMobile ? (
-            <div className="flex-1 min-h-0">
-              <MobileReplayCategories 
-                categories={getCurrentRoundCategories()} 
-                aria-label="Mobile categories view" 
-              />
+            <div className="min-h-0 flex-1">
+              <MobileReplayCategories categories={getCurrentRoundCategories()} aria-label="Mobile categories view" />
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" aria-label="Category grid">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-5" aria-label="Category grid">
               {Object.entries(getCurrentRoundCategories()).map(([title]) => (
-                <ReplayColumn 
-                  key={title} 
-                  title={title as CategoryName} 
-                  cards={categories[title as CategoryName] || []} 
+                <ReplayColumn
+                  key={title}
+                  title={title as CategoryName}
+                  cards={categories[title as CategoryName] || []}
                 />
               ))}
             </div>
@@ -354,9 +388,9 @@ export default function ReplayClient() {
               top: animatingCard.targetPos.y,
             }}
             transition={{
-              type: "tween",
+              type: 'tween',
               duration: 0.5,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
             aria-hidden="true"
           >

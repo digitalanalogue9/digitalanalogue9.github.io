@@ -1,6 +1,6 @@
-import { getSession, getRoundsBySession } from "@/lib/db/indexedDB";
-import { initializeGameState } from "@/lib/utils/storage";
-import { Round, Value, Categories, DropCommandPayload, MoveCommandPayload } from "@/lib/types";
+import { getSession, getRoundsBySession } from '@/lib/db/indexedDB';
+import { initializeGameState } from '@/lib/utils/storage';
+import { Round, Value, Categories, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
 
 export async function loadSessionState(sessionId: string) {
   const session = await getSession(sessionId);
@@ -18,26 +18,23 @@ export async function loadSessionState(sessionId: string) {
     sessionId,
     currentRound,
     roundsCount: rounds.length,
-    availableCards: session.remainingValues?.length ?? 0
+    availableCards: session.remainingValues?.length ?? 0,
   });
 
   // Get the current round's data
-  const currentRoundData = rounds.find(r => r.roundNumber === currentRound);
+  const currentRoundData = rounds.find((r) => r.roundNumber === currentRound);
   if (!currentRoundData) {
     throw new Error(`Round ${currentRound} not found`);
   }
 
-  
   // Process drop commands for the current round to get remaining cards
-  const remainingValuesMap = new Map<string, Value>(
-    (session.remainingValues || []).map(value => [value.id, value])
-  );
+  const remainingValuesMap = new Map<string, Value>((session.remainingValues || []).map((value) => [value.id, value]));
 
   for (const command of currentRoundData.commands) {
     if (command.type === 'DROP') {
       const dropPayload = command.payload as DropCommandPayload;
       remainingValuesMap.delete(dropPayload.cardId);
-    } 
+    }
   }
 
   // Convert remaining values back to array
@@ -51,8 +48,8 @@ export async function loadSessionState(sessionId: string) {
     remainingCards: remainingValues,
     categoriesState: Object.entries(currentRoundData.availableCategories).map(([cat, vals]) => ({
       category: cat,
-      count: (vals || []).length
-    }))
+      count: (vals || []).length,
+    })),
   });
 
   // Initialize game state with reconstructed data
@@ -66,6 +63,6 @@ export async function loadSessionState(sessionId: string) {
 
   return {
     session,
-    currentRound
+    currentRound,
   };
 }

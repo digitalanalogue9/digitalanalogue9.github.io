@@ -12,7 +12,7 @@ const ROOT = process.cwd();
 // Create readline interface
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 const question = (query) => new Promise((resolve) => rl.question(query, resolve));
@@ -28,66 +28,68 @@ const SECTION_ORDER = [
   'state',
   'effects',
   'handlers',
-  'render'
+  'render',
 ];
 
 function identifySection(node) {
   if (t.isVariableDeclaration(node)) {
     // Check for useState
-    if (node.declarations.some(dec => 
-      t.isCallExpression(dec.init) && 
-      t.isIdentifier(dec.init.callee) && 
-      dec.init.callee.name === 'useState'
-    )) {
+    if (
+      node.declarations.some(
+        (dec) => t.isCallExpression(dec.init) && t.isIdentifier(dec.init.callee) && dec.init.callee.name === 'useState'
+      )
+    ) {
       return 'state';
     }
-    
+
     // Check for useRef
-    if (node.declarations.some(dec => 
-      t.isCallExpression(dec.init) && 
-      t.isIdentifier(dec.init.callee) && 
-      dec.init.callee.name === 'useRef'
-    )) {
+    if (
+      node.declarations.some(
+        (dec) => t.isCallExpression(dec.init) && t.isIdentifier(dec.init.callee) && dec.init.callee.name === 'useRef'
+      )
+    ) {
       return 'refs';
     }
-    
+
     // Check for other hooks
-    if (node.declarations.some(dec => 
-      t.isCallExpression(dec.init) && 
-      t.isIdentifier(dec.init.callee) && 
-      dec.init.callee.name.startsWith('use')
-    )) {
+    if (
+      node.declarations.some(
+        (dec) =>
+          t.isCallExpression(dec.init) && t.isIdentifier(dec.init.callee) && dec.init.callee.name.startsWith('use')
+      )
+    ) {
       return 'hooks';
     }
 
     // Check for constants
-    if (node.kind === 'const' && !node.declarations.some(dec => 
-      t.isCallExpression(dec.init) && 
-      t.isIdentifier(dec.init.callee) && 
-      dec.init.callee.name.startsWith('use')
-    )) {
+    if (
+      node.kind === 'const' &&
+      !node.declarations.some(
+        (dec) =>
+          t.isCallExpression(dec.init) && t.isIdentifier(dec.init.callee) && dec.init.callee.name.startsWith('use')
+      )
+    ) {
       return 'constants';
     }
   }
 
   // Check for useEffect
-  if (t.isExpressionStatement(node) && 
-      t.isCallExpression(node.expression) && 
-      t.isIdentifier(node.expression.callee) && 
-      node.expression.callee.name === 'useEffect') {
+  if (
+    t.isExpressionStatement(node) &&
+    t.isCallExpression(node.expression) &&
+    t.isIdentifier(node.expression.callee) &&
+    node.expression.callee.name === 'useEffect'
+  ) {
     return 'effects';
   }
 
   // Check for handlers
-  if (t.isFunctionDeclaration(node) || 
-      (t.isVariableDeclaration(node) && 
-       node.declarations.some(dec => 
-         t.isArrowFunctionExpression(dec.init) || 
-         t.isFunctionExpression(dec.init)
-       ))) {
-    const name = t.isFunctionDeclaration(node) ? 
-      node.id.name : 
-      node.declarations[0].id.name;
+  if (
+    t.isFunctionDeclaration(node) ||
+    (t.isVariableDeclaration(node) &&
+      node.declarations.some((dec) => t.isArrowFunctionExpression(dec.init) || t.isFunctionExpression(dec.init)))
+  ) {
+    const name = t.isFunctionDeclaration(node) ? node.id.name : node.declarations[0].id.name;
     if (name.startsWith('handle') || name.includes('Handler')) {
       return 'handlers';
     }
@@ -107,11 +109,11 @@ function identifySection(node) {
 async function analyzeComponent(filePath) {
   const content = await fs.readFile(filePath, 'utf-8');
   const issues = [];
-  
+
   try {
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     let componentBody = null;
@@ -121,7 +123,7 @@ async function analyzeComponent(filePath) {
       FunctionDeclaration(path) {
         if (path.node.body.type === 'BlockStatement') {
           componentBody = path;
-          path.node.body.body.forEach(node => {
+          path.node.body.body.forEach((node) => {
             const section = identifySection(node);
             if (section) {
               currentSectionOrder.push(section);
@@ -132,14 +134,14 @@ async function analyzeComponent(filePath) {
       ArrowFunctionExpression(path) {
         if (path.node.body.type === 'BlockStatement') {
           componentBody = path;
-          path.node.body.body.forEach(node => {
+          path.node.body.body.forEach((node) => {
             const section = identifySection(node);
             if (section) {
               currentSectionOrder.push(section);
             }
           });
         }
-      }
+      },
     });
 
     if (!componentBody) {
@@ -159,9 +161,8 @@ async function analyzeComponent(filePath) {
     return {
       hasIssues: issues.length > 0,
       issues,
-      currentOrder: currentSectionOrder
+      currentOrder: currentSectionOrder,
     };
-
   } catch (error) {
     console.error(`Error analyzing ${filePath}:`, error);
     return null;
@@ -175,62 +176,62 @@ async function analyzeComponentStructure(filePath) {
     hooksUsed: [],
     effectsCount: 0,
     handlersCount: 0,
-    orderIssues: []
+    orderIssues: [],
   };
-  
+
   try {
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     traverse(ast, {
       VariableDeclaration(path) {
-        path.node.declarations.forEach(dec => {
+        path.node.declarations.forEach((dec) => {
           // Collect state declarations
-          if (t.isCallExpression(dec.init) && 
-              t.isIdentifier(dec.init.callee) && 
-              dec.init.callee.name === 'useState') {
+          if (t.isCallExpression(dec.init) && t.isIdentifier(dec.init.callee) && dec.init.callee.name === 'useState') {
             if (t.isArrayPattern(dec.id)) {
               const stateName = dec.id.elements[0].name;
               details.stateDeclarations.push(stateName);
             }
           }
-          
+
           // Collect hook usage
-          if (t.isCallExpression(dec.init) && 
-              t.isIdentifier(dec.init.callee) && 
-              dec.init.callee.name.startsWith('use')) {
+          if (
+            t.isCallExpression(dec.init) &&
+            t.isIdentifier(dec.init.callee) &&
+            dec.init.callee.name.startsWith('use')
+          ) {
             details.hooksUsed.push(dec.init.callee.name);
           }
         });
       },
-      
+
       CallExpression(path) {
-        if (t.isIdentifier(path.node.callee) && 
-            path.node.callee.name === 'useEffect') {
+        if (t.isIdentifier(path.node.callee) && path.node.callee.name === 'useEffect') {
           details.effectsCount++;
         }
       },
-      
+
       FunctionDeclaration(path) {
         if (path.node.id.name.startsWith('handle')) {
           details.handlersCount++;
         }
       },
-      
+
       ArrowFunctionExpression(path) {
         const parentNode = path.parent;
-        if (t.isVariableDeclarator(parentNode) && 
-            t.isIdentifier(parentNode.id) && 
-            parentNode.id.name.startsWith('handle')) {
+        if (
+          t.isVariableDeclarator(parentNode) &&
+          t.isIdentifier(parentNode.id) &&
+          parentNode.id.name.startsWith('handle')
+        ) {
           details.handlersCount++;
         }
-      }
+      },
     });
 
     return details;
-
   } catch (error) {
     console.error(`Error analyzing structure of ${filePath}:`, error);
     return null;
@@ -239,11 +240,11 @@ async function analyzeComponentStructure(filePath) {
 
 async function reorganiseComponent(filePath) {
   const content = await fs.readFile(filePath, 'utf-8');
-  
+
   try {
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     let componentBody = null;
@@ -257,30 +258,30 @@ async function reorganiseComponent(filePath) {
       state: [],
       effects: [],
       handlers: [],
-      render: []
+      render: [],
     };
 
     traverse(ast, {
       Program(path) {
         // Handle top-level imports
-        path.node.body.forEach(node => {
+        path.node.body.forEach((node) => {
           if (t.isImportDeclaration(node)) {
             sections.imports.push(node);
           }
         });
       },
-      
+
       FunctionDeclaration(path) {
         if (path.node.body.type === 'BlockStatement') {
           componentBody = path;
         }
       },
-      
+
       ArrowFunctionExpression(path) {
         if (path.node.body.type === 'BlockStatement') {
           componentBody = path;
         }
-      }
+      },
     });
 
     if (!componentBody) {
@@ -288,7 +289,7 @@ async function reorganiseComponent(filePath) {
     }
 
     // Categorize statements
-    componentBody.node.body.body.forEach(node => {
+    componentBody.node.body.body.forEach((node) => {
       const section = identifySection(node);
       if (section) {
         sections[section].push(node);
@@ -299,7 +300,7 @@ async function reorganiseComponent(filePath) {
 
     // Rebuild the body in the correct order
     const newBody = [];
-    SECTION_ORDER.forEach(section => {
+    SECTION_ORDER.forEach((section) => {
       if (sections[section].length > 0) {
         newBody.push(t.commentBlock(` ${section} `, true));
         newBody.push(...sections[section]);
@@ -309,14 +310,17 @@ async function reorganiseComponent(filePath) {
 
     componentBody.node.body.body = newBody;
 
-    const output = generate(ast, {
-      retainLines: true,
-      comments: true
-    }, content);
+    const output = generate(
+      ast,
+      {
+        retainLines: true,
+        comments: true,
+      },
+      content
+    );
 
     await fs.writeFile(filePath, output.code);
     return true;
-
   } catch (error) {
     console.error(`Error processing ${filePath}:`, error);
     return false;
@@ -326,16 +330,17 @@ async function reorganiseComponent(filePath) {
 async function main() {
   try {
     console.log('Analyzing components...\n');
-    
+
     // Find all component files
     const files = glob.sync(path.join(ROOT, 'src', 'components', '**', '*.tsx'));
-    
+
     // Filter out index files and type files
-    const componentFiles = files.filter(file => 
-      !file.endsWith('index.tsx') && 
-      !file.endsWith('.types.tsx') &&
-      !file.includes('.test.') &&
-      !file.endsWith('Props.tsx')
+    const componentFiles = files.filter(
+      (file) =>
+        !file.endsWith('index.tsx') &&
+        !file.endsWith('.types.tsx') &&
+        !file.includes('.test.') &&
+        !file.endsWith('Props.tsx')
     );
 
     // Analyze all components first
@@ -347,7 +352,7 @@ async function main() {
         analysisResults.push({
           file,
           ...analysis,
-          details
+          details,
         });
       }
     }
@@ -361,11 +366,11 @@ async function main() {
     // Ask what to do
     const answer = await question(
       'Would you like to:\n' +
-      '1. Show detailed report only (no changes)\n' +
-      '2. Fix all components\n' +
-      '3. Fix components one by one\n' +
-      '4. Exit\n' +
-      'Enter your choice (1-4): '
+        '1. Show detailed report only (no changes)\n' +
+        '2. Fix all components\n' +
+        '3. Fix components one by one\n' +
+        '4. Exit\n' +
+        'Enter your choice (1-4): '
     );
 
     switch (answer) {
@@ -376,17 +381,17 @@ async function main() {
           console.log('----------------------------------------');
           if (issues && issues.length > 0) {
             console.log('\nOrder Issues:');
-            issues.forEach(issue => console.log(`  - ${issue}`));
+            issues.forEach((issue) => console.log(`  - ${issue}`));
           }
           if (details) {
             console.log('\nComponent Structure:');
             if (details.stateDeclarations.length > 0) {
               console.log(`  State declarations (${details.stateDeclarations.length}):`);
-              details.stateDeclarations.forEach(state => console.log(`    - ${state}`));
+              details.stateDeclarations.forEach((state) => console.log(`    - ${state}`));
             }
             if (details.hooksUsed.length > 0) {
               console.log(`  Hooks used (${details.hooksUsed.length}):`);
-              details.hooksUsed.forEach(hook => console.log(`    - ${hook}`));
+              details.hooksUsed.forEach((hook) => console.log(`    - ${hook}`));
             }
             console.log(`  Effects count: ${details.effectsCount}`);
             console.log(`  Handlers count: ${details.handlersCount}`);
@@ -422,7 +427,6 @@ async function main() {
 
     console.log('\nDone!');
     rl.close();
-
   } catch (error) {
     console.error('Error during component analysis:', error);
     rl.close();

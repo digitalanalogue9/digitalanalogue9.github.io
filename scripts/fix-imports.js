@@ -73,7 +73,7 @@ const importMappings = {
   '../db/indexedDB': '@/lib/db/indexedDB',
   '../utils/storage': '@/lib/utils/storage',
   '../utils/cache': '@/lib/utils/cache',
-  '../data/values.json': '@/data/values.json'
+  '../data/values.json': '@/data/values.json',
 };
 
 function createRelativeMapping(importPath) {
@@ -97,7 +97,7 @@ async function updateImports(filePath) {
     // Parse the file
     const ast = parser.parse(content, {
       sourceType: 'module',
-      plugins: ['typescript', 'jsx']
+      plugins: ['typescript', 'jsx'],
     });
 
     // Track any imports that weren't mapped
@@ -116,7 +116,7 @@ async function updateImports(filePath) {
             modified = true;
             wasUpdated = true;
           }
-        } 
+        }
         // Handle absolute paths
         else if (importPath.startsWith('@/')) {
           for (const [oldPath, newPath] of Object.entries(importMappings)) {
@@ -132,7 +132,7 @@ async function updateImports(filePath) {
         if (!wasUpdated && (importPath.startsWith('@/') || importPath.startsWith('..'))) {
           unmappedImports.add(importPath);
         }
-      }
+      },
     });
 
     if (modified) {
@@ -143,9 +143,8 @@ async function updateImports(filePath) {
 
     if (unmappedImports.size > 0) {
       console.log(`\n⚠️  Unmapped imports in ${filePath}:`);
-      unmappedImports.forEach(imp => console.log(`   ${imp}`));
+      unmappedImports.forEach((imp) => console.log(`   ${imp}`));
     }
-
   } catch (error) {
     console.error(`\n✗ Error processing ${filePath}:`, error.message);
     console.error(`   File: ${filePath}`);
@@ -153,55 +152,54 @@ async function updateImports(filePath) {
 }
 
 async function main() {
-    try {
-        console.log('Starting import path updates...');
-        console.log('Source directory:', SRC);
+  try {
+    console.log('Starting import path updates...');
+    console.log('Source directory:', SRC);
 
-        // Modified glob pattern for Windows
-        const files = glob.sync('**/*.{ts,tsx}', {
-            cwd: SRC,
-            absolute: true,
-            nodir: true,
-            windowsPathsNoEscape: true
-        });
+    // Modified glob pattern for Windows
+    const files = glob.sync('**/*.{ts,tsx}', {
+      cwd: SRC,
+      absolute: true,
+      nodir: true,
+      windowsPathsNoEscape: true,
+    });
 
-        console.log(`Found ${files.length} files to process`);
+    console.log(`Found ${files.length} files to process`);
 
-        if (files.length === 0) {
-            console.log('Searched in:', SRC);
-            console.log('No files found. Please check the path.');
-            return;
-        }
-
-        // Sort files to process in a predictable order
-        files.sort();
-
-        // Log first few files to verify correct paths
-        console.log('\nFirst few files to process:');
-        files.slice(0, 5).forEach(f => console.log(f));
-
-        let processedCount = 0;
-        let errorCount = 0;
-
-        // Process each file
-        for (const file of files) {
-            try {
-                await updateImports(file);
-                processedCount++;
-            } catch (error) {
-                errorCount++;
-                console.error(`Failed to process ${file}:`, error);
-            }
-        }
-
-        console.log('\nImport updates complete!');
-        console.log(`Processed ${processedCount} files`);
-        if (errorCount > 0) console.log(`Encountered ${errorCount} errors`);
-
-    } catch (error) {
-        console.error('Error during import updates:', error);
-        process.exit(1);
+    if (files.length === 0) {
+      console.log('Searched in:', SRC);
+      console.log('No files found. Please check the path.');
+      return;
     }
+
+    // Sort files to process in a predictable order
+    files.sort();
+
+    // Log first few files to verify correct paths
+    console.log('\nFirst few files to process:');
+    files.slice(0, 5).forEach((f) => console.log(f));
+
+    let processedCount = 0;
+    let errorCount = 0;
+
+    // Process each file
+    for (const file of files) {
+      try {
+        await updateImports(file);
+        processedCount++;
+      } catch (error) {
+        errorCount++;
+        console.error(`Failed to process ${file}:`, error);
+      }
+    }
+
+    console.log('\nImport updates complete!');
+    console.log(`Processed ${processedCount} files`);
+    if (errorCount > 0) console.log(`Encountered ${errorCount} errors`);
+  } catch (error) {
+    console.error('Error during import updates:', error);
+    process.exit(1);
+  }
 }
 
 main();

@@ -1,7 +1,7 @@
-import { Value, Categories } from "@/lib/types";
+import { Value, Categories } from '@/lib/types';
 /**
  * Represents the state of validation for a round.
- * 
+ *
  * @property {Value[]} remainingCards - The list of remaining cards to be validated.
  * @property {boolean} hasMinimumNotImportant - Indicates if the minimum number of not important cards is met.
  * @property {boolean} hasEnoughCards - Indicates if there are enough cards to proceed.
@@ -34,7 +34,9 @@ export const useRoundValidation = (state: ValidationState) => {
     }
 
     // Calculate total cards in non-Not Important categories
-    const activeCardsCount = Object.entries(state.categories).filter(([category]) => category !== 'Not Important').reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
+    const activeCardsCount = Object.entries(state.categories)
+      .filter(([category]) => category !== 'Not Important')
+      .reduce((sum, [_, cards]) => sum + (cards?.length || 0), 0);
 
     // Allow next round if we have enough active cards for the target
     return activeCardsCount >= state.targetCoreValues;

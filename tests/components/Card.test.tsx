@@ -9,7 +9,7 @@ describe('Card Component', () => {
   it('renders card content correctly', () => {
     const testValue = createMockValue({
       title: 'Test Title',
-      description: 'Test Description'
+      description: 'Test Description',
     });
     // testValue.id will be 1
     // ... rest of the test
@@ -18,7 +18,7 @@ describe('Card Component', () => {
   it('other test case', () => {
     const testValue = createMockValue({
       title: 'Another Title',
-      description: 'Another Description'
+      description: 'Another Description',
     });
     // testValue.id will be 2
     // ... rest of the test
@@ -28,7 +28,7 @@ describe('Card Component', () => {
     const testValue = createMockValue({
       id: 'test-card-id',
       title: 'Specific ID Test',
-      description: 'Test Description'
+      description: 'Test Description',
     });
     // testValue.id will be 35
   });

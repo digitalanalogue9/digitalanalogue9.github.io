@@ -13,19 +13,19 @@ const withPWA = require('next-pwa')({
         cacheName: 'core-values-cache',
         expiration: {
           maxEntries: 200,
-          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
         },
         networkTimeoutSeconds: 10,
         backgroundSync: {
           name: 'core-values-queue',
           options: {
-            maxRetentionTime: 24 * 60 // Retry for max of 24 Hours
-          }
-        }
-      }
-    }
-  ]
-})
+            maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
+          },
+        },
+      },
+    },
+  ],
+});
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isGitHubPages = process.env.NEXT_PUBLIC_DEPLOYMENT_TARGET === 'github';
@@ -42,8 +42,8 @@ const nextConfig = {
     NEXT_PUBLIC_VERSION: process.env.NEXT_PUBLIC_VERSION,
     NEXT_PUBLIC_DEBUG: process.env.NEXT_PUBLIC_DEBUG,
     NEXT_PUBLIC_CARDS_IN_GAME: process.env.NEXT_PUBLIC_CARDS_IN_GAME,
-    NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE: process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE
+    NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE: process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE,
   },
-}
+};
 
 module.exports = withPWA(nextConfig);

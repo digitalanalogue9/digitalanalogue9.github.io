@@ -1,8 +1,8 @@
 // src/app/error.tsx
-'use client'
+'use client';
 
 import { useMobile } from '@/lib/contexts/MobileContext';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 /**
  * Error component to display error messages and provide a way to reset the application state.
@@ -23,17 +23,11 @@ import { useEffect, useState } from 'react'
  * In development mode, it displays the error message to the user.
  * It provides a button to attempt to recover from the error and optionally displays an error reference code.
  */
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const { isMobile } = useMobile();
-  
+
   useEffect(() => {
-    document.title = "Core Values - Error";
+    document.title = 'Core Values - Error';
   }, []);
 
   useEffect(() => {
@@ -41,37 +35,23 @@ export default function Error({
     console.error('App Error:', {
       message: error.message,
       digest: error.digest,
-      name: error.name
-    })
-  }, [error])
+      name: error.name,
+    });
+  }, [error]);
 
   return (
-    <main
-      className="flex-1 flex items-center justify-center p-4"
-      role="alert"
-      aria-labelledby="error-heading"
-    >
-      <div className="text-center max-w-md">
-        <h1
-          id="error-heading"
-          className="text-2xl font-bold mb-4"
-        >
+    <main className="flex flex-1 items-center justify-center p-4" role="alert" aria-labelledby="error-heading">
+      <div className="max-w-md text-center">
+        <h1 id="error-heading" className="mb-4 text-2xl font-bold">
           Something went wrong!
         </h1>
 
         <div className="mb-6">
-          <p
-            className="text-black mb-2"
-            aria-live="polite"
-          >
-            We encountered an unexpected error.
-            You can try again or return to the home page.
+          <p className="mb-2 text-black" aria-live="polite">
+            We encountered an unexpected error. You can try again or return to the home page.
           </p>
           {process.env.NODE_ENV === 'development' && error.message && (
-            <p
-              className="text-red-600 text-sm mt-2"
-              aria-label="Error details"
-            >
+            <p className="mt-2 text-sm text-red-600" aria-label="Error details">
               {error.message}
             </p>
           )}
@@ -80,22 +60,19 @@ export default function Error({
         <div className="space-y-4">
           <button
             onClick={() => reset()}
-            className="w-full px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="Attempt to recover from error"
           >
             Try again
           </button>
 
           {error.digest && (
-            <p
-              className="text-xs text-black"
-              aria-label="Error reference code"
-            >
+            <p className="text-xs text-black" aria-label="Error reference code">
               Error Reference: {error.digest}
             </p>
           )}
         </div>
       </div>
     </main>
-  )
+  );
 }

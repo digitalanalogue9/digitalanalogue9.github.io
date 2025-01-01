@@ -1,5 +1,11 @@
-import { Categories, CategoryName } from "@/lib/types";
-export const allCategories: CategoryName[] = ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'] as const;
+import { Categories, CategoryName } from '@/lib/types';
+export const allCategories: CategoryName[] = [
+  'Very Important',
+  'Quite Important',
+  'Important',
+  'Of Some Importance',
+  'Not Important',
+] as const;
 export const emptyCategories: Categories = allCategories.reduce((acc, category) => {
   acc[category] = [];
   return acc;
@@ -9,7 +15,7 @@ export const emptyCategories: Categories = allCategories.reduce((acc, category) 
 export const initialCategories: Categories = {
   'Very Important': [],
   'Quite Important': [],
-  'Important': [],
+  Important: [],
   'Of Some Importance': [],
-  'Not Important': []
+  'Not Important': [],
 };

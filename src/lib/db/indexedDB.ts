@@ -3,32 +3,32 @@
 import { getEnvBoolean } from '@/lib/utils/config';
 import { generateSessionName } from '@/components/features/Exercise/utils';
 import { openDB, IDBPDatabase } from 'idb';
-import { Session } from "@/lib/types/Session";
-import { Round } from "@/lib/types/Round";
-import { Command } from "@/lib/types/Command";
-import { Value, CompletedSession, Categories } from "@/lib/types";
+import { Session } from '@/lib/types/Session';
+import { Round } from '@/lib/types/Round';
+import { Command } from '@/lib/types/Command';
+import { Value, CompletedSession, Categories } from '@/lib/types';
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'coreValuesData';
 const dbVersion = 3;
 const storeNames = {
   sessions: 'sessions',
   rounds: 'rounds',
-  completedSessions: 'completedSessions'
+  completedSessions: 'completedSessions',
 };
 const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
 
 // Database initialization
 /**
  * Initializes the IndexedDB database with the specified schema.
- * 
+ *
  * This function opens the IndexedDB database with the given name and version.
  * If the database needs to be upgraded, it creates the necessary object stores
  * and indexes.
- * 
+ *
  * @returns {Promise<IDBPDatabase>} A promise that resolves to the initialized IndexedDB database instance.
- * 
+ *
  * @throws Will throw an error if the database initialization fails.
- * 
+ *
  * @example
  * ```typescript
  * initDB().then(db => {
@@ -48,7 +48,7 @@ export async function initDB(): Promise<IDBPDatabase> {
         // Create stores
         if (!db.objectStoreNames.contains(storeNames.sessions)) {
           db.createObjectStore(storeNames.sessions, {
-            keyPath: 'id'
+            keyPath: 'id',
           });
         }
 
@@ -56,7 +56,7 @@ export async function initDB(): Promise<IDBPDatabase> {
         if (!db.objectStoreNames.contains(storeNames.rounds)) {
           // Create new store with index
           const store = db.createObjectStore(storeNames.rounds, {
-            keyPath: ['sessionId', 'roundNumber']
+            keyPath: ['sessionId', 'roundNumber'],
           });
           try {
             store.createIndex('sessionId', 'sessionId');
@@ -66,10 +66,10 @@ export async function initDB(): Promise<IDBPDatabase> {
         }
         if (!db.objectStoreNames.contains(storeNames.completedSessions)) {
           db.createObjectStore(storeNames.completedSessions, {
-            keyPath: 'sessionId'
+            keyPath: 'sessionId',
           }); // Single string, not array
         }
-      }
+      },
     });
     if (isDebug) console.log('✅ IndexedDB initialized successfully');
     return db;
@@ -113,14 +113,14 @@ export async function addSession(session: Omit<Session, 'id'>, initialCategories
   try {
     const db = await initDB();
     const sessionId = await generateSessionName(db);
-    
+
     // Start a transaction that includes both stores
     const tx = db.transaction([storeNames.sessions, storeNames.rounds], 'readwrite');
-    
+
     // Save the session
     await tx.objectStore(storeNames.sessions).put({
       ...session,
-      id: sessionId
+      id: sessionId,
     });
 
     // Create initial round
@@ -128,8 +128,8 @@ export async function addSession(session: Omit<Session, 'id'>, initialCategories
       sessionId,
       roundNumber: 1,
       commands: [],
-      availableCategories : initialCategories,
-      timestamp: Date.now()
+      availableCategories: initialCategories,
+      timestamp: Date.now(),
     };
 
     // Save the initial round
@@ -181,10 +181,11 @@ export async function getSessions(): Promise<Session[]> {
  * @throws Will throw an error if the update operation fails.
  */
 export async function updateSession(sessionId: string, updates: Partial<Session>) {
-  if (isDebug) console.log('🔄 Updating session:', {
-    sessionId,
-    updates
-  });
+  if (isDebug)
+    console.log('🔄 Updating session:', {
+      sessionId,
+      updates,
+    });
   try {
     const db = await initDB();
     const tx = db.transaction(storeNames.sessions, 'readwrite');
@@ -193,7 +194,7 @@ export async function updateSession(sessionId: string, updates: Partial<Session>
     if (session) {
       await store.put({
         ...session,
-        ...updates
+        ...updates,
       });
       if (isDebug) console.log('✅ Session updated successfully');
     }
@@ -216,13 +217,18 @@ export async function updateSession(sessionId: string, updates: Partial<Session>
  *
  * @throws Will throw an error if there is an issue saving the round.
  */
-export async function saveRound(sessionId: string, roundNumber: number, commands: Command[], availableCategories: Categories // Add this parameter
+export async function saveRound(
+  sessionId: string,
+  roundNumber: number,
+  commands: Command[],
+  availableCategories: Categories // Add this parameter
 ): Promise<void> {
-  if (isDebug) console.log('💾 Saving round:', {
-    sessionId,
-    roundNumber,
-    commands
-  });
+  if (isDebug)
+    console.log('💾 Saving round:', {
+      sessionId,
+      roundNumber,
+      commands,
+    });
   try {
     if (!sessionId) return;
     const db = await initDB();
@@ -232,7 +238,7 @@ export async function saveRound(sessionId: string, roundNumber: number, commands
       roundNumber,
       commands,
       availableCategories,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     if (existingRound) {
       if (isDebug) console.log('🔄 Updating existing round');
@@ -240,7 +246,7 @@ export async function saveRound(sessionId: string, roundNumber: number, commands
         ...existingRound,
         commands: round.commands,
         availableCategories: round.availableCategories,
-        timestamp: round.timestamp
+        timestamp: round.timestamp,
       });
     } else {
       if (isDebug) console.log('➕ Creating new round');
@@ -261,10 +267,11 @@ export async function saveRound(sessionId: string, roundNumber: number, commands
  * @throws Will throw an error if there is an issue fetching the round from the database.
  */
 export async function getRound(sessionId: string, roundNumber: number): Promise<Round | undefined> {
-  if (isDebug) console.log('🔍 Fetching round:', {
-    sessionId,
-    roundNumber
-  });
+  if (isDebug)
+    console.log('🔍 Fetching round:', {
+      sessionId,
+      roundNumber,
+    });
   try {
     const db = await initDB();
     const round = await db.get(storeNames.rounds, [sessionId, roundNumber]);
@@ -305,17 +312,18 @@ export async function getRoundsBySession(sessionId: string): Promise<Round[]> {
  * @throws Will throw an error if there is an issue saving the session.
  */
 export async function saveCompletedSession(sessionId: string, finalValues: Value[]) {
-  if (isDebug) console.log('💾 Saving completed session:', {
-    sessionId,
-    valuesCount: finalValues.length
-  });
+  if (isDebug)
+    console.log('💾 Saving completed session:', {
+      sessionId,
+      valuesCount: finalValues.length,
+    });
   try {
     const db = await initDB();
     await db.put(storeNames.completedSessions, {
       sessionId,
       // This needs to be included since it's the keyPath
       finalValues,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }); // No need for second argument since sessionId is in the object as keyPath
     if (isDebug) console.log('✅ Completed session saved successfully');
   } catch (error) {
@@ -360,10 +368,10 @@ export const deleteSession = async (sessionId: string): Promise<void> => {
   if (isDebug) console.log('🗑️ Deleting session and associated rounds:', sessionId);
   try {
     const db = await initDB();
-    
+
     // Start a transaction that includes both stores
     const tx = db.transaction([storeNames.sessions, storeNames.rounds, storeNames.completedSessions], 'readwrite');
-    
+
     // Delete the session
     await tx.objectStore(storeNames.sessions).delete(sessionId);
     await tx.objectStore(storeNames.completedSessions).delete(sessionId);
@@ -371,7 +379,7 @@ export const deleteSession = async (sessionId: string): Promise<void> => {
     const roundsStore = tx.objectStore(storeNames.rounds);
     const sessionRoundsIndex = roundsStore.index('sessionId');
     const roundsToDelete = await sessionRoundsIndex.getAllKeys(sessionId);
-    
+
     // Delete each round
     for (const roundKey of roundsToDelete) {
       await roundsStore.delete(roundKey);
@@ -388,24 +396,24 @@ export const deleteSession = async (sessionId: string): Promise<void> => {
 };
 
 export async function importSession(session: Session, completedSession: CompletedSession, rounds: Round[]) {
-    const db = await initDB();
-    const tx = db.transaction(['sessions', 'completedSessions', 'rounds'], 'readwrite');
+  const db = await initDB();
+  const tx = db.transaction(['sessions', 'completedSessions', 'rounds'], 'readwrite');
 
-    // Import session
-    const sessionStore = tx.objectStore('sessions');
-    await sessionStore.put(session);
+  // Import session
+  const sessionStore = tx.objectStore('sessions');
+  await sessionStore.put(session);
 
-    // Import completed session
-    if (completedSession) {
-        const completedSessionStore = tx.objectStore('completedSessions');
-        await completedSessionStore.put(completedSession);
-    }
+  // Import completed session
+  if (completedSession) {
+    const completedSessionStore = tx.objectStore('completedSessions');
+    await completedSessionStore.put(completedSession);
+  }
 
-    // Import rounds
-    const roundsStore = tx.objectStore('rounds');
-    for (const round of rounds) {
-        await roundsStore.put(round);
-    }
+  // Import rounds
+  const roundsStore = tx.objectStore('rounds');
+  for (const round of rounds) {
+    await roundsStore.put(round);
+  }
 
-    await tx.done;
+  await tx.done;
 }

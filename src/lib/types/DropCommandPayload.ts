@@ -1,6 +1,6 @@
-import { CategoryName } from "./CategoryName";
+import { CategoryName } from './CategoryName';
 export interface DropCommandPayload {
-    cardId: string;
-    cardTitle: string; // Add this
-    category: CategoryName;
+  cardId: string;
+  cardTitle: string; // Add this
+  category: CategoryName;
 }
