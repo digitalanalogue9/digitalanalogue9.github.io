@@ -1,15 +1,15 @@
 'use client';
 
-import { getEnvBoolean } from '@/lib/utils/config';
 import { generateSessionName } from '@/components/features/Exercise/utils';
 import { openDB, IDBPDatabase } from 'idb';
 import { Session } from '@/lib/types/Session';
 import { Round } from '@/lib/types/Round';
 import { Command } from '@/lib/types/Command';
 import { Value, CompletedSession, Categories } from '@/lib/types';
+
 const isBrowser = typeof window !== 'undefined';
 const dbName = 'coreValuesData';
-const dbVersion = 3;
+const dbVersion = 4;
 const storeNames = {
   sessions: 'sessions',
   rounds: 'rounds',
@@ -92,6 +92,9 @@ export async function getSession(sessionId: string): Promise<Session | undefined
   try {
     const db = await initDB();
     const session = await db.get(storeNames.sessions, sessionId);
+    if (session && !session.exerciseType) {
+      session.exerciseType = 'personal'; // Default to 'personal' if not present
+    }
     if (isDebug) console.log('✅ Session fetched successfully:', session);
     return session;
   } catch (error) {
@@ -165,6 +168,11 @@ export async function getSessions(): Promise<Session[]> {
   try {
     const db = await initDB();
     const sessions = await db.getAll(storeNames.sessions);
+    sessions.forEach(session => {
+      if (!session.exerciseType) {
+        session.exerciseType = 'personal';
+      }
+    });
     if (isDebug) console.log('✅ Sessions fetched successfully:', sessions);
     return sessions;
   } catch (error) {

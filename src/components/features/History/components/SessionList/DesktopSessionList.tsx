@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPostItStyles } from '@/components/features/Cards/components/styles';
-import { getCompletedSession, deleteSession, importSession, getRoundsBySession } from '@/lib/db/indexedDB';
+import { deleteSession } from '@/lib/db/indexedDB';
 import { SessionListProps } from './types';
-import { Value, ValueWithReason, Session, CompletedSession, Round } from '@/lib/types';
+import { Value, ValueWithReason } from '@/lib/types';
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
-import { saveAs } from 'file-saver-es';
 import {
   formatDate,
   handleImportSession,
@@ -19,6 +18,7 @@ import {
   generateFullText,
   generateTitles,
 } from './sessionUtils';
+import { formatRelative } from 'date-fns';
 
 /**
  * Component for displaying a list of sessions in a desktop view.
@@ -319,6 +319,9 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
               Last Updated
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+              Type
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
               Target Values
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
@@ -349,8 +352,9 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
               </td>
               <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.id}</td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-black">
-                <time dateTime={new Date(session.timestamp).toISOString()}>{formatDate(session.timestamp)}</time>
+                <time dateTime={new Date(session.timestamp).toISOString()}>{formatRelative(new Date(session.timestamp).toISOString(), new Date())}</time>
               </td>
+              <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.exerciseType}</td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-black">{session.targetCoreValues}</td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-black">{session.currentRound}</td>
               <td className="whitespace-nowrap px-6 py-4">

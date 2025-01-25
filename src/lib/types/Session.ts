@@ -1,5 +1,6 @@
 // src/types/Session.ts
 import { Categories } from './Categories';
+import { ExerciseType } from './ExerciseType';
 import { Value } from './Value';
 
 export interface Session {
@@ -10,6 +11,7 @@ export interface Session {
   completed: boolean;
   initialValues: Value[];
   remainingValues: Value[];
+  exerciseType: ExerciseType;
 }
 
 export interface ReconstructedState {

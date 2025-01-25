@@ -64,7 +64,8 @@ export default function About() {
         <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={styles.paragraph}>
             Understanding your core values is essential for making meaningful life decisions and living authentically.
-            This app helps you explore and organise your values through an interactive and thoughtful process.
+            This app helps you explore and organise your values through an interactive and thoughtful process.  You can
+            also use this app to help your team or group identify shared values and align on a common purpose.
             {!isMobile &&
               `
             Whether you are at a crossroads in life, planning your future, or simply want

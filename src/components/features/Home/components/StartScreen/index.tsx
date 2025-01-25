@@ -7,9 +7,12 @@ import { addSession } from '@/lib/db/indexedDB';
 import { initializeGameState } from '@/lib/utils/storage';
 import { initialCategories } from '@/components/features/Categories/constants/categories';
 import valuesData from '@/data/values.json';
+import teamValuesData from '@/data/team-values.json';
 import { getRandomValues } from '@/components/features/Home/utils/valuesUtils';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from '@/lib/utils/styles/textStyles';
+import { ExerciseType } from '@/lib/types/ExerciseType';
+
 
 export default function StartScreen() {
   const router = useRouter();
@@ -21,6 +24,7 @@ export default function StartScreen() {
   const [isInitialising, setIsInitialising] = useState(false);
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
+  const [exerciseType, setExerciseType] = useState<ExerciseType>('personal');
 
   const handleViewPreviousResults = () => {
     router.push('/history');
@@ -29,7 +33,8 @@ export default function StartScreen() {
   const handleStart = async () => {
     setIsInitialising(true);
     try {
-      const shuffledValues = getRandomValues(valuesData.values);
+      const sourceData = exerciseType === 'personal' ? valuesData.values : teamValuesData.values;
+      const shuffledValues = getRandomValues(sourceData);
       const limitedValues = shuffledValues.slice(0, maxCards);
 
       const session = {
@@ -39,6 +44,7 @@ export default function StartScreen() {
         completed: false,
         initialValues: limitedValues,
         remainingValues: limitedValues,
+        exerciseType, // Add this to track session type
       };
 
       const sessionId = await addSession(session, initialCategories);
@@ -64,7 +70,6 @@ export default function StartScreen() {
       >
         Discover Your <span className="text-blue-700">Core Values</span>
       </h1>
-
       <div
         className={`mx-auto max-w-2xl text-center ${isMobile ? 'mb-4 space-y-2' : 'mb-10 space-y-4 sm:space-y-6'}`}
         aria-label="Introduction"
@@ -75,7 +80,7 @@ export default function StartScreen() {
         </p>
         <p className={styles.paragraph}>
           You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values,
-          like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you.
+          like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you or your team.
         </p>
       </div>
 
@@ -84,13 +89,13 @@ export default function StartScreen() {
           <h2 className="text-lg font-semibold text-black sm:text-xl">Why Discover Your Core Values?</h2>
           <ul className="list-inside list-disc space-y-2 text-left text-sm text-black sm:text-base">
             <li>
-              <strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you.
+              <strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you or your team.
             </li>
             <li>
               <strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.
             </li>
             <li>
-              <strong>Enhanced Relationships:</strong> Communicate your values clearly and understand others better.
+              <strong>Enhanced Relationships:</strong> Communicate your values or the values of your team clearly and understand others better.
             </li>
             <li>
               <strong>Increased Motivation:</strong> Align your goals with your values for lasting progress.
@@ -98,7 +103,6 @@ export default function StartScreen() {
           </ul>
         </div>
       )}
-
       <form
         id="configuration-form"
         onSubmit={(e) => {
@@ -108,6 +112,39 @@ export default function StartScreen() {
         className={`flex flex-col items-center ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}
         aria-label="Exercise configuration"
       >
+        <label
+          id="exercise-type-label"
+          htmlFor="exercise-type"
+          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
+        >
+          Do you want to discover your core values or your team's core values?
+        </label>
+        <div className="mb-6 flex justify-center" role="radiogroup" aria-labelledby="exercise-type-label">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="exercise-type"
+              value="personal"
+              checked={exerciseType === 'personal'}
+              onChange={() => setExerciseType('personal')}
+              className="form-radio"
+              aria-checked={exerciseType === 'personal'}
+            />
+            <span className="ml-2">My own</span>
+          </label>
+          <label className="inline-flex items-center ml-4">
+            <input
+              type="radio"
+              name="exercise-type"
+              value="team"
+              checked={exerciseType === 'team'}
+              onChange={() => setExerciseType('team')}
+              className="form-radio"
+              aria-checked={exerciseType === 'team'}
+            />
+            <span className="ml-2">The team</span>
+          </label>
+        </div>
         <label
           id="core-values-count-label"
           htmlFor="core-values-count"
@@ -128,8 +165,16 @@ export default function StartScreen() {
           required
           disabled={isInitialising}
         />
+        <label
+          id="start-button-label"
+          htmlFor="start-button"
+          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
+        >
+          Ready to start?
+        </label>
         <button
           type="submit"
+          id="start-button"
           className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
           aria-label="Begin discovery of my core values"
           disabled={isInitialising}

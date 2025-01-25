@@ -7,7 +7,8 @@ import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
-import { saveAs } from 'file-saver-es';
+import { formatRelative } from 'date-fns';
+
 import {
   formatDate,
   handleImportSession,
@@ -275,11 +276,12 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             )}
             <div className="mb-2 flex items-start justify-between">
               <div>
-                <time dateTime={new Date(session.timestamp).toISOString()} className="text-sm text-black">
-                  {formatDate(session.timestamp)}
+              <div className="mt-1 text-sm">Type : {session.exerciseType}</div> {/* Added line */}
+              <time dateTime={new Date(session.timestamp).toISOString()} className="mt-1 text-sm text-black">
+                  Last updated : {formatRelative(new Date(session.timestamp).toISOString(), new Date())}
                 </time>
-                <div className="mt-1 text-sm">Target Values: {session.targetCoreValues}</div>
-                <div className="text-sm">Round: {session.currentRound}</div>
+                <div className="mt-1 text-sm">Target values : {session.targetCoreValues}</div>
+                <div className="mt-1 text-sm">Round : {session.currentRound}</div>
               </div>
               <div className={`text-sm ${session.completed ? 'text-green-700' : 'text-blue-700'}`}>
                 {session.completed ? 'Completed' : 'In Progress'}

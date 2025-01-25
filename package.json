@@ -18,6 +18,7 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "client-only": "^0.0.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "file-saver-es": "^2.0.5",
     "framer-motion": "^11.11.11",

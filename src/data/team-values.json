@@ -1,178 +1,179 @@
-[
+{
+  "values": [
     {
-      "id": 1,
-      "title": "Accountability",
-      "description": "We own our responsibilities, acknowledge mistakes, and take corrective action without deflecting blame."
+      "id": "1",
+      "title": "RESPONSIBILITY",
+      "description": "We take pride in our work, own our responsibilities, acknowledge mistakes, and take corrective action without deflecting blame."
     },
     {
-      "id": 2,
-      "title": "Adaptability",
-      "description": "We flex and adjust as circumstances shift, finding opportunities in challenges."
+      "id": "2",
+      "title": "TEAMWORK",
+      "description": "We collaborate as a unit, leveraging each other’s strengths to achieve collective success."
     },
     {
-      "id": 3,
-      "title": "Alignment",
-      "description": "We ensure our individual efforts align with the team’s objectives for collective success."
+      "id": "3",
+      "title": "RECOGNITION",
+      "description": "We celebrate each other's successes, contributions, and efforts, creating a culture of gratitude and encouragement."
     },
     {
-      "id": 4,
-      "title": "Appreciation",
-      "description": "We celebrate each other's successes and acknowledge the effort behind them."
+      "id": "4",
+      "title": "ADAPTABILITY",
+      "description": "We flex and adjust as circumstances shift, finding opportunities in challenges and responding effectively to change."
     },
     {
-      "id": 5,
-      "title": "Balance",
-      "description": "We recognise the importance of balancing workloads with personal health and happiness."
+      "id": "5",
+      "title": "GROWTH",
+      "description": "We embrace challenges as opportunities to develop skills, improve, and thrive as a team."
     },
     {
-      "id": 6,
-      "title": "Candour",
-      "description": "We value constructive feedback and aren’t afraid to voice concerns in a respectful way."
+      "id": "6",
+      "title": "INCLUSIVITY",
+      "description": "We value diverse perspectives and create an environment where everyone feels welcome, respected, and valued."
     },
     {
-      "id": 7,
-      "title": "Clarity",
-      "description": "We avoid misunderstandings by being clear and precise in our communication."
+      "id": "7",
+      "title": "CLARITY",
+      "description": "We communicate clearly and precisely, valuing respectful and constructive feedback to address concerns effectively."
     },
     {
-      "id": 8,
-      "title": "Collaboration",
-      "description": "We work together, leveraging each other's strengths to achieve more than we could individually."
+      "id": "8",
+      "title": "DEDICATION",
+      "description": "We stay committed to our goals, overcome obstacles with determination, and deliver on our promises."
     },
     {
-      "id": 9,
-      "title": "Commitment",
-      "description": "We dedicate ourselves fully to the team’s goals and consistently deliver on our promises."
+      "id": "9",
+      "title": "BALANCE",
+      "description": "We prioritise balancing workloads with personal health and happiness, creating a sustainable work environment."
     },
     {
-      "id": 10,
-      "title": "Creativity",
-      "description": "We embrace innovative thinking and encourage the team to explore new ideas and solutions."
+      "id": "10",
+      "title": "CREATIVITY",
+      "description": "We embrace innovative thinking and encourage exploring new ideas and solutions."
     },
     {
-      "id": 11,
-      "title": "Diversity",
-      "description": "We value diverse perspectives and recognise the strength they bring to our decisions."
+      "id": "11",
+      "title": "EMPATHY",
+      "description": "We listen to understand, treating each other with kindness and compassion."
     },
     {
-      "id": 12,
-      "title": "Empathy",
-      "description": "We listen to understand and treat each other with kindness and compassion."
+      "id": "12",
+      "title": "EXCELLENCE",
+      "description": "We strive for the highest standards in everything we do, inspiring ourselves and others to excel."
     },
     {
-      "id": 13,
-      "title": "Empowerment",
-      "description": "We trust each other to take ownership and make decisions that benefit the team."
-    },
-    {
-      "id": 14,
-      "title": "Excellence",
-      "description": "We strive for the highest standards in everything we do and inspire others to do the same."
-    },
-    {
-      "id": 15,
-      "title": "Growth",
-      "description": "We embrace challenges as opportunities to develop skills and grow as a team."
-    },
-    {
-      "id": 16,
-      "title": "Honesty",
-      "description": "We are truthful and transparent in all our interactions, building trust through integrity."
-    },
-    {
-      "id": 17,
-      "title": "Inclusivity",
-      "description": "We ensure everyone feels welcome, respected, and valued for their contributions."
-    },
-    {
-      "id": 18,
-      "title": "Initiative",
-      "description": "We take proactive steps to improve our team and processes without waiting to be asked."
-    },
-    {
-      "id": 19,
-      "title": "Innovation",
-      "description": "We challenge conventional thinking and explore creative ways to solve problems."
-    },
-    {
-      "id": 20,
-      "title": "Integrity",
+      "id": "13",
+      "title": "INTEGRITY",
       "description": "We act in alignment with our values, even when it’s difficult or inconvenient."
     },
     {
-      "id": 21,
-      "title": "Kindness",
-      "description": "We treat each other with respect and encourage positive interactions in all our exchanges."
-    },
-    {
-      "id": 22,
-      "title": "Leadership",
+      "id": "14",
+      "title": "LEADERSHIP",
       "description": "We inspire others by taking responsibility and guiding the team towards success."
     },
     {
-      "id": 23,
-      "title": "Learning",
-      "description": "We constantly seek new knowledge and skills to improve ourselves and the team."
+      "id": "15",
+      "title": "OPENNESS",
+      "description": "We share ideas, perspectives, and information freely, promoting collaboration and innovation."
     },
     {
-      "id": 24,
-      "title": "Openness",
-      "description": "We share ideas, perspectives, and information freely, promoting collaboration."
-    },
-    {
-      "id": 25,
-      "title": "Ownership",
-      "description": "We take pride in our work and ensure we see tasks through to completion."
-    },
-    {
-      "id": 26,
-      "title": "Perseverance",
-      "description": "We stay resilient and determined, overcoming obstacles to achieve our goals."
-    },
-    {
-      "id": 27,
-      "title": "Positivity",
+      "id": "16",
+      "title": "POSITIVITY",
       "description": "We foster an optimistic mindset and encourage each other to focus on solutions."
     },
     {
-      "id": 28,
-      "title": "Quality",
-      "description": "We prioritise doing things well, ensuring our work is effective and reliable."
-    },
-    {
-      "id": 29,
-      "title": "Recognition",
-      "description": "We celebrate each other's contributions and express gratitude for hard work."
-    },
-    {
-      "id": 30,
-      "title": "Resilience",
+      "id": "17",
+      "title": "RESILIENCE",
       "description": "We bounce back from setbacks, learning and growing stronger with each challenge."
     },
     {
-      "id": 31,
-      "title": "Respect",
-      "description": "We value each other’s time, opinions, and efforts, fostering mutual trust and appreciation."
+      "id": "18",
+      "title": "SAFETY",
+      "description": "We create an environment where everyone feels comfortable expressing themselves and taking risks."
     },
     {
-      "id": 32,
-      "title": "Safety",
-      "description": "We create an environment where everyone feels comfortable to express themselves and take risks."
-    },
-    {
-      "id": 33,
-      "title": "Support",
+      "id": "19",
+      "title": "SUPPORT",
       "description": "We help one another succeed by offering guidance, encouragement, and assistance."
     },
     {
-      "id": 34,
-      "title": "Teamwork",
-      "description": "We collaborate as a unit, leveraging our collective strengths for better results."
+      "id": "20",
+      "title": "ACCOUNTABILITY",
+      "description": "We take ownership of our actions and ensure follow-through on commitments."
     },
     {
-      "id": 35,
-      "title": "Trust",
-      "description": "We rely on one another to be dependable, honest, and supportive."
+      "id": "21",
+      "title": "TRUST",
+      "description": "We build mutual trust by being dependable, honest, and supportive."
+    },
+    {
+      "id": "22",
+      "title": "TRANSPARENCY",
+      "description": "We are open and honest in our communication, ensuring everyone is informed and aligned."
+    },
+    {
+      "id": "23",
+      "title": "INNOVATION",
+      "description": "We challenge conventional thinking to find creative and effective solutions."
+    },
+    {
+      "id": "24",
+      "title": "HUMILITY",
+      "description": "We acknowledge our limitations, remain open to feedback, and learn from others."
+    },
+    {
+      "id": "25",
+      "title": "COURAGE",
+      "description": "We embrace challenges, take calculated risks, and step out of our comfort zones."
+    },
+    {
+      "id": "26",
+      "title": "FOCUS",
+      "description": "We maintain clarity on our priorities and avoid distractions to achieve our goals."
+    },
+    {
+      "id": "27",
+      "title": "PERSISTENCE",
+      "description": "We stay determined and consistent, even when facing challenges or setbacks."
+    },
+    {
+      "id": "28",
+      "title": "STANDARDS",
+      "description": "We hold each other to high standards, ensuring collective success."
+    },
+    {
+      "id": "29",
+      "title": "FLEXIBILITY",
+      "description": "We adapt to changing needs and challenges with agility and creativity."
+    },
+    {
+      "id": "30",
+      "title": "OPTIMISM",
+      "description": "We maintain a positive outlook, even during difficult times, to inspire and motivate each other."
+    },
+    {
+      "id": "31",
+      "title": "COMMUNITY",
+      "description": "We build a strong sense of belonging and purpose within our team and beyond."
+    },
+    {
+      "id": "32",
+      "title": "ENERGY",
+      "description": "We bring enthusiasm and passion to our work, inspiring others around us."
+    },
+    {
+      "id": "33",
+      "title": "ALIGNMENT",
+      "description": "We ensure our individual efforts align with the team’s objectives for collective success."
+    },
+    {
+      "id": "34",
+      "title": "RESOURCEFULNESS",
+      "description": "We maximise the use of available resources, finding creative solutions to overcome limitations."
+    },
+    {
+      "id": "35",
+      "title": "EQUITY",
+      "description": "We ensure fairness, providing equal opportunities for everyone to succeed."
     }
   ]
-  
+}
