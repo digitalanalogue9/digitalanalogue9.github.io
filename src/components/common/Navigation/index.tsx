@@ -46,6 +46,13 @@ export default function Navigation() {
           About
         </Link>
         <Link
+          href="/howtouse"
+          className={`${getActiveClass('/howtouse')} px-4 py-2 text-lg`}
+          aria-current={pathname === '/howtouse' ? 'page' : undefined}
+        >
+          How to use
+        </Link>
+        <Link
           href="/history"
           className={`${getActiveClass('/history')} px-4 py-2 text-lg`}
           aria-current={pathname === '/history' ? 'page' : undefined}

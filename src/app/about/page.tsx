@@ -3,18 +3,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { clearGameState } from '@/lib/utils/storage';
-import { getLocalStorage, setLocalStorage } from '@/lib/utils/localStorage';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from '@/lib/utils/styles/textStyles';
-import { useConsent } from '@/lib/hooks/useConsent';
-import Link from 'next/link';
-import { ConsentStatus } from '@/lib/types/Consent';
 
 const appVersion = process.env.NEXT_PUBLIC_VERSION || '0.0.0';
 
 export default function About() {
-  const [showInstructions, setShowInstructions] = useState(true);
-  const { consent, updateConsent } = useConsent();
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
 
@@ -26,26 +20,6 @@ export default function About() {
     clearGameState();
   }, []);
 
-  useEffect(() => {
-    const savedPreference = getLocalStorage('show-instructions', true);
-    setShowInstructions(savedPreference !== false);
-  }, []);
-
-  const handleToggleInstructions = () => {
-    const newValue = !showInstructions;
-    setShowInstructions(newValue);
-    setLocalStorage('show-instructions', newValue ? true : false);
-  };
-
-  const handleConsent = (status: ConsentStatus) => {
-    updateConsent({
-      analytics: status,
-      functional: status,
-      advertisement: 'denied',
-      timestamp: Date.now(),
-    });
-  };
-
   return (
     <div aria-labelledby="about-heading" className={`max-w-4xl ${getContainerClassName(isMobile)}`}>
       <div className="text-center">
@@ -56,158 +30,94 @@ export default function About() {
           <p className={`${styles.largeParagraph} font-medium text-black`}>Version {appVersion}</p>
         </div>
       </div>
-
-      <section aria-labelledby="why-matters-heading" className="pt-2">
-        <h2 id="why-matters-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Why Core Values Matter
+      <section aria-labelledby="inspiration-heading" className="pt-2">
+        <h2 id="inspiration-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
+          What was the inspiration behind Core Values?
         </h2>
-        <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
-          <p className={styles.paragraph}>
-            Understanding your core values is essential for making meaningful life decisions and living authentically.
-            This app helps you explore and organise your values through an interactive and thoughtful process.  You can
-            also use this app to help your team or group identify shared values and align on a common purpose.
-            {!isMobile &&
-              `
-            Whether you are at a crossroads in life, planning your future, or simply want
-            to better understand yourself, identifying your core values provides a compass
-            for decision-making and personal growth.`}
+        <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            I'm lucky to have an awesome coach to chat things through with. In one of our first sessions, she had a set
+            of physical cards that she lent me to help me identify my core values. I found the exercise to be very
+            helpful but understood from my coach that I should periodically revisit my choices because the only constant
+            in life is change.
+          </p>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            The challenge was that she wanted them back so it would be fair to say the inspiration for Core Values was
+            born out of wanting to have my own set of cards to use whenever I needed them.
+          </p>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            I then decided to send it out into the world in the hope that you will find it helpful as well.
           </p>
         </div>
       </section>
 
-      <section aria-labelledby="how-it-works-heading" className="pt-2">
-        <h2 id="how-it-works-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          How to Play
+      <section aria-labelledby="why-matters-heading" className="pt-2">
+        <h2 id="why-matters-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
+          Why core values matter
         </h2>
-        <div className="space-y-4" role="list">
-          {[
-            {
-              icon: '📝',
-              title: 'Step 1: Identify Values',
-              description:
-                'Start by selecting the number of core values that you want to finish with.  The default is 10 - the lower you go, the harder this exercise will be.',
-              bgColor: 'bg-green-100',
-              textColor: 'text-green-900',
-            },
-            {
-              icon: '🔍',
-              title: 'Step 2: Prioritise',
-              description:
-                "For each value, you will need to move the card to an importance category. This helps you see which values are most significant to you and which are not important.  When you have played through all the values, any values in the 'Not Important' category will be removed and you start again with less values.  Keep going until you have the number of values you selected in Step 1.  You will then be asked why you chose these values.",
-              bgColor: 'bg-green-100',
-              textColor: 'text-green-900',
-            },
-            {
-              icon: '💡',
-              title: 'Step 3: Review',
-              description:
-                'Periodically review and update your values as you grow and your circumstances change. This ensures that your values remain aligned with your current life.',
-              bgColor: 'bg-green-100',
-              textColor: 'text-green-900',
-            },
-          ].map((step) => (
-            <div key={step.title} className={`${step.bgColor} rounded-lg p-4`} role="listitem">
-              <h3 className={`${styles.paragraph} ${step.textColor} mb-2 font-semibold`}>
-                <span aria-hidden="true">{step.icon} </span>
-                {step.title}
-              </h3>
-              <p className={styles.paragraph}>{step.description}</p>
-            </div>
-          ))}
+        <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            <b>For you</b> : Whether you are at a crossroads in life, planning your future, or simply want to better understand
+            yourself, identifying your core values provides a compass for decision-making and personal growth.
+          </p>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            <b>For your team</b> : You can also use Core Values to help your team or group identify shared values and align on
+            a common purpose.
+          </p>
         </div>
       </section>
-
-      <section aria-labelledby="privacy-heading" className="pt-2">
-        <h2 id="privacy-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Your Data
+      <section aria-labelledby="you-heading" className="pt-2">
+        <h2 id="you-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
+          What others are saying
         </h2>
-        <div className="space-y-4" role="list">
-          <div className="rounded-lg bg-blue-100 p-4" role="listitem">
-            <h3 className={`${styles.paragraph} mb-2 font-semibold text-blue-900`}>
-              <span aria-hidden="true">🔒 </span>Secure Analytics
-            </h3>
-            <p className={styles.paragraph}>
-              This app uses Google Analytics to track anonymous usage data, such as page views and time spent, to
-              improve the user experience. For detailed information on how your data is handled, please visit our{' '}
-              <Link href="/privacy" className="transition-colours text-blue-700 hover:text-blue-800">
-                Privacy Policy
-              </Link>
-              .
-            </p>
-            <div className="flex justify-center gap-2">
-              {consent.analytics === 'granted' ? (
-                <button
-                  className="rounded-md bg-red-600 px-6 py-2 font-semibold text-white shadow-lg transition-transform duration-200 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                  onClick={() => handleConsent('denied')}
-                >
-                  Stop tracking
-                </button>
-              ) : (
-                <button
-                  className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white shadow-lg transition-transform duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                  onClick={() => handleConsent('granted')}
-                >
-                  Allow tracking
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="rounded-lg bg-blue-100 p-4" role="listitem">
-            <h3 className={`${styles.paragraph} mb-2 font-semibold text-blue-900`}>
-              <span aria-hidden="true">⚡ </span>Works Offline
-            </h3>
-            <p className={styles.paragraph}>
-              Your selections and progress are stored locally on your device, ensuring your data remains private and
-              accessible only to you. All functionality works offline, so you can use the app anywhere without an
-              internet connection.
-            </p>
-          </div>
-          <div className="rounded-lg bg-blue-100 p-4" role="listitem">
-            <h3 className={`${styles.paragraph} mb-2 font-semibold text-blue-900`}>
-              <span aria-hidden="true">⚠️ </span>Important Note
-            </h3>
-            <p className={styles.paragraph}>
-              If you clear your browser data or uninstall the app, your locally stored information will be deleted.
-            </p>
-          </div>
-        </div>
-        <p className={`${styles.paragraph} mt-4 text-black`}></p>
-      </section>
+        <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
+          <p className={`mb-2 ${styles.paragraph}`}>I hope you find Core Values as helpful as I do.</p>
 
-      <section aria-labelledby="instructions-heading" className="pt-2">
-        <h2 id="instructions-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Instructions Preference
-        </h2>
-        <div className="rounded-lg bg-purple-100 p-4" role="group" aria-labelledby="instructions-heading">
-          <div
-            className={`${styles.paragraph} flex items-center gap-3`}
-            role="group"
-            aria-labelledby="instructions-label"
-          >
-            <div className="relative flex items-start">
-              <div className="flex h-5 items-center">
-                <input
-                  type="checkbox"
-                  id="show-instructions"
-                  checked={showInstructions}
-                  onChange={handleToggleInstructions}
-                  className="mt-2 rounded border-gray-300 text-blue-700 focus:ring-blue-600"
-                  aria-describedby="instructions-description"
-                  aria-checked={showInstructions}
-                />
-              </div>
-              <div className="ml-3">
-                <label id="instructions-label" htmlFor="show-instructions" className="font-medium text-black">
-                  Show instructions when starting the exercise
-                </label>
-                <p id="instructions-description" className="mt-2 text-black">
-                  {showInstructions
-                    ? 'Instructions will appear at the start of each new exercise'
-                    : 'Instructions will not appear automatically. You can change this setting at any time'}
-                </p>
-              </div>
-            </div>
-          </div>
+          <p className={`mb-2 ${styles.paragraph}`}>
+            There are a number of awesome folks on the internet also talking about the importance of understanding your
+            core values. As we all learn differently, here is an article, a podcast and a video to get you started.
+            <ul className={`list-none pl-6 text-black ${styles.paragraph}`}>
+              <li>
+                <span role="img" aria-label="article">
+                  📖
+                </span>
+                <a
+                  rel="noopener"
+                  title="Let Your Values Drive Your Choices"
+                  href="https://jamesclear.com/values-choices"
+                  target="_blank"
+                >
+                  James Clear : Let Your Values Drive Your Choices (Atomic Habits)
+                </a>
+              </li>
+              <li>
+                <span role="img" aria-label="podcast">
+                  🎧
+                </span>
+                <a
+                  rel="noopener"
+                  title="Living Into Our Values"
+                  href="https://brenebrown.com/podcast/living-into-our-values/"
+                  target="_blank"
+                >
+                  Brené Brown and Barrett Guillen : Living Into Our Values (Unlocking Us podcast)
+                </a>
+              </li>
+              <li>
+                <span role="img" aria-label="video">
+                  🎥
+                </span>
+                <a
+                  rel="noopener"
+                  title="Core Values - Your Inner Compass"
+                  href="https://www.youtube.com/watch?v=mL4l75rMIiQ"
+                  target="_blank"
+                >
+                  Larisa Halilović : Core Values - Your Inner Compass (TEDxFerhadija)
+                </a>
+              </li>
+            </ul>
+          </p>
         </div>
       </section>
     </div>
