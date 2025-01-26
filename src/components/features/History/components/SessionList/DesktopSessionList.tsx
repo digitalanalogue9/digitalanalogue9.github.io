@@ -370,7 +370,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                     <button
                       onClick={() => handleShowValues(session.id, setIsLoading, setCurrentValues, setShowValuesFor)}
                       aria-label={`Show values for session ${session.id}`}
-                      className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-green-700"
+                      className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
                     >
                       My Values
                     </button>
