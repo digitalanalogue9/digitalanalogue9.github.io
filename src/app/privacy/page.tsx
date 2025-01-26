@@ -43,14 +43,25 @@ export default function PrivacyPolicy() {
           </p>
         </div>
       </section>
+      <section aria-labelledby="application-data-heading" className="pt-2">
+        <h2 id="application-data-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">📋 </span>Core Values data
+        </h2>
+        <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
+          <p className={`${styles.paragraph} text-black`}>
+            Data is all stored locally on your device and is never transmitted to our servers.  You can choose to export your data to a file if you wish to keep a copy of your sessions.
+          </p>
+        </div>
+      </section>
+
       <section aria-labelledby="google-analytics-heading" className="pt-2">
         <h2 id="google-analytics-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
           <span aria-hidden="true">📊 </span>Google Analytics
         </h2>
-        <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
+        <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
-            We use Google Analytics to understand how users interact with our app. To comply with privacy regulations,
-            we have taken the following measures:
+            We use Google Analytics to understand how users interact with our app. No personally identifiable information (PII), such as names or email addresses, is collected. Any data
+            collected is anonymised and cannot be linked to individual users.
           </p>
           <ul className={`list-disc pl-6 text-black ${styles.paragraph}`}>
             <li>IP anonymisation is enabled to mask users&apos; IP addresses.</li>
@@ -61,17 +72,9 @@ export default function PrivacyPolicy() {
             <li>Analytics tracking is only activated after you provide explicit consent via the cookie banner.</li>
             <li>Data sharing with Google or third parties is disabled wherever possible.</li>
           </ul>
-        </div>
-      </section>
 
-      <section aria-labelledby="data-collection-heading" className="pt-2">
-        <h2 id="data-collection-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span aria-hidden="true">📋 </span>Data Collection
-        </h2>
-        <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
-            We collect minimal data to improve the user experience. Specifically, we use Google Analytics to track
-            anonymous usage data, such as:
+            Specifically, we track anonymous usage data, such as:
           </p>
           <ul className={`list-disc pl-6 text-black ${styles.paragraph}`}>
             <li>Pages viewed</li>
@@ -79,9 +82,16 @@ export default function PrivacyPolicy() {
             <li>Device type and operating system</li>
             <li>General location (country-level)</li>
           </ul>
+        </div>
+      </section>
+      <section aria-labelledby="data-retention-heading" className="pt-2">
+        <h2 id="data-retention-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">🗄️ </span>Data Retention
+        </h2>
+        <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
-            No personally identifiable information (PII), such as names or email addresses, is collected. Any data
-            collected is anonymised and cannot be linked to individual users.
+            Google Analytics retains data for a maximum of 14 months. After this period, data is automatically deleted.
+            Your consent preferences are stored locally on your device until you reset them or clear your browser data.
           </p>
         </div>
       </section>
@@ -89,13 +99,13 @@ export default function PrivacyPolicy() {
         <h2 id="consent-management-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
           <span aria-hidden="true">✅ </span>Consent Management
         </h2>
-        <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
+        <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
             You have full control over your data and can manage your consent preferences at any time. When you first use
             the app, you will see a cookie banner allowing you to grant or deny consent for analytics tracking.
           </p>
           <p className={`${styles.paragraph} mt-4 text-black`}>
-            To adjust your preferences, visit the Analytics section on the About page or use the buttons below:
+            To adjust your preferences, use the button below:
           </p>
           <div className="mt-2 flex justify-center gap-2">
             {consent.analytics === 'granted' && (
@@ -115,18 +125,6 @@ export default function PrivacyPolicy() {
               </button>
             )}
           </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="data-retention-heading" className="pt-2">
-        <h2 id="data-retention-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span aria-hidden="true">🗄️ </span>Data Retention
-        </h2>
-        <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
-          <p className={`${styles.paragraph} text-black`}>
-            Google Analytics retains data for a maximum of 14 months. After this period, data is automatically deleted.
-            Your consent preferences are stored locally on your device until you reset them or clear your browser data.
-          </p>
         </div>
       </section>
 
@@ -154,7 +152,7 @@ export default function PrivacyPolicy() {
         <h2 id="contact-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
           <span aria-hidden="true">📧 </span>Contact Us
         </h2>
-        <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
+        <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
             If you have any questions or concerns about this privacy policy, feel free to reach out to us at{' '}
             <a href="mailto:corevaluesanalytics@gmail.com" className="text-blue-700 underline">
