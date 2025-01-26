@@ -13,7 +13,6 @@ import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from '@/lib/utils/styles/textStyles';
 import { ExerciseType } from '@/lib/types/ExerciseType';
 
-
 export default function StartScreen() {
   const router = useRouter();
   const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
@@ -76,127 +75,125 @@ export default function StartScreen() {
       >
         <p className={styles.paragraph}>
           Start your journey to clarity and purpose. Some values may surprise you, while others will resonate deeply.
-          Find the ones that define you best!
+          Find the ones that define you or your team best!
         </p>
         <p className={styles.paragraph}>
           You will start with 35 values and narrow them down to the ones that matter most. Choosing fewer core values,
           like 5 instead of 10, may take a bit longer but will help you focus on what truly defines you or your team.
         </p>
       </div>
-
-      {!isMobile && (
+      {/* {!isMobile && (
         <div className="mt-6 space-y-4 text-center sm:space-y-6">
-          <h2 className="text-lg font-semibold text-black sm:text-xl">Why Discover Your Core Values?</h2>
-          <ul className="list-inside list-disc space-y-2 text-left text-sm text-black sm:text-base">
-            <li>
-              <strong>Clarity in Decision-Making:</strong> Make choices that align with what truly matters to you or your team.
-            </li>
-            <li>
-              <strong>Personal Growth:</strong> Understand your motivations and priorities for deeper self-awareness.
-            </li>
-            <li>
-              <strong>Enhanced Relationships:</strong> Communicate your values or the values of your team clearly and understand others better.
-            </li>
-            <li>
-              <strong>Increased Motivation:</strong> Align your goals with your values for lasting progress.
-            </li>
-          </ul>
+          <h2 className={`${styles.subheading} pb-2 font-bold text-black`}>Why Discover Your Core Values?</h2>
+          <p className={styles.paragraph}>
+            <strong>Clarity in Decision-Making :</strong> Make choices that align with what truly matters to you or your
+            team.
+          </p>
+          <p className={styles.paragraph}>
+            <strong>Personal Growth :</strong> Understand your motivations and priorities or those of your team for deeper self-awareness.
+          </p>
+          <p className={styles.paragraph}>
+            <strong>Enhanced Relationships :</strong> Communicate your values or the values of your team clearly and
+            understand others better.
+          </p>
+          <p className={styles.paragraph}>
+            <strong>Increased Motivation :</strong> Align your goals or your team&apos;s goals with your values for lasting progress.
+          </p>
         </div>
-      )}
-      <form
-        id="configuration-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleStart();
-        }}
-        className={`flex flex-col items-center ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}
-        aria-label="Exercise configuration"
-      >
-        <label
-          id="exercise-type-label"
-          htmlFor="exercise-type"
-          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
+      )} */}
+      <section aria-labelledby="form-heading" className="pt-2">
+        <h2 id="form-heading" className={`${styles.subheading} pb-2 text-center font-bold text-black`}>
+          Let&apos;s get started!
+        </h2>
+        <form
+          id="configuration-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleStart();
+          }}
+          className={`flex flex-col items-center ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}
+          aria-label="Exercise configuration"
         >
-          Do you want to discover your core values or your team's core values?
-        </label>
-        <div className="mb-6 flex justify-center" role="radiogroup" aria-labelledby="exercise-type-label">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="exercise-type"
-              value="personal"
-              checked={exerciseType === 'personal'}
-              onChange={() => setExerciseType('personal')}
-              className="form-radio"
-              aria-checked={exerciseType === 'personal'}
-            />
-            <span className="ml-2">My own</span>
+          <label
+            id="exercise-type-label"
+            htmlFor="exercise-type"
+            className={`text-center font-semibold ${styles.paragraph}`} // Updated font size
+          >
+            Do you want to discover your core values or your team's core values?
           </label>
-          <label className="inline-flex items-center ml-4">
-            <input
-              type="radio"
-              name="exercise-type"
-              value="team"
-              checked={exerciseType === 'team'}
-              onChange={() => setExerciseType('team')}
-              className="form-radio"
-              aria-checked={exerciseType === 'team'}
-            />
-            <span className="ml-2">The team</span>
+          <div className="mb-6 flex justify-center" role="radiogroup" aria-labelledby="exercise-type-label">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="exercise-type"
+                value="personal"
+                checked={exerciseType === 'personal'}
+                onChange={() => setExerciseType('personal')}
+                className="form-radio"
+                aria-checked={exerciseType === 'personal'}
+              />
+              <span className="ml-2">My own</span>
+            </label>
+            <label className="ml-4 inline-flex items-center">
+              <input
+                type="radio"
+                name="exercise-type"
+                value="team"
+                checked={exerciseType === 'team'}
+                onChange={() => setExerciseType('team')}
+                className="form-radio"
+                aria-checked={exerciseType === 'team'}
+              />
+              <span className="ml-2">The team</span>
+            </label>
+          </div>
+          <label
+            id="core-values-count-label"
+            htmlFor="core-values-count"
+            className={`text-center font-semibold ${styles.paragraph}`} // Updated font size
+          >
+            What number of values feels right for defining you or your team?
           </label>
-        </div>
-        <label
-          id="core-values-count-label"
-          htmlFor="core-values-count"
-          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
-        >
-          What number of values feels right for defining you?
-        </label>
-        <input
-          id="core-values-count"
-          type="number"
-          min="1"
-          max="10"
-          value={coreValuesCount}
-          onChange={(e) => setCoreValuesCount(Number(e.target.value))}
-          className="w-20 rounded-lg border px-4 py-2 text-center text-black shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-          aria-label="Number of core values"
-          aria-labelledby="core-values-count-label"
-          required
-          disabled={isInitialising}
-        />
-        <label
-          id="start-button-label"
-          htmlFor="start-button"
-          className={`text-center font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}
-        >
-          Ready to start?
-        </label>
-        <button
-          type="submit"
-          id="start-button"
-          className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
-          aria-label="Begin discovery of my core values"
-          disabled={isInitialising}
-        >
-          {isInitialising ? 'Initialising...' : 'Start'}
-        </button>
-      </form>
-
-      <div className={`${isMobile ? 'mt-4' : 'mt-8'} text-center`} aria-label="Previous results navigation">
-        <p id="completed-before-description" className="mb-3 text-sm font-semibold text-black sm:text-base">
+          <input
+            id="core-values-count"
+            type="number"
+            min="1"
+            max="10"
+            value={coreValuesCount}
+            onChange={(e) => setCoreValuesCount(Number(e.target.value))}
+            className="w-20 rounded-lg border px-4 py-2 text-center text-black shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+            aria-label="Number of core values"
+            aria-labelledby="core-values-count-label"
+            required
+            disabled={isInitialising}
+          />
+          <button
+            type="submit"
+            id="start-button"
+            className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
+            aria-label="Begin discovery of my core values"
+            disabled={isInitialising}
+          >
+            {isInitialising ? 'Initialising...' : 'Start'}
+          </button>
+        </form>
+      </section>
+      <section aria-labelledby="form-heading" className={`pt-4 pb-2 ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}>
+        <h2 id="form-heading" className={`${styles.subheading} pb-4 text-center font-bold text-black`}>
           Have you completed this before? Revisit your results!
-        </p>
-        <button
-          type="button"
-          onClick={handleViewPreviousResults}
-          className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
-          aria-label="View previous results"
-          aria-describedby="completed-before-description"
-        >
-          View Previous Results
-        </button>
-      </div>
+        </h2>
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={handleViewPreviousResults}
+            className={`${sharedButtonClasses} ${isInitialising ? 'cursor-not-allowed opacity-50' : ''}`}
+            aria-label="View previous results"
+            aria-describedby="completed-before-description"
+          >
+            View Previous Results
+          </button>
+        </div>
+      </section>
     </div>
   );
 }

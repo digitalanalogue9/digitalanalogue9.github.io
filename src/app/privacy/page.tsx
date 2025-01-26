@@ -29,12 +29,12 @@ export default function PrivacyPolicy() {
     <div className={`max-w-4xl ${getContainerClassName(isMobile)}`} aria-labelledby="privacy-policy-heading">
       <div className="text-center">
         <h1 id="privacy-policy-heading" className={`${styles.heading} mb-4 whitespace-nowrap font-extrabold sm:mb-6`}>
-          Core <span className="text-blue-700">Values</span> Privacy Policy
+          <span className="text-blue-700">Core Values</span> Privacy Policy
         </h1>
       </div>
       <section aria-labelledby="introduction-heading" className="pt-2">
-        <h2 id="introduction-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Introduction
+        <h2 id="introduction-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">🔒 </span>Why you can trust us
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
@@ -44,8 +44,8 @@ export default function PrivacyPolicy() {
         </div>
       </section>
       <section aria-labelledby="google-analytics-heading" className="pt-2">
-        <h2 id="google-analytics-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Google Analytics
+        <h2 id="google-analytics-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">📊 </span>Google Analytics
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
@@ -65,8 +65,8 @@ export default function PrivacyPolicy() {
       </section>
 
       <section aria-labelledby="data-collection-heading" className="pt-2">
-        <h2 id="data-collection-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Data Collection
+        <h2 id="data-collection-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">📋 </span>Data Collection
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
@@ -86,8 +86,8 @@ export default function PrivacyPolicy() {
         </div>
       </section>
       <section aria-labelledby="consent-management-heading" className="pt-2">
-        <h2 id="consent-management-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Consent Management
+        <h2 id="consent-management-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">✅ </span>Consent Management
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
@@ -119,8 +119,8 @@ export default function PrivacyPolicy() {
       </section>
 
       <section aria-labelledby="data-retention-heading" className="pt-2">
-        <h2 id="data-retention-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Data Retention
+        <h2 id="data-retention-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">🗄️ </span>Data Retention
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>
@@ -131,8 +131,8 @@ export default function PrivacyPolicy() {
       </section>
 
       <section aria-labelledby="user-rights-heading" className="pt-2">
-        <h2 id="user-rights-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Your Rights
+        <h2 id="user-rights-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">🛡️ </span>Your Rights
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>Under GDPR and other privacy laws, you have the right to:</p>
@@ -151,8 +151,8 @@ export default function PrivacyPolicy() {
       </section>
 
       <section aria-labelledby="contact-heading" className="pt-2">
-        <h2 id="contact-heading" className={`${styles.subheading} pb-2 font-bold text-black`}>
-          Contact Us
+        <h2 id="contact-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
+          <span aria-hidden="true">📧 </span>Contact Us
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`${styles.paragraph} text-black`}>

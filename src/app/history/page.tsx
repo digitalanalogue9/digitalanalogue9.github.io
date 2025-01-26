@@ -61,7 +61,7 @@ export default function HistoryPage() {
     <div aria-labelledby="history-heading" className={getContainerClassName(isMobile)}>
       <div className="text-center">
         <h1 id="history-heading" className={`${styles.heading} mb-4 whitespace-nowrap font-extrabold sm:mb-6`}>
-          Core <span className="text-blue-700">Values</span> Session History
+          Your previous <span className="text-blue-700">Core Values</span>
         </h1>
       </div>
       <section aria-label="Value sorting sessions history" className={styles.spacing}>
