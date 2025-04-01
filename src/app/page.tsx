@@ -33,7 +33,7 @@ import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
  * ```
  */
 export default function Home() {
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     document.title = 'Core Values - Home';

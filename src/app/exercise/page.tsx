@@ -11,7 +11,7 @@ import PWAPrompt from '@/components/common/PWAPrompt';
 import { useGameState } from '@/components/features/Exercise/hooks/useGameState';
 import { forceReload } from '@/lib/utils/cache';
 import { useGameInit } from '@/components/features/Exercise/hooks/useGameInit';
-import { useMobile } from '@/lib/contexts/MobileContext';
+// import { useMobile } from '@/lib/contexts/MobileContext';
 
 function ExerciseContent() {
   const router = useRouter();

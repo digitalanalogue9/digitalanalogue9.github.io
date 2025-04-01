@@ -4,7 +4,7 @@
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+// import { Suspense, useEffect, useState } from 'react';
 
 /**
  * NotFound component renders a user-friendly message indicating that the requested page could not be found.

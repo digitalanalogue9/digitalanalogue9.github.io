@@ -1,8 +1,8 @@
 // src/app/error.tsx
 'use client';
 
-import { useMobile } from '@/lib/contexts/MobileContext';
-import { useEffect, useState } from 'react';
+// import { useMobile } from '@/lib/contexts/MobileContext';
+import { useEffect } from 'react';
 
 /**
  * Error component to display error messages and provide a way to reset the application state.
@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react';
  * It provides a button to attempt to recover from the error and optionally displays an error reference code.
  */
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const { isMobile } = useMobile();
+  // const { isMobile } = useMobile();
 
   useEffect(() => {
     document.title = 'Core Values - Error';
