@@ -1,5 +1,4 @@
 // src/components/CategoryColumn.tsx
-import { Value, CategoryName } from '@/lib/types';
 import { Card } from '@/components/features/Cards/components'; // Change this import
 import { CategoryColumnProps } from './types';
 
@@ -24,7 +23,6 @@ export default function CategoryColumn({
   onDrop,
   onMoveWithinCategory,
   onMoveBetweenCategories,
-  columnIndex,
 }: CategoryColumnProps) {
   const findDropIndex = (mouseY: number, container: HTMLElement): number => {
     const cardElements = container.querySelectorAll('[data-card-id]');

@@ -76,7 +76,7 @@ const RoundUI = memo(function RoundUI() {
     return Object.entries(categories)
       .filter(([category]) => category !== 'Not Important')
       .reduce((sum, [_, cards]) => {
-        return sum + ((cards as Array<any>)?.length || 0); // Replace `any` with the appropriate type if known
+        return sum + ((cards as Array<unknown>)?.length || 0); 
       }, 0);
   }, [categories]);
 
@@ -217,8 +217,8 @@ const RoundUI = memo(function RoundUI() {
         'Not Important',
       ];
 
-      let cardsToPromote: Value[] = [];
-      let cardsToDemote: Value[] = [];
+      const cardsToPromote: Value[] = [];
+      const cardsToDemote: Value[] = [];
 
       // Collect cards while preserving their current categories
       for (const category of categoryPriority) {
@@ -273,8 +273,6 @@ const RoundUI = memo(function RoundUI() {
     targetCoreValues,
     sessionId,
     roundNumber,
-    saveRound,
-    updateSession,
     setCategories,
     addCommand,
     setFinalValuesWithoutReasons,

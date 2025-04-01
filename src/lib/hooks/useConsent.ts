@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getLocalStorage, setLocalStorage } from '@/lib/utils/localStorage';
-import { CookieConsent, ConsentStatus } from '@/lib/types/Consent';
+import { CookieConsent } from '@/lib/types/Consent';
 import { updateConsent as updateGtagConsent } from '@/lib/utils/gtagHelper/gtagWrapper';
 
 const CONSENT_KEY = 'cookie-consent';

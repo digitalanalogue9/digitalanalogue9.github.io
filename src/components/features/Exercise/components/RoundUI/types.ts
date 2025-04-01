@@ -1,4 +1,4 @@
-import { Categories, CategoryName, Command, Value } from '@/lib/types';
+import { Categories, CategoryName, Value } from '@/lib/types';
 
 /** Props for round UI */
 export interface RoundUIProps {
@@ -17,7 +17,7 @@ export interface RoundUIProps {
   /** List of categories */
   categories: Categories;
   /** List of current round commands */
-  currentRoundCommands: any[];
+  currentRoundCommands: unknown[];
   /** Flag indicating if can proceed to next round */
   canProceedToNextRound: boolean;
   /** Flag indicating if end game is ready */

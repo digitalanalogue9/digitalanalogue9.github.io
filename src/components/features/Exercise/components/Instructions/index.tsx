@@ -46,7 +46,10 @@ export default function Instructions({ onClose }: InstructionsProps) {
           <li>When you&apos;re done sorting all cards, click &quot;Next Round&quot;.</li>
           <li>In the next round, cards marked as &quot;Not Important&quot; will be removed.</li>
           <li>Continue sorting until you reach your target number of core values.</li>
-          <li>If you&apos;re satisfied with your selection before reaching the target number, you can click &quot;Finish Early&quot;.</li>
+          <li>
+            If you&apos;re satisfied with your selection before reaching the target number, you can click &quot;Finish
+            Early&quot;.
+          </li>
           <li>You can use the replay button to apply your decision from the previous round.</li>
           <li>Then tell me why you chose your values.</li>
         </ol>
@@ -63,6 +66,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
           </label>
 
           <button
+            type="button"
             aria-label="Confirm instructions understood and start exercise"
             onClick={handleClose}
             className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 sm:w-auto"

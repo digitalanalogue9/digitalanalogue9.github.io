@@ -20,6 +20,7 @@ export function MobileCardControls({
       <div className="flex flex-col gap-1">
         {canMoveToPrevCategory && (
           <button
+            type="button"
             onClick={onMoveToPrevCategory}
             className="rounded-full bg-blue-100 p-2 text-blue-800 hover:bg-blue-200"
             aria-label="Move to previous category"
@@ -31,6 +32,7 @@ export function MobileCardControls({
       <div className="flex flex-col gap-1">
         {canMoveUp && (
           <button
+            type="button"
             onClick={onMoveUp}
             className="rounded-full bg-gray-100 p-2 hover:bg-gray-200"
             aria-label="Move up within category"
@@ -40,6 +42,7 @@ export function MobileCardControls({
         )}
         {canMoveDown && (
           <button
+            type="button"
             onClick={onMoveDown}
             className="rounded-full bg-gray-100 p-2 hover:bg-gray-200"
             aria-label="Move down within category"
@@ -51,6 +54,7 @@ export function MobileCardControls({
       <div className="flex flex-col gap-1">
         {canMoveToNextCategory && (
           <button
+            type="button"
             onClick={onMoveToNextCategory}
             className="rounded-full bg-blue-100 p-2 text-blue-800 hover:bg-blue-200"
             aria-label="Move to next category"

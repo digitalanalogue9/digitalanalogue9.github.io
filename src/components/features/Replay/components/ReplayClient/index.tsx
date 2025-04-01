@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getRoundsBySession } from '@/lib/db/indexedDB';
-import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command, Categories } from '@/lib/types';
+import { Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload, Command } from '@/lib/types';
 import { AnimatedCard } from '@/components/features/Cards/components/AnimatedCard';
 import { useReplayState } from '../../hooks/useReplayState';
 import { useCardAnimation } from '../../hooks/useCardAnimation';
@@ -17,7 +17,7 @@ export default function ReplayClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('sessionId');
-  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
+  // const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
   const [rounds, setRounds] = useState<Round[]>([]);
   const [currentRound, setCurrentRound] = useState<number>(1);
   const [currentCommandIndex, setCurrentCommandIndex] = useState<number>(0);
@@ -46,7 +46,7 @@ export default function ReplayClient() {
     setAllCards: setReplayStateCards,
   } = useReplayState();
 
-  const { position, isAnimating, startAnimation } = useCardAnimation(
+  const { isAnimating } = useCardAnimation(
     animatingCard?.sourcePos || {
       x: 0,
       y: 0,
@@ -287,6 +287,7 @@ export default function ReplayClient() {
           <div className="flex flex-wrap items-center gap-2 sm:gap-4">
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => setIsPlaying(!isPlaying)}
                 className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700 sm:px-4 sm:py-2 sm:text-base"
                 aria-label={isPlaying ? 'Pause replay' : 'Start replay'}
@@ -294,6 +295,7 @@ export default function ReplayClient() {
                 {isPlaying ? 'Pause' : 'Play'}
               </button>
               <button
+                type="button"
                 onClick={handleReset}
                 className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-gray-700 sm:px-4 sm:py-2 sm:text-base"
                 aria-label="Reset replay to beginning"

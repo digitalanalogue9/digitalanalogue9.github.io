@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { getCompletedSession, deleteSession, importSession, getRoundsBySession } from '@/lib/db/indexedDB';
+import { getCompletedSession, deleteSession } from '@/lib/db/indexedDB';
 import { SessionListProps } from './types';
-import { Value, ValueWithReason, Session, CompletedSession, Round } from '@/lib/types';
+import { Value, ValueWithReason } from '@/lib/types';
 import { useSessionSelection } from '../../contexts/SessionSelectionContext';
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal';
 import { Modal } from '@/components/common/Modal';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 import { formatRelative } from 'date-fns';
 
-import {
-  formatDate,
-  handleImportSession,
-  handleExportSession,
-  handleShowValues,
-  handleCopyToClipboard,
-  formatTextForPlatform,
-  generateFullText,
-  generateTitles,
-} from './sessionUtils';
+import { handleImportSession, handleExportSession, handleCopyToClipboard, formatTextForPlatform } from './sessionUtils';
 
 /**
  * MobileSessionList component renders a list of sessions with options to view details, select, and delete sessions.
@@ -118,6 +109,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
       >
         <div className="mb-4 flex justify-end">
           <button
+            type="button"
             onClick={() => {
               setCopySuccess(false);
               setShowValuesFor(null);
@@ -139,6 +131,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
         </h3>
         <div className="mb-4 flex items-center justify-center gap-2">
           <button
+            type="button"
             onClick={() => {
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(values, setCopySuccess);
@@ -191,6 +184,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             ))}
           </div>
           <button
+            type="button"
             onClick={() => {
               setCopySuccess(false);
               setShowValuesFor(null);
@@ -216,6 +210,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
       <div className="sticky top-0 z-10 mb-4 bg-white shadow-sm">
         <div className="flex items-center justify-between p-4">
           <button
+            type="button"
             onClick={toggleSelectionMode}
             aria-label={isSelectionMode ? 'Cancel' : 'Select'}
             className="rounded-md bg-gray-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-gray-700"
@@ -226,6 +221,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             <div className="flex items-center space-x-2">
               {selectedSessions.size > 0 && (
                 <button
+                  type="button"
                   onClick={() => setIsDeleteModalOpen(true)}
                   aria-label={`Delete ${selectedSessions.size} sessions`}
                   className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700"
@@ -234,6 +230,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                 </button>
               )}
               <button
+                type="button"
                 onClick={handleSelectAll}
                 aria-label={selectedSessions.size === sessions.length ? 'Deselect all sessions' : 'Select all sessions'}
                 className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
@@ -276,8 +273,8 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             )}
             <div className="mb-2 flex items-start justify-between">
               <div>
-              <div className="mt-1 text-sm">Type : {session.exerciseType}</div> {/* Added line */}
-              <time dateTime={new Date(session.timestamp).toISOString()} className="mt-1 text-sm text-black">
+                <div className="mt-1 text-sm">Type : {session.exerciseType}</div> {/* Added line */}
+                <time dateTime={new Date(session.timestamp).toISOString()} className="mt-1 text-sm text-black">
                   Last updated : {formatRelative(new Date(session.timestamp).toISOString(), new Date())}
                 </time>
                 <div className="mt-1 text-sm">Target values : {session.targetCoreValues}</div>
@@ -292,6 +289,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                 {session.completed ? (
                   <>
                     <button
+                      type="button"
                       onClick={() => {
                         setCopySuccess(false);
                         handleShowValues(session.id);
@@ -302,6 +300,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                       Show Values
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleExportSession(session.id, sessions)}
                       className="rounded-md bg-orange-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-orange-800"
                       aria-label={`Export session ${session.id}`}
@@ -311,7 +310,8 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                   </>
                 ) : (
                   <button
-                    onClick={() => (window.location.href = `/exercise?sessionId=${session.id}`)}
+                    type="button"
+                    onClick={() => (window.location.href = `/exercise?sessionId=${session.id}&resume=true`)}
                     aria-label="Resume session"
                     className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
                   >

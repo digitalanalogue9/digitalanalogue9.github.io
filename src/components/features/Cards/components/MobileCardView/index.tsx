@@ -1,6 +1,5 @@
 // src/components/Round/components/MobileCardView.tsx
 import React from 'react';
-import { Value, CategoryName, Categories } from '@/lib/types';
 import { Card } from '@/components/features/Cards/components';
 import { MobileCardViewProps } from './types';
 
@@ -8,7 +7,7 @@ import { MobileCardViewProps } from './types';
  * MobileCardView component displays a list of value cards in a mobile-friendly view.
  * It shows the cards in a scrollable container and provides accessibility features.
  */
-export const MobileCardView: React.FC<MobileCardViewProps> = ({ cards, categorizedCards, onCardPlace }) => {
+export const MobileCardView: React.FC<MobileCardViewProps> = ({ cards }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-white p-4" role="dialog" aria-label="Value cards selection">
       <div className="space-y-4" role="list" aria-label="Available value cards">

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useEffect, useState, useCallback } from 'react';
 import { CardMoveOptionsProps } from '@/components/features/Cards/types';
-import { CategoryName } from '@/lib/types';
 import { allCategories } from '@/components/features/Categories/constants/categories'; // Use centralized categories
 import { useMobile } from '@/lib/contexts/MobileContext';
 
@@ -131,7 +130,7 @@ export function CardMoveOptions({ value, currentCategory, onMoveBetweenCategorie
             </button>
           ))}
       </div>
-      <button onClick={onClose} className="sr-only" aria-label="Close move options">
+      <button type="button" onClick={onClose} className="sr-only" aria-label="Close move options">
         Close
       </button>
     </motion.div>

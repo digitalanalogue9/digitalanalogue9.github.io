@@ -1,7 +1,7 @@
 // src/app/about/page.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { clearGameState } from '@/lib/utils/storage';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles, getContainerClassName } from '@/lib/utils/styles/textStyles';
@@ -28,8 +28,11 @@ export default function About() {
         </h1>
       </div>
       <section aria-labelledby="why-matters-heading" className="pt-2">
-        <h2 id="why-matters-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span role="img" aria-label="heart">❤️</span> Why Core Values matter
+        <h2 id="why-matters-heading" className={`${styles.subheading} pb-2 text-center font-bold text-black`}>
+          <span role="img" aria-label="heart">
+            ❤️
+          </span>{' '}
+          Why Core Values matter
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`mb-2 ${styles.paragraph}`}>
@@ -45,12 +48,15 @@ export default function About() {
       </section>
 
       <section aria-labelledby="inspiration-heading" className="pt-2">
-        <h2 id="inspiration-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span role="img" aria-label="lightbulb">💡</span> What was the inspiration behind Core Values?
+        <h2 id="inspiration-heading" className={`${styles.subheading} pb-2 text-center font-bold text-black`}>
+          <span role="img" aria-label="lightbulb">
+            💡
+          </span>{' '}
+          What was the inspiration behind Core Values?
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`mb-2 ${styles.paragraph}`}>
-            I'm lucky to have an awesome coach to chat things through with. In one of our first sessions, she had a set
+            I&apos;m lucky to have an awesome coach to chat things through with. In one of our first sessions, she had a set
             of physical cards that she lent me to help me identify my core values. I found the exercise to be very
             helpful but understood from my coach that I should periodically revisit my choices because the only constant
             in life is change.
@@ -66,8 +72,11 @@ export default function About() {
       </section>
 
       <section aria-labelledby="you-heading" className="pt-2">
-        <h2 id="you-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span role="img" aria-label="speech balloon">💬</span> What others are saying
+        <h2 id="you-heading" className={`${styles.subheading} pb-2 text-center font-bold text-black`}>
+          <span role="img" aria-label="speech balloon">
+            💬
+          </span>{' '}
+          What others are saying
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-green-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`mb-2 ${styles.paragraph}`}>
@@ -116,14 +125,18 @@ export default function About() {
         </div>
       </section>
       <section aria-labelledby="version-heading" className="pt-2">
-        <h2 id="version-heading" className={`${styles.subheading} pb-2 font-bold text-black text-center`}>
-          <span role="img" aria-label="information">ℹ️</span> Version Information
+        <h2 id="version-heading" className={`${styles.subheading} pb-2 text-center font-bold text-black`}>
+          <span role="img" aria-label="information">
+            ℹ️
+          </span>{' '}
+          Version Information
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-purple-100 p-4 shadow-sm ${styles.prose} text-black`}>
-          <p className={`${styles.largeParagraph} font-medium text-black text-center`}>We&apos;re up to version {appVersion}</p>
+          <p className={`${styles.largeParagraph} text-center font-medium text-black`}>
+            We&apos;re up to version {appVersion}
+          </p>
         </div>
       </section>
-
     </div>
   );
 }

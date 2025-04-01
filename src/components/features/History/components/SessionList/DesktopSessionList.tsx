@@ -15,8 +15,6 @@ import {
   handleShowValues,
   handleCopyToClipboard,
   formatTextForPlatform,
-  generateFullText,
-  generateTitles,
 } from './sessionUtils';
 import { formatRelative } from 'date-fns';
 
@@ -38,7 +36,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deletingCount, setDeletingCount] = useState(0);
+  const [_, setDeletingCount] = useState(0);
   const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [reload, setReload] = useState(false);
@@ -50,7 +48,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
   };
 
   const handleResumeGame = (sessionId: string) => {
-    router.push(`/exercise?sessionId=${sessionId}`);
+    router.push(`/exercise?sessionId=${sessionId}&resume=true`);
   };
 
   const handleDeleteSelected = async () => {
@@ -197,6 +195,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
         </div>
         <div className="flex items-center justify-end gap-2">
           <button
+            type="button"
             onClick={() => {
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(values, setCopySuccess);
@@ -209,6 +208,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
             </svg>
           </button>
           <button
+            type="button"
             onClick={handlePrint}
             className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
             aria-label="Print values"
@@ -287,6 +287,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
         <div className="flex flex-grow justify-end space-x-2">
           {selectedSessions.size > 0 && (
             <button
+              type="button"
               onClick={() => setIsDeleteModalOpen(true)}
               aria-label="Delete selected sessions"
               className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700"
@@ -352,7 +353,9 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
               </td>
               <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.id}</td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-black">
-                <time dateTime={new Date(session.timestamp).toISOString()}>{formatRelative(new Date(session.timestamp).toISOString(), new Date())}</time>
+                <time dateTime={new Date(session.timestamp).toISOString()}>
+                  {formatRelative(new Date(session.timestamp).toISOString(), new Date())}
+                </time>
               </td>
               <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.exerciseType}</td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-black">{session.targetCoreValues}</td>

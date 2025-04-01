@@ -1,11 +1,11 @@
 // Extend the existing Window interface
 interface Window {
-  workbox: any;
+  workbox: unknown;
 }
 
 // Define ServiceWorkerGlobalScope
 interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
-  __WB_MANIFEST: any[];
+  __WB_MANIFEST: unknown[];
   skipWaiting(): Promise<void>;
   clients: Clients;
 }

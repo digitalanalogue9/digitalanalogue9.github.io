@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { getRound, saveRound } from '@/lib/db/indexedDB';
-import { CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/lib/types';
+import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
 import { DropCommand } from '@/components/features/Exercise/commands/DropCommand';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { ReplayPreviousRoundProps } from './types';
+import { Command } from '../../commands/Command';
 
 const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
   sessionId,
@@ -16,6 +17,24 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
 }) => {
   const [isReplaying, setIsReplaying] = useState(false);
   const { isMobile } = useMobile();
+
+  // in useRoundHandlers.ts
+  const saveRoundData = useCallback(
+    async (command: Command, updatedCategories: Categories) => {
+      if (!sessionId) return;
+      try {
+        // Get current round from database to ensure we have all commands
+        const currentRound = await getRound(sessionId, roundNumber);
+        const existingCommands = currentRound?.commands || [];
+
+        // Save with all commands plus the new one
+        await saveRound(sessionId, roundNumber, [...existingCommands, command], updatedCategories);
+      } catch (error) {
+        console.error('Failed to save round data:', error);
+      }
+    },
+    [sessionId, roundNumber]
+  );
 
   const handleReplayPreviousRound = useCallback(async () => {
     if (!sessionId || roundNumber <= 1) return;
@@ -30,7 +49,6 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
       // Create a copy of the current state to work with
       let currentCategories = { ...categories };
       let currentRemaining = [...remainingCards];
-
       // Process each remaining card
       for (const currentCard of remainingCards) {
         // Find last command for current card
@@ -66,9 +84,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
               setRemainingCards(currentRemaining);
 
               // Save the updated state
-              if (sessionId) {
-                await saveRound(sessionId, roundNumber, [command], currentCategories);
-              }
+              await saveRoundData(command, currentCategories);
 
               // Add a delay for visual feedback
               await new Promise((resolve) => setTimeout(resolve, 300));
@@ -81,7 +97,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
     } finally {
       setIsReplaying(false);
     }
-  }, [sessionId, roundNumber, categories, remainingCards, setCategories, setRemainingCards, addCommand]);
+  }, [sessionId, roundNumber, categories, remainingCards, saveRoundData, setCategories, setRemainingCards, addCommand]);
 
   const findBestMatchingCategory = (
     originalCategory: CategoryName,
@@ -124,6 +140,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
     return (
       <div className="flex flex-col items-center gap-1" role="region" aria-label="Round progression">
         <button
+          type="button"
           onClick={handleReplayPreviousRound}
           disabled={isReplaying || remainingCards.length === 0}
           className={`flex h-16 w-16 items-center justify-center rounded-full p-2 ${
@@ -146,6 +163,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
     <div className="flex h-24 items-center justify-center sm:h-48" role="region" aria-label="Round progression">
       <div className="mt-4 flex justify-center">
         <button
+          type="button"
           onClick={handleReplayPreviousRound}
           disabled={isReplaying || remainingCards.length === 0}
           className={`rounded-md px-6 py-2 text-base font-medium text-white ${

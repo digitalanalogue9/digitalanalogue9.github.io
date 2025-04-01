@@ -1,13 +1,7 @@
 import React from 'react';
 import { ShareButtonProps } from './types';
 
-const BlueskyShareButton: React.FC<ShareButtonProps> = ({
-  text,
-  url,
-  fill = 'currentColor',
-  size = 32,
-  round = false,
-}) => {
+const BlueskyShareButton: React.FC<ShareButtonProps> = ({ text, size = 32, round = false }) => {
   const shareText = encodeURIComponent(`${text}`);
   const shareUrl = `https://bsky.app/intent/compose?text=${shareText}`;
   const handleClick = () => {
@@ -15,7 +9,9 @@ const BlueskyShareButton: React.FC<ShareButtonProps> = ({
   };
   return (
     <button
+      type="button"
       onClick={handleClick}
+      title="Share on Bluesky"
       aria-label="Share on Bluesky"
       className={`font-inherit inline-flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-white p-0 text-black text-inherit no-underline outline-none hover:bg-white ${round ? 'rounded-full' : 'rounded-none'}`}
     >

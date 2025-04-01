@@ -3,7 +3,7 @@ import { CategoryName, Categories, Value, Command } from '@/lib/types';
 import { MoveCommand } from '@/components/features/Exercise/commands/MoveCommand';
 import { DropCommand } from '@/components/features/Exercise/commands/DropCommand';
 import { saveRound, getRound } from '@/lib/db/indexedDB';
-import { logEffect, logStateUpdate } from '@/lib/utils';
+import { logEffect } from '@/lib/utils';
 /**
  * Custom hook that provides handlers for managing round-related actions such as dropping a card into a category,
  * moving a card between categories, and moving a card within a category.
@@ -42,10 +42,10 @@ export const useRoundHandlers = (
   currentRoundCommands: Command[],
   addCommand: (command: Command) => Promise<void>,
   clearCommands: () => void,
-  targetCoreValues: number,
-  setRoundNumber: (round: number) => void,
-  setShowResults: (show: boolean) => void,
-  setShowStatusDetails: (isFirst: boolean) => void
+  _targetCoreValues: number,
+  _setRoundNumber: (round: number) => void,
+  _setShowResults: (show: boolean) => void,
+  _setShowStatusDetails: (isFirst: boolean) => void
 ) => {
   useEffect(() => {
     const loadRoundCommands = async () => {

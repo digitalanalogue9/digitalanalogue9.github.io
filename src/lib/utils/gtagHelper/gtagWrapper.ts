@@ -2,13 +2,13 @@ import { CookieConsent } from '@/lib/types/Consent';
 
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    dataLayer?: any[];
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
 // Queue for storing gtag calls before gtag is loaded
-let gtagQueue: Array<[string, ...any[]]> = [];
+const gtagQueue: Array<[string, ...unknown[]]> = [];
 
 export const isGtagDefined = () => {
   return typeof window !== 'undefined' && typeof window.gtag === 'function';
@@ -26,7 +26,7 @@ const processQueue = () => {
   }
 };
 
-export const safeGtag = (command: string, ...args: any[]) => {
+export const safeGtag = (command: string, ...args: unknown[]) => {
   if (isGtagDefined()) {
     window.gtag!(command, ...args);
   } else {

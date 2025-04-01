@@ -11,7 +11,7 @@
 // src/app/replay/page.tsx
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import ReplayClient from '@/components/features/Replay/components/ReplayClient';
 export default function ReplayPage() {
   useEffect(() => {

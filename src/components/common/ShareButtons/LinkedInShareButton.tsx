@@ -19,8 +19,10 @@ const LinkedInShareButton: React.FC<ShareButtonProps> = ({
   };
   return (
     <button
+      type="button"
       onClick={handleClick}
       aria-label="Share on LinkedIn"
+      title="Share on LinkedIn"
       className={`font-inherit inline-flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-white p-0 text-black text-inherit no-underline outline-none hover:bg-white ${round ? 'rounded-full' : 'rounded-none'} `}
     >
       <svg width={size} height={size} fill={fill} viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">

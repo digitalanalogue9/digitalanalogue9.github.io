@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import StartScreen from '@/components/features/Home/components/StartScreen';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -33,7 +33,7 @@ import { getLocalStorage, setLocalStorage } from '../lib/utils/localStorage';
  * ```
  */
 export default function Home() {
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     document.title = 'Core Values - Home';

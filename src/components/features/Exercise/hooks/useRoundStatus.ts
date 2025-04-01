@@ -63,7 +63,7 @@ export const useRoundStatus = (state: StatusState) => {
     }
     if (state.veryImportantCount === state.targetCoreValues) {
       return {
-        text: 'Perfect! Click End Game to complete the exercise.',
+        text: 'Perfect - click the Finish button to complete the exercise.',
         type: 'success',
         isEndGame: true,
       };

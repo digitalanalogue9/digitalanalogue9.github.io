@@ -4,14 +4,13 @@
 import { getPostItStyles } from '@/components/features/Cards/components/styles';
 import { useRef, useEffect, useState } from 'react';
 import { ValueWithReason, Categories, CategoryName } from '@/lib/types';
-import Link from 'next/link';
 import { useGameState } from '@/components/features/Exercise/hooks/useGameState';
 import { clearGameState } from '@/lib/utils/storage';
 import { getCompletedSession } from '@/lib/db/indexedDB';
 import { useSession } from '@/components/features/Exercise/hooks/useSession';
 import { useRouter } from 'next/navigation';
 import { useMobile } from '@/lib/contexts/MobileContext';
-import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
+// import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 import { BlueskyShareButton, LinkedInShareButton, TwitterShareButton } from '@/components/common/ShareButtons';
 
 /**
@@ -44,7 +43,6 @@ export default function Results() {
   const { sessionId } = useSession();
   const [enrichedCategories, setEnrichedCategories] = useState<Categories>(categories);
   const { isMobile } = useMobile();
-  const styles = getResponsiveTextStyles(isMobile);
 
   useEffect(() => {
     setMounted(true);
@@ -240,9 +238,11 @@ export default function Results() {
         <div className="flex justify-center space-x-2 pb-2">
           {!isMobile && (
             <button
+              type="button"
               onClick={handlePrint}
               className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
               aria-label="Print values"
+              title="Print values"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M6 2a2 2 0 00-2 2v3h12V4a2 2 0 00-2-2H6zM4 8v6h12V8H4zm2 8v2a2 2 0 002 2h4a2 2 0 002-2v-2H6z" />
@@ -250,12 +250,14 @@ export default function Results() {
             </button>
           )}
           <button
+            type="button"
             onClick={() => {
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(veryImportantValues);
             }}
             className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700"
             aria-label="Copy values to clipboard"
+            title="Copy values to clipboard"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-1h1a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H8zm0 2h4v1H8V4zm-3 3h10v9H5V7zm2 2a1 1 0 000 2h6a1 1 0 100-2H7z" />
@@ -333,6 +335,7 @@ export default function Results() {
           <div className="flex space-x-2">
             {!isMobile && (
               <button
+                type="button"
                 onClick={handlePrint}
                 className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
                 aria-label="Print values"
@@ -343,6 +346,7 @@ export default function Results() {
               </button>
             )}
             <button
+              type="button"
               onClick={() => {
                 setCopySuccess(!copySuccess);
                 handleCopyToClipboard(veryImportantValues);
@@ -379,6 +383,7 @@ export default function Results() {
             />
           </div>
           <button
+            type="button"
             onClick={handleViewHistory}
             className="w-full rounded-lg bg-blue-700 px-6 py-2 text-white transition-colors hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 sm:w-auto"
             aria-label="View all your previous results"
@@ -386,6 +391,7 @@ export default function Results() {
             View All Previous Results
           </button>
           <button
+            type="button"
             onClick={handleNewExercise}
             className="w-full rounded-lg bg-green-700 px-6 py-2 text-center text-white transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 sm:w-auto"
             aria-label="Start a new values exercise"
