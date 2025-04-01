@@ -1,5 +1,4 @@
 import { Value } from './Value';
-import { CategoryName } from './CategoryName';
 
 // In src/types/Categories.ts
 export interface Categories {

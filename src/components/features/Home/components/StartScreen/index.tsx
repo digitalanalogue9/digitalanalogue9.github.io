@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getEnvNumber, getEnvBoolean } from '@/lib/utils/config';
 import { addSession } from '@/lib/db/indexedDB';
 import { initializeGameState } from '@/lib/utils/storage';
 import { initialCategories } from '@/components/features/Categories/constants/categories';
@@ -15,7 +14,6 @@ import { ExerciseType } from '@/lib/types/ExerciseType';
 
 export default function StartScreen() {
   const router = useRouter();
-  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
   const defaultMaxCards = Number(process.env.NEXT_PUBLIC_CARDS_IN_GAME || 35);
   const defaultCoreValues = Number(process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10);
   const [maxCards] = useState<number>(defaultMaxCards);
@@ -119,7 +117,7 @@ export default function StartScreen() {
             htmlFor="exercise-type"
             className={`text-center font-semibold ${styles.paragraph}`} // Updated font size
           >
-            Do you want to discover your core values or your team's core values?
+            Do you want to discover your core values or your team&apos;s core values?
           </label>
           <div className="mb-6 flex justify-center" role="radiogroup" aria-labelledby="exercise-type-label">
             <label className="inline-flex items-center">
@@ -178,7 +176,7 @@ export default function StartScreen() {
           </button>
         </form>
       </section>
-      <section aria-labelledby="form-heading" className={`pt-4 pb-2 ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}>
+      <section aria-labelledby="form-heading" className={`pb-2 pt-4 ${isMobile ? 'gap-3' : 'mt-6 gap-6'}`}>
         <h2 id="form-heading" className={`${styles.subheading} pb-4 text-center font-bold text-black`}>
           Have you completed this before? Revisit your results!
         </h2>

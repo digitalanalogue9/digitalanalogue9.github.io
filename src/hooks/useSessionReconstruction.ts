@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Categories, Command, Round, Value, CategoryName, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
+import { Categories, Value, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
 import { getRoundsBySession } from '@/lib/db/indexedDB';
 import valuesData from '@/data/values.json';
 import { ReconstructedState } from '@/lib/types';
@@ -12,10 +12,10 @@ export function useSessionReconstruction(sessionId: string | null) {
       const rounds = await getRoundsBySession(sessionId);
 
       // Initialize categories
-      let categories: Categories = {
+      const categories: Categories = {
         'Very Important': [],
         'Quite Important': [],
-        Important: [],
+        'Important': [],
         'Of Some Importance': [],
         'Not Important': [],
       };

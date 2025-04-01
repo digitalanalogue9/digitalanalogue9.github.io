@@ -83,9 +83,9 @@ export function RoundActions({
             <div className={`${styles.paragraph} text-black`}>
               If you want to continue normally instead:
               <ul className={`${styles.paragraph} list-disc space-y-2 pl-5`}>
-                <li>Click "Cancel" to close this dialog</li>
-                <li>Click "Next Round" to continue with a reduced set of cards (discarding Not Important cards)</li>
-                <li>Use the "Replay Previous" button to quickly sort remaining cards</li>
+                <li>Click &quot;Cancel&quot; to close this dialog</li>
+                <li>Click &quot;Next Round&quot; to continue with a reduced set of cards (discarding Not Important cards)</li>
+                <li>Use the &quot;Replay Previous&quot; button to quickly sort remaining cards</li>
               </ul>
             </div>
             <div className="mt-4 flex justify-end gap-3">

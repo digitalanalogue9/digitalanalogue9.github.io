@@ -1,6 +1,5 @@
 // src/components/Card/CardControls.tsx
 import { TouchEvent as ReactTouchEvent, MouseEvent as ReactMouseEvent } from 'react';
-import { Value } from '@/lib/types';
 import { ExtendedCardControlsProps } from '@/components/features/Cards/types';
 
 /**

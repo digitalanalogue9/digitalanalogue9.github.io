@@ -7,7 +7,6 @@ import { Round } from '@/lib/types/Round';
 import { Command } from '@/lib/types/Command';
 import { Value, CompletedSession, Categories } from '@/lib/types';
 
-const isBrowser = typeof window !== 'undefined';
 const dbName = 'coreValuesData';
 const dbVersion = 4;
 const storeNames = {
@@ -42,7 +41,7 @@ export async function initDB(): Promise<IDBPDatabase> {
   if (isDebug) console.log('🔵 Initializing IndexedDB');
   try {
     const db = await openDB(dbName, dbVersion, {
-      upgrade(db, oldVersion, newVersion) {
+      upgrade(db, _oldVersion, _newVersion) {
         if (isDebug) console.log('🆙 Upgrading IndexedDB schema');
 
         // Create stores

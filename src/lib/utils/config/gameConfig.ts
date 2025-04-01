@@ -1,7 +1,5 @@
 'use client';
 
-import { getEnvNumber } from './envUtils';
-
 export const getGameConfig = () => ({
   maxCards: Number(process.env.NEXT_PUBLIC_CARDS_IN_GAME || 35),
   defaultCoreValues: Number(process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10),

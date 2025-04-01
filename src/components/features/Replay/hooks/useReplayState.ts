@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Value, Categories, CategoryName, Command, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
+import { Value, Categories, Command, DropCommandPayload, MoveCommandPayload } from '@/lib/types';
 import { initialCategories } from '@/components/features/Categories/constants/categories';
 import { AnimatingCard } from '@/components/features/Replay/types';
 

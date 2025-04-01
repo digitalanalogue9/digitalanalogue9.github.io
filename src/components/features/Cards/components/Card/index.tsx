@@ -1,13 +1,11 @@
 'use client';
 
 import { memo, useRef, useState } from 'react';
-import type { CardProps, DroppedValue } from '@/components/features/Cards/types';
-import { getEnvBoolean } from '@/lib/utils/config';
+import type { CardProps } from '@/components/features/Cards/types';
 import { CardControls } from '../CardControls';
 import { CardMoveOptions } from '../CardMoveOptions';
 import { CardContent } from '../CardContent';
 import { getPostItStyles } from '../styles';
-import { CategoryName, Value } from '@/lib/types';
 import { useMobile } from '@/lib/contexts/MobileContext';
 
 /**

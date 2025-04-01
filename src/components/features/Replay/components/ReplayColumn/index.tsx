@@ -1,5 +1,4 @@
 // src/components/Replay/components/ReplayColumn.tsx
-import { Value, CategoryName } from '@/lib/types';
 import { ReplayColumnProps } from './types';
 
 export function ReplayColumn({ title, cards }: ReplayColumnProps) {

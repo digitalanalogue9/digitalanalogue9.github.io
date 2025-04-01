@@ -1,5 +1,5 @@
 // src/components/CoreValueReasoning.tsx
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ValueWithReason } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { getPostItStyles } from '@/components/features/Cards/components/styles';
@@ -36,10 +36,10 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
   const styles = getResponsiveTextStyles(isMobile);
 
   const { postItBaseStyles, tapeEffect } = getPostItStyles(false, false);
-  useEffect(() => {
-    // Check if all values have non-empty reasons
-    const hasAllReasons = values.every((value) => reasons[value.id]?.trim());
-  }, [reasons, values]);
+  // useEffect(() => {
+  //   // Check if all values have non-empty reasons
+  //   const hasAllReasons = values.every((value) => reasons[value.id]?.trim());
+  // }, [reasons, values]);
   const handleReasonChange = (valueId: string, reason: string) => {
     setReasons((prev) => ({
       ...prev,
@@ -74,7 +74,7 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
           </button>
         </div>
         <div className="mb-8 space-y-6" role="list" aria-label="Value reflection entries">
-          {values.map((value, index) => (
+          {values.map((value, _index) => (
             <motion.div
               key={value.id}
               className={`${postItBaseStyles} ${tapeEffect} p-6`}

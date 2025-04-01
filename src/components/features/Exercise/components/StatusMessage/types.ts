@@ -19,7 +19,7 @@ export interface StatusMessageProps {
   /** Flag indicating if can proceed to next round */
   canProceedToNextRound: boolean;
   /** List of remaining cards */
-  remainingCards: any[];
+  remainingCards: unknown[];
   /** Flag indicating if details should be shown */
   showDetails?: boolean;
   /** Callback to set show details flag */

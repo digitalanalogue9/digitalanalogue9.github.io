@@ -6,7 +6,7 @@ import { usePWA } from '@/lib/hooks/usePWA';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { getResponsiveTextStyles } from '@/lib/utils/styles/textStyles';
 import { getLocalStorage, setLocalStorage } from '@/lib/utils/localStorage';
-import { PromptType } from './types';
+import { BeforeInstallPromptEvent, PromptType } from './types';
 
 /**
  * PWAPrompt component handles the display of a prompt to the user for installing
@@ -15,7 +15,7 @@ import { PromptType } from './types';
 export default function PWAPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [promptType, setPromptType] = useState<PromptType>(null);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const { needsUpdate, updateServiceWorker } = usePWA();
   const { isMobile } = useMobile();
   const styles = getResponsiveTextStyles(isMobile);
@@ -23,7 +23,7 @@ export default function PWAPrompt() {
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
 
       const isDismissed = getLocalStorage('pwa-prompt-dismissed', false);
       if (!needsUpdate && !isDismissed) {
@@ -113,6 +113,7 @@ export default function PWAPrompt() {
               aria-label="PWA prompt actions"
             >
               <button
+                type="button"
                 onClick={promptType === 'install' ? handleInstallClick : handleUpdateClick}
                 className={` ${isMobile ? 'w-full' : 'flex-1'} rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2`}
                 aria-label={promptType === 'install' ? 'Install application' : 'Update application'}
@@ -122,6 +123,7 @@ export default function PWAPrompt() {
 
               {promptType === 'install' && (
                 <button
+                  type="button"
                   onClick={handleDismiss}
                   className={` ${isMobile ? 'w-full' : 'flex-1'} rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2`}
                   aria-label="Dismiss installation prompt"

@@ -52,6 +52,7 @@ export function MobileCategoryRow({
       aria-labelledby={categoryId}
     >
       <button
+        type="button"
         onClick={() => (showingCardSelection ? onCategorySelect(category) : onCategoryTap(category))}
         className="w-full bg-gray-200 p-4 hover:bg-gray-300"
         aria-expanded={isExpanded}
@@ -97,6 +98,7 @@ export function MobileCategoryRow({
                   <div className="flex items-center justify-between gap-2 border-b border-yellow-200 p-2">
                     {/* Card Title and Expand Button */}
                     <button
+                      type="button"
                       onClick={(e) => toggleCardExpansion(card.id, e)}
                       className="flex min-w-0 items-center gap-2 bg-yellow-100 text-left text-black hover:bg-yellow-100"
                       aria-expanded={expandedCards.has(card.id)}
@@ -117,6 +119,7 @@ export function MobileCategoryRow({
                       {/* Category Movement Controls */}
                       <div className="flex items-center gap-1 border-r border-yellow-200 pr-3">
                         <button
+                          type="button"
                           onClick={() =>
                             handleMoveBetweenCategories(card, category, availableCategories[currentCategoryIndex - 1])
                           }
@@ -129,6 +132,7 @@ export function MobileCategoryRow({
                           <ArrowUpIcon className="h-4 w-4 text-black" />
                         </button>
                         <button
+                          type="button"
                           onClick={() =>
                             handleMoveBetweenCategories(card, category, availableCategories[currentCategoryIndex + 1])
                           }
@@ -145,6 +149,7 @@ export function MobileCategoryRow({
                       {/* Position Movement Controls */}
                       <div className="flex items-center gap-1">
                         <button
+                          type="button"
                           onClick={() => onMoveWithinCategory?.(index, index - 1)}
                           className={`rounded-full bg-gray-100 p-1.5 text-black hover:bg-gray-200 ${
                             index > 0 ? 'visible' : 'invisible'
@@ -155,6 +160,7 @@ export function MobileCategoryRow({
                           <ChevronUpIcon className="h-4 w-4" />
                         </button>
                         <button
+                          type="button"
                           onClick={() => onMoveWithinCategory?.(index, index + 1)}
                           className={`rounded-full bg-gray-100 p-1.5 text-black hover:bg-gray-200 ${
                             index < cards.length - 1 ? 'visible' : 'invisible'

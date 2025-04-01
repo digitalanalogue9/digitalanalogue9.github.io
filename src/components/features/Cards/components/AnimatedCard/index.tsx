@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CardProps } from '@/components/features/Cards/types';
-import { getEnvBoolean } from '@/lib/utils/config';
 import { CardControls } from '../CardControls';
 import { CardMoveOptions } from '../CardMoveOptions';
 import { CardContent } from '../CardContent';
@@ -59,7 +58,6 @@ export function AnimatedCard({
   currentCategory,
   columnIndex,
 }: CardProps) {
-  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMoveOptions, setShowMoveOptions] = useState(false);
   if (!value) return null;

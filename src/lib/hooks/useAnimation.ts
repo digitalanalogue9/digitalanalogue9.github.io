@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useMotionValue, useSpring, MotionValue } from 'framer-motion';
+import { useMotionValue, useSpring } from 'framer-motion';
 import { Position, AnimationConfig } from '@/lib/types';
 
 /**

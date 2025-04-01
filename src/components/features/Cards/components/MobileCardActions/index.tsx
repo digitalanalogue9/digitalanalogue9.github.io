@@ -1,6 +1,5 @@
 // src/components/Mobile/MobileCardActions.tsx
 import React from 'react';
-import { Value, CategoryName } from '@/lib/types';
 import { MobileCardActionsProps } from '@/components/features/Cards/types';
 
 /**
@@ -36,6 +35,7 @@ export const MobileCardActions: React.FC<MobileCardActionsProps> = ({
     <div className="mt-2 flex gap-2" role="toolbar" aria-label={`Actions for ${card.title} in ${category}`}>
       <div role="group" aria-label="Reorder controls" className="flex gap-2">
         <button
+          type="button"
           onClick={onMoveUp}
           disabled={!canMoveUp}
           className={`${baseButtonClasses} ${canMoveUp ? 'hover:bg-blue-150 bg-blue-100 text-blue-500 active:bg-blue-200' : 'cursor-not-allowed bg-gray-100 text-black'}`}
@@ -46,6 +46,7 @@ export const MobileCardActions: React.FC<MobileCardActionsProps> = ({
           <span className="sr-only">Move Up</span>
         </button>
         <button
+          type="button"
           onClick={onMoveDown}
           disabled={!canMoveDown}
           className={`${baseButtonClasses} ${canMoveDown ? 'hover:bg-blue-150 bg-blue-100 text-blue-500 active:bg-blue-200' : 'cursor-not-allowed bg-gray-100 text-black'}`}
@@ -58,6 +59,7 @@ export const MobileCardActions: React.FC<MobileCardActionsProps> = ({
       </div>
 
       <button
+        type="button"
         onClick={onMoveBetweenCategories}
         className={`${baseButtonClasses} hover:bg-blue-150 flex-grow bg-blue-100 text-blue-500 active:bg-blue-200`}
         aria-label={`Move ${card.title} to different category`}

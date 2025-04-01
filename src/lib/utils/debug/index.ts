@@ -2,13 +2,13 @@ import { getEnvBoolean } from '../config';
 
 const isDebug = getEnvBoolean('NEXT_PUBLIC_DEBUG', false);
 
-export const logRender = (componentName: string, props?: any) => {
+export const logRender = (componentName: string, props?: unknown) => {
   if (isDebug) {
     console.log(`[Render] ${componentName}`, props ? { props } : '');
   }
 };
 
-export const logStateUpdate = (name: string, value: any, source: string) => {
+export const logStateUpdate = (name: string, value: unknown, source: string) => {
   if (isDebug) {
     console.group(`[State Update] ${name}`);
     console.log('Value:', value);
@@ -18,7 +18,7 @@ export const logStateUpdate = (name: string, value: any, source: string) => {
   }
 };
 
-export const logEffect = (effectName: string, dependencies?: any[]) => {
+export const logEffect = (effectName: string, dependencies?: unknown[]) => {
   if (isDebug) {
     console.log(`[Effect] ${effectName}`, dependencies ? { dependencies } : '');
   }

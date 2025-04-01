@@ -9,3 +9,11 @@ export interface PWAPromptResult {
   handleUpdateClick: () => Promise<void>;
   handleDismiss: () => void;
 }
+
+export interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+}

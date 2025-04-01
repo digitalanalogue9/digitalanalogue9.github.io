@@ -16,8 +16,10 @@ const TwitterShareButton: React.FC<ShareButtonProps> = ({
   };
   return (
     <button
+      type="button"
       onClick={handleClick}
       aria-label="Share on X"
+      title="Share on X"
       className={`font-inherit inline-flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-black p-0 text-inherit text-white no-underline outline-none hover:bg-black ${round ? 'rounded-full' : 'rounded-none'}`}
     >
       <svg width={size} height={size} viewBox="0 0 1200 1227" fill={fill} xmlns="http://www.w3.org/2000/svg">
