@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RoundUIDebug from '@/components/features/Exercise/components/RoundUIDebug';
 import RoundUI from '@/components/features/Exercise/components/RoundUI';
@@ -35,6 +35,14 @@ function ExerciseContent() {
       forceReload();
     }
   }, []);
+
+ // New effect: Hide instructions if resume=true is present in query string.
+ useLayoutEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('resume') === 'true') {
+    setShowInstructions(false);
+  }
+}, [setShowInstructions]);
 
   useEffect(() => {
     if (shouldRedirect) {

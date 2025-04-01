@@ -50,7 +50,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
   };
 
   const handleResumeGame = (sessionId: string) => {
-    router.push(`/exercise?sessionId=${sessionId}`);
+    router.push(`/exercise?sessionId=${sessionId}&resume=true`);
   };
 
   const handleDeleteSelected = async () => {

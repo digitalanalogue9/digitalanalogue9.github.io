@@ -311,7 +311,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                   </>
                 ) : (
                   <button
-                    onClick={() => (window.location.href = `/exercise?sessionId=${session.id}`)}
+                    onClick={() => (window.location.href = `/exercise?sessionId=${session.id}&resume=true`)}
                     aria-label="Resume session"
                     className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
                   >

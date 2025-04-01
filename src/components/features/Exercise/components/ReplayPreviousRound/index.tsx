@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { getRound, saveRound } from '@/lib/db/indexedDB';
-import { CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/lib/types';
+import { Categories, CategoryName, DropCommandPayload, MoveCommandPayload, Value } from '@/lib/types';
 import { DropCommand } from '@/components/features/Exercise/commands/DropCommand';
 import { useMobile } from '@/lib/contexts/MobileContext';
 import { ReplayPreviousRoundProps } from './types';
+import { Command } from '../../commands/Command';
 
 const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
   sessionId,
@@ -16,6 +17,24 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
 }) => {
   const [isReplaying, setIsReplaying] = useState(false);
   const { isMobile } = useMobile();
+
+// in useRoundHandlers.ts
+  const saveRoundData = useCallback(
+    async (command: Command, updatedCategories: Categories) => {
+      if (!sessionId) return;
+      try {
+        // Get current round from database to ensure we have all commands
+        const currentRound = await getRound(sessionId, roundNumber);
+        const existingCommands = currentRound?.commands || [];
+
+        // Save with all commands plus the new one
+        await saveRound(sessionId, roundNumber, [...existingCommands, command], updatedCategories);
+      } catch (error) {
+        console.error('Failed to save round data:', error);
+      }
+    },
+    [sessionId, roundNumber]
+  );
 
   const handleReplayPreviousRound = useCallback(async () => {
     if (!sessionId || roundNumber <= 1) return;
@@ -30,7 +49,6 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
       // Create a copy of the current state to work with
       let currentCategories = { ...categories };
       let currentRemaining = [...remainingCards];
-
       // Process each remaining card
       for (const currentCard of remainingCards) {
         // Find last command for current card
@@ -66,9 +84,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
               setRemainingCards(currentRemaining);
 
               // Save the updated state
-              if (sessionId) {
-                await saveRound(sessionId, roundNumber, [command], currentCategories);
-              }
+              await saveRoundData(command, currentCategories);
 
               // Add a delay for visual feedback
               await new Promise((resolve) => setTimeout(resolve, 300));
