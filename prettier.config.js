@@ -1,0 +1,9 @@
+// prettier.config.js
+/** @type {import("prettier").Config} */
+export default {
+  printWidth: 100,
+  singleQuote: true,
+  semi: false,
+  trailingComma: "es5",
+  tabWidth: 2,
+};
