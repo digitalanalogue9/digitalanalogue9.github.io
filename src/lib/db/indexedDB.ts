@@ -8,7 +8,9 @@ import { Command } from '@/lib/types/Command';
 import { Value, CompletedSession, Categories } from '@/lib/types';
 
 const dbName = 'coreValuesData';
-const dbVersion = 4;
+// Keep the version-4 stores in place for existing records while adding the
+// canonical session stores used by the current exercise repository.
+const dbVersion = 6;
 const storeNames = {
   sessions: 'sessions',
   rounds: 'rounds',
@@ -67,6 +69,20 @@ export async function initDB(): Promise<IDBPDatabase> {
           db.createObjectStore(storeNames.completedSessions, {
             keyPath: 'sessionId',
           }); // Single string, not array
+        }
+
+        if (!db.objectStoreNames.contains('canonicalSessions')) {
+          db.createObjectStore('canonicalSessions', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('canonicalRounds')) {
+          const store = db.createObjectStore('canonicalRounds', { keyPath: ['sessionId', 'roundNumber'] });
+          store.createIndex('sessionId', 'sessionId');
+        }
+        if (!db.objectStoreNames.contains('canonicalCompletedSessions')) {
+          db.createObjectStore('canonicalCompletedSessions', { keyPath: 'sessionId' });
+        }
+        if (!db.objectStoreNames.contains('metadata')) {
+          db.createObjectStore('metadata', { keyPath: 'key' });
         }
       },
     });

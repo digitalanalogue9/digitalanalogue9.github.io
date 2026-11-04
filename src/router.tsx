@@ -1,11 +1,11 @@
 import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
+import { ExerciseRoute } from './app/ExerciseRoute';
+import { HistoryRoute } from './app/HistoryRoute';
 
 const routeTitles: Record<string, string> = {
   about: 'About',
   behaviour: 'Behaviour reflection',
   completed: 'Completed session',
-  exercise: 'Exercise',
-  history: 'History',
   howtouse: 'How to use',
   privacy: 'Privacy',
   reasoning: 'Reasoning',
@@ -71,6 +71,8 @@ export const router = createBrowserRouter([
         path,
         element: <PlaceholderPage title={title} />,
       })),
+      { path: 'exercise', element: <ExerciseRoute /> },
+      { path: 'history', element: <HistoryRoute /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
