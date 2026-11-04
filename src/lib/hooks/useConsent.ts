@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getLocalStorage, setLocalStorage } from '@/lib/utils/localStorage';
-import { CookieConsent } from '@/lib/types/Consent';
-import { updateConsent as updateGtagConsent } from '@/lib/utils/gtagHelper/gtagWrapper';
+import type { ConsentStatus, CookieConsent } from '@/lib/types/Consent';
 
 const CONSENT_KEY = 'cookie-consent';
+const CONSENT_CHANGED_EVENT = 'core-values-consent-changed';
 const DEFAULT_CONSENT: CookieConsent = {
   analytics: 'pending',
   functional: 'pending',
@@ -11,40 +11,90 @@ const DEFAULT_CONSENT: CookieConsent = {
   timestamp: 0,
 };
 
+function isConsentStatus(value: unknown): value is ConsentStatus {
+  return value === 'granted' || value === 'denied' || value === 'pending';
+}
+
+function normalizeConsent(value: unknown): CookieConsent {
+  if (!value || typeof value !== 'object') return DEFAULT_CONSENT;
+
+  const candidate = value as Partial<CookieConsent>;
+  return {
+    analytics: isConsentStatus(candidate.analytics) ? candidate.analytics : DEFAULT_CONSENT.analytics,
+    functional: isConsentStatus(candidate.functional) ? candidate.functional : DEFAULT_CONSENT.functional,
+    advertisement: isConsentStatus(candidate.advertisement) ? candidate.advertisement : DEFAULT_CONSENT.advertisement,
+    timestamp: typeof candidate.timestamp === 'number' ? candidate.timestamp : DEFAULT_CONSENT.timestamp,
+  };
+}
+
+function readStoredConsent(): CookieConsent {
+  try {
+    return normalizeConsent(getLocalStorage(CONSENT_KEY, DEFAULT_CONSENT));
+  } catch {
+    return DEFAULT_CONSENT;
+  }
+}
+
+function saveConsent(consent: CookieConsent) {
+  try {
+    setLocalStorage(CONSENT_KEY, consent);
+  } catch {
+    // Consent remains active for the current visit if browser storage is unavailable.
+  }
+}
+
+function broadcastConsent(consent: CookieConsent) {
+  window.dispatchEvent(new CustomEvent<CookieConsent>(CONSENT_CHANGED_EVENT, { detail: consent }));
+}
+
 export function useConsent() {
   const [consent, setConsent] = useState<CookieConsent>(DEFAULT_CONSENT);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const storedConsent = getLocalStorage(CONSENT_KEY, DEFAULT_CONSENT);
-    setConsent(storedConsent);
+    setConsent(readStoredConsent());
     setIsInitialized(true);
+
+    const handleConsentChanged = (event: Event) => {
+      setConsent(normalizeConsent((event as CustomEvent<CookieConsent>).detail));
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== CONSENT_KEY) return;
+      try {
+        setConsent(event.newValue ? normalizeConsent(JSON.parse(event.newValue)) : DEFAULT_CONSENT);
+      } catch {
+        setConsent(DEFAULT_CONSENT);
+      }
+    };
+
+    window.addEventListener(CONSENT_CHANGED_EVENT, handleConsentChanged);
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener(CONSENT_CHANGED_EVENT, handleConsentChanged);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
-  useEffect(() => {
-    if (!isInitialized) return;
+  const updateConsent = useCallback(
+    (newConsent: Partial<CookieConsent>) => {
+      const nextConsent = normalizeConsent({ ...consent, ...newConsent, timestamp: Date.now() });
+      setConsent(nextConsent);
+      saveConsent(nextConsent);
+      broadcastConsent(nextConsent);
+    },
+    [consent]
+  );
 
-    // Update Google Analytics consent
-    updateGtagConsent(consent);
-
-    // Store consent with timestamp
-    setLocalStorage(CONSENT_KEY, {
-      ...consent,
-      timestamp: Date.now(),
-    });
-  }, [consent, isInitialized]);
-
-  const updateConsent = (newConsent: Partial<CookieConsent>) => {
-    setConsent((prev) => ({
-      ...prev,
-      ...newConsent,
-      timestamp: Date.now(),
-    }));
-  };
+  const updateBeforeInitialization = useCallback((newConsent: Partial<CookieConsent>) => {
+    const nextConsent = normalizeConsent({ ...DEFAULT_CONSENT, ...newConsent, timestamp: Date.now() });
+    setConsent(nextConsent);
+    saveConsent(nextConsent);
+    broadcastConsent(nextConsent);
+  }, []);
 
   return {
     consent,
-    updateConsent,
+    updateConsent: isInitialized ? updateConsent : updateBeforeInitialization,
     isInitialized,
   };
 }
