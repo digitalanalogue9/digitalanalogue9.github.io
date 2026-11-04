@@ -1,4 +1,6 @@
 import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
+import OfflineIndicator from './components/common/OfflineIndicator';
+import PWAPrompt from './components/common/PWAPrompt';
 
 const routeTitles: Record<string, string> = {
   about: 'About',
@@ -15,6 +17,8 @@ const routeTitles: Record<string, string> = {
 function SiteLayout() {
   return (
     <>
+      <OfflineIndicator />
+      <PWAPrompt />
       <header>
         <Link to="/" aria-label="Core Values home">
           Core Values

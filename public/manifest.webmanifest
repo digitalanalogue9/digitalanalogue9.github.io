@@ -2,7 +2,9 @@
   "name": "Core Values",
   "short_name": "Core Values",
   "description": "Discover and prioritise your personal values",
-  "start_url": "/",
+  "id": "https://core-values.me/",
+  "start_url": "https://core-values.me/",
+  "scope": "https://core-values.me/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1d4ed8",
@@ -23,38 +25,38 @@
     {
       "src": "/icons/android-icon-36x36.png",
       "sizes": "36x36",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     },
-     {
+    },
+    {
       "src": "/icons/android-icon-48x48.png",
       "sizes": "48x48",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     },
-     {
+    },
+    {
       "src": "/icons/android-icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     },
-     {
+    },
+    {
       "src": "/icons/android-icon-96x96.png",
       "sizes": "96x96",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     },
-     {
+    },
+    {
       "src": "/icons/android-icon-144x144.png",
       "sizes": "144x144",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     },
-     {
+    },
+    {
       "src": "/icons/android-icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/icons/png",
+      "type": "image/png",
       "purpose": "any maskable"
-     }
+    }
   ]
 }
