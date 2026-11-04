@@ -343,6 +343,8 @@ function buildCanonicalRecord(
     session: {
       id: session.id,
       version: 2,
+      // Version 4 kept only one timestamp; its original creation time cannot
+      // be recovered if that value was refreshed when the Session completed.
       createdAt: session.timestamp,
       updatedAt: Math.max(
         session.timestamp,
