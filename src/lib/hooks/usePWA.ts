@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PWAStatus } from '@/lib/types';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import { PWAStatus } from '../types';
 
 /**
  * Custom hook to manage Progressive Web App (PWA) status.
@@ -30,6 +31,14 @@ import { PWAStatus } from '@/lib/types';
  * }, [isOffline]);
  */
 export function usePWA() {
+  const {
+    needRefresh: [needsUpdate],
+    updateServiceWorker: triggerServiceWorkerUpdate,
+  } = useRegisterSW({
+    onRegisterError(error: unknown) {
+      console.error('Service worker registration error:', error);
+    },
+  });
   const [status, setStatus] = useState<PWAStatus>({
     needsUpdate: false,
     isOffline: false, // Default to false, will update in useEffect
@@ -59,28 +68,12 @@ export function usePWA() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in window.navigator) {
-      window.navigator.serviceWorker.ready.then((registration) => {
-        registration.addEventListener('controllerchange', () => {
-          setStatus((prevStatus) => ({
-            ...prevStatus,
-            needsUpdate: true,
-          }));
-        });
-      });
-    }
-  }, []);
+    setStatus((prevStatus) => ({ ...prevStatus, needsUpdate }));
+  }, [needsUpdate]);
 
   const updateServiceWorker = async () => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in window.navigator) {
-      const registration = await window.navigator.serviceWorker.ready;
-      await registration.update();
-      setStatus((prevStatus) => ({
-        ...prevStatus,
-        needsUpdate: false,
-      }));
-      window.location.reload();
-    }
+    await triggerServiceWorkerUpdate(true);
+    setStatus((prevStatus) => ({ ...prevStatus, needsUpdate: false }));
   };
 
   return {

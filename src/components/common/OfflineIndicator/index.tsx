@@ -1,8 +1,8 @@
 'use client';
-import { usePWA } from '@/lib/hooks/usePWA';
+import { useEffect, useState } from 'react';
 /**
  * OfflineIndicator component displays a notification when the user is offline.
- * It uses the `usePWA` hook to determine the offline status.
+ * It follows the browser's online and offline network events.
  *
  * @component
  * @example
@@ -21,7 +21,20 @@ import { usePWA } from '@/lib/hooks/usePWA';
  */
 // src/components/OfflineIndicator.tsx
 export default function OfflineIndicator() {
-  const { isOffline } = usePWA();
+  const [isOffline, setIsOffline] = useState(false);
+
+  useEffect(() => {
+    const updateStatus = () => setIsOffline(!navigator.onLine);
+    updateStatus();
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+
+    return () => {
+      window.removeEventListener('online', updateStatus);
+      window.removeEventListener('offline', updateStatus);
+    };
+  }, []);
+
   if (!isOffline) return null;
   return (
     <div
