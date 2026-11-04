@@ -183,7 +183,7 @@ export async function getSessions(): Promise<Session[]> {
   try {
     const db = await initDB();
     const sessions = await db.getAll(storeNames.sessions);
-    sessions.forEach(session => {
+    sessions.forEach((session) => {
       if (!session.exerciseType) {
         session.exerciseType = 'personal';
       }
