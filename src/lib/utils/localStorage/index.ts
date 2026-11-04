@@ -1,18 +1,15 @@
-import 'client-only';
-
 export function getLocalStorage(key: string, defaultValue: unknown) {
-  const stickyValue = localStorage.getItem(key);
+  if (typeof window === 'undefined') return defaultValue;
 
   try {
-    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
-  } catch (_) {
-    return stickyValue !== null ? stickyValue : defaultValue;
+    const storedValue = window.localStorage.getItem(key);
+    return storedValue === null ? defaultValue : JSON.parse(storedValue);
+  } catch {
+    return defaultValue;
   }
 }
 
 export function setLocalStorage(key: string, value: unknown) {
-  if (value !== undefined) {
-    // Check if value is undefined
-    localStorage.setItem(key, JSON.stringify(value));
-  }
+  if (typeof window === 'undefined' || value === undefined) return;
+  window.localStorage.setItem(key, JSON.stringify(value));
 }
