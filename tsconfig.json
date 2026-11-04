@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "noImplicitAny": true,
     "allowJs": true,
@@ -18,14 +18,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"],
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
@@ -33,10 +29,9 @@
       "@/common/*": ["./src/components/common/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/styles/*": ["./src/styles/*"],
-      "@/assets/*": ["./src/assets/*"],
-      "file-saver-es": ["@types/file-saver"]
+      "@/assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next-env.d.ts", "out/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/main.tsx", "src/router.tsx", "vite.config.ts", "playwright.config.ts", "tests/e2e/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test-results"]
 }
