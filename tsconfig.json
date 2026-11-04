@@ -32,6 +32,13 @@
       "@/assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["src/main.tsx", "src/router.tsx", "src/lib/types/serviceWorker.d.ts", "vite.config.ts", "playwright.config.ts", "tests/e2e/**/*.ts"],
+  "include": [
+    "src/main.tsx",
+    "src/router.tsx",
+    "src/lib/types/serviceWorker.d.ts",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "tests/e2e/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", "test-results"]
 }
