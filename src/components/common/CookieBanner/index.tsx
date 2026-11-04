@@ -1,121 +1,105 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useConsent } from '@/lib/hooks/useConsent';
-import { ConsentStatus } from '@/lib/types/Consent';
+import type { ConsentStatus } from '@/lib/types/Consent';
 
 export default function CookieBanner() {
   const { consent, updateConsent, isInitialized } = useConsent();
+  const [choices, setChoices] = useState(consent);
   const [isVisible, setIsVisible] = useState(false);
-  const [localConsent, setLocalConsent] = useState(consent);
 
+  useEffect(() => setChoices(consent), [consent]);
   useEffect(() => {
-    if (isInitialized && consent.analytics === 'pending') {
-      setLocalConsent((prev) => ({
-        ...prev,
-        analytics: 'granted',
-        functional: 'granted',
-        advertisement: 'denied',
-      }));
-      setIsVisible(true);
-    }
-  }, [isInitialized, consent.analytics]);
+    if (isInitialized && consent.analytics === 'pending') setIsVisible(true);
+  }, [consent.analytics, isInitialized]);
 
-  const handleConsent = (analyticsStatus: ConsentStatus, functionalStatus: ConsentStatus) => {
-    updateConsent({
-      analytics: analyticsStatus,
-      functional: functionalStatus,
-      advertisement: 'denied',
-      timestamp: Date.now(),
-    });
+  const chooseConsent = (analytics: ConsentStatus, functional: ConsentStatus) => {
+    updateConsent({ analytics, functional, advertisement: 'denied' });
     setIsVisible(false);
   };
 
-  const handleLocalConsentChange = (type: keyof typeof localConsent, status: ConsentStatus) => {
-    setLocalConsent((prev) => ({ ...prev, [type]: status }));
-  };
-
-  const handleChoose = () => {
-    updateConsent(localConsent);
-    setIsVisible(false);
+  const updateChoice = (type: 'analytics' | 'functional', granted: boolean) => {
+    setChoices((current) => ({ ...current, [type]: granted ? 'granted' : 'denied' }));
   };
 
   if (!isVisible) return null;
 
   return (
-    <div
-      role="dialog"
+    <section
+      role="region"
       aria-labelledby="cookie-consent-title"
       aria-describedby="cookie-consent-description"
-      className="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-95 p-4 shadow-lg"
+      className="border-b border-slate-200 bg-white px-4 py-5 text-slate-900 shadow-sm sm:px-6 print:hidden"
     >
-      <div className="mx-auto max-w-4xl">
-        <div className="flex flex-col items-center justify-between gap-4 text-white md:flex-row">
-          <div className="flex-1 space-y-2">
-            <h2 id="cookie-consent-title" className="text-xl font-semibold text-white">
-              Cookie Preferences
+      <div className="mx-auto max-w-5xl space-y-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl space-y-2">
+            <h2 id="cookie-consent-title" className="text-lg font-semibold sm:text-xl">
+              Privacy preferences
             </h2>
-            <p id="cookie-consent-description" className="text-gray-300">
-              We use cookies to enhance your browsing experience and analyze our traffic.
-              <Link
-                href="/privacy"
-                className="ml-1 text-blue-400 underline hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Learn more about our Privacy Policy
+            <p id="cookie-consent-description" className="text-sm leading-relaxed sm:text-base">
+              Optional Google Analytics helps us understand visits to this site. It stays off until you allow it. Your
+              sessions remain on this device either way.{' '}
+              <Link to="/privacy" className="font-semibold underline underline-offset-2 focus-visible:outline-2">
+                Read the Privacy Policy
               </Link>
             </p>
           </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={() => handleConsent('granted', 'granted')}
-              className="rounded-lg bg-green-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-              aria-label="Accept all cookies"
+              onClick={() => chooseConsent('granted', 'granted')}
+              className="min-h-11 rounded-md bg-blue-700 px-5 py-2 font-semibold text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
-              Accept All
+              Allow Analytics
             </button>
-            <div className="flex flex-row items-center gap-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={localConsent.analytics === 'granted'}
-                  onChange={(e) => handleLocalConsentChange('analytics', e.target.checked ? 'granted' : 'denied')}
-                  className="mr-2"
-                />
-                Analytics
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={localConsent.functional === 'granted'}
-                  onChange={(e) => handleLocalConsentChange('functional', e.target.checked ? 'granted' : 'denied')}
-                  className="mr-2"
-                />
-                Functional
-              </label>
-              <button
-                type="button"
-                onClick={handleChoose}
-                className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                aria-label="Choose cookies"
-              >
-                Accept Chosen
-              </button>
-            </div>
             <button
               type="button"
-              onClick={() => handleConsent('denied', 'denied')}
-              className="rounded-lg bg-gray-700 px-6 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-              aria-label="Decline all cookies"
+              onClick={() => chooseConsent('denied', 'denied')}
+              className="min-h-11 rounded-md border border-slate-500 px-5 py-2 font-semibold hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
-              Decline All
+              Reject optional cookies
             </button>
           </div>
         </div>
+
+        <details className="border-t border-slate-200 pt-3">
+          <summary className="w-fit cursor-pointer rounded-sm font-semibold underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2">
+            Customize preferences
+          </summary>
+          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
+              <label htmlFor="consent-analytics" className="flex min-h-11 items-center gap-3">
+                <input
+                  id="consent-analytics"
+                  type="checkbox"
+                  checked={choices.analytics === 'granted'}
+                  onChange={(event) => updateChoice('analytics', event.target.checked)}
+                  className="size-5 accent-blue-700"
+                />
+                <span>Google Analytics</span>
+              </label>
+              <label htmlFor="consent-functional" className="flex min-h-11 items-center gap-3">
+                <input
+                  id="consent-functional"
+                  type="checkbox"
+                  checked={choices.functional === 'granted'}
+                  onChange={(event) => updateChoice('functional', event.target.checked)}
+                  className="size-5 accent-blue-700"
+                />
+                <span>Functional preferences</span>
+              </label>
+            </div>
+            <button
+              type="button"
+              onClick={() => chooseConsent(choices.analytics, choices.functional)}
+              className="min-h-11 w-full rounded-md bg-blue-700 px-5 py-2 font-semibold text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:w-auto"
+            >
+              Save preferences
+            </button>
+          </div>
+        </details>
       </div>
-    </div>
+    </section>
   );
 }

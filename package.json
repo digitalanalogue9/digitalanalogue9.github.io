@@ -11,7 +11,7 @@
     "clean": "rimraf dist && rimraf node_modules",
     "generate-meta": "node scripts/generate-meta-files.js",
     "dev": "vite",
-    "build": "vite build && node scripts/create-pages-routes.js",
+    "build": "vite build && node scripts/create-pages-routes.js && node scripts/generate-personal-route-metadata.js",
     "start": "vite preview",
     "preview": "vite preview",
     "kill-ports": "node scripts/kill-ports.js",

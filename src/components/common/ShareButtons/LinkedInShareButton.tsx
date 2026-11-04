@@ -12,7 +12,7 @@ const LinkedInShareButton: React.FC<ShareButtonProps> = ({
   const shareUrlQ = encodeURIComponent(`${url}`);
   const shareTitle = encodeURIComponent(`Core Values`);
 
-  const shareUrl = `http://www.linkedin.com/shareArticle?mini=true&url=${shareUrlQ}&title=${shareTitle}&summary=${shareText}`;
+  const shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrlQ}&title=${shareTitle}&summary=${shareText}`;
 
   const handleClick = () => {
     window.open(shareUrl, '_blank', 'noopener,noreferrer');
