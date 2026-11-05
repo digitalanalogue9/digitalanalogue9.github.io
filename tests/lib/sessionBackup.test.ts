@@ -80,10 +80,46 @@ describe('saved Session backups', () => {
     const duplicate = await loadSession(importedId);
     expect(duplicate?.rounds[0].commands).toEqual((await loadSession('portable-session'))?.rounds[0].commands);
     expect(await listSessions()).toHaveLength(2);
+    expect(duplicate?.completedSession?.finalValues).toEqual([{ ...value('a'), reason: 'It matters.' }]);
   });
 
   test('rejects malformed backup data without adding a Session', async () => {
     await expect(importSessionData({ session: { id: 'broken' }, rounds: [] })).rejects.toThrow();
     expect(await listSessions()).toEqual([]);
+  });
+
+  test('round-trips the current source canonical envelope including reasons and reflection', async () => {
+    await importSessionData(legacyBackup);
+    const record = (await loadSession('portable-session'))!;
+    const reflection = {
+      version: 1,
+      values: { a: { observation: 'A recent example', action: 'Notice it tomorrow', suggestions: { lens: 'unsure' } } },
+      goal: 'Stay curious',
+      relationships: { 'values-in-context': { observation: 'Both may matter', action: 'Consider the situation' } },
+      schedulePreferences: { frequency: 'weekly', localTime: '09:00', timeZone: 'Europe/London', weeklyDay: 'monday' },
+    };
+    const envelope = {
+      version: 2,
+      exportedAt: 300,
+      session: record.session,
+      rounds: record.rounds,
+      completedSession: { ...record.completedSession, reflection },
+    };
+    const importedId = await importSessionData(envelope);
+    const exported = await exportSessionData(importedId, { format: 'canonical' });
+    expect(exported).toMatchObject({
+      version: 2,
+      session: { id: importedId, status: 'completed' },
+      completedSession: { finalValues: [{ ...value('a'), reason: 'It matters.' }], reflection },
+    });
+    const roundTripId = await importSessionData(exported);
+    expect((await loadSession(roundTripId))?.completedSession?.reflection).toEqual(reflection);
+    const legacyExport = await exportSessionData(importedId, { format: 'legacy' });
+    expect(legacyExport.session).toMatchObject({ completed: true, currentRound: 2 });
+    const legacyId = await importSessionData(legacyExport);
+    expect((await loadSession(legacyId))?.completedSession).toMatchObject({
+      finalValues: [{ ...value('a'), reason: 'It matters.' }],
+      reflection,
+    });
   });
 });

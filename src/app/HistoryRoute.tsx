@@ -25,13 +25,15 @@ export function HistoryRoute() {
     }
   }
 
-  async function exportBackup(session: Session) {
+  async function exportBackup(session: Session, legacy = false) {
     try {
-      const payload = await exportSessionData(session.id);
+      const payload = legacy
+        ? await exportSessionData(session.id, { format: 'legacy' })
+        : await exportSessionData(session.id, { format: 'canonical' });
       const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
       const link = document.createElement('a');
       link.href = url;
-      link.download = `session-${session.id}.json`;
+      link.download = `session-${session.id}${legacy ? '-legacy' : ''}.json`;
       link.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -84,6 +86,9 @@ export function HistoryRoute() {
               )}
               <button type="button" onClick={() => void exportBackup(session)}>
                 Export backup
+              </button>
+              <button type="button" onClick={() => void exportBackup(session, true)}>
+                Export legacy backup
               </button>
             </li>
           ))}

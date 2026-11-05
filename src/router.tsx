@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ExerciseRoute } from './app/ExerciseRoute';
 import { HistoryRoute } from './app/HistoryRoute';
 import { ReplayRoute } from './app/ReplayRoute';
+import { ReasoningRoute } from './app/ReasoningRoute';
 import PrivacyPage from './app/privacy/page';
 import CookieBanner from './components/common/CookieBanner';
 import GoogleAnalytics from './components/common/GoogleAnalytics';
@@ -165,7 +166,7 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'completed', element: <LegacySessionRoute destination="/exercise" /> },
-      { path: 'reasoning', element: <LegacySessionRoute destination="/exercise" /> },
+      { path: 'reasoning', element: <ReasoningRoute /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

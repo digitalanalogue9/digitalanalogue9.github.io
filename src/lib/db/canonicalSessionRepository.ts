@@ -1,4 +1,17 @@
 import { openDB, type IDBPDatabase } from 'idb';
+import type {
+  CompletedSession,
+  ImportEnvelope,
+  RoundCommand,
+  RoundSnapshot,
+  Session,
+  SessionRecord,
+  ValueCard,
+  SessionReflection,
+} from '../contracts/types';
+import { validateImportEnvelope, isSessionReflection } from '../contracts/guards';
+import { CATEGORY_ORDER as CATEGORIES } from '../contracts/constants';
+import { createInitialRoundSnapshot, getActiveCategoriesForRound } from '../domain/roundEngine';
 
 const STORES = {
   legacySessions: 'sessions',
@@ -12,54 +25,8 @@ const STORES = {
 const MIGRATION_KEY = 'v4-session-canonical-migration-v1';
 const DB_NAME = 'coreValuesData';
 const DB_VERSION = 6;
-const CATEGORIES = ['Very Important', 'Quite Important', 'Important', 'Of Some Importance', 'Not Important'] as const;
 type Category = (typeof CATEGORIES)[number];
-type ValueCard = { id: string; title: string; description: string };
-type RoundCommand =
-  | { kind: 'drop'; valueId: string; toCategory: Category; toIndex?: number }
-  | {
-      kind: 'move';
-      valueId: string;
-      fromCategory: Category;
-      toCategory: Category;
-      fromIndex?: number;
-      toIndex?: number;
-    };
-export type Session = {
-  id: string;
-  version: 2;
-  createdAt: number;
-  updatedAt: number;
-  exerciseType: 'personal' | 'team';
-  targetCoreValues: number;
-  initialValues: ValueCard[];
-  currentRoundNumber: number;
-  status: 'active' | 'completed';
-};
-export type RoundSnapshot = {
-  version: 2;
-  sessionId: string;
-  roundNumber: number;
-  targetCoreValues: number;
-  deck: ValueCard[];
-  categories: Record<Category, ValueCard[]>;
-  activeCategories: Category[];
-  commands: RoundCommand[];
-  createdAt: number;
-  updatedAt: number;
-};
-export type CompletedSession = {
-  version: 2;
-  sessionId: string;
-  completedAt: number;
-  finalValues: Array<ValueCard & { reason?: string }>;
-};
-export type SessionRecord = {
-  session: Session;
-  currentRound: RoundSnapshot;
-  rounds: RoundSnapshot[];
-  completedSession?: CompletedSession;
-};
+export type { CompletedSession, RoundSnapshot, Session, SessionRecord, SessionReflection } from '../contracts/types';
 export type SessionBackup = {
   session: {
     id: string;
@@ -71,7 +38,12 @@ export type SessionBackup = {
     initialValues: ValueCard[];
     remainingValues: ValueCard[];
   };
-  completedSession?: { sessionId: string; timestamp: number; finalValues: Array<ValueCard & { reason?: string }> };
+  completedSession?: {
+    sessionId: string;
+    timestamp: number;
+    finalValues: Array<ValueCard & { reason?: string }>;
+    reflection?: SessionReflection;
+  };
   rounds: Array<{
     sessionId: string;
     roundNumber: number;
@@ -167,14 +139,6 @@ function toCategories(value: unknown): Record<Category, ValueCard[]> | null {
   return categories;
 }
 
-function activeCategories(cardsInRound: number, target: number): Category[] {
-  const ratio = cardsInRound / target;
-  if (ratio <= 1.5) return ['Very Important', 'Not Important'];
-  if (ratio <= 2) return ['Very Important', 'Quite Important', 'Not Important'];
-  if (ratio <= 3) return ['Very Important', 'Quite Important', 'Important', 'Not Important'];
-  return [...CATEGORIES];
-}
-
 function toCommand(value: unknown): RoundCommand | null {
   if (!isRecord(value) || !isRecord(value.payload)) return null;
   const payload = value.payload;
@@ -251,7 +215,7 @@ function buildRound(
     targetCoreValues: session.targetCoreValues,
     deck,
     categories: legacyRound.categories,
-    activeCategories: activeCategories(sourceValues.length, session.targetCoreValues),
+    activeCategories: getActiveCategoriesForRound(sourceValues.length, session.targetCoreValues),
     commands: legacyRound.commands,
     createdAt: legacyRound.timestamp,
     updatedAt: legacyRound.timestamp,
@@ -343,7 +307,10 @@ function buildCanonicalRecord(
       })
     )
       return null;
+    if (legacyCompleted.reflection !== undefined && !isSessionReflection(legacyCompleted.reflection, finalValues))
+      return null;
     completedSession = {
+      ...(legacyCompleted.reflection ? { reflection: legacyCompleted.reflection as SessionReflection } : {}),
       version: 2,
       sessionId: session.id,
       completedAt:
@@ -448,6 +415,7 @@ export async function createSession(input: {
 }): Promise<SessionRecord> {
   if (
     !input.initialValues.length ||
+    !Number.isInteger(input.targetCoreValues) ||
     input.targetCoreValues < 1 ||
     input.targetCoreValues > input.initialValues.length
   ) {
@@ -456,19 +424,7 @@ export async function createSession(input: {
   const db = await initRepositoryDb();
   const createdAt = Date.now();
   const id = crypto.randomUUID();
-  const categories = emptyCategories();
-  const round: RoundSnapshot = {
-    version: 2,
-    sessionId: id,
-    roundNumber: 1,
-    targetCoreValues: input.targetCoreValues,
-    deck: [...input.initialValues],
-    categories,
-    activeCategories: activeCategories(input.initialValues.length, input.targetCoreValues),
-    commands: [],
-    createdAt,
-    updatedAt: createdAt,
-  };
+  const round = createInitialRoundSnapshot(id, input.initialValues, input.targetCoreValues, createdAt);
   const session: Session = {
     id,
     version: 2,
@@ -533,6 +489,19 @@ export async function completeSession(
   await tx.done;
 }
 
+export async function saveSessionReflection(sessionId: string, reflection: SessionReflection): Promise<void> {
+  const db = await initRepositoryDb();
+  const tx = db.transaction([STORES.sessions, STORES.completed], 'readwrite');
+  const session = (await tx.objectStore(STORES.sessions).get(sessionId)) as Session | undefined;
+  const completed = (await tx.objectStore(STORES.completed).get(sessionId)) as CompletedSession | undefined;
+  if (!session || !completed || !isSessionReflection(reflection, completed.finalValues)) {
+    throw new Error('This completed Session reflection could not be saved.');
+  }
+  await tx.objectStore(STORES.completed).put({ ...completed, reflection });
+  await tx.objectStore(STORES.sessions).put({ ...session, updatedAt: Date.now() });
+  await tx.done;
+}
+
 export async function closeSessionRepository(): Promise<void> {
   (await repositoryDb)?.close();
   repositoryDb = undefined;
@@ -544,35 +513,59 @@ export async function hasCanonicalSession(sessionId: string): Promise<boolean> {
   return Boolean(await db.get(STORES.sessions, sessionId));
 }
 
-/** Import the JSON backup format used by previous personal app versions. */
+/** Accept current canonical exports and supported historical personal backups. */
 export async function importSessionData(value: unknown): Promise<string> {
-  if (!isRecord(value) || !isRecord(value.session) || !Array.isArray(value.rounds)) {
-    throw new Error('This Session backup is not supported.');
+  let record: SessionRecord | null;
+  if (validateImportEnvelope(value)) {
+    const rounds = [...value.rounds].sort((left, right) => left.roundNumber - right.roundNumber);
+    if (new Set(rounds.map((round) => round.roundNumber)).size !== rounds.length) {
+      throw new Error('This Session backup contains duplicate rounds.');
+    }
+    record = {
+      session: value.session,
+      rounds,
+      currentRound: rounds.find((round) => round.roundNumber === value.session.currentRoundNumber)!,
+      ...(value.completedSession ? { completedSession: value.completedSession } : {}),
+    };
+  } else if (isRecord(value) && value.version === undefined && Array.isArray(value.rounds)) {
+    record = buildCanonicalRecord(value.session, value.rounds, value.completedSession);
+  } else {
+    record = null;
   }
-  const session = value.session;
-  if (typeof session.id !== 'string' || !session.id) throw new Error('This Session backup is not supported.');
-  const db = await initRepositoryDb();
-  const existing = await db.get(STORES.sessions, session.id);
-  const importedId = existing ? crypto.randomUUID() : session.id;
-  const importedSession = { ...session, id: importedId };
-  const importedRounds = value.rounds.map((round) => (isRecord(round) ? { ...round, sessionId: importedId } : round));
-  const importedCompleted = isRecord(value.completedSession)
-    ? { ...value.completedSession, sessionId: importedId }
-    : value.completedSession;
-  const record = buildCanonicalRecord(importedSession, importedRounds, importedCompleted);
   if (!record) throw new Error('This Session backup is incomplete or invalid.');
+  const db = await initRepositoryDb();
   const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed], 'readwrite');
-  await tx.objectStore(STORES.sessions).put(record.session);
-  for (const round of record.rounds) await tx.objectStore(STORES.rounds).put(round);
-  if (record.completedSession) await tx.objectStore(STORES.completed).put(record.completedSession);
+  const existing = await tx.objectStore(STORES.sessions).get(record.session.id);
+  const importedId = existing ? crypto.randomUUID() : record.session.id;
+  await tx.objectStore(STORES.sessions).put({ ...record.session, id: importedId });
+  for (const round of record.rounds) await tx.objectStore(STORES.rounds).put({ ...round, sessionId: importedId });
+  if (record.completedSession)
+    await tx.objectStore(STORES.completed).put({ ...record.completedSession, sessionId: importedId });
   await tx.done;
   return importedId;
 }
 
-/** Export a backup that remains readable by the previous personal app format. */
-export async function exportSessionData(sessionId: string): Promise<SessionBackup> {
+export async function exportSessionData(
+  sessionId: string,
+  options?: { format: 'canonical' | 'legacy' }
+): Promise<ImportEnvelope | SessionBackup> {
   const record = await loadSession(sessionId);
   if (!record) throw new Error('Session was not found.');
+  if (options?.format === 'canonical') {
+    return {
+      version: 2,
+      exportedAt: Date.now(),
+      session: record.session,
+      rounds: record.rounds,
+      ...(record.completedSession ? { completedSession: record.completedSession } : {}),
+    };
+  }
+  return exportLegacySessionData(record);
+}
+
+/** Export a backup that remains readable by the previous personal app format. */
+function exportLegacySessionData(record: SessionRecord): SessionBackup {
+  const sessionId = record.session.id;
   const cards = new Map(record.session.initialValues.map((card) => [card.id, card]));
   const rounds = record.rounds.map((round) => {
     const commands = round.commands.map((command) => {
@@ -622,6 +615,7 @@ export async function exportSessionData(sessionId: string): Promise<SessionBacku
             sessionId,
             timestamp: record.completedSession.completedAt,
             finalValues: record.completedSession.finalValues,
+            ...(record.completedSession.reflection ? { reflection: record.completedSession.reflection } : {}),
           },
         }
       : {}),
