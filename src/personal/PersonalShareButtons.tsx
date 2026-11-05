@@ -7,9 +7,9 @@ export default function PersonalShareButtons() {
 
   return (
     <div className="flex items-center gap-3" aria-label="Share Core Values">
-<BlueskyShareButton url={shareUrl} text={shareText} fill="none" size={22} round />
-<TwitterShareButton url={shareUrl} text="Check out Core Values!" fill="currentColor" size={20} round />
-<LinkedInShareButton url={shareUrl} text={shareText} fill="currentColor" size={32} round />
+      <BlueskyShareButton url={shareUrl} text={shareText} fill="none" size={22} round />
+      <TwitterShareButton url={shareUrl} text="Check out Core Values!" fill="currentColor" size={20} round />
+      <LinkedInShareButton url={shareUrl} text={shareText} fill="currentColor" size={32} round />
     </div>
   );
 }

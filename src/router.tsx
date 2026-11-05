@@ -96,11 +96,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <RouteMetadata
-            title="Core Values"
-            description="Discover and prioritise your personal values."
-            path="/"
-          >
+          <RouteMetadata title="Core Values" description="Discover and prioritise your personal values." path="/">
             <HomePage />
           </RouteMetadata>
         ),

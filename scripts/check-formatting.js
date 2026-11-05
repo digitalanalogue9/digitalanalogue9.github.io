@@ -46,7 +46,17 @@ const changedFiles = [
   ]),
 ]
   .filter(Boolean)
-  .filter((file) => file !== 'pnpm-lock.yaml');
+  .filter((file) => file !== 'pnpm-lock.yaml')
+  .filter((file) => !isWorkspaceContextFile(file));
+
+function isWorkspaceContextFile(file) {
+  return (
+    file === 'AGENTS.md' ||
+    file.startsWith('.scratch/') ||
+    file.startsWith('.serena/') ||
+    file.startsWith('docs/agents/')
+  );
+}
 
 if (changedFiles.length === 0) {
   console.log('No changed files to format-check.');
