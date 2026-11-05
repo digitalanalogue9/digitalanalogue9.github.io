@@ -1,6 +1,7 @@
 import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
 import { ExerciseRoute } from './app/ExerciseRoute';
 import { HistoryRoute } from './app/HistoryRoute';
+import { ReplayRoute } from './app/ReplayRoute';
 import OfflineIndicator from './components/common/OfflineIndicator';
 import PWAPrompt from './components/common/PWAPrompt';
 
@@ -11,7 +12,6 @@ const routeTitles: Record<string, string> = {
   howtouse: 'How to use',
   privacy: 'Privacy',
   reasoning: 'Reasoning',
-  replay: 'Replay',
 };
 
 function SiteLayout() {
@@ -77,6 +77,7 @@ export const router = createBrowserRouter([
       })),
       { path: 'exercise', element: <ExerciseRoute /> },
       { path: 'history', element: <HistoryRoute /> },
+      { path: 'replay', element: <ReplayRoute /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

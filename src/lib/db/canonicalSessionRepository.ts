@@ -60,6 +60,26 @@ export type SessionRecord = {
   rounds: RoundSnapshot[];
   completedSession?: CompletedSession;
 };
+export type SessionBackup = {
+  session: {
+    id: string;
+    timestamp: number;
+    currentRound: number;
+    completed: boolean;
+    targetCoreValues: number;
+    exerciseType: 'personal' | 'team';
+    initialValues: ValueCard[];
+    remainingValues: ValueCard[];
+  };
+  completedSession?: { sessionId: string; timestamp: number; finalValues: Array<ValueCard & { reason?: string }> };
+  rounds: Array<{
+    sessionId: string;
+    roundNumber: number;
+    timestamp: number;
+    commands: Array<Record<string, unknown>>;
+    availableCategories: Record<Category, ValueCard[]>;
+  }>;
+};
 type LegacySession = {
   id: string;
   timestamp: number;
@@ -522,4 +542,89 @@ export async function closeSessionRepository(): Promise<void> {
 export async function hasCanonicalSession(sessionId: string): Promise<boolean> {
   const db = await initRepositoryDb();
   return Boolean(await db.get(STORES.sessions, sessionId));
+}
+
+/** Import the JSON backup format used by previous personal app versions. */
+export async function importSessionData(value: unknown): Promise<string> {
+  if (!isRecord(value) || !isRecord(value.session) || !Array.isArray(value.rounds)) {
+    throw new Error('This Session backup is not supported.');
+  }
+  const session = value.session;
+  if (typeof session.id !== 'string' || !session.id) throw new Error('This Session backup is not supported.');
+  const db = await initRepositoryDb();
+  const existing = await db.get(STORES.sessions, session.id);
+  const importedId = existing ? crypto.randomUUID() : session.id;
+  const importedSession = { ...session, id: importedId };
+  const importedRounds = value.rounds.map((round) => (isRecord(round) ? { ...round, sessionId: importedId } : round));
+  const importedCompleted = isRecord(value.completedSession)
+    ? { ...value.completedSession, sessionId: importedId }
+    : value.completedSession;
+  const record = buildCanonicalRecord(importedSession, importedRounds, importedCompleted);
+  if (!record) throw new Error('This Session backup is incomplete or invalid.');
+  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed], 'readwrite');
+  await tx.objectStore(STORES.sessions).put(record.session);
+  for (const round of record.rounds) await tx.objectStore(STORES.rounds).put(round);
+  if (record.completedSession) await tx.objectStore(STORES.completed).put(record.completedSession);
+  await tx.done;
+  return importedId;
+}
+
+/** Export a backup that remains readable by the previous personal app format. */
+export async function exportSessionData(sessionId: string): Promise<SessionBackup> {
+  const record = await loadSession(sessionId);
+  if (!record) throw new Error('Session was not found.');
+  const cards = new Map(record.session.initialValues.map((card) => [card.id, card]));
+  const rounds = record.rounds.map((round) => {
+    const commands = round.commands.map((command) => {
+      const card = cards.get(command.valueId);
+      if (!card) throw new Error('Session history is incomplete.');
+      return command.kind === 'drop'
+        ? { type: 'DROP', payload: { cardId: card.id, cardTitle: card.title, category: command.toCategory } }
+        : {
+            type: 'MOVE',
+            payload: {
+              cardId: card.id,
+              cardTitle: card.title,
+              fromCategory: command.fromCategory,
+              toCategory: command.toCategory,
+              ...(command.fromIndex === undefined ? {} : { fromIndex: command.fromIndex }),
+              ...(command.toIndex === undefined ? {} : { toIndex: command.toIndex }),
+            },
+          };
+    });
+    return {
+      sessionId,
+      roundNumber: round.roundNumber,
+      timestamp: round.createdAt,
+      commands,
+      availableCategories: round.categories,
+    };
+  });
+  const finalValues = record.completedSession?.finalValues;
+  const remainingValues =
+    record.session.status === 'completed'
+      ? (finalValues ?? []).map(({ id, title, description }) => ({ id, title, description }))
+      : record.currentRound.deck.concat(...CATEGORIES.map((category) => record.currentRound.categories[category]));
+  return {
+    session: {
+      id: sessionId,
+      timestamp: record.session.createdAt,
+      currentRound: record.session.currentRoundNumber,
+      completed: record.session.status === 'completed',
+      targetCoreValues: record.session.targetCoreValues,
+      exerciseType: record.session.exerciseType,
+      initialValues: record.session.initialValues,
+      remainingValues,
+    },
+    ...(record.completedSession
+      ? {
+          completedSession: {
+            sessionId,
+            timestamp: record.completedSession.completedAt,
+            finalValues: record.completedSession.finalValues,
+          },
+        }
+      : {}),
+    rounds,
+  };
 }
