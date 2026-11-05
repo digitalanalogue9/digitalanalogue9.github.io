@@ -1,6 +1,16 @@
 export const SCENARIO_ATTEMPTS_STORAGE_KEY = 'core-values-scenario-attempts-v1';
 
 export type ScenarioChoice = string | 'depends' | 'skip';
+export type ReflectionAnswer = 'worth-considering' | 'does-not-fit' | 'not-sure';
+export type ReflectionNote = { answer?: ReflectionAnswer; note?: string };
+export type ScenarioValueConnection = { value: string; observation?: string };
+export type ReflectionReminder = {
+  cadence: 'daily' | 'weekdays' | 'weekly';
+  time: string;
+  timezone: string;
+  weekday: number;
+  selectedPossibilityIds: string[];
+};
 
 export type ScenarioAttempt = {
   id: string;
@@ -9,6 +19,9 @@ export type ScenarioAttempt = {
   position: number;
   status: 'active' | 'completed';
   answers: Record<string, ScenarioChoice>;
+  reflections?: Record<string, ReflectionNote>;
+  valueConnections?: Record<string, ScenarioValueConnection>;
+  reminder?: ReflectionReminder;
 };
 
 type ScenarioAttemptStore = { attempts: ScenarioAttempt[] };
