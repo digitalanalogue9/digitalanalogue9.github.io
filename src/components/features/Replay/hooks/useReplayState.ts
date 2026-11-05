@@ -63,8 +63,8 @@ export function useReplayState() {
       }
 
       // Animation setup
-      let sourceElement: Element | null = null;
-      let targetElement: Element | null = null;
+      let sourceElement: Element | null;
+      let targetElement: Element | null;
 
       // Handle state updates based on command type
       if (command.type === 'DROP') {

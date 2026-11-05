@@ -3,7 +3,6 @@ const path = require('path');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
-const t = require('@babel/types');
 const glob = require('glob');
 
 const ROOT = process.cwd();

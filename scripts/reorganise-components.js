@@ -150,7 +150,7 @@ async function analyzeComponent(filePath) {
 
     // Check for section order issues
     let lastSectionIndex = -1;
-    currentSectionOrder.forEach((section, index) => {
+    currentSectionOrder.forEach((section) => {
       const sectionIndex = SECTION_ORDER.indexOf(section);
       if (sectionIndex < lastSectionIndex) {
         issues.push(`${section} appears after ${SECTION_ORDER[lastSectionIndex]}`);

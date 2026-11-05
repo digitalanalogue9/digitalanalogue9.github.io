@@ -8,7 +8,9 @@ export default defineConfig({
     ...devices['Desktop Chrome'],
   },
   webServer: {
-    command: 'pnpm build && pnpm preview --host 127.0.0.1 --port 5173',
+    command: process.env.CI
+      ? 'pnpm preview --host 127.0.0.1 --port 5173'
+      : 'pnpm build && pnpm preview --host 127.0.0.1 --port 5173',
     url: 'http://127.0.0.1:5173',
     reuseExistingServer: !process.env.CI,
   },

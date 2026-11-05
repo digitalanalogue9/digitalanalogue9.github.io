@@ -31,6 +31,7 @@
     "reorganise": "node scripts/reorganise-features.js",
     "format": "prettier --write .",
     "format:check": "node scripts/check-formatting.js",
+    "validate:pages-artifact": "node scripts/pages-artifact-validator.js",
     "codex:init-watch": "codex-mem codex init && codex-mem codex watch"
   },
   "dependencies": {
