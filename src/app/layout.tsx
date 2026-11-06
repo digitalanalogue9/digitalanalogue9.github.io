@@ -26,9 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>Core Values</title>
         <meta name="description" content="Discover and prioritise your personal values" />
-        <meta name="msapplication-TileColor" content="#1d4ed8" />
+        <meta name="msapplication-TileColor" content="#613d60" />
         <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#1d4ed8" />
+        <meta name="theme-color" content="#613d60" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="format-detection" content="telephone=no" />
@@ -41,7 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:site_name" content="Core Values" />
         <meta property="og:type" content="website" />
         <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
-        <link rel="shortcut icon" href="/icons/favicon.ico" />
+        <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" sizes="any" />
+        <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png" />
         <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png" />

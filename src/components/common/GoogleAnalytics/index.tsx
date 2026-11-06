@@ -18,7 +18,8 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID = DEFAULT_MEASUREMEN
   const [isReady, setIsReady] = useState(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const previousPageRef = useRef<string | null>(null);
-  const page = `${location.pathname}${location.search}${location.hash}`;
+  // Avoid sending Session IDs or other query-string values to the Analytics property.
+  const page = location.pathname;
 
   useEffect(() => {
     if (!isInitialized || consent.analytics !== 'granted' || !GA_MEASUREMENT_ID) {
@@ -78,8 +79,23 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID = DEFAULT_MEASUREMEN
   useEffect(() => {
     if (!isReady || consent.analytics !== 'granted' || !window.gtag || previousPageRef.current === page) return;
 
+    const previousPage = previousPageRef.current;
+    const pageLocation = `${window.location.origin}${page}`;
+    let pageReferrer = previousPage ? `${window.location.origin}${previousPage}` : '';
+    if (!previousPage && document.referrer) {
+      try {
+        const referrer = new URL(document.referrer);
+        pageReferrer = `${referrer.origin}${referrer.pathname}`;
+      } catch {
+        pageReferrer = '';
+      }
+    }
     previousPageRef.current = page;
-    window.gtag('event', 'page_view', { page_path: page });
+    window.gtag('event', 'page_view', {
+      page_path: page,
+      page_location: pageLocation,
+      page_referrer: pageReferrer,
+    });
   }, [consent.analytics, isReady, page]);
 
   return null;

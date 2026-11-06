@@ -57,16 +57,17 @@ describe('Session history and replay', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Review exercise' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'View results' })).toHaveAttribute(
       'href',
-      '/exercise?sessionId=history-session'
+      '/completed?sessionId=history-session'
     );
-    fireEvent.click(screen.getByRole('link', { name: 'Replay choices' }));
-    expect(await screen.findByRole('heading', { name: 'Round 1 choices' })).toBeInTheDocument();
-    expect(screen.getByText('Value b placed in Not Important')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Round 2' }));
-    expect(await screen.findByRole('heading', { name: 'Round 2 choices' })).toBeInTheDocument();
-    expect(screen.getByText('Value a placed in Very Important')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('link', { name: 'Replay' }));
+    expect(await screen.findByRole('heading', { name: 'Replay', exact: true })).toBeInTheDocument();
+    fireEvent.change(await screen.findByLabelText('Playback speed'), { target: { value: '2x' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Play', exact: true }));
+    expect(await screen.findByText('Round 2 snapshot', {}, { timeout: 5000 })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Play Again' }, { timeout: 5000 })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    expect(screen.getByRole('heading', { name: 'Round 1 snapshot' })).toBeInTheDocument();
   });
 });

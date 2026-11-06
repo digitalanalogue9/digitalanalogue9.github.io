@@ -1,0 +1,130 @@
+import { expect, test, type Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import data from '../../src/data/values.json' with { type: 'json' };
+
+const cards = data.values.slice(0, 3).map(({ id, title, description }) => ({ id, title, description }));
+const sessionId = 'functional-pages-session';
+const backup = {
+  version: 2,
+  exportedAt: 100,
+  session: {
+    id: sessionId,
+    version: 2,
+    createdAt: 100,
+    updatedAt: 200,
+    exerciseType: 'personal',
+    targetCoreValues: 1,
+    initialValues: cards,
+    currentRoundNumber: 1,
+    status: 'completed',
+  },
+  rounds: [
+    {
+      version: 2,
+      sessionId,
+      roundNumber: 1,
+      targetCoreValues: 1,
+      deck: [],
+      activeCategories: ['Very Important', 'Quite Important', 'Important', 'Not Important'],
+      categories: {
+        'Very Important': [cards[0]],
+        'Quite Important': [],
+        Important: [],
+        'Of Some Importance': [],
+        'Not Important': cards.slice(1),
+      },
+      commands: cards.map((card, i) => ({
+        kind: 'drop',
+        valueId: card.id,
+        toCategory: i === 0 ? 'Very Important' : 'Not Important',
+      })),
+      createdAt: 100,
+      updatedAt: 200,
+    },
+  ],
+  completedSession: {
+    version: 2,
+    sessionId,
+    completedAt: 200,
+    finalValues: [{ ...cards[0], reason: 'My saved reason.' }],
+    reflection: {
+      version: 1,
+      values: { [cards[0].id]: { observation: 'My private observation.' } },
+      goal: 'My private goal.',
+    },
+  },
+};
+
+async function importBackup(page: Page) {
+  await page.goto('/history');
+  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByLabel('Values session or scenario backup JSON').fill(JSON.stringify(backup));
+  await page.getByRole('button', { name: /Import.*text/ }).click();
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
+}
+async function downloadJson(page: Page, button: string) {
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: button, exact: true }).click();
+  const downloaded = await pending;
+  return JSON.parse(await readFile((await downloaded.path())!, 'utf8'));
+}
+
+test('history imports, exports, copies and deletes sessions; results provide print, HTML and prompt workflows', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await context.addInitScript(() => {
+    window.print = () => {};
+  });
+  await importBackup(page);
+  const legacy = await downloadJson(page, 'Export legacy backup');
+  expect(legacy.session.timestamp).toBeDefined();
+  const ordinary = await downloadJson(page, 'Export');
+  expect(ordinary.completedSession.reflection).toBeUndefined();
+  const full = await downloadJson(page, 'Export reflection backup');
+  expect(full.completedSession.reflection.goal).toBe('My private goal.');
+  await page.getByRole('button', { name: 'Copy to clipboard', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
+  await page.getByRole('link', { name: 'View results', exact: true }).click();
+  await expect(page).toHaveURL(/\/completed\?sessionId=/);
+  await page.getByText('Session goal (optional)', { exact: true }).first().click();
+  await expect(page.getByRole('textbox', { name: 'Session goal', exact: true })).toHaveValue('My private goal.');
+  await page.getByRole('button', { name: 'Preview one-off coaching prompt' }).click();
+  const preview = page.getByRole('region', { name: 'Exact prompt preview', exact: true });
+  await expect(preview).not.toContainText('My private observation.');
+  await page.getByRole('checkbox', { name: /Observation.*My private observation/ }).check();
+  await expect(preview).toContainText('My private observation.');
+  await preview.getByRole('button', { name: 'Copy preview', exact: true }).click();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('My private observation.');
+  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
+  await page.getByLabel('Recurring reflection frequency').selectOption('weekly');
+  await page.getByLabel('Recurring reflection local time').fill('11:15');
+  await page.getByRole('button', { name: 'Save reflection', exact: true }).click();
+  await expect(page.getByText('Reflection saved on this device.', { exact: true })).toBeVisible();
+  await page.reload();
+  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
+  await expect(page.getByLabel('Recurring reflection local time')).toHaveValue('11:15');
+  await page.getByLabel('Original results', { exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
+  const htmlDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export HTML', exact: true }).click();
+  expect(await readFile((await (await htmlDownload).path())!, 'utf8')).toContain('My saved reason.');
+  await page.screenshot({ path: '.scratch/parity-completed.png', fullPage: true });
+  const popupPending = page.waitForEvent('popup');
+  await page.getByRole('button', { name: 'Print', exact: true }).click();
+  const popup = await popupPending;
+  await expect(popup.getByText('My saved reason.', { exact: true })).toBeVisible();
+  await popup.close();
+  await page.goto('/history');
+  await page.screenshot({ path: '.scratch/parity-history.png', fullPage: true });
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByText('No sessions saved in this browser yet.', { exact: true })).toBeVisible();
+  await page
+    .locator('input[type="file"]')
+    .setInputFiles({ name: 'legacy.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
+});

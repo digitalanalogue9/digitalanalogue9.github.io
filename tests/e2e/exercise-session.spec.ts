@@ -4,49 +4,56 @@ test('start, sort, save, resume, replay a previous round and complete with an op
   await page.goto('/exercise');
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
   await page.getByLabel('Target number of core values').fill('1');
-  await page.getByRole('button', { name: 'Start personal exercise', exact: true }).click();
+  await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
   const instructions = page.getByRole('dialog', { name: 'How to use Core Values' });
   await expect(instructions).toBeVisible();
   await instructions.getByRole('checkbox', { name: "Don't show again" }).check();
   await instructions.getByRole('button', { name: 'Start sorting' }).click();
 
-  const firstCard = page.getByRole('list', { name: 'Value cards to sort' }).getByRole('listitem').first();
-  const keptTitle = await firstCard.locator('strong').innerText();
-  await firstCard.getByRole('button', { name: `Place ${keptTitle}`, exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Very Important', exact: true })).toContainText(keptTitle);
+  const firstCard = page.getByLabel(/^Current card /);
+  const keptTitle = await firstCard.getByRole('heading').innerText();
+  await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
+  await expect(page.getByRole('article', { name: 'Very Important category' })).toContainText(keptTitle);
   const sessionUrl = page.url();
   await page.getByRole('link', { name: 'Save and return to history' }).click();
   await page.reload();
-  await page.getByRole('link', { name: 'Resume exercise' }).click();
+  await page.getByRole('link', { name: 'Resume' }).click();
   await expect(page).toHaveURL(sessionUrl);
   await expect(instructions).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'Very Important', exact: true })).toContainText(keptTitle);
+  await expect(page.getByRole('article', { name: 'Very Important category' })).toContainText(keptTitle);
 
   // Retain one more card so the next round can demonstrate replay and early finish.
   let retainAnother = true;
-  while (await page.getByRole('list', { name: 'Value cards to sort' }).count()) {
-    const card = page.getByRole('list', { name: 'Value cards to sort' }).getByRole('listitem').first();
-    const title = await card.locator('strong').innerText();
-    await card.getByRole('combobox').selectOption(retainAnother ? 'Very Important' : 'Not Important');
+  while (await page.getByLabel(/^Current card /).count()) {
+    const card = page.getByLabel(/^Current card /);
+    const title = await card.getByRole('heading').innerText();
+    await page
+      .getByRole('button', {
+        name: `Place current card in ${retainAnother ? 'Very Important' : 'Not Important'}`,
+        exact: true,
+      })
+      .click();
     retainAnother = false;
-    await card.getByRole('button', { name: `Place ${title}`, exact: true }).click();
-    await expect(page.getByRole('button', { name: `Place ${title}`, exact: true })).toHaveCount(0);
+    await expect(page.getByLabel(`Current card ${title}`, { exact: true })).toHaveCount(0);
   }
-  await page.getByRole('button', { name: 'Continue to next round' }).click();
-  await expect(page.getByRole('heading', { name: 'Round 2', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Replay previous round' }).click();
-  await expect(page.getByRole('list', { name: 'Value cards to sort' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Finish early' }).click();
+  await page.getByRole('button', { name: 'Next Round' }).click();
+  await expect(page.getByRole('heading', { name: 'Round 2 command center', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Replay Previous Round' }).click();
+  await expect(page.getByLabel(/^Current card /)).toHaveCount(0);
+  await page.getByRole('button', { name: 'Early Finish' }).click();
   await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Reflect on your choices' })).toBeVisible();
   const finalTitle = await page
     .getByRole('textbox')
     .first()
-    .evaluate((input: HTMLTextAreaElement) => input.labels?.[0].textContent ?? '');
-  await page.getByRole('textbox', { name: finalTitle, exact: true }).fill('This helps me choose deliberately.');
-  await page.getByRole('button', { name: 'Complete exercise', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Exercise complete' })).toBeVisible();
+    .evaluate(
+      (input: HTMLTextAreaElement) => input.labels?.[0].querySelector('span:last-child')?.textContent?.trim() ?? ''
+    );
+  await page.getByRole('textbox').first().fill('This helps me choose deliberately.');
+  await page.getByRole('button', { name: 'Save Completed Session', exact: true }).click();
+  await expect(page.getByLabel('Reflect on your values', { exact: true })).toBeVisible();
+  await page.getByLabel('Original results', { exact: true }).click();
   await expect(page.getByText('This helps me choose deliberately.', { exact: true })).toBeVisible();
   await page
     .getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })
@@ -54,15 +61,25 @@ test('start, sort, save, resume, replay a previous round and complete with an op
   await page.getByRole('button', { name: 'Save reflection', exact: true }).click();
   await expect(page.getByText('Reflection saved on this device.', { exact: true })).toBeVisible();
   await page.reload();
+  await page.getByLabel('Original results', { exact: true }).click();
   await expect(page.getByText('This helps me choose deliberately.', { exact: true })).toBeVisible();
   await expect(page.getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })).toHaveValue(
     'I noticed this in a recent choice.'
   );
-  await page.getByRole('link', { name: 'Back to history' }).click();
-  await expect(page.getByRole('link', { name: 'Review exercise' })).toBeVisible();
-  await page.getByRole('link', { name: 'Replay choices' }).click();
-  await expect(page.getByRole('heading', { name: 'Round 1 choices' })).toBeVisible();
-  await expect(page.getByText(`${keptTitle} placed in Very Important`, { exact: true })).toBeVisible();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'History', exact: true })
+    .click();
+  await expect(page.getByRole('link', { name: 'View results' })).toBeVisible();
+  await page.getByRole('link', { name: 'Replay', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Replay', exact: true })).toBeVisible();
+  await page.getByLabel('Playback speed').selectOption('2x');
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Pause', exact: true }).click();
+  await page.getByRole('button', { name: 'Reset', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Round 1 snapshot' })).toBeVisible();
+  await page.screenshot({ path: '.scratch/parity-replay.png', fullPage: true });
 });
 
 test('Analytics makes no network request before consent and loads after explicit grant', async ({ page }) => {
@@ -73,9 +90,9 @@ test('Analytics makes no network request before consent and loads after explicit
   });
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Allow Analytics' })).toBeVisible();
-  await page.getByRole('link', { name: 'Start an exercise', exact: true }).click();
+  await page.getByRole('button', { name: 'Sort values', exact: true }).click();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Start an exercise' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Sort values', exact: true })).toBeVisible();
   expect(analyticsRequests).toEqual([]);
   await expect(page.locator('script[src*="googletagmanager.com"]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Allow Analytics' }).click();

@@ -4,18 +4,21 @@ import PageMetadata from './PageMetadata';
 const preferenceKey = 'show-instructions';
 const steps = [
   [
-    'Choose how many values',
-    'Select how many core values you want to finish with. The default is 10; choosing fewer makes the exercise more challenging.',
+    'Choose a value set and set a target',
+    'Choose personal values or a team-focused set, then select how many core values you want to finish with. The default target is 10. The team-focused set is still a personal exercise; the app does not provide multi-user collaboration.',
   ],
   [
-    'Prioritise your values',
-    'For each value, decide how important it is and move its card to the matching category. Values in Not Important are removed between rounds.',
+    'Sort each value',
+    'Choose an importance category for each value and select Place value. You can move placed values to another category. Values in Not Important are removed when you continue to the next round.',
   ],
   [
-    'Explain your choices',
-    'You can record why you chose your final values. This is optional, but it can help you remember what matters to you.',
+    'Continue until you reach your target',
+    'Your progress is saved in this browser as you go. Keep sorting through the rounds until you have your target number of core values.',
   ],
-  ['Review and update', 'Revisit your choices periodically as you grow and your circumstances change.'],
+  [
+    'Reflect and review',
+    'When you finish, you can add optional notes about your final values. Use History to resume an unfinished Session, review a completed one, replay its rounds, or export a backup.',
+  ],
 ];
 
 export default function HelpPage() {
@@ -31,27 +34,27 @@ export default function HelpPage() {
   };
 
   return (
-    <article className="mx-auto w-full max-w-4xl space-y-5 p-4" aria-labelledby="help-heading">
+    <article className="app-page-panel mx-auto max-w-5xl space-y-6" aria-labelledby="help-heading">
       <PageMetadata
         title="How to use Core Values"
-        description="Learn how to choose, prioritise, and reflect on your personal core values."
+        description="Learn how to sort values, reflect on your choices, and manage locally saved Core Values sessions."
         path="/howtouse"
       />
-      <h1 id="help-heading" className="text-center text-3xl font-bold">
+      <h1 id="help-heading" className="text-interface-title-1 text-center font-semibold">
         How to use Core Values
       </h1>
       <ol className="space-y-4">
         {steps.map(([title, description], index) => (
-          <li key={title} className="rounded-lg bg-blue-100 p-5">
-            <h2 className="mb-2 text-xl font-bold">
+          <li key={title} className="app-content-card">
+            <h2 className="text-interface-title-2 mb-2 font-semibold">
               Step {index + 1}: {title}
             </h2>
             <p>{description}</p>
           </li>
         ))}
       </ol>
-      <section className="rounded-lg bg-purple-100 p-5" aria-labelledby="reminder-heading">
-        <h2 id="reminder-heading" className="mb-2 text-xl font-bold">
+      <section className="app-content-card" aria-labelledby="reminder-heading">
+        <h2 id="reminder-heading" className="text-interface-title-2 mb-2 font-semibold">
           Want a reminder when you play?
         </h2>
         <label className="flex items-center gap-2">
@@ -67,6 +70,26 @@ export default function HelpPage() {
           {showInstructions
             ? 'Instructions will appear at the start of each new exercise.'
             : 'Instructions will not appear automatically.'}
+        </p>
+      </section>
+      <section className="app-content-card space-y-3" aria-labelledby="behaviour-heading">
+        <h2 id="behaviour-heading" className="text-interface-title-2 font-semibold">
+          Explore possible perspectives on your behaviour
+        </h2>
+        <p>
+          In a separate reflection, choose how you might respond to six everyday work situations. When you finish, you
+          can consider possible intentions and how someone else might experience those actions. These are prompts for
+          reflection, not conclusions about your behaviour or another person’s thoughts.
+        </p>
+        <p>Your scenario choices and notes are saved in this browser.</p>
+      </section>
+      <section className="app-content-card space-y-3" aria-labelledby="sessions-heading">
+        <h2 id="sessions-heading" className="text-interface-title-2 font-semibold">
+          Your sessions stay in this browser
+        </h2>
+        <p>
+          Values exercises and scenario reflections are stored on this device. They do not automatically appear in
+          another browser or on another device. Export a backup from History if you want to keep or move a copy.
         </p>
       </section>
     </article>

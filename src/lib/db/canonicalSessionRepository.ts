@@ -508,6 +508,43 @@ export async function closeSessionRepository(): Promise<void> {
   migration = undefined;
 }
 
+/** Persist a source application service mutation in the existing personal database. */
+export async function saveCanonicalSession(payload: {
+  session: Session;
+  round: RoundSnapshot;
+  completedSession?: CompletedSession;
+}): Promise<void> {
+  const db = await initRepositoryDb();
+  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed], 'readwrite');
+  await tx.objectStore(STORES.sessions).put(payload.session);
+  await tx.objectStore(STORES.rounds).put(payload.round);
+  if (payload.completedSession) await tx.objectStore(STORES.completed).put(payload.completedSession);
+  await tx.done;
+}
+
+export async function deleteSession(sessionId: string): Promise<void> {
+  const db = await initRepositoryDb();
+  const tx = db.transaction(
+    [
+      STORES.sessions,
+      STORES.rounds,
+      STORES.completed,
+      STORES.legacySessions,
+      STORES.legacyRounds,
+      STORES.legacyCompleted,
+    ],
+    'readwrite'
+  );
+  for (const store of [STORES.rounds, STORES.legacyRounds]) {
+    const rounds = await tx.objectStore(store).index('sessionId').getAllKeys(sessionId);
+    for (const key of rounds) await tx.objectStore(store).delete(key);
+  }
+  for (const store of [STORES.sessions, STORES.completed, STORES.legacySessions, STORES.legacyCompleted]) {
+    await tx.objectStore(store).delete(sessionId);
+  }
+  await tx.done;
+}
+
 export async function hasCanonicalSession(sessionId: string): Promise<boolean> {
   const db = await initRepositoryDb();
   return Boolean(await db.get(STORES.sessions, sessionId));

@@ -1,8 +1,8 @@
 'use client';
 
 export const getGameConfig = () => ({
-  maxCards: Number(process.env.NEXT_PUBLIC_CARDS_IN_GAME || 35),
-  defaultCoreValues: Number(process.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10),
+  maxCards: Number(import.meta.env.NEXT_PUBLIC_CARDS_IN_GAME || 35),
+  defaultCoreValues: Number(import.meta.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10),
   minNotImportant: 1, // Minimum cards that must be in Not Important
   ratioThresholds: {
     final: 1.5, // Ratio for final round (2 categories)

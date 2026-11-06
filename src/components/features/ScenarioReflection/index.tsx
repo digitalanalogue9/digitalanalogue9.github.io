@@ -8,7 +8,7 @@ export function ScenarioReflectionRoute() {
     return (
       <section
         aria-labelledby="scenario-intro-heading"
-        className="mx-auto max-w-3xl space-y-6 rounded-lg border bg-white p-6 sm:p-10"
+        className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default mx-auto max-w-3xl space-y-6 border p-6 sm:p-10"
       >
         <h1 id="scenario-intro-heading">Scenario reflection</h1>
         <p>

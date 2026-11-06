@@ -16,9 +16,9 @@ test('visitor can reach personal app pages from the home page', async ({ page })
 
 test('visitor can open and refresh a direct application route', async ({ page }) => {
   await page.goto('/history');
-  await expect(page.getByRole('heading', { name: 'Your previous Core Values exercises' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
 
   await page.reload();
   await expect(page).toHaveURL(/\/history\/?$/);
-  await expect(page.getByRole('heading', { name: 'Your previous Core Values exercises' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
 });

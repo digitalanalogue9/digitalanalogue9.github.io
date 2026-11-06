@@ -15,7 +15,7 @@ export function useExerciseRound(sessionId: string | null, onReady: () => void) 
   const [busy, setBusy] = useState(false);
   const locked = useRef(false);
   async function updateRound(change: (round: RoundSnapshot) => { round: RoundSnapshot; ready?: boolean }) {
-    if (!record || record.session.status !== 'active' || locked.current) return;
+    if (!record || record.session.status !== 'active' || locked.current) return false;
     locked.current = true;
     setBusy(true);
     setError('');
@@ -24,8 +24,10 @@ export function useExerciseRound(sessionId: string | null, onReady: () => void) 
       await saveSessionProgress(record.session.id, result.round);
       setRecord(await loadSession(record.session.id));
       if (result.ready) onReady();
+      return true;
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Your sorting choice could not be saved. Please try again.');
+      return false;
     } finally {
       locked.current = false;
       setBusy(false);

@@ -16,7 +16,7 @@ export function ScenarioResults({
   return (
     <section
       aria-labelledby="scenario-results-heading"
-      className="mx-auto max-w-4xl space-y-6 rounded-lg border bg-white p-6 sm:p-10"
+      className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default mx-auto max-w-4xl space-y-6 border p-6 sm:p-10"
     >
       <h1 id="scenario-results-heading">Your scenario reflections</h1>
       <p>These are possibilities to consider, not conclusions about your behaviour or anyone else’s experience.</p>

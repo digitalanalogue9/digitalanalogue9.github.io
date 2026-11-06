@@ -6,6 +6,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: '/',
+  // Keep the migrated app's existing public configuration names available in Vite.
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   build: {
     outDir: 'dist',
   },

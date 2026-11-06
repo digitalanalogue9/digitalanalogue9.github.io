@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" fill="none">
+  <path d="M0 0H395C385 170 45 165 80 380S100 650 0 720Z" fill="#e7d5e1" opacity="1"/>
+  <path d="M1600 1200H1205C1225 1030 1555 1035 1520 820S1500 550 1600 480Z" fill="#efe0d8" opacity="1"/>
+  <path d="M430 0C425 205 80 200 115 405S140 690 0 780" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M462 0C457 205 112 200 147 405S172 690 0 806" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M494 0C489 205 144 200 179 405S204 690 0 832" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M526 0C521 205 176 200 211 405S236 690 0 858" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M1170 1200C1175 995 1520 1000 1485 795S1460 510 1600 420" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M1138 1200C1143 995 1488 1000 1453 795S1428 510 1600 394" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M1106 1200C1111 995 1456 1000 1421 795S1396 510 1600 368" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+  <path d="M1074 1200C1079 995 1424 1000 1389 795S1364 510 1600 342" stroke="#613d60" stroke-opacity="0.17" stroke-width="1.5"/>
+</svg>

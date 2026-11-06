@@ -30,12 +30,13 @@ export function ExerciseInstructions() {
     <dialog
       ref={dialog}
       aria-labelledby="instructions-heading"
-      className="m-auto max-w-xl rounded-lg border bg-white p-6 backdrop:bg-black/40"
+      className="app-instructions-dialog m-auto backdrop:bg-black/40"
     >
       <h2 id="instructions-heading">How to use Core Values</h2>
       <p>
-        Sort each value card by how important it is to you. Choose a category and place the card. You can move placed
-        cards between categories.
+        Sort each value card by how important it is to you. Choose a category button beside the current card, or drag it
+        into a category. You can move placed cards between categories and drag them above or below other cards to change
+        their order. Turn on Accessibility for buttons to move and reorder cards, or review a category on mobile.
       </p>
       <p>
         Your target is the number of core values you want to finish with. Keep at least that many active values and

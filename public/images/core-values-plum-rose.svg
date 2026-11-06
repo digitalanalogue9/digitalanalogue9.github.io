@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" fill="none">
+  <path d="M0 0H520C390 48 410 144 270 196S110 340 0 540Z" fill="#e7d5e1" opacity="1"/>
+  <path d="M1600 1200H1030C1210 1150 1190 1040 1355 990S1500 835 1600 660Z" fill="#efe0d8" opacity="1"/>
+  <path d="M0 70C140 60 170 135 150 245S45 430 0 438Z" fill="#d8a2bb" opacity="0.32"/>
+  <path d="M0 560C168 438 86 296 282 226S425 92 570 0" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M0 596C193 467 120 320 304 253S456 115 608 0" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M1600 615C1422 744 1506 916 1318 980S1152 1152 988 1200" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M1600 580C1390 723 1474 889 1296 953S1122 1128 950 1200" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M1490.5 1199.5A120 120 0 0 1 1599.5 1090.5" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M1460.6 1196.9A150 150 0 0 1 1596.9 1060.6" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+  <path d="M1430.7 1194.3A180 180 0 0 1 1594.3 1030.7" stroke="#613d60" stroke-opacity="0.22" stroke-width="1.5"/>
+</svg>

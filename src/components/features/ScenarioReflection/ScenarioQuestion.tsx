@@ -20,7 +20,7 @@ export function ScenarioQuestion({ attempt, saveError, updateAttempt }: Scenario
   return (
     <section
       aria-labelledby="scenario-heading"
-      className="mx-auto max-w-4xl space-y-6 rounded-lg border bg-white p-6 sm:p-10"
+      className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default mx-auto max-w-4xl space-y-6 border p-6 sm:p-10"
     >
       <div className="flex flex-wrap justify-between gap-3">
         <a href="/">Exit reflection</a>
@@ -33,7 +33,10 @@ export function ScenarioQuestion({ attempt, saveError, updateAttempt }: Scenario
       <fieldset className="space-y-3">
         <legend>What would you most likely do?</legend>
         {scenario.responses.map((response) => (
-          <label key={response.id} className="flex gap-3 rounded border p-4">
+          <label
+            key={response.id}
+            className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default hover:border-ref-color-brand-primary flex gap-3 border p-4"
+          >
             <input
               type="radio"
               name={`scenario-${scenario.id}`}
@@ -45,7 +48,10 @@ export function ScenarioQuestion({ attempt, saveError, updateAttempt }: Scenario
           </label>
         ))}
         {(['depends', 'skip'] as const).map((choice) => (
-          <label key={choice} className="flex gap-3 rounded border p-4">
+          <label
+            key={choice}
+            className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default hover:border-ref-color-brand-primary flex gap-3 border p-4"
+          >
             <input
               type="radio"
               name={`scenario-${scenario.id}`}

@@ -18,7 +18,7 @@ describe('personal site content', () => {
   it('shows the About content and its further reading links', () => {
     render(<AboutPage />);
 
-    expect(screen.getByRole('heading', { name: 'More information about Core Values' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Further perspectives' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'James Clear: Let Your Values Drive Your Choices' })).toHaveAttribute(
       'href',
       'https://jamesclear.com/values-choices'

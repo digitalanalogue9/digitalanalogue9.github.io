@@ -4,6 +4,7 @@ import { afterEach, expect, test } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { deleteDB } from 'idb';
 import { ExerciseRoute } from '../../src/app/ExerciseRoute';
+import { CompletedRoute } from '../../src/app/CompletedRoute';
 import { ReasoningRoute } from '../../src/app/ReasoningRoute';
 import { closeSessionRepository, createSession } from '../../src/lib/db/canonicalSessionRepository';
 
@@ -21,23 +22,26 @@ test('a normally sorted exercise offers optional reasons and can complete withou
     targetCoreValues: 1,
     exerciseType: 'team',
   });
+  const [kept, rejected] = record.currentRound.deck;
   render(
     <MemoryRouter initialEntries={[`/exercise?sessionId=${record.session.id}`]}>
       <Routes>
         <Route path="/exercise" element={<ExerciseRoute />} />
         <Route path="/reasoning" element={<ReasoningRoute />} />
+        <Route path="/completed" element={<CompletedRoute />} />
       </Routes>
     </MemoryRouter>
   );
-  fireEvent.click(await screen.findByRole('button', { name: 'Place Value a' }));
-  await screen.findByRole('button', { name: 'Move Value a' });
-  fireEvent.change(screen.getByLabelText('Category for Value b'), { target: { value: 'Not Important' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Place Value b' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'Complete exercise' }));
+  await screen.findByLabelText(`Current card ${kept.title}`);
+  expect(screen.queryByText(rejected.title)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Place current card in Very Important' }));
+  await screen.findByLabelText(`Current card ${rejected.title}`);
+  fireEvent.click(screen.getByRole('button', { name: 'Place current card in Not Important' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Proceed to reasoning' }));
   expect(await screen.findByRole('heading', { name: 'Reflect on your choices' })).toBeInTheDocument();
-  expect(screen.getByRole('textbox', { name: 'Value a', exact: true })).toHaveValue('');
-  fireEvent.click(screen.getByRole('button', { name: 'Complete exercise' }));
-  expect(await screen.findByRole('heading', { name: 'Exercise complete' })).toBeInTheDocument();
+  expect(await screen.findByRole('textbox', { name: new RegExp(kept.title) })).toHaveValue('');
+  fireEvent.click(screen.getByRole('button', { name: 'Save Completed Session' }));
+  expect(await screen.findByLabelText('Reflect on your values')).toBeInTheDocument();
 });
 
 test('a placed value is immediately visible and can be moved without reloading', async () => {
@@ -47,6 +51,7 @@ test('a placed value is immediately visible and can be moved without reloading',
     targetCoreValues: 1,
     exerciseType: 'personal',
   });
+  const kept = record.currentRound.deck[0];
   render(
     <MemoryRouter initialEntries={[`/exercise?sessionId=${record.session.id}`]}>
       <Routes>
@@ -54,11 +59,11 @@ test('a placed value is immediately visible and can be moved without reloading',
       </Routes>
     </MemoryRouter>
   );
-  fireEvent.click(await screen.findByRole('button', { name: 'Place Value a' }));
-  const important = screen.getByRole('region', { name: 'Very Important' });
-  expect(await within(important).findByText('Value a')).toBeInTheDocument();
-  fireEvent.change(screen.getByLabelText('Move Value a to'), { target: { value: 'Not Important' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Move Value a' }));
-  const rejected = screen.getByRole('region', { name: 'Not Important' });
-  expect(await within(rejected).findByText('Value a')).toBeInTheDocument();
+  fireEvent.click(await screen.findByRole('button', { name: 'Place current card in Very Important' }));
+  const important = screen.getByRole('article', { name: 'Very Important category' });
+  expect(await within(important).findByText(kept.title)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: /Accessibility/ }));
+  fireEvent.click(await screen.findByRole('button', { name: `Move ${kept.title} to Not Important` }));
+  const rejected = screen.getByRole('article', { name: 'Not Important category' });
+  expect(await within(rejected).findByText(kept.title)).toBeInTheDocument();
 });

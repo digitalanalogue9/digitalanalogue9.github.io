@@ -1,0 +1,55 @@
+import { expect, test } from '@playwright/test';
+
+test('desktop supports dragging, moving and ordering placed cards', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.addInitScript(() => localStorage.setItem('show-instructions', 'false'));
+  await page.goto('/exercise');
+  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
+  const current = page.getByLabel(/^Current card /);
+  const bucket = page.getByRole('article', { name: 'Very Important category' });
+  const first = await current.getByRole('heading').innerText();
+  await current.dragTo(bucket);
+  await expect(bucket.getByRole('listitem', { name: `${first} in Very Important`, exact: true })).toBeVisible();
+  const second = await current.getByRole('heading').innerText();
+  await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
+  const secondRow = bucket.getByRole('listitem', { name: `${second} in Very Important`, exact: true });
+  await expect(secondRow).toBeVisible();
+  const firstRow = bucket.getByRole('listitem', { name: `${first} in Very Important`, exact: true });
+  await secondRow.dragTo(firstRow, { targetPosition: { x: 15, y: 5 } });
+  await expect(bucket.getByRole('listitem').first()).toHaveAccessibleName(`${second} in Very Important`);
+  await page.screenshot({ path: '.scratch/sorting-desktop-before-drag.png', fullPage: true });
+  await page.reload();
+  await expect(bucket.getByRole('listitem').first()).toHaveAccessibleName(`${second} in Very Important`);
+  await secondRow.dragTo(page.getByRole('article', { name: 'Not Important category' }));
+  await expect(page.getByRole('article', { name: 'Not Important category' })).toContainText(second);
+  await page.reload();
+  await expect(bucket).toContainText(first);
+  await expect(page.getByRole('article', { name: 'Not Important category' })).toContainText(second);
+  await page.screenshot({ path: '.scratch/sorting-desktop.png', fullPage: true });
+});
+
+test('mobile retains compact sorting and allows review, movement and reordering', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem('show-instructions', 'false'));
+  await page.goto('/exercise');
+  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
+  const current = page.getByLabel(/^Current card /);
+  const first = await current.getByRole('heading').innerText();
+  await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
+  await expect(page.getByLabel(`Current card ${first}`, { exact: true })).toHaveCount(0);
+  const second = await current.getByRole('heading').innerText();
+  await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
+  await page.getByRole('button', { name: 'Review Very Important, 2 values', exact: true }).click();
+  const review = page.getByRole('region', { name: 'Very Important review' });
+  await expect(review.getByRole('listitem')).toHaveCount(2);
+  await review.getByRole('button', { name: `Move ${second} up in Very Important` }).click();
+  await expect(review.getByRole('listitem').first()).toHaveAccessibleName(`${second} in Very Important`);
+  await review.getByRole('button', { name: `Move ${first} to Not Important` }).click();
+  await expect(page.getByRole('region', { name: 'Not Important review' })).toContainText(first);
+  await page.getByRole('button', { name: 'Return to sorting' }).click();
+  await expect(current).toBeVisible();
+  await page.screenshot({ path: '.scratch/sorting-mobile.png', fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

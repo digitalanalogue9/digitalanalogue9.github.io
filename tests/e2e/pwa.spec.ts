@@ -56,7 +56,7 @@ test('visitor sees offline status while the installed app is offline', async ({ 
   await context.setOffline(true);
   await page.goto('/history');
 
-  await expect(page.getByRole('heading', { name: 'Your previous Core Values exercises' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
   await expect(page.getByRole('alert')).toContainText('You are offline. Some features may be limited.');
 
   await context.setOffline(false);

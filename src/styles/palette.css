@@ -1,0 +1,96 @@
+/* Core Values: Plum & Rose. Site overrides live outside the generated APC tokens. */
+:root {
+  --ref-color-brand-primary: #613d60;
+  --ref-color-brand-primary-hover: #472b46;
+  --ref-color-brand-secondary: #3c2a38;
+  --ref-color-brand-accent: #d8a2bb;
+  --ref-color-brand-surface-primary: #e7d5e1;
+  --ref-color-brand-surface-primary-hover: #d6bdcc;
+  --ref-color-brand-surface-secondary: #efe0d8;
+  --ref-color-brand-surface-secondary-hover: #d6bdcc;
+  --ref-color-other-background: #f5edf1;
+  --ref-color-neutral-grey1: #e7d5e1;
+  --ref-color-neutral-grey2: #d6bdcc;
+  --ref-color-neutral-grey3: #71596b;
+  --ref-color-neutral-grey5: #71596b;
+  --ref-color-neutral-black: #3c2a38;
+  --sys-color-surface-default: #faf5f8;
+  --sys-color-surface-light: #fffbfd;
+
+  /* Keep generated Tailwind colour utilities on the same site palette. */
+  --color-ref-color-brand-primary: var(--ref-color-brand-primary);
+  --color-ref-color-brand-primary-hover: var(--ref-color-brand-primary-hover);
+  --color-ref-color-brand-secondary: var(--ref-color-brand-secondary);
+  --color-ref-color-brand-accent: var(--ref-color-brand-accent);
+  --color-ref-color-brand-surface-primary: var(--ref-color-brand-surface-primary);
+  --color-ref-color-brand-surface-primary-hover: var(--ref-color-brand-surface-primary-hover);
+  --color-ref-color-brand-surface-secondary: var(--ref-color-brand-surface-secondary);
+  --color-ref-color-brand-surface-secondary-hover: var(--ref-color-brand-surface-secondary-hover);
+  --color-ref-color-other-background: var(--ref-color-other-background);
+  --color-ref-color-neutral-grey1: var(--ref-color-neutral-grey1);
+  --color-ref-color-neutral-grey2: var(--ref-color-neutral-grey2);
+  --color-ref-color-neutral-grey3: var(--ref-color-neutral-grey3);
+  --color-ref-color-neutral-grey5: var(--ref-color-neutral-grey5);
+  --color-ref-color-neutral-black: var(--ref-color-neutral-black);
+  --color-sys-color-surface-default: var(--sys-color-surface-default);
+  --color-sys-color-surface-light: var(--sys-color-surface-light);
+}
+
+.core-values-shell {
+  background: var(--sys-color-surface-page);
+  color: var(--sys-color-text-primary);
+  caret-color: var(--ref-color-brand-primary);
+}
+
+.core-values-background {
+  background-image: url('/images/core-values-growth.svg');
+  background-color: var(--sys-color-surface-page);
+  background-size: 100% auto;
+  background-position: center;
+}
+.core-values-background--values {
+background-image: url('/images/core-values-values.svg');
+}
+.core-values-background--behaviour {
+background-image: url('/images/core-values-behaviour.svg');
+}
+
+.core-values-error-background {
+  background-color: var(--sys-color-surface-page);
+  background-image: url('/images/core-values-error-bg.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.core-values-shell article {
+  background: var(--sys-color-surface-light);
+}
+
+::selection {
+  background: var(--ref-color-brand-accent);
+  color: var(--sys-color-text-primary);
+}
+
+.core-values-shell :focus-visible {
+  outline-color: var(--ref-color-brand-primary);
+}
+
+.core-values-shell header :focus-visible,
+.core-values-shell footer :focus-visible {
+  outline-color: var(--ref-color-brand-accent);
+}
+
+.core-values-shell header svg .stroke-ref-color-brand-primary {
+  stroke: var(--ref-color-brand-accent);
+}
+
+.core-values-shell header svg .fill-ref-color-brand-primary {
+  fill: var(--ref-color-brand-accent);
+}
+
+@media print {
+  .core-values-background {
+    background-image: none;
+  }
+}

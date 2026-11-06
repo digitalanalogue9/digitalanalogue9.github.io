@@ -37,7 +37,7 @@ export function CompletedExercise({ record }: { record: SessionRecord }) {
     }
   }
   return (
-    <section aria-labelledby="completed-heading">
+    <section aria-labelledby="completed-heading" className="space-y-6">
       <h1 id="completed-heading">Exercise complete</h1>
       <h2>Your core values</h2>
       <ul>

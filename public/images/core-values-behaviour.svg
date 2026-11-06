@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" fill="none">
+  <path d="M0 0h470C352 91 336 180 206 238S84 366 0 454Z" fill="#efe0d8" opacity=".76" />
+  <path d="M1600 1200h-535c158-78 179-190 322-245s147-184 213-302Z" fill="#e7d5e1" opacity=".76" />
+  <path d="M0 477c177-125 119-238 295-306S437 61 560 0M0 513c202-137 139-248 315-317S468 79 596 0" stroke="#613d60" stroke-opacity=".12" stroke-width="2" />
+  <path d="M1600 677c-172 131-119 264-304 339s-166 153-304 184M1600 640c-196 144-145 281-324 356s-187 162-332 202" stroke="#613d60" stroke-opacity=".12" stroke-width="2" />
+
+  <path d="M-56 870c159-83 275-111 350-187s82-164 35-238-22-157 101-238M-34 908c170-88 290-117 373-198s93-176 46-252-19-150 103-230" stroke="#613d60" stroke-opacity=".15" stroke-width="3" />
+  <path d="M1656 330c-159 83-275 111-350 187s-82 164-35 238 22 157-101 238M1634 292c-170 88-290 117-373 198s-93 176-46 252 19 150-103 230" stroke="#613d60" stroke-opacity=".15" stroke-width="3" />
+
+  <circle cx="352" cy="326" r="104" stroke="#613d60" stroke-opacity=".11" stroke-width="2" />
+  <circle cx="352" cy="326" r="135" stroke="#613d60" stroke-opacity=".08" stroke-width="2" />
+  <circle cx="1248" cy="874" r="104" stroke="#613d60" stroke-opacity=".11" stroke-width="2" />
+  <circle cx="1248" cy="874" r="135" stroke="#613d60" stroke-opacity=".08" stroke-width="2" />
+
+  <path d="M131 587c-4-48 18-85 61-107 17 42-2 82-61 107Zm63-50c9-48 40-77 87-83 1 46-31 76-87 83Zm81-72c0-47 26-78 72-91 10 45-17 78-72 91Z" fill="#d8a2bb" opacity=".29" />
+  <path d="M1469 613c4 48-18 85-61 107-17-42 2-82 61-107Zm-63 50c-9 48-40 77-87 83-1-46 31-76 87-83Zm-81 72c0 47-26 78-72 91-10-45 17-78 72-91Z" fill="#d8a2bb" opacity=".27" />
+</svg>

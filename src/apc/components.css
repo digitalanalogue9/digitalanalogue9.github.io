@@ -1,0 +1,464 @@
+/*
+ * Hand-written Web component layer.
+ * Load tokens.css first. Keep selectors namespaced and use the generated
+ * Web token variables; this file intentionally contains no global reset.
+ */
+
+:where(
+  .apc-button,
+  .apc-icon-button,
+  .apc-link,
+  .apc-menu__link,
+  .apc-tabs__link,
+  .apc-breadcrumb__link,
+  .apc-field__control,
+  .apc-checkbox__control,
+  .apc-chip__remove,
+  .apc-radio__control,
+  .apc-toggle__control,
+  .apc-selector__control,
+  .apc-accordion__summary,
+  .apc-dialog__close
+):focus-visible {
+  outline: var(--ref-border-2) solid var(--sys-color-focus-ring);
+  outline-offset: var(--ref-space-100);
+}
+
+:where(
+  .apc-button-group,
+  .apc-icon-button,
+  .apc-selector,
+  .apc-checkbox,
+  .apc-radio,
+  .apc-radio-group,
+  .apc-toggle,
+  .apc-form,
+  .apc-field,
+  .apc-select__control,
+  .apc-input__control,
+  .apc-search,
+  .apc-search__control,
+  .apc-time__control,
+  .apc-accordion,
+  .apc-chip,
+  .apc-chip-list,
+  .apc-comparison-table,
+  .apc-card,
+  .apc-tooltip,
+  .apc-cookie-banner,
+  .apc-attention-box,
+  .apc-toast,
+  .apc-alert-banner,
+  .apc-dialog,
+  .apc-panel,
+  .apc-breadcrumb,
+  .apc-link,
+  .apc-list,
+  .apc-tabs,
+  .apc-menu
+) {
+  font-family: var(--font-family-interface-base-default);
+  font-size: var(--font-size-interface-base-default);
+  font-weight: var(--font-weight-interface-base-default);
+  line-height: var(--line-height-interface-base-default);
+}
+
+.apc-button {
+  align-items: center;
+  background-color: var(--ref-color-brand-primary);
+  border: var(--sys-border-none) solid var(--sys-color-text-primary);
+  border-radius: var(--sys-radius-button-sm);
+  color: var(--sys-color-text-inverse);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-family-interface-base-default);
+  font-size: var(--font-size-interface-base-default);
+  font-weight: var(--font-weight-interface-base-default);
+  gap: var(--ref-space-200);
+  justify-content: center;
+  min-block-size: var(--ref-space-600);
+  min-inline-size: var(--ref-space-600);
+  line-height: var(--line-height-interface-base-default);
+  padding: var(--ref-space-200) var(--ref-space-400);
+  text-decoration: none;
+}
+
+.apc-button:hover {
+  background-color: var(--ref-color-brand-primary-hover);
+}
+
+.apc-button:disabled {
+  background-color: var(--sys-color-surface-disabled);
+  color: var(--sys-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.apc-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ref-space-200);
+}
+
+.apc-icon-button {
+  align-items: center;
+  background-color: var(--sys-color-surface-default);
+  border: var(--ref-border-1) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-button-sm);
+  color: var(--sys-color-text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  min-block-size: var(--ref-space-600);
+  min-inline-size: var(--ref-space-600);
+  padding: var(--ref-space-200);
+}
+
+.apc-icon-button > svg {
+  block-size: var(--ref-space-600);
+  inline-size: var(--ref-space-600);
+}
+
+.apc-icon-button:hover {
+  background-color: var(--sys-color-surface-subtle);
+}
+
+.apc-selector,
+.apc-checkbox,
+.apc-radio,
+.apc-toggle {
+  align-items: center;
+  color: var(--sys-color-text-primary);
+  display: inline-flex;
+  gap: var(--ref-space-200);
+}
+
+.apc-selector__control,
+.apc-checkbox__control,
+.apc-radio__control,
+.apc-toggle__control {
+  accent-color: var(--ref-color-brand-primary);
+  block-size: var(--ref-space-600);
+  inline-size: var(--ref-space-600);
+}
+
+.apc-form {
+  display: grid;
+  gap: var(--ref-space-400);
+}
+
+.apc-field {
+  display: grid;
+  gap: var(--ref-space-100);
+}
+
+.apc-field__label {
+  color: var(--sys-color-text-primary);
+  font-family: var(--font-family-interface-label);
+  font-size: var(--font-size-interface-label);
+  font-weight: var(--font-weight-interface-label);
+  line-height: var(--line-height-interface-label);
+}
+
+.apc-field__control {
+  background-color: var(--sys-color-surface-default);
+  border: var(--ref-border-1) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-input);
+  color: var(--sys-color-text-primary);
+  font: inherit;
+  padding: var(--ref-space-200) var(--ref-space-300);
+}
+
+.apc-field__control:disabled {
+  background-color: var(--sys-color-surface-disabled);
+  color: var(--sys-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.apc-field__hint {
+  color: var(--sys-color-text-secondary);
+  font-family: var(--font-family-interface-base-small);
+  font-size: var(--font-size-interface-base-small);
+  line-height: var(--line-height-interface-base-small);
+}
+
+.apc-field__error {
+  color: var(--sys-color-text-error);
+  font-family: var(--font-family-interface-base-small);
+  font-size: var(--font-size-interface-base-small);
+  line-height: var(--line-height-interface-base-small);
+}
+
+.apc-field__control[aria-invalid='true'] {
+  border-color: var(--sys-color-border-error);
+}
+
+.apc-select__control,
+.apc-input__control,
+.apc-search__control,
+.apc-time__control {
+  background-color: var(--sys-color-surface-default);
+  border: var(--ref-border-1) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-input);
+  color: var(--sys-color-text-primary);
+  font: inherit;
+  padding: var(--ref-space-200) var(--ref-space-300);
+}
+
+.apc-select__control:disabled,
+.apc-input__control:disabled,
+.apc-search__control:disabled,
+.apc-time__control:disabled {
+  background-color: var(--sys-color-surface-disabled);
+  color: var(--sys-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.apc-select__control:focus-visible,
+.apc-input__control:focus-visible,
+.apc-search__control:focus-visible,
+.apc-time__control:focus-visible {
+  outline: var(--ref-border-2) solid var(--sys-color-focus-ring);
+  outline-offset: var(--ref-space-100);
+}
+
+.apc-search {
+  display: grid;
+  gap: var(--ref-space-200);
+}
+
+.apc-radio-group {
+  border: var(--sys-border-none) solid var(--sys-color-text-primary);
+  display: grid;
+  gap: var(--ref-space-200);
+  margin: var(--ref-space-0);
+  padding: var(--ref-space-0);
+}
+
+.apc-toggle__control {
+  block-size: var(--ref-space-600);
+  inline-size: var(--ref-space-600);
+}
+
+.apc-accordion {
+  border-block-end: var(--sys-border-divider) solid var(--sys-color-text-secondary);
+  color: var(--sys-color-text-primary);
+}
+
+.apc-accordion__summary {
+  cursor: pointer;
+  padding-block: var(--ref-space-300);
+}
+
+.apc-accordion__content {
+  padding-block-end: var(--ref-space-300);
+}
+
+.apc-chip {
+  align-items: center;
+  background-color: var(--sys-color-surface-subtle);
+  border-radius: var(--sys-radius-pill);
+  color: var(--sys-color-text-primary);
+  display: inline-flex;
+  gap: var(--ref-space-100);
+  padding: var(--ref-space-100) var(--ref-space-300);
+}
+
+.apc-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ref-space-200);
+  list-style: none;
+  margin: var(--ref-space-0);
+  padding: var(--ref-space-0);
+}
+
+.apc-chip__remove {
+  background: none;
+  border: var(--sys-border-none) solid var(--sys-color-text-primary);
+  color: inherit;
+  cursor: pointer;
+  min-block-size: var(--ref-space-600);
+  min-inline-size: var(--ref-space-600);
+  font: inherit;
+}
+
+.apc-comparison-table {
+  overflow-x: auto;
+}
+
+.apc-comparison-table table {
+  border-collapse: collapse;
+  color: var(--sys-color-text-primary);
+  inline-size: auto;
+}
+
+.apc-comparison-table caption {
+  font-family: var(--font-family-interface-small-title-3);
+  font-size: var(--font-size-interface-small-title-3);
+  font-weight: var(--font-weight-interface-small-title-3);
+  line-height: var(--line-height-interface-small-title-3);
+  text-align: start;
+}
+
+.apc-comparison-table th,
+.apc-comparison-table td {
+  border: var(--sys-border-table) solid var(--sys-color-text-secondary);
+  padding: var(--ref-space-200);
+  text-align: start;
+  vertical-align: top;
+}
+
+.apc-card,
+.apc-panel {
+  background-color: var(--sys-color-surface-default);
+  border: var(--sys-border-card) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-card-md);
+  color: var(--sys-color-text-primary);
+  padding: var(--ref-space-400);
+}
+
+.apc-card__title,
+.apc-panel__title {
+  font-family: var(--font-family-interface-small-title-2);
+  font-size: var(--font-size-interface-small-title-2);
+  font-weight: var(--font-weight-interface-small-title-2);
+  line-height: var(--line-height-interface-small-title-2);
+}
+
+.apc-tooltip {
+  background-color: var(--ref-color-brand-secondary);
+  border-radius: var(--sys-radius-tooltip);
+  color: var(--sys-color-text-inverse);
+  padding: var(--ref-space-200);
+}
+
+.apc-cookie-banner,
+.apc-attention-box,
+.apc-toast,
+.apc-alert-banner {
+  background-color: var(--sys-color-surface-default);
+  border: var(--ref-border-1) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-card-sm);
+  color: var(--sys-color-text-primary);
+  padding: var(--ref-space-400);
+}
+
+.apc-cookie-banner,
+.apc-attention-box,
+.apc-toast,
+.apc-alert-banner,
+.apc-dialog {
+  display: grid;
+  gap: var(--ref-space-300);
+}
+
+.apc-dialog {
+  background-color: var(--sys-color-surface-default);
+  border: var(--ref-border-1) solid var(--sys-color-text-secondary);
+  border-radius: var(--sys-radius-modal);
+  color: var(--sys-color-text-primary);
+  padding: var(--ref-space-500);
+}
+
+.apc-dialog::backdrop {
+  background-color: var(--ref-color-other-scrim);
+}
+
+.apc-dialog__close {
+  justify-self: end;
+}
+
+.apc-breadcrumb ol,
+.apc-menu ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ref-space-200);
+  list-style: none;
+  margin: var(--ref-space-0);
+  padding: var(--ref-space-0);
+}
+
+.apc-list {
+  display: grid;
+  gap: var(--ref-space-200);
+  list-style: disc;
+  margin: var(--ref-space-0);
+  padding-inline-start: var(--ref-space-500);
+}
+
+.apc-breadcrumb__link,
+.apc-link,
+.apc-menu__link,
+.apc-tabs__link {
+  color: var(--sys-color-text-teal);
+  text-decoration: underline;
+  text-underline-offset: var(--ref-space-100);
+}
+
+.apc-breadcrumb__link,
+.apc-menu__link,
+.apc-tabs__link {
+  padding: var(--ref-space-100);
+}
+
+.apc-breadcrumb__current,
+.apc-breadcrumb__separator {
+  color: var(--sys-color-text-secondary);
+}
+
+.apc-tabs,
+.apc-menu {
+  border-block-end: var(--sys-border-divider) solid var(--sys-color-text-secondary);
+}
+
+.apc-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ref-space-400);
+  list-style: none;
+  margin: var(--ref-space-0);
+  padding: var(--ref-space-0);
+}
+
+.apc-tabs__link[aria-current='page'],
+.apc-menu__link[aria-current='page'] {
+  color: var(--sys-color-text-primary);
+  font-weight: var(--font-weight-interface-base-default-bold);
+}
+
+@media (forced-colors: active) {
+  :where(
+    .apc-button,
+    .apc-icon-button,
+    .apc-link,
+    .apc-menu__link,
+    .apc-tabs__link,
+    .apc-breadcrumb__link,
+    .apc-field__control,
+    .apc-checkbox__control,
+    .apc-radio__control,
+    .apc-toggle__control,
+    .apc-selector__control,
+    .apc-accordion__summary,
+    .apc-dialog__close
+  ):focus-visible {
+    outline-color: Highlight;
+  }
+
+  .apc-button,
+  .apc-icon-button,
+  .apc-field__control,
+  .apc-select__control,
+  .apc-input__control,
+  .apc-search__control,
+  .apc-time__control,
+  .apc-card,
+  .apc-panel,
+  .apc-cookie-banner,
+  .apc-attention-box,
+  .apc-toast,
+  .apc-alert-banner,
+  .apc-dialog {
+    border-color: ButtonText;
+  }
+}

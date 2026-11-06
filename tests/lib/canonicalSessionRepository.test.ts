@@ -5,6 +5,7 @@ import {
   completeSession,
   closeSessionRepository,
   createSession,
+  deleteSession,
   listSessions,
   loadSession,
   migrateLegacySessions,
@@ -12,6 +13,19 @@ import {
 } from '../../src/lib/db/canonicalSessionRepository';
 
 const DB_NAME = 'coreValuesData';
+
+test('deleting a migrated Session removes its retained legacy records without affecting another Session', async () => {
+  await seedVersionFourDatabase();
+  await listSessions();
+  await deleteSession('completed-session');
+  expect((await listSessions()).map((session) => session.id)).toEqual(['active-session']);
+  const db = await openDB(DB_NAME);
+  expect(await db.get('sessions', 'completed-session')).toBeUndefined();
+  expect(await db.get('completedSessions', 'completed-session')).toBeUndefined();
+  expect(await db.getAllFromIndex('rounds', 'sessionId', 'completed-session')).toEqual([]);
+  expect(await db.get('sessions', 'active-session')).toBeDefined();
+  db.close();
+});
 
 function value(id: string) {
   return { id, title: `Value ${id}`, description: `Description ${id}` };
