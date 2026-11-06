@@ -19,6 +19,21 @@ Parent specification: [Public editorial site](../spec.md), especially Privacy an
 - [ ] Reuse and extend existing consent tests for rejection, remembered choices, granting and withdrawal; cover direct Privacy load/refresh and actual link/control behaviour at the browser boundary without duplicating all consent tests on every page.
 - [ ] Verify mobile/desktop readability, keyboard operation, feedback announcements, contrast, 320px overflow and 200% zoom. Relevant checks pass.
 
+## Reviewed wording requirements
+
+Implement the complete [Privacy draft](../copy-review.md#proposed-privacy-copy), relevant [shared consent wording](../copy-review.md#shared-wording-and-adjacent-application-text) and [metadata](../copy-review.md#proposed-metadata). Preserve all existing data-handling and consent contracts.
+
+- [ ] Retain the agreed short introduction and the full reviewed sections on browser storage, downloaded backups, optional Google Analytics, current consent and privacy contact. Keep technical details available without leading with them.
+- [ ] Explain “Export reflection backup” and the standard export's additional-reflection-note omission. Preserve the distinction between values imports creating a separate copy for an existing ID and behaviour imports replacing a saved reflection with the same ID.
+- [ ] Use sentence-case “Allow analytics”, “Reject analytics” and “Your analytics preference has been saved.” Map current-state wording to “Not set”, “Allowed” or “Rejected” without changing stored consent values.
+- [ ] Use the reviewed consent-banner wording and British “Customise preferences”. Retain “Reject optional cookies” where the action also rejects functional preference consent. Preserve the “Functional preferences” label unless actual behaviour supports a more specific explanation; invent no effect for that field.
+- [ ] Retain property G-JZPX5JCP5D, query/fragment omission, optional loading, advertising/Signals settings, withdrawal limits and the existing contact address. Friendly language must not weaken these material details.
+
 ## Comments
 
 - The completed slice demonstrates both comprehension and working privacy controls. Legal/product claims remain tied to the existing implementation rather than historical aspirations.
+
+- 2026-11-06 owner instruction: **Application editing is paused pending owner review of proposed wording.** Read [the copy review and proposal](../copy-review.md) before resuming. Use the reviewed short introduction and complete detailed notice. Preserve analytics configuration, consent behaviour and the difference between values and behaviour backup imports.
+
+
+- 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.
