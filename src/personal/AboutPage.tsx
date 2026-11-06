@@ -1,67 +1,116 @@
+import { Link } from 'react-router-dom';
 import PageMetadata from './PageMetadata';
 
 export default function AboutPage() {
   return (
-    <article className="app-page-panel mx-auto max-w-5xl space-y-6" aria-labelledby="about-heading">
+    <article className="editorial-home mx-auto w-full max-w-4xl space-y-12" aria-labelledby="about-heading">
       <PageMetadata
-        title="About Core Values"
-        description="Why Core Values was created and how identifying your values can support personal growth."
+        title="About Core Values · A borrowed deck of cards"
+        description="A borrowed deck of cards led to Core Values, a tool for sorting values and returning to the priorities you choose."
         path="/about"
       />
-      <h1 id="about-heading" className="text-interface-title-1 text-center font-semibold">
-        The story behind Core Values
-      </h1>
-      <section aria-label="Origin story" className="app-content-card space-y-3">
-        <p>
-          I was fortunate to work with a coach who helped me think things through. In one of our early sessions, she
-          lent me a deck of cards to help me identify my core values. I found the exercise useful, and learned that it
-          can be worth revisiting those choices as life changes.
-        </p>
-        <p>
-          The cards belonged to my coach, so I had to return them. I wanted a set of my own that I could revisit when I
-          needed it. That was the starting point for Core Values.
-        </p>
-        <p>I later decided to share the tool in case it could help others reflect on what matters to them.</p>
-      </section>
-      <section aria-labelledby="why-matters-heading" className="app-content-card space-y-3">
-        <h2 id="why-matters-heading" className="text-interface-title-2 font-semibold">
-          Why values matter
+
+      <header className="space-y-6">
+        <h1 id="about-heading" className="max-w-[18ch] text-4xl sm:text-5xl lg:text-6xl">
+          It started with a borrowed deck of cards.
+        </h1>
+        <div className="max-w-[70ch] space-y-4 text-lg leading-relaxed">
+          <p>
+            I was working with a coach when she lent me a deck of cards to help me identify my core values. I found the
+            exercise useful. It also gave me something I wanted to revisit as life changed.
+          </p>
+          <p>
+            The cards belonged to my coach, so I had to return them. I wanted a set of my own that I could come back to
+            when I needed it. That was the starting point for Core Values.
+          </p>
+          <p>I later decided to share the tool in case it could help others reflect on what matters to them.</p>
+        </div>
+      </header>
+
+      <section
+        className="max-w-[70ch] space-y-4 border-t border-[var(--editorial-line)] pt-8"
+        aria-labelledby="what-you-can-do"
+      >
+        <h2 id="what-you-can-do" className="text-3xl sm:text-4xl">
+          What you can do here
         </h2>
-        <p>
-          Focus on what is within your control. Taking time to consider your values can bring that perspective to
-          everyday choices.
+        <p className="leading-relaxed">
+          Core Values gives you a set of cards to sort by importance. Over a series of rounds, you choose which values
+          to keep. You can add notes about why they matter and come back to your choices later.
         </p>
-        <p>
-          <strong>For you:</strong> Your values can help make what matters clearer when you are weighing a decision,
-          planning a next step, or reflecting on change.
-        </p>
-        <p>
-          <strong>For teams:</strong> Team-focused values offer a useful starting point for a discussion about shared
-          priorities.
+        <p className="leading-relaxed">
+          If you’re weighing a decision or thinking about a change, the exercise gives you a starting point for putting
+          your priorities into words. What you take from it is yours to consider.
         </p>
       </section>
-      <section aria-labelledby="further-reading" className="app-content-card space-y-3">
-        <h2 id="further-reading" className="text-interface-title-2 font-semibold">
+
+      <section
+        className="max-w-[70ch] space-y-4 border-t border-[var(--editorial-line)] pt-8"
+        aria-labelledby="conversation-heading"
+      >
+        <h2 id="conversation-heading" className="text-3xl sm:text-4xl">
+          A starting point for a conversation
+        </h2>
+        <p className="leading-relaxed">
+          You can use the exercise on your own or bring your chosen values to a conversation with a coach.
+        </p>
+        <p className="leading-relaxed">
+          There’s also a team-focused set for thinking about what matters to you at work. Each person completes their
+          own exercise. You can then discuss your choices together; the tool doesn’t combine them into a team result.
+        </p>
+      </section>
+
+      <section
+        className="max-w-[70ch] space-y-4 border-t border-[var(--editorial-line)] pt-8"
+        aria-labelledby="further-reading"
+      >
+        <h2 id="further-reading" className="text-3xl sm:text-4xl">
           Further perspectives
         </h2>
-        <p>These reading, audio, and video resources offer additional perspectives on values and the choices we make.</p>
-        <ul className="list-inside list-disc space-y-2">
+        <p className="leading-relaxed">
+          These articles, conversations and talks offer other ways to think about values and the choices we make.
+        </p>
+        <ul className="list-inside list-disc space-y-3 leading-relaxed">
           <li>
-            <a href="https://jamesclear.com/values-choices" target="_blank" rel="noreferrer">
+            <a
+              href="https://jamesclear.com/values-choices"
+              target="_blank"
+              rel="noreferrer"
+              className="editorial-text-link"
+            >
               James Clear: Let Your Values Drive Your Choices
             </a>
           </li>
           <li>
-            <a href="https://brenebrown.com/podcast/living-into-our-values/" target="_blank" rel="noreferrer">
+            <a
+              href="https://brenebrown.com/podcast/living-into-our-values/"
+              target="_blank"
+              rel="noreferrer"
+              className="editorial-text-link"
+            >
               Brené Brown and Barrett Guillen: Living Into Our Values
             </a>
           </li>
           <li>
-            <a href="https://www.youtube.com/watch?v=mL4l75rMIiQ" target="_blank" rel="noreferrer">
+            <a
+              href="https://www.youtube.com/watch?v=mL4l75rMIiQ"
+              target="_blank"
+              rel="noreferrer"
+              className="editorial-text-link"
+            >
               Larisa Halilović: Core Values - Your Inner Compass
             </a>
           </li>
         </ul>
+        <p className="text-sm leading-relaxed text-[#584451]">
+          These links are provided for further reading and listening. They don’t imply an endorsement of Core Values.
+        </p>
+      </section>
+
+      <section className="border-t border-[var(--editorial-line)] pt-8" aria-label="Explore the exercise">
+        <Link className="editorial-button editorial-button--primary" to="/exercise">
+          Find my core values
+        </Link>
       </section>
     </article>
   );
