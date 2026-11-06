@@ -19,6 +19,19 @@ Parent specification: [Public editorial site](../spec.md), especially Optional s
 - [ ] Intercept requests in a representative journey to confirm no sample answer is transmitted and optional analytics remains off before consent/after rejection. Reuse existing consent tests for detailed consent transitions.
 - [ ] Sample controls and feedback work on mobile and with reduced motion, with visible focus, sufficient contrast and principal targets at least 44px high. Relevant tests and checks pass.
 
+## Reviewed wording requirements
+
+Use the [optional sample draft](../copy-review.md#optional-sample) as part of the reviewed Home copy. Keep all isolation and accessibility criteria above.
+
+- [ ] Retain the exact catalogue descriptions: Security — “It is important to know your work will always be there for you.” Independence — “You like being able to work in the way you want, without others telling you what to do.” Do not broaden these into different concepts.
+- [ ] After either selection, use the same neutral question specified above and the invitation “Explore the complete set and see which other values you want to keep.”
+- [ ] Use “Find my core values” for the persistent full-exercise action, “Reset sample” for reset, and “A sample only. Your choice isn’t saved.” for reassurance. Add no interpretation, score or answer-dependent persuasion.
+
 ## Comments
 
 - This sample demonstrates reflection, not the exercise engine. Its choices must not be mistaken for results or used to seed a Session.
+
+- 2026-11-06 owner instruction: **Application editing is paused pending owner review of proposed wording.** Read [the copy review and proposal](../copy-review.md) before resuming. Keep the sample wording, exact catalogue meanings and neutral feedback in the proposal. Review approval does not authorise persistence or sample analytics.
+
+
+- 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.

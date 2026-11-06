@@ -20,6 +20,21 @@ Parent specification: [Public editorial site](../spec.md), especially How it wor
 - [ ] Extend existing instruction-preference, content and browser-route tests to cover persistence, navigation and direct refresh. Assert behaviours and working destinations instead of image pixels or markup structure.
 - [ ] Verify mobile image scaling, readable body measure, keyboard focus, image failure and 320px overflow. Relevant checks pass.
 
+## Reviewed wording requirements
+
+Implement the [How it works draft](../copy-review.md#proposed-how-it-works-copy) and corresponding [metadata](../copy-review.md#proposed-metadata). Keep practical language aligned with current controls and mechanics.
+
+- [ ] Use the reviewed opening and three product-view captions: “Sort the cards”, “Narrow your choices” and “Reflect on your final set”. Label the synthetic composition “Example exercise”; alternative text must describe the actual illustrated stage.
+- [ ] Follow with the reviewed set/target, sorting, reflection, backup and separate behaviour sections. Explain the individual nature of team-focused use and the six-situation flow without adding capabilities or changing catalogue content.
+- [ ] Explain that the standard values JSON export omits additional reflection notes added on the completed exercise page, and point to the existing “Export reflection backup” action in History to include them. Do not imply every export preserves every note or alter export semantics.
+- [ ] Use “Show instructions next time” for the preference section. Preserve “Show instructions when starting the exercise”, its existing feedback and saved state.
+- [ ] Use the reviewed exercise, History and behaviour actions. Keep Read-mode prose direct and useful; avoid promotional language in detailed guidance.
+
 ## Comments
 
 - The completed slice is a working public guide with honest visuals and preserved instructions, not a standalone asset-production task.
+
+- 2026-11-06 owner instruction: **Application editing is paused pending owner review of proposed wording.** Read [the copy review and proposal](../copy-review.md) before resuming. Use the reviewed guide, captions and backup guidance. Explain the existing Export reflection backup option and preserve instruction-preference behaviour.
+
+
+- 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.

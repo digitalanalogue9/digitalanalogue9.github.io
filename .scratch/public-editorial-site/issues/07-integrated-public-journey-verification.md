@@ -21,6 +21,22 @@ Parent specification: [Public editorial site](../spec.md), especially Accessibil
 - [ ] Record a concise verification outcome with reviewed viewports/states, check results and any residual limitations. Resolve defects that prevent the parent specification's acceptance criteria from passing.
 - [ ] Do not deploy, publish the site, change the parent specification or expand into new product capabilities as part of verification.
 
+## Reviewed wording requirements
+
+Use [the reviewed copy baseline](../copy-review.md), especially [shared wording and adjacent application text](../copy-review.md#shared-wording-and-adjacent-application-text), [metadata](../copy-review.md#proposed-metadata) and [product marketing context](../../../docs/product-marketing.md). This adds a copy consistency check and bounded interface text edits to the existing integrated review.
+
+- [ ] Check the five public pages together for warm, confident, audience-focused British English. Preserve the personal About story and the recommended Home opening; verify concrete explanations of the exercise, its relevance and next actions.
+- [ ] Check that hypothetical outcomes and notes are labelled, team use remains individual, behaviour prompts offer possibilities, and storage/export wording accurately describes current behaviour. Add no claims, testimonials, completion durations or fixed result counts.
+- [ ] Apply the reviewed adjacent interface text for behaviour entry/results, History/introduction/empty state, backup input/warnings and final-values/notes guidance. Coordinate consent wording with ticket 06 and setup wording with ticket 01 rather than implementing those twice.
+- [ ] Preserve catalogue definitions, scenario responses, generated prompt templates, operational diagnostics, engine behaviour, data contracts and export semantics. This is a bounded wording pass, not a new feature or content catalogue.
+- [ ] Use copywriting to check any necessary new marketing lines and copy-editing for the final clarity, voice, benefit, evidence, specificity and friction passes. Remove hype, corporate language, clichés and formulaic AI phrasing without flattening the genuine voice.
+- [ ] Check reviewed titles/descriptions and social previews against built route metadata. Protect visible behaviour and factual links through existing tests; do not add prose or DOM snapshots just to mirror the copy.
+
 ## Comments
 
 - Tickets 01 and 02 are transitive prerequisites through tickets 03–06; they are deliberately not duplicated in the blocking list. The final demo is the whole public-site-to-exercise journey in the built static application.
+
+- 2026-11-06 owner instruction: **Application editing is paused pending owner review of proposed wording.** Read [the copy review and proposal](../copy-review.md) before resuming. Include a cross-page copy check against the reviewed proposal, natural British English and accurate metadata. Apply only the reviewed adjacent interface text edits; catalogue definitions, scenario responses, prompt templates and engine behaviour remain outside this copy pass.
+
+
+- 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.
