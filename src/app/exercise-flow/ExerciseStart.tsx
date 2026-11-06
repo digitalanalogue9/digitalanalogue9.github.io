@@ -1,4 +1,5 @@
-import HomeClient from '../HomeClient';
+import { ExerciseSetup } from './ExerciseSetup';
+
 export function ExerciseStart() {
-  return <HomeClient initialPurposeChosen />;
+  return <ExerciseSetup />;
 }
