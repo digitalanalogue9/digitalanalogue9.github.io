@@ -3,13 +3,13 @@ import { expect, test } from '@playwright/test';
 test('visitor can reach personal app pages from the home page', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { name: 'Core Values' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation).toContainText('About');
-  await expect(navigation).toContainText('How to use');
-  await expect(navigation).toContainText('Privacy');
+  await expect(navigation).toContainText('How it works');
+  await expect(navigation).toContainText('History');
 
-  await navigation.getByRole('link', { name: 'Privacy' }).click();
+  await page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'Privacy' }).click();
   await expect(page).toHaveURL(/\/privacy\/?$/);
   await expect(page.getByRole('heading', { name: 'Privacy', exact: true })).toBeVisible();
 });
@@ -28,8 +28,8 @@ test('home and direct exercise setup load and refresh without browser runtime er
   page.on('pageerror', (error) => runtimeErrors.push(error.message));
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Core Values', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Sort values' }).click();
+  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
+  await page.getByRole('link', { name: 'Find my core values' }).first().click();
   await expect(page).toHaveURL(/\/exercise\/?$/);
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
   await page.goto('/exercise');
@@ -50,7 +50,7 @@ test('exercise setup creates a team-focused Session only after an explicit start
   const initialSessionCount = await page.getByRole('listitem').count();
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Core Values', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
   await page.goto('/exercise');
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Team-focused values' })).toBeVisible();

@@ -1,171 +1,129 @@
-'use client';
+import { Link } from 'react-router-dom';
+import valueCatalogue from '@/data/values.json';
 
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+const featuredValues = ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS'].map((title) => {
+  const value = valueCatalogue.values.find((item) => item.title === title);
+  if (!value) throw new Error(`The public example value ${title} is missing from the catalogue.`);
 
-import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
-import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
-import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
-import type { BehaviourAttempt } from '@/lib/services/behaviourAttemptService';
-import { getBehaviourAttemptServiceSingleton } from '@/lib/services/serviceSingleton';
+  return {
+    ...value,
+    displayTitle: title
+      .toLocaleLowerCase('en-GB')
+      .replace(/^\w/, (character) => character.toLocaleUpperCase('en-GB')),
+  };
+});
+
+const situations = ['Considering a change of job', 'Preparing for a conversation with a coach', 'Wondering what you want more of in your working life'];
 
 export default function HomeClient() {
-  const navigate = useNavigate();
-  const service = useExerciseService();
-  const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
-  const [scenarioAttempts, setScenarioAttempts] = useState<BehaviourAttempt[]>([]);
-  const [scenarioLoadError, setScenarioLoadError] = useState<string | null>(null);
-  const [unfinishedValues, setUnfinishedValues] = useState<Awaited<ReturnType<typeof service.listSessions>>>([]);
-  const [valuesLoadError, setValuesLoadError] = useState<string | null>(null);
-
-  const refreshScenarioAttempts = async () => {
-    try {
-      setScenarioAttempts(await getBehaviourAttemptServiceSingleton().listAttempts());
-      setScenarioLoadError(null);
-    } catch {
-      setScenarioLoadError('Saved scenario reflections could not be loaded. Try refreshing this page.');
-    }
-  };
-
-  useEffect(() => {
-    if (behaviourReflectionEnabled) {
-      void refreshScenarioAttempts();
-    }
-    void service
-      .listSessions()
-      .then((sessions) => {
-        setUnfinishedValues(sessions.filter((savedSession) => savedSession.status === 'active'));
-        setValuesLoadError(null);
-      })
-      .catch(() => {
-        setValuesLoadError('Saved values exercises could not be loaded. Try refreshing this page.');
-      });
-  }, [behaviourReflectionEnabled, service]);
-
   return (
-    <div
-      className={`${nonExercisePageContainerClassName} rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default space-y-8 border px-6 py-8 sm:px-10 sm:py-10`}
-    >
-      <section className="mx-auto max-w-2xl space-y-4 text-center" aria-labelledby="home-heading">
-        <h1 id="home-heading" className="text-interface-title-1 text-sys-color-text-primary font-semibold">
-          Core Values
-        </h1>
-        <h2 className="text-interface-title-2 text-sys-color-text-primary font-normal">
-          Choose what you want to explore
-        </h2>
-        <p className="text-interface-base-default text-sys-color-text-primary">
-          Choose the reflection that fits what you want to explore today. Each exercise can stand on its own.
-        </p>
-      </section>
-      <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
-        <article className="rounded-sys-radius-card-md border-sys-color-border-default bg-sys-color-surface-default flex flex-col items-start border p-6">
-          <h3 className="text-interface-title-2 text-sys-color-text-primary font-semibold">Explore your values</h3>
-          <p className="text-interface-base-small text-sys-color-text-primary my-3 flex-1">
-            <span className="block font-semibold">What matters to me?</span>
-            Sort value cards by importance and narrow them to a core set. Choose a personal set or a team-focused set
-            designed to support conversations about what matters when working together.
+    <div className="editorial-home">
+      <section className="editorial-hero" aria-labelledby="home-heading">
+        <div className="editorial-hero-copy">
+          <h1 id="home-heading">Some things matter more. Which things matter to you?</h1>
+          <p className="editorial-lede">
+            Sort value cards to explore your priorities. Narrow your choices, then reflect on what your final set means to you.
           </p>
-          <button type="button" className="apc-button min-h-11" onClick={() => navigate('/exercise')}>
-            Sort values
-          </button>
-        </article>
-        {behaviourReflectionEnabled && (
-          <article className="rounded-sys-radius-card-md border-sys-color-border-default bg-sys-color-surface-default flex flex-col items-start border p-6">
-            <h3 className="text-interface-title-2 text-sys-color-text-primary font-semibold">Explore your behaviour</h3>
-            <p className="text-interface-base-small text-sys-color-text-primary my-3 flex-1">
-              <span className="block font-semibold">What do others see that I don’t?</span>
-              Choose how you might respond to six situations, then consider possible intentions and perspectives. These
-              are possibilities to reflect on, not facts about what others think.
-            </p>
-            <button type="button" className="apc-button min-h-11" onClick={() => navigate('/behaviour')}>
-              Explore your behaviour
-            </button>
-          </article>
-        )}
-      </div>
-      <div className="text-center">
-        <button
-          type="button"
-          className="text-interface-base-small text-ref-color-brand-primary min-h-11 underline underline-offset-4 focus-visible:outline-2"
-          onClick={() => navigate('/history')}
-        >
-          View all exercise history
-        </button>
-      </div>
-      {(unfinishedValues.length > 0 || valuesLoadError) && (
-        <section className="mx-auto w-full max-w-4xl space-y-3 text-left" aria-labelledby="values-resume-heading">
-          <h2 id="values-resume-heading" className="text-interface-title-2 text-sys-color-text-primary font-semibold">
-            Unfinished values exercises
-          </h2>
-          {valuesLoadError && <p role="alert">{valuesLoadError}</p>}
-          {unfinishedValues.map((savedSession) => (
-            <article
-              key={savedSession.id}
-              className="rounded-sys-radius-card-sm border-sys-color-border-default flex flex-wrap items-center justify-between gap-3 border p-4"
-            >
-              <div>
-                <h3 className="text-sys-color-text-primary font-semibold">
-                  {savedSession.exerciseType === 'team' ? 'Team-focused values exercise' : 'Personal values exercise'}
-                </h3>
-                <p className="text-interface-base-small text-sys-color-text-primary">
-                  Updated {new Date(savedSession.updatedAt).toLocaleDateString()} · Round{' '}
-                  {savedSession.currentRoundNumber}
-                </p>
-              </div>
-              <a className="apc-button min-h-11" href={`/exercise?sessionId=${encodeURIComponent(savedSession.id)}`}>
-                Resume {savedSession.exerciseType === 'team' ? 'team-focused' : 'personal'} values
-              </a>
+          <div className="editorial-actions">
+            <Link className="editorial-button editorial-button--primary" to="/exercise">
+              Find my core values
+            </Link>
+            <Link className="editorial-text-link" to="/howtouse">
+              See how it works
+            </Link>
+          </div>
+          <Link className="editorial-history-link" to="/history">
+            Resume an exercise in History
+          </Link>
+        </div>
+
+        <figure className="editorial-card-composition" aria-label="Three values from the personal card sort">
+          {featuredValues.map((value, index) => (
+            <article className={`editorial-value-card editorial-value-card--${index + 1}`} key={value.id}>
+              <h2>{value.displayTitle}</h2>
+              <p>{value.description}</p>
             </article>
           ))}
-        </section>
-      )}
-      {behaviourReflectionEnabled && (scenarioAttempts.length > 0 || scenarioLoadError) && (
-        <section className="mx-auto w-full max-w-4xl space-y-3 text-left" aria-labelledby="scenario-history-heading">
-          <h2
-            id="scenario-history-heading"
-            className="text-interface-title-2 text-sys-color-text-primary font-semibold"
-          >
-            Scenario reflections
-          </h2>
-          {scenarioLoadError && <p role="alert">{scenarioLoadError}</p>}
-          {scenarioAttempts.map((attempt) => (
-            <article
-              key={attempt.id}
-              className="rounded-sys-radius-card-sm border-sys-color-border-default flex flex-wrap items-center justify-between gap-3 border p-4"
-            >
-              <div>
-                <h3 className="text-sys-color-text-primary font-semibold">
-                  {attempt.stage === 'active' ? 'Unfinished scenario reflection' : 'Completed scenario reflection'}
-                </h3>
-                <p className="text-interface-base-small text-sys-color-text-primary">
-                  {attempt.stage === 'active'
-                    ? `Situation ${attempt.position + 1} of ${attempt.scenarios.length}`
-                    : 'Possible perspectives ready to revisit'}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className="apc-button min-h-11"
-                  onClick={() => navigate(`/behaviour?attemptId=${encodeURIComponent(attempt.id)}`)}
-                >
-                  {attempt.stage === 'active' ? 'Resume' : 'Review'}
-                </button>
-                <button
-                  type="button"
-                  className="border-sys-color-border-strong text-interface-base-small text-sys-color-text-primary min-h-11 rounded border px-3"
-                  onClick={async () => {
-                    await getBehaviourAttemptServiceSingleton().deleteAttempt(attempt.id);
-                    await refreshScenarioAttempts();
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </article>
-          ))}
-        </section>
-      )}
+          <figcaption>Choose between values that matter in different ways.</figcaption>
+        </figure>
+      </section>
+
+      <section className="editorial-outcome" aria-labelledby="example-heading">
+        <div className="editorial-section-intro">
+          <h2 id="example-heading">Example outcome</h2>
+          <p>A final set gives you something concrete to reflect on. You can add a note about why each value matters to you.</p>
+          <p className="editorial-aside">This is an illustrative selection, not a prescribed final count. You choose how many values to keep.</p>
+        </div>
+        <div className="editorial-outcome-content">
+          <ul className="editorial-outcome-values" aria-label="Illustrative final set">
+            {featuredValues.map((value) => (
+              <li key={value.id}>
+                <h3>{value.displayTitle}</h3>
+                <p>{value.description}</p>
+              </li>
+            ))}
+          </ul>
+          <blockquote className="editorial-note">
+            <cite>Illustrative note for Learning</cite>
+            <p>“I want room to learn in whatever I do next.”</p>
+          </blockquote>
+        </div>
+      </section>
+
+      <section className="editorial-situations" aria-labelledby="situations-heading">
+        <div>
+          <h2 id="situations-heading">When a decision pulls you in different directions</h2>
+          <p>
+            Sorting the cards gives you a way to consider which priorities come first. You can return to the exercise as your circumstances change.
+          </p>
+        </div>
+        <ul className="editorial-situations-list" aria-label="Possible moments for reflection">
+          {situations.map((situation) => <li key={situation}>{situation}</li>)}
+        </ul>
+      </section>
+
+      <section className="editorial-process" aria-labelledby="process-heading">
+        <div className="editorial-section-intro">
+          <h2 id="process-heading">Sort. Narrow. Reflect.</h2>
+          <p>Work through a set of values, making choices and returning to the ones that feel most important.</p>
+        </div>
+        <ol className="editorial-process-list">
+          <li>
+            <h3>Sort</h3>
+            <p>Consider each value and choose how important it is to you.</p>
+          </li>
+          <li>
+            <h3>Narrow</h3>
+            <p>Work through further rounds to decide which values to keep. You choose how many to finish with.</p>
+          </li>
+          <li>
+            <h3>Reflect</h3>
+            <p>Add optional notes about your final values. Revisit your choices in History when you want to think them through again.</p>
+          </li>
+        </ol>
+        <Link className="editorial-text-link" to="/howtouse">See how it works</Link>
+      </section>
+
+      <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
+        <div>
+          <h2 id="behaviour-heading">See your choices from another angle</h2>
+          <p>
+            Consider six everyday situations at work and choose how you might respond. Then explore possible intentions and perspectives behind those choices.
+          </p>
+          <p>These prompts offer possibilities for reflection. They do not tell you what another person thinks.</p>
+        </div>
+        <Link className="editorial-button editorial-button--light" to="/behaviour">Explore behaviour reflection</Link>
+      </section>
+
+      <section className="editorial-closing" aria-labelledby="closing-heading">
+        <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
+        <p>Find your values, make choices between them, then return to your reflections when you want to think them through again.</p>
+        <p className="editorial-storage-note">Your reflections stay in this browser.</p>
+        <div className="editorial-actions">
+          <Link className="editorial-button editorial-button--primary" to="/exercise">Find my core values</Link>
+          <Link className="editorial-text-link" to="/history">View History</Link>
+        </div>
+      </section>
     </div>
   );
 }

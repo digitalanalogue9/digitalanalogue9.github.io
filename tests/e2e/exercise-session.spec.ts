@@ -90,9 +90,9 @@ test('Analytics makes no network request before consent and loads after explicit
   });
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Allow Analytics' })).toBeVisible();
-  await page.getByRole('button', { name: 'Sort values', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Sort values', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
   expect(analyticsRequests).toEqual([]);
   await expect(page.locator('script[src*="googletagmanager.com"]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Allow Analytics' }).click();
