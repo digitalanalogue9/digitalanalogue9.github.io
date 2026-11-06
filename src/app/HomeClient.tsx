@@ -255,7 +255,7 @@ setHomeBackdrop?.(purposeChosen ? 'values' : 'overview');
             </label>
           </div>
           <p className="text-interface-base-small text-sys-color-text-primary">
-            The team option uses values relevant to working together.
+  This is an individual exercise using values relevant to working together. It can support a later team conversation.
           </p>
         </fieldset>
 
