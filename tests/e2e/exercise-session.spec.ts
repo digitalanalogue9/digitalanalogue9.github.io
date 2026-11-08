@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('start, sort, save, resume, replay a previous round and complete with an optional reason', async ({ page }) => {
   await page.goto('/exercise');
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
-  await page.getByLabel('Target number of core values').fill('1');
+  await page.getByLabel('How many values would you like to finish with?').fill('1');
   await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
   const instructions = page.getByRole('dialog', { name: 'How to use Core Values' });
   await expect(instructions).toBeVisible();

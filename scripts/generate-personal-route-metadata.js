@@ -8,20 +8,20 @@ const baseUrl = (process.env.VITE_SITE_URL || 'https://core-values.me').replace(
 
 const pageMetadata = {
   about: {
-    title: 'About Core Values',
-    description: 'Why Core Values was created and how identifying your values can support personal growth.',
+title: 'About Core Values · A borrowed deck of cards',
+description: 'A borrowed deck of cards led to Core Values, a tool for sorting values and returning to the priorities you choose.',
   },
   howtouse: {
-    title: 'How to use Core Values',
-    description: 'Learn how to choose, prioritise, and reflect on your personal core values.',
+title: 'How Core Values works',
+description: 'See how to sort value cards, narrow your choices and reflect on your final set. Find guidance on saved exercises, History and backups.',
   },
   contact: {
-    title: 'Contact Core Values',
-    description: 'Contact the Core Values site owner with questions, feedback, or privacy requests.',
+title: 'Contact · Core Values',
+description: 'Ask a question, share an idea or report a problem with Core Values. Find the email address for feedback and privacy requests.',
   },
   privacy: {
-    title: 'Core Values Privacy Policy',
-    description: 'Learn how Core Values stores local data and uses analytics only with your consent.',
+title: 'Privacy · Core Values',
+description: 'Understand what Core Values saves in your browser, how backups work and how to allow or reject optional Google Analytics.',
   },
 };
 

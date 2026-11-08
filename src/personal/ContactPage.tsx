@@ -19,7 +19,7 @@ export default function ContactPage() {
         </p>
         <p className="text-lg leading-relaxed">
           Email{' '}
-          <a className="editorial-text-link" href="mailto:corevaluesanalytics@gmail.com">
+          <a className="editorial-text-link break-words" href="mailto:corevaluesanalytics@gmail.com">
             corevaluesanalytics@gmail.com
           </a>
           . You can use the same address for privacy questions and requests.
