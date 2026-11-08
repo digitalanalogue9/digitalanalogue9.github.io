@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 — Launch the editorial home page and public navigation.
 
-**Status:** ready-for-human
+**Status:** resolved
 
 Parent specification: [Public editorial site](../spec.md), especially Privacy and Contact and Navigation/routing.
 
@@ -39,3 +39,4 @@ Implement the complete [Privacy draft](../copy-review.md#proposed-privacy-copy),
 - 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.
 
 - 2026-11-08 implementation complete on implement/editorial-06-fresh; implementation commit 3f967de plus integration sync cd57257 (latest tip 08cbdbf). Targeted consent tests, typecheck, lint and five app-routing browser tests pass. Privacy copy, metadata and controls retain the existing consent and analytics contracts.
+- 2026-11-08 orchestration update: integrated on staging at 374f19e; default-disabled and enabled browser checks passed 7/7 each, Home flag visibility 1/1 each, consent/behaviour-attempt/reflection-backup tests 26/26, typecheck, targeted lint, formatting, build and diff checks passed. Scenario backup import remains supported in both states.
