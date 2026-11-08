@@ -174,3 +174,5 @@ The change covers Home, About, How it works, Privacy, Contact, their shared publ
 ## Comments
 
 - Specification synthesized from the accepted public-site recommendation. Test-boundary confirmation was requested while preparing this document; no response has been recorded at initial publication.
+
+- 2026-11-08 owner-approved availability decision: behaviour reflection is disabled in public builds unless VITE_ENABLE_BEHAVIOUR_REFLECTION=true. This gates the Home/How it works invitations and route, and any active scenario presentation in History; it does not alter saved records or backup import/export compatibility.
