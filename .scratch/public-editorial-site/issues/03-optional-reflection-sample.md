@@ -6,7 +6,7 @@ submission.
 
 **Blocked by:** 02 — Launch the editorial home page and public navigation.
 
-**Status:** ready-for-human
+**Status:** resolved
 
 Parent specification: [Public editorial site](../spec.md), especially Optional sample interaction contract.
 
@@ -83,3 +83,4 @@ and accessibility criteria above.
   flow and compares every IndexedDB object-store record before and after the sample journey.
 
 - TDD red for the Home flag: the new invitation case failed while the baseline helper returned true with the flag unset.
+- 2026-11-08 orchestration update: integrated on the staging branch; sample isolation and both public feature-flag states are verified, with typecheck, focused lint, formatting and diff checks passing.

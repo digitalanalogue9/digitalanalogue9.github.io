@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 — Launch the editorial home page and public navigation.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 Parent specification: [Public editorial site](../spec.md), especially About, Privacy and Contact, and Editorial visual system.
 
@@ -38,3 +38,4 @@ Implement the full [About draft](../copy-review.md#proposed-about-copy), [Contac
 
 
 - 2026-11-06 follow-up: the owner reviewed the copy proposal, requested these wording requirements in the existing tickets, and authorised implement-spec to continue after the updates. This supersedes the earlier wording-review pause. Use the recommended draft in copy-review.md; alternative headlines and CTAs are not selected.
+- 2026-11-08 orchestration update: integrated on the staging branch, including the owner-approved About/Contact artwork and styles; build and focused guide checks passed.

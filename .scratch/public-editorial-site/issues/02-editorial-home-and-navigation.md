@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 — Restore reliable entry and separate exercise setup.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 Parent specification: [Public editorial site](../spec.md), especially Direction, Editorial visual system and Home composition.
 
@@ -50,3 +50,4 @@ Use the complete [Home draft](../copy-review.md#proposed-home-copy), [shared wor
 - `pnpm typecheck` — passed. `pnpm lint` — passed with 3 existing unused `testValue` warnings in `tests/components/Card.test.tsx`. `pnpm build` — passed.
 - `impeccable.cmd detect --json src/app/HomeClient.tsx src/router.tsx src/styles/editorial.css src/styles.css` — `[]`.
 - Reviewed desktop 1440px, mobile 390px, 320px, pending-consent, and keyboard-focus captures. At widths 390 and 320, document/body widths were 375 and 305 pixels; the first keyboard focus had a visible solid 3px outline. Captures: `C:\dev\agent-notes\editorial-02\`.
+- 2026-11-08 orchestration update: integrated on the staging branch; ticket acceptance and recorded TDD/browser/type/lint/build evidence are complete.
