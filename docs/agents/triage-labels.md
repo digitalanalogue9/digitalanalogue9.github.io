@@ -11,3 +11,5 @@ The skills use five canonical triage roles. This file maps each role to the stri
 | `wontfix` | `wontfix` | Will not be actioned |
 
 When a skill mentions a role, use the corresponding label string from this table.
+
+`resolved` is not a triage role or label. It is the terminal issue lifecycle state and may be used only after the issue's acceptance criteria are complete.

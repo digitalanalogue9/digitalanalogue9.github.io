@@ -2,6 +2,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { editorialRouteMetadata } from '../scripts/editorial-route-metadata.js';
 import { validatePagesArtifact } from '../scripts/pages-artifact-validator.js';
 
 const artifactPaths: string[] = [];
@@ -15,28 +16,7 @@ function createPagesArtifact() {
     writeFileSync(filePath, contents);
   };
 
-  const pageMetadata = {
-    about: {
-      title: 'About Core Values · A borrowed deck of cards',
-      description:
-        'A borrowed deck of cards led to Core Values, a tool for sorting values and returning to the priorities you choose.',
-    },
-    contact: {
-      title: 'Contact · Core Values',
-      description:
-        'Ask a question, share an idea or report a problem with Core Values. Find the email address for feedback and privacy requests.',
-    },
-    howtouse: {
-      title: 'How Core Values works',
-      description:
-        'See how to sort value cards, narrow your choices and reflect on your final set. Find guidance on saved exercises, History and backups.',
-    },
-    privacy: {
-      title: 'Privacy · Core Values',
-      description:
-        'Understand what Core Values saves in your browser, how backups work and how to allow or reject optional Google Analytics.',
-    },
-  };
+  const pageMetadata = editorialRouteMetadata;
   const routes = [
     'about',
     'behaviour',
@@ -59,7 +39,10 @@ function createPagesArtifact() {
   write('googlebfe6ddd34d4e4f70.html', 'google-site-verification: googlebfe6ddd34d4e4f70.html');
   write('robots.txt', 'Sitemap: https://core-values.me/sitemap.xml');
   write('sitemap.xml', '<loc>https://core-values.me/about</loc>');
-  write('manifest.webmanifest', JSON.stringify({ start_url: 'https://core-values.me/', scope: 'https://core-values.me/' }));
+  write(
+    'manifest.webmanifest',
+    JSON.stringify({ start_url: 'https://core-values.me/', scope: 'https://core-values.me/' })
+  );
   write('.nojekyll', '');
   write('sw.js', 'self.addEventListener("fetch", () => {});');
   for (const route of routes) {

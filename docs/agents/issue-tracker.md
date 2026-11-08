@@ -7,7 +7,7 @@ Issues and specs for this repo live as markdown files in `.scratch/`.
 - One feature per directory: `.scratch/<feature-slug>/`
 - Spec: `.scratch/<feature-slug>/spec.md`
 - Implementation issues: one file per ticket at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`; don't combine tickets into one file.
-- Record triage state in a `Status:` line near the top of the issue file (see `triage-labels.md` for role strings).
+- Record the triage role in a `Status:` line near the top of the issue file (see `triage-labels.md`). `resolved` is a terminal issue lifecycle state, not a triage role; use it only after the issue's acceptance criteria are complete.
 - Append comments and conversation history at the bottom under `## Comments`.
 
 ## When a skill says "publish to the issue tracker"
@@ -23,7 +23,7 @@ Read the referenced file. The user will normally provide its path or issue numbe
 Used by `/wayfinder`. The map is one file with one child file per ticket.
 
 - **Map**: `.scratch/<effort>/map.md` (the Notes / Decisions-so-far / Fog body).
-- **Child ticket**: `.scratch/<effort>/issues/NN-<slug>.md`, numbered from `01`, with the question in the body. A `Type:` line records ticket type (`research`/`prototype`/`grilling`/`task`); `Status:` records `claimed`/`resolved`.
+- **Child ticket**: `.scratch/<effort>/issues/NN-<slug>.md`, numbered from `01`, with the question in the body. A `Type:` line records ticket type (`research`/`prototype`/`grilling`/`task`); for these Wayfinding tickets, `Status:` uses lifecycle values `claimed` and `resolved`. Use `resolved` only when the answer is recorded and acceptance is complete.
 - **Blocking**: `Blocked by: NN, NN` line near the top. A ticket is unblocked when all listed files have `Status: resolved`.
 - **Frontier**: scan `.scratch/<effort>/issues/` for open, unblocked, unclaimed files; the first by number wins.
 - **Claim**: set `Status: claimed` and save before work.
