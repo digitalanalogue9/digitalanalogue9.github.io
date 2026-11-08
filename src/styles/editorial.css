@@ -117,6 +117,18 @@
   background-image: none;
 }
 
+.core-values-background--about {
+  background-color: var(--editorial-paper);
+  background-image: url('/images/core-values-about.svg');
+  background-position: center top;
+}
+
+.core-values-background--contact {
+  background-color: var(--editorial-paper);
+  background-image: url('/images/core-values-contact.svg');
+  background-position: center top;
+}
+
 .editorial-home {
   width: min(100%, 78rem);
   margin-inline: auto;
