@@ -11,10 +11,12 @@ test('visitor can read and refresh the how it works guide', async ({ page }) => 
   await expect(page.getByText('Export reflection backup')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Find my core values' }).first()).toHaveAttribute('href', '/exercise');
   await expect(page.getByRole('link', { name: 'View History' }).first()).toHaveAttribute('href', '/history');
-  await expect(page.getByRole('link', { name: 'Explore behaviour reflection' }).first()).toHaveAttribute(
-    'href',
-    '/behaviour'
-  );
+  const behaviourAction = page.getByRole('link', { name: 'Explore behaviour reflection', exact: true });
+  if (process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true') {
+    await expect(behaviourAction.first()).toHaveAttribute('href', '/behaviour');
+  } else {
+    await expect(behaviourAction).toHaveCount(0);
+  }
 
   await expect(page).toHaveTitle('How Core Values works');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
@@ -91,4 +93,23 @@ test('guide explains each view when an illustration cannot load', async ({ page 
   await expect(page.getByRole('img', { name: /Security card is being placed/ })).toBeVisible();
   await expect(page.getByRole('img', { name: /Two sample rounds show/ })).toBeVisible();
   await expect(page.getByRole('img', { name: /A final example set lists/ })).toBeVisible();
+});
+
+test('guide behaviour reflection section and action follow the public feature flag', async ({ page }) => {
+  await page.goto('/howtouse', { waitUntil: 'domcontentloaded' });
+
+  const enabled = process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true';
+  const section = page.getByRole('region', { name: 'Explore possible perspectives on your behaviour' });
+  const action = page.getByRole('link', { name: 'Explore behaviour reflection', exact: true });
+
+  if (enabled) {
+    await expect(section).toBeVisible();
+    await expect(section.getByRole('link', { name: 'Explore behaviour reflection', exact: true })).toHaveAttribute(
+      'href',
+      '/behaviour'
+    );
+  } else {
+    await expect(section).toHaveCount(0);
+    await expect(action).toHaveCount(0);
+  }
 });
