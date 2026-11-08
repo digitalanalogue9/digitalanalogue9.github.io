@@ -3,7 +3,7 @@ import PageMetadata from './PageMetadata';
 
 export default function ContactPage() {
   return (
-    <article className="editorial-home mx-auto w-full max-w-4xl space-y-10" aria-labelledby="contact-heading">
+    <article className="app-page-panel editorial-home mx-auto w-full max-w-4xl space-y-10" aria-labelledby="contact-heading">
       <PageMetadata
         title="Contact · Core Values"
         description="Ask a question, share an idea or report a problem with Core Values. Find the email address for feedback and privacy requests."
