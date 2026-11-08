@@ -2,6 +2,7 @@ import { ChangeEvent, useRef } from 'react';
 import { historyButtonClassName } from '@/app/history/constants/buttonStyles';
 
 interface ImportSectionProps {
+  behaviourReflectionEnabled: boolean;
   importText: string;
   onImportTextChange: (text: string) => void;
   onImportFromText: () => void;
@@ -11,6 +12,7 @@ interface ImportSectionProps {
 }
 
 export default function ImportSection({
+  behaviourReflectionEnabled,
   importText,
   onImportTextChange,
   onImportFromText,
@@ -28,7 +30,7 @@ export default function ImportSection({
           htmlFor="session-json-import"
           className="text-interface-base-small text-sys-color-text-primary block font-semibold"
         >
-          Values session or scenario backup JSON
+          {behaviourReflectionEnabled ? 'Values session or scenario backup JSON' : 'Values session JSON'}
         </label>
         <textarea
           className="apc-field__control h-28 w-full"
@@ -40,8 +42,9 @@ export default function ImportSection({
           onChange={(event) => onImportTextChange(event.target.value)}
         />
         <p id="session-json-import-help" className="text-interface-base-small text-sys-color-text-secondary">
-          Paste a values session export or scenario reflection backup. Restoring a scenario backup with an existing ID
-          replaces that saved attempt and may replace newer work.
+          {behaviourReflectionEnabled
+            ? 'Paste a values session export or scenario reflection backup. Restoring a scenario backup with an existing ID replaces that saved attempt and may replace newer work.'
+            : 'Paste a values session export to restore saved work.'}
         </p>
         <p id="session-json-import-replacement" className="text-interface-base-small text-sys-color-text-secondary">
           Values session imports keep existing local work: a backup with an existing session ID is restored as a

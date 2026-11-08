@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PageMetadata from './PageMetadata';
 import './HelpPage.css';
+import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 
 const preferenceKey = 'show-instructions';
 
@@ -28,12 +29,15 @@ const guideViews = [
 const actions = [
   { href: '/exercise', label: 'Find my core values', primary: true },
   { href: '/history', label: 'View History' },
-  { href: '/behaviour', label: 'Explore behaviour reflection' },
 ];
 
 export default function HelpPage() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [failedImages, setFailedImages] = useState<string[]>([]);
+  const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
+  const visibleActions = behaviourReflectionEnabled
+    ? [...actions, { href: '/behaviour', label: 'Explore behaviour reflection' }]
+    : actions;
 
   useEffect(() => {
     try {
@@ -68,7 +72,7 @@ export default function HelpPage() {
           keep.
         </p>
         <nav className="help-guide__actions" aria-label="How it works actions">
-          {actions.map(({ href, label, primary }) => (
+          {visibleActions.map(({ href, label, primary }) => (
             <a
               className={primary ? 'editorial-button editorial-button--primary' : 'help-guide__text-link'}
               href={href}
@@ -177,23 +181,25 @@ export default function HelpPage() {
           </p>
         </section>
 
-        <section aria-labelledby="behaviour-heading">
-          <p className="help-guide__eyebrow">A different kind of reflection</p>
-          <h2 id="behaviour-heading">Explore possible perspectives on your behaviour</h2>
-          <p>
-            Consider how you might respond to six everyday situations at work. You can choose “It depends” or skip any
-            situation. When you finish, explore possible intentions and perspectives on your choices. These prompts do
-            not tell you what another person thinks or feels.
-          </p>
-          <p>Your choices and notes are saved in this browser.</p>
-          <a href="/behaviour">Explore behaviour reflection</a>
-        </section>
+        {behaviourReflectionEnabled && (
+          <section aria-labelledby="behaviour-heading">
+            <p className="help-guide__eyebrow">A different kind of reflection</p>
+            <h2 id="behaviour-heading">Explore possible perspectives on your behaviour</h2>
+            <p>
+              Consider how you might respond to six everyday situations at work. You can choose “It depends” or skip any
+              situation. When you finish, explore possible intentions and perspectives on your choices. These prompts do
+              not tell you what another person thinks or feels.
+            </p>
+            <p>Your choices and notes are saved in this browser.</p>
+            <a href="/behaviour">Explore behaviour reflection</a>
+          </section>
+        )}
       </div>
 
       <footer className="help-guide__closing">
         <p>Your reflections stay in this browser and don’t sync automatically between devices.</p>
         <nav className="help-guide__actions" aria-label="Continue from How it works">
-          {actions.map(({ href, label, primary }) => (
+          {visibleActions.map(({ href, label, primary }) => (
             <a
               className={primary ? 'editorial-button editorial-button--primary' : 'help-guide__text-link'}
               href={href}
