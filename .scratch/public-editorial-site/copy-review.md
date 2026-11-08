@@ -366,3 +366,8 @@ The recommended headline and CTA preserve the specification. These alternatives 
 - No application files were changed for this review. No browser or test verification is claimed for proposed wording.
 - Owner review is complete: the recommended drafts are accepted; none of the alternative headlines or CTAs has been selected. Tickets 02–06 consume the reviewed copy; ticket 07 checks cross-page consistency. Ticket 01 takes the reviewed setup wording without changing its functional scope. The owner has explicitly authorised implementation to resume once these task updates are complete.
 - Minor adjacent application text edits above belong to ticket 07. Avoid changing the sorting engine, operational diagnostics or export semantics to fit the prose. The functional-consent field is stored, but the reviewed source does not establish a separate feature it controls; retain its label and flag this limitation rather than inventing an explanation.
+
+
+## Public feature availability
+
+The reviewed behaviour-reflection copy remains approved for builds where VITE_ENABLE_BEHAVIOUR_REFLECTION=true. Public builds hide the Home and How it works invitations and /behaviour route when the flag is unset or false. This changes visibility only; do not change the tool behaviour, saved data, or backup/import contracts.
