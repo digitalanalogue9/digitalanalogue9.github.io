@@ -413,6 +413,7 @@ export default function HistoryClient() {
       )}
 
       <ImportSection
+        behaviourReflectionEnabled={behaviourReflectionEnabled}
         importText={importText}
         onImportTextChange={setImportText}
         onImportFromText={() => void handleImportText()}

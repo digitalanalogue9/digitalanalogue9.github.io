@@ -9,6 +9,7 @@ import PWAPrompt from './components/common/PWAPrompt';
 import HomeClient from './app/HomeClient';
 import { AboutPage, ContactPage, HelpPage, PersonalShareButtons } from './personal';
 import PageMetadata from './personal/PageMetadata';
+import { isBehaviourReflectionEnabled } from './lib/utils/config/featureFlags';
 
 const PrivacyPage = lazy(() => import('./app/privacy/page'));
 const BehaviourReflectionPage = lazy(() => import('./app/behaviour/page'));
@@ -42,7 +43,7 @@ function SiteLayout() {
   const isNotFoundRoute = useMatches().some((match) => match.handle === 'not-found');
   const valuesFlowPaths = ['/exercise', '/completed', '/reasoning', '/replay'];
   const backgroundVariant =
-    location.pathname === '/behaviour'
+    location.pathname === '/behaviour' && isBehaviourReflectionEnabled()
       ? 'behaviour'
       : location.pathname === '/about'
         ? 'about'
@@ -135,7 +136,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'behaviour',
-        element: (
+        element: isBehaviourReflectionEnabled() ? (
           <RouteMetadata
             title="Scenario reflection - Core Values"
             description="Consider possible intentions and perceptions of hypothetical choices."
@@ -143,7 +144,7 @@ export const router = createBrowserRouter([
           >
             <BehaviourReflectionPage />
           </RouteMetadata>
-        ),
+        ) : <NotFoundPage />,
       },
       {
         path: 'exercise',

@@ -82,6 +82,9 @@ The project adheres to a modular structure, organised as follows:
 
 The application uses the following environment variables for configuration:
 
+- `VITE_ENABLE_BEHAVIOUR_REFLECTION`: Set to `true` at build time to show the behaviour reflection tool. It is hidden
+  when unset or set to `false`.
+
 - `NEXT_PUBLIC_SERVER_URL`: The base URL for the application.
 - `NEXT_PUBLIC_VERSION`: The current version of the application.
 - `GA_MEASUREMENT_ID`: Google Analytics Measurement ID (optional, for tracking purposes).
