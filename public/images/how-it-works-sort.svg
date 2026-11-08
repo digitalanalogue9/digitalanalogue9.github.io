@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Place a value in an importance category</title>
+  <desc id="desc">A sample Security card beside the actual category buttons, including Very Important and Not Important.</desc>
+  <rect width="960" height="600" rx="24" fill="#faf5f8"/>
+  <rect x="26" y="26" width="908" height="548" rx="18" fill="#fff" stroke="#d6bdcc" stroke-width="2"/>
+  <text x="58" y="78" fill="#613d60" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="1.5">ROUND 1 · TARGET: 3</text>
+  <rect x="58" y="112" width="420" height="414" rx="14" fill="#fff" stroke="#d6bdcc" stroke-width="2"/>
+  <rect x="58" y="112" width="420" height="8" rx="4" fill="#d8a2bb"/>
+  <text x="88" y="166" fill="#613d60" font-family="Arial,sans-serif" font-size="17" font-weight="700" letter-spacing="1">CURRENT CARD</text>
+  <text x="88" y="226" fill="#3c2a38" font-family="Georgia,serif" font-size="42" font-weight="700">Security</text>
+  <text x="88" y="274" fill="#3c2a38" font-family="Arial,sans-serif" font-size="20"><tspan x="88" dy="0">It is important to know your</tspan><tspan x="88" dy="30">work will always be there</tspan><tspan x="88" dy="30">for you.</tspan></text>
+  <text x="520" y="150" fill="#3c2a38" font-family="Arial,sans-serif" font-size="18" font-weight="700">Choose a category</text>
+  <g font-family="Arial,sans-serif" font-size="17" font-weight="600" fill="#3c2a38">
+    <rect x="520" y="174" width="368" height="54" rx="9" fill="#efe0d8" stroke="#613d60" stroke-width="2"/><text x="542" y="208">Very Important</text><text x="850" y="208" fill="#613d60">→</text>
+    <rect x="520" y="242" width="368" height="54" rx="9" fill="#fff" stroke="#d6bdcc" stroke-width="2"/><text x="542" y="276">Quite Important</text><text x="850" y="276" fill="#613d60">→</text>
+    <rect x="520" y="310" width="368" height="54" rx="9" fill="#fff" stroke="#d6bdcc" stroke-width="2"/><text x="542" y="344">Important</text><text x="850" y="344" fill="#613d60">→</text>
+    <rect x="520" y="378" width="368" height="54" rx="9" fill="#fff" stroke="#d6bdcc" stroke-width="2"/><text x="542" y="412">Of Some Importance</text><text x="850" y="412" fill="#613d60">→</text>
+    <rect x="520" y="446" width="368" height="54" rx="9" fill="#fff" stroke="#d6bdcc" stroke-width="2"/><text x="542" y="480">Not Important</text><text x="850" y="480" fill="#613d60">→</text>
+  </g>
+</svg>

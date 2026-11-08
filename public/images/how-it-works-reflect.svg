@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Example final values with optional reflection</title>
+  <desc id="desc">The example final set lists Learning, Independence and Helping others, with an optional notes area.</desc>
+  <rect width="960" height="600" rx="24" fill="#faf5f8"/>
+  <rect x="26" y="26" width="908" height="548" rx="18" fill="#fff" stroke="#d6bdcc" stroke-width="2"/>
+  <text x="58" y="80" fill="#613d60" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="1.5">EXAMPLE EXERCISE · FINAL SET</text>
+  <text x="58" y="137" fill="#3c2a38" font-family="Georgia,serif" font-size="38" font-weight="700">Your core values</text>
+  <g fill="#3c2a38" font-family="Arial,sans-serif">
+    <rect x="58" y="166" width="844" height="94" rx="12" fill="#faf5f8" stroke="#d6bdcc" stroke-width="2"/>
+    <text x="84" y="203" font-size="23" font-weight="700">Learning</text><text x="84" y="232" fill="#613d60" font-size="16">Optional note</text>
+    <rect x="58" y="278" width="844" height="94" rx="12" fill="#faf5f8" stroke="#d6bdcc" stroke-width="2"/>
+    <text x="84" y="315" font-size="23" font-weight="700">Independence</text><text x="84" y="344" fill="#613d60" font-size="16">Optional note</text>
+    <rect x="58" y="390" width="844" height="94" rx="12" fill="#faf5f8" stroke="#d6bdcc" stroke-width="2"/>
+    <text x="84" y="427" font-size="23" font-weight="700">Helping others</text><text x="84" y="456" fill="#613d60" font-size="16">Optional note</text>
+  </g>
+  <text x="58" y="528" fill="#613d60" font-family="Arial,sans-serif" font-size="16">Notes are optional. This is illustrative sample content.</text>
+</svg>

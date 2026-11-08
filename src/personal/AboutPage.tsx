@@ -3,7 +3,7 @@ import PageMetadata from './PageMetadata';
 
 export default function AboutPage() {
   return (
-    <article className="editorial-home mx-auto w-full max-w-4xl space-y-12" aria-labelledby="about-heading">
+    <article className="app-page-panel editorial-home mx-auto w-full max-w-4xl space-y-12" aria-labelledby="about-heading">
       <PageMetadata
         title="About Core Values · A borrowed deck of cards"
         description="A borrowed deck of cards led to Core Values, a tool for sorting values and returning to the priorities you choose."

@@ -50,6 +50,10 @@ function SiteLayout() {
   const backgroundVariant =
     location.pathname === '/behaviour'
       ? 'behaviour'
+      : location.pathname === '/about'
+        ? 'about'
+        : location.pathname === '/contact'
+          ? 'contact'
       : valuesFlowPaths.includes(location.pathname)
         ? 'values'
         : 'overview';
