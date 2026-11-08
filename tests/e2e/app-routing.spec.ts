@@ -3,7 +3,9 @@ import { expect, test } from '@playwright/test';
 test('visitor can reach personal app pages from the home page', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
+  ).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation).toContainText('About');
   await expect(navigation).toContainText('How it works');
@@ -11,7 +13,7 @@ test('visitor can reach personal app pages from the home page', async ({ page })
 
   await page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'Privacy' }).click();
   await expect(page).toHaveURL(/\/privacy\/?$/);
-  await expect(page.getByRole('heading', { name: 'Privacy', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
 });
 
 test('visitor can open and refresh a direct application route', async ({ page }) => {
@@ -23,12 +25,55 @@ test('visitor can open and refresh a direct application route', async ({ page })
   await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
 });
 
+test('privacy page loads directly, refreshes, manages consent and links to the exercise', async ({ page }) => {
+  await page.goto('/privacy');
+
+  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+  await expect(page).toHaveTitle('Privacy · Core Values');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    'Understand what Core Values saves in your browser, how backups work and how to allow or reject optional Google Analytics.'
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://core-values.me/privacy');
+
+  const banner = page.getByRole('region', { name: 'Privacy preferences' });
+  await expect(banner).toContainText('Optional Google Analytics helps me understand visits to this site.');
+  await expect(banner.getByRole('button', { name: 'Allow analytics' })).toBeVisible();
+  await expect(banner.getByRole('button', { name: 'Reject optional cookies' })).toBeVisible();
+  await expect(banner.getByText('Customise preferences')).toBeVisible();
+  await banner.getByRole('link', { name: 'Read the privacy notice' }).click();
+  await expect(page).toHaveURL(/\/privacy\/?$/);
+  await page.setViewportSize({ width: 320, height: 800 });
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth))
+    .toBe(true);
+  // A 640px CSS viewport matches a 1280px browser viewport at 200% zoom.
+  await page.setViewportSize({ width: 640, height: 800 });
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth))
+    .toBe(true);
+  const rejectAnalytics = page.getByRole('button', { name: 'Reject analytics' });
+  await rejectAnalytics.focus();
+  await rejectAnalytics.press('Enter');
+  await expect(page.getByRole('status')).toHaveText('Your analytics preference has been saved.');
+  await expect(
+    page.getByRole('main', { name: 'Main content' }).getByRole('button', { name: 'Allow analytics' })
+  ).toHaveAttribute('aria-pressed', 'false');
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+  await expect(page.getByText('Rejected', { exact: true })).toBeVisible();
+  await page.getByRole('main', { name: 'Main content' }).getByRole('link', { name: 'Find my core values' }).click();
+  await expect(page).toHaveURL(/\/exercise\/?$/);
+});
+
 test('home and direct exercise setup load and refresh without browser runtime errors', async ({ page }) => {
   const runtimeErrors: string[] = [];
   page.on('pageerror', (error) => runtimeErrors.push(error.message));
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
+  ).toBeVisible();
   await page.getByRole('link', { name: 'Find my core values' }).first().click();
   await expect(page).toHaveURL(/\/exercise\/?$/);
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
@@ -50,7 +95,9 @@ test('exercise setup creates a team-focused Session only after an explicit start
   const initialSessionCount = await page.getByRole('listitem').count();
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
+  ).toBeVisible();
   await page.goto('/exercise');
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Team-focused values' })).toBeVisible();

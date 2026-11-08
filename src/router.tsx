@@ -12,11 +12,17 @@ import PageMetadata from './personal/PageMetadata';
 
 const PrivacyPage = lazy(() => import('./app/privacy/page'));
 const BehaviourReflectionPage = lazy(() => import('./app/behaviour/page'));
-const ExerciseRoute = lazy(() => import('./app/ExerciseRoute').then(({ ExerciseRoute }) => ({ default: ExerciseRoute })));
+const ExerciseRoute = lazy(() =>
+  import('./app/ExerciseRoute').then(({ ExerciseRoute }) => ({ default: ExerciseRoute }))
+);
 const HistoryRoute = lazy(() => import('./app/HistoryRoute').then(({ HistoryRoute }) => ({ default: HistoryRoute })));
 const ReplayRoute = lazy(() => import('./app/ReplayRoute').then(({ ReplayRoute }) => ({ default: ReplayRoute })));
-const ReasoningRoute = lazy(() => import('./app/ReasoningRoute').then(({ ReasoningRoute }) => ({ default: ReasoningRoute })));
-const CompletedRoute = lazy(() => import('./app/CompletedRoute').then(({ CompletedRoute }) => ({ default: CompletedRoute })));
+const ReasoningRoute = lazy(() =>
+  import('./app/ReasoningRoute').then(({ ReasoningRoute }) => ({ default: ReasoningRoute }))
+);
+const CompletedRoute = lazy(() =>
+  import('./app/CompletedRoute').then(({ CompletedRoute }) => ({ default: CompletedRoute }))
+);
 
 function RouteMetadata({
   title,
@@ -67,7 +73,9 @@ function SiteLayout() {
               <NavLink to="/howtouse">How it works</NavLink>
               <NavLink to="/about">About</NavLink>
               <NavLink to="/history">History</NavLink>
-              <Link className="public-nav-action" to="/exercise">Find my core values</Link>
+              <Link className="public-nav-action" to="/exercise">
+                Find my core values
+              </Link>
             </nav>
           </div>
         </header>
@@ -121,8 +129,8 @@ export const router = createBrowserRouter([
         path: 'privacy',
         element: (
           <RouteMetadata
-            title="Core Values Privacy Policy"
-            description="Learn how Core Values stores local data and uses analytics only with your consent."
+            title="Privacy · Core Values"
+            description="Understand what Core Values saves in your browser, how backups work and how to allow or reject optional Google Analytics."
             path="/privacy"
           >
             <PrivacyPage />
@@ -144,7 +152,11 @@ export const router = createBrowserRouter([
       {
         path: 'exercise',
         element: (
-          <RouteMetadata title="Core Values exercise" description="Sort personal or team-focused values into importance categories." path="/exercise">
+          <RouteMetadata
+            title="Core Values exercise"
+            description="Sort personal or team-focused values into importance categories."
+            path="/exercise"
+          >
             <ExerciseRoute />
           </RouteMetadata>
         ),
@@ -152,7 +164,11 @@ export const router = createBrowserRouter([
       {
         path: 'history',
         element: (
-          <RouteMetadata title="Session History - Core Values" description="Resume, review, export, and replay Core Values Sessions saved in this browser." path="/history">
+          <RouteMetadata
+            title="Session History - Core Values"
+            description="Resume, review, export, and replay Core Values Sessions saved in this browser."
+            path="/history"
+          >
             <HistoryRoute />
           </RouteMetadata>
         ),
@@ -160,7 +176,11 @@ export const router = createBrowserRouter([
       {
         path: 'replay',
         element: (
-          <RouteMetadata title="Session replay - Core Values" description="Replay the saved choices from a completed Core Values exercise." path="/replay">
+          <RouteMetadata
+            title="Session replay - Core Values"
+            description="Replay the saved choices from a completed Core Values exercise."
+            path="/replay"
+          >
             <ReplayRoute />
           </RouteMetadata>
         ),

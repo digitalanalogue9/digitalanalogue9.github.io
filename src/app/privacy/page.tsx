@@ -1,110 +1,131 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useConsent } from '@/lib/hooks/useConsent';
 
 export default function PrivacyPage() {
   const { consent, updateConsent, isInitialized } = useConsent();
-  const [analyticsChoice, setAnalyticsChoice] = useState(consent.analytics === 'granted');
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => setAnalyticsChoice(consent.analytics === 'granted'), [consent.analytics]);
-
   const saveAnalyticsChoice = (granted: boolean) => {
-    setAnalyticsChoice(granted);
     updateConsent({ analytics: granted ? 'granted' : 'denied', advertisement: 'denied' });
     setSaved(true);
   };
 
+  const currentChoice =
+    !isInitialized || consent.analytics === 'pending'
+      ? 'Not set'
+      : consent.analytics === 'granted'
+        ? 'Allowed'
+        : 'Rejected';
+
   return (
-    <article className="border-sys-color-border-default bg-sys-color-surface-default mx-auto max-w-4xl space-y-8 rounded-lg border p-5 shadow-sm sm:p-8">
-      <header className="text-sys-color-text-primary block bg-transparent p-0 shadow-none">
-        <h1 className="mt-0 text-3xl font-bold sm:text-4xl">Privacy</h1>
-        <p className="text-sys-color-text-secondary mt-3 text-base leading-relaxed">
-          Core Values keeps your exercise work in this browser. Optional Google Analytics is off unless you allow it.
-          This page explains what is stored and what changes when you give consent.
+    <article className="mx-auto max-w-prose space-y-10 px-5 py-8 sm:px-8" aria-labelledby="privacy-heading">
+      <header className="space-y-4">
+        <p className="text-sys-color-text-secondary text-sm font-semibold tracking-wide uppercase">Privacy</p>
+        <h1 id="privacy-heading" className="font-serif text-4xl leading-tight sm:text-5xl">
+          Your reflections stay in this browser.
+        </h1>
+        <p className="text-sys-color-text-secondary text-lg leading-relaxed">
+          Exercise answers and notes are stored on this device. They don’t sync automatically. Optional Google Analytics
+          loads only if you allow it.
         </p>
       </header>
 
-      <section aria-labelledby="local-data-heading" className="space-y-2">
-        <h2 id="local-data-heading" className="text-xl font-semibold">
-          Sessions and preferences on your device
+      <section aria-labelledby="saved-data-heading" className="space-y-3">
+        <h2 id="saved-data-heading" className="font-serif text-2xl font-semibold">
+          Saved exercises and preferences
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          Values exercise Sessions are stored in this browser&apos;s IndexedDB storage. Scenario reflection choices,
-          notes, display preferences, and your consent choice are stored in browser storage on this device. The app
-          does not send your exercise values, choices, or notes to a server, and your Sessions are not synced between
-          browsers or devices. Clearing this site&apos;s browser data can remove saved work and preferences. Use History
-          to export a Session backup before clearing data or changing devices.
+          Your values exercises are saved in this browser’s IndexedDB storage. Behaviour reflection choices and notes,
+          display preferences and your consent choice are also stored in browser storage on this device.
+        </p>
+        <p className="text-sys-color-text-secondary leading-relaxed">
+          The app doesn’t send your exercise values, choices or notes to a server. Saved work doesn’t sync between
+          browsers or devices. Clearing this site’s browser data can remove it, along with your preferences.
         </p>
       </section>
 
-      <section aria-labelledby="analytics-heading" className="space-y-2">
-        <h2 id="analytics-heading" className="text-xl font-semibold">
+      <section aria-labelledby="backups-heading" className="space-y-3">
+        <h2 id="backups-heading" className="font-serif text-2xl font-semibold">
+          Backups you download
+        </h2>
+        <p className="text-sys-color-text-secondary leading-relaxed">
+          Use History to export a backup before clearing browser data or moving your work. The standard values JSON
+          export omits additional completed-exercise reflection notes. Choose <strong>Export reflection backup</strong>{' '}
+          to include them.
+        </p>
+        <p className="text-sys-color-text-secondary leading-relaxed">
+          Backup files are saved wherever your browser downloads files. Keep them private and delete them when you no
+          longer need them. Imported values backups are added to History in this browser. Importing a values backup with
+          an existing Session ID creates a separate copy. Restoring a behaviour reflection backup with an existing ID
+          replaces that saved reflection and may replace newer work.
+        </p>
+      </section>
+
+      <section aria-labelledby="analytics-heading" className="space-y-3">
+        <h2 id="analytics-heading" className="font-serif text-2xl font-semibold">
           Optional Google Analytics
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          If you allow Analytics, this site loads Google Analytics property G-JZPX5JCP5D and sends page views with
-          page URLs and referrers that omit query strings and fragments, so Session identifiers in links are not
-          included. Exercise values, choices, notes, and imported or exported backup contents are not sent. Google
-          may process standard browser and device information under its own privacy terms, and may use its own cookies
-          or similar technologies after you consent. Analytics is not loaded before consent; advertising features and
-          Google Signals are disabled. Rejecting or withdrawing consent stops further page views, but does not remove
-          information already collected by Google.
+          If you allow analytics, this site loads Google Analytics property G-JZPX5JCP5D and sends page views. Page URLs
+          and referrers omit query strings and fragments, so Session identifiers in links aren’t included.
+        </p>
+        <p className="text-sys-color-text-secondary leading-relaxed">
+          Exercise values, choices, notes and imported or exported backup contents aren’t sent. Google may process
+          standard browser and device information under its own privacy terms. It may also use cookies or similar
+          technologies after you consent.
+        </p>
+        <p className="text-sys-color-text-secondary leading-relaxed">
+          Analytics doesn’t load before consent. Advertising features and Google Signals are disabled. Rejecting or
+          withdrawing consent stops further page views. It doesn’t remove information Google has already collected.
         </p>
       </section>
 
-      <section aria-labelledby="retention-heading" className="space-y-2">
-        <h2 id="retention-heading" className="text-xl font-semibold">
-          Retention and backups
+      <section aria-labelledby="manage-consent-heading" className="space-y-4">
+        <h2 id="manage-consent-heading" className="font-serif text-2xl font-semibold">
+          Your analytics choice
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          You control locally stored Sessions through this browser. Exported JSON backups are saved wherever your
-          browser downloads files; keep them private and delete them when you no longer need them. Imported backups are
-          added to this browser&apos;s local Session history.
-        </p>
-      </section>
-
-      <section aria-labelledby="manage-consent-heading" className="space-y-3">
-        <h2 id="manage-consent-heading" className="text-xl font-semibold">
-          Manage Analytics consent
-        </h2>
-        <p className="text-sys-color-text-secondary leading-relaxed">
-          Your current choice is{' '}
-          <strong>{!isInitialized || consent.analytics === 'pending' ? 'not set' : consent.analytics}</strong>. You can
-          change it at any time.
+          Your current choice is <strong>{currentChoice}</strong>. You can change it at any time.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
             onClick={() => saveAnalyticsChoice(true)}
-            aria-pressed={analyticsChoice}
+            aria-pressed={isInitialized && consent.analytics === 'granted'}
             className="apc-button min-h-11 px-5 py-2"
           >
-            Allow Analytics
+            Allow analytics
           </button>
           <button
             type="button"
             onClick={() => saveAnalyticsChoice(false)}
-            aria-pressed={!analyticsChoice}
+            aria-pressed={isInitialized && consent.analytics === 'denied'}
             className="rounded-sys-radius-button-sm border-sys-color-border-strong hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary min-h-11 border px-5 py-2 font-semibold hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2"
           >
-            Reject Analytics
+            Reject analytics
           </button>
         </div>
-        <p aria-live="polite" className="text-interface-base-small text-sys-color-text-secondary min-h-6">
-          {saved ? 'Your Analytics preference has been saved.' : ''}
+        <p role="status" className="text-interface-base-small text-sys-color-text-secondary min-h-6">
+          {saved ? 'Your analytics preference has been saved.' : ''}
         </p>
       </section>
 
-      <section aria-labelledby="privacy-contact-heading" className="space-y-2">
-        <h2 id="privacy-contact-heading" className="text-xl font-semibold">
+      <section aria-labelledby="privacy-contact-heading" className="space-y-3">
+        <h2 id="privacy-contact-heading" className="font-serif text-2xl font-semibold">
           Questions or privacy requests
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          Contact the site owner at{' '}
-          <a href="mailto:corevaluesanalytics@gmail.com">corevaluesanalytics@gmail.com</a> with questions about this
-          notice or a privacy request.
+          Email <a href="mailto:corevaluesanalytics@gmail.com">corevaluesanalytics@gmail.com</a> with a question about
+          this notice or a privacy request.
         </p>
       </section>
+
+      <p>
+        <Link className="apc-button inline-flex min-h-11 items-center px-5 py-2" to="/exercise">
+          Find my core values
+        </Link>
+      </p>
     </article>
   );
 }

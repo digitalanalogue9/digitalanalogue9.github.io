@@ -17,6 +17,36 @@ describe('privacy choices', () => {
 
   afterEach(() => cleanup());
 
+  it('explains browser storage and backups and exposes the reviewed consent state', async () => {
+    localStorage.setItem(
+      consentKey,
+      JSON.stringify({ analytics: 'denied', functional: 'pending', advertisement: 'denied', timestamp: 1 })
+    );
+
+    render(
+      <MemoryRouter initialEntries={['/privacy']}>
+        <PrivacyPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+    expect(
+      screen.getByText(/Exercise answers and notes are stored on this device\. They don’t sync automatically\./)
+    ).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Saved exercises and preferences' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Backups you download' })).toBeVisible();
+    expect(
+      screen.getByText(/standard values JSON export omits additional completed-exercise reflection notes/)
+    ).toBeVisible();
+    expect(screen.getByText(/creates a separate copy/)).toBeVisible();
+    expect(screen.getByText(/replaces that saved reflection and may replace newer work/)).toBeVisible();
+    expect(screen.getByText(/It doesn’t remove information Google has already collected\./)).toBeVisible();
+    expect(screen.getByText('Rejected', { selector: 'strong' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Allow analytics' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'Reject analytics' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('link', { name: 'Find my core values' })).toHaveAttribute('href', '/exercise');
+  });
+
   it('lets visitors reject optional tracking and remembers that choice', async () => {
     const { unmount } = render(
       <MemoryRouter>
@@ -57,7 +87,7 @@ describe('privacy choices', () => {
     expect(document.querySelector('script[src*="googletagmanager.com"]')).not.toBeInTheDocument();
     expect(window.gtag).toBeUndefined();
     const banner = await screen.findByRole('region', { name: 'Privacy preferences' });
-    fireEvent.click(within(banner).getByRole('button', { name: 'Allow Analytics' }));
+    fireEvent.click(within(banner).getByRole('button', { name: 'Allow analytics' }));
 
     const script = await waitFor(() => {
       const element = document.querySelector<HTMLScriptElement>('script[src*="googletagmanager.com"]');
@@ -83,7 +113,7 @@ describe('privacy choices', () => {
       ).toBe(true);
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Reject Analytics' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject analytics' }));
     await waitFor(() => expect(document.querySelector('script[src*="googletagmanager.com"]')).not.toBeInTheDocument());
     expect(window.gtag).toBeUndefined();
     expect(JSON.parse(localStorage.getItem(consentKey) ?? '{}').analytics).toBe('denied');

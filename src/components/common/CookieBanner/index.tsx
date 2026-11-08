@@ -41,13 +41,13 @@ export default function CookieBanner() {
               id="cookie-consent-description"
               className="text-interface-base-small sm:text-interface-base-default text-white"
             >
-              Optional Google Analytics helps us understand visits to this site. It stays off until you allow it. Your
-              sessions remain on this device either way.{' '}
+              Optional Google Analytics helps me understand visits to this site. It stays off until you allow it. Your
+              exercises are saved in this browser either way.{' '}
               <Link
                 to="/privacy"
                 className="font-semibold text-white underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-white"
               >
-                Read the Privacy Policy
+                Read the privacy notice
               </Link>
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function CookieBanner() {
               onClick={() => chooseConsent('granted', 'granted')}
               className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              Allow Analytics
+              Allow analytics
             </button>
             <button
               type="button"
@@ -71,7 +71,7 @@ export default function CookieBanner() {
 
         <details className="border-t border-white/30 pt-3">
           <summary className="w-fit cursor-pointer rounded-sm font-semibold text-white underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-            Customize preferences
+            Customise preferences
           </summary>
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
