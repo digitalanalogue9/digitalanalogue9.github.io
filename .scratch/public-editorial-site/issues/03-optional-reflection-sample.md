@@ -33,7 +33,7 @@ Parent specification: [Public editorial site](../spec.md), especially Optional s
       remains off before consent/after rejection. Reuse existing consent tests for detailed consent transitions.
 - [x] Sample controls and feedback work on mobile and with reduced motion, with visible focus, sufficient contrast and
       principal targets at least 44px high. Relevant tests and checks pass.
-- [ ] Home shows the secondary behaviour invitation only when `VITE_ENABLE_BEHAVIOUR_REFLECTION` is explicitly true; the
+- [x] Home shows the secondary behaviour invitation only when `VITE_ENABLE_BEHAVIOUR_REFLECTION` is explicitly true; the
       optional sample remains available whether behaviour reflection is enabled or disabled.
 
 ## Reviewed wording requirements
@@ -69,13 +69,17 @@ and accessibility criteria above.
 - TDD red:
   `pnpm exec playwright test --config playwright.ticket03.config.ts --grep "optional sample|sample is usable" --reporter=line`
   failed against the pre-feature Home because the Security radio was absent.
-- TDD green: the same isolated sample cases passed (2/2), then the complete Home browser spec passed (3/3). Also passed
-  `pnpm typecheck`, `pnpm exec eslint src/app/HomeClient.tsx tests/e2e/home-editorial.spec.ts`, and
+- TDD green: the complete Home browser spec passed (4/4) with the flag unset; explicit false and true feature-gate cases
+  each passed (1/1). The saved-work sample test passed (1/1) with a stored Session and identical IndexedDB records
+  before and after. Also passed `pnpm typecheck`,
+  `pnpm exec eslint src/app/HomeClient.tsx tests/e2e/home-editorial.spec.ts`, and
   `pnpm exec prettier --check src/app/HomeClient.tsx src/styles/editorial.css tests/e2e/home-editorial.spec.ts .scratch/public-editorial-site/issues/03-optional-reflection-sample.md`.
 - Browser checks ran in `C:\dev\worktrees\editorial-03-sample` using dedicated port 5174 with server reuse disabled; no
   integration checkout files or port-5173 process were changed.
 - 2026-11-08 follow-up: the owner approved the public-default behaviour feature gate. Home now reuses the existing
   `isBehaviourReflectionEnabled()` helper for the secondary invitation. Its default-disabled and explicit-enabled
-  browser cases are added; final green validation awaits the helper update at the latest integration tip.
+  browser cases are added; unset, false, and true flag checks now pass at staging tip f2ca980.
 - Saved-work isolation was strengthened after review: the browser test creates a Session through the public exercise
   flow and compares every IndexedDB object-store record before and after the sample journey.
+
+- TDD red for the Home flag: the new invitation case failed while the baseline helper returned true with the flag unset.
