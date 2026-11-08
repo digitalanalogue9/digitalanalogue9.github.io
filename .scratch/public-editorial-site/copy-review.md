@@ -371,3 +371,5 @@ The recommended headline and CTA preserve the specification. These alternatives 
 ## Public feature availability
 
 The reviewed behaviour-reflection copy remains approved for builds where VITE_ENABLE_BEHAVIOUR_REFLECTION=true. Public builds hide the Home and How it works invitations and /behaviour route when the flag is unset or false. This changes visibility only; do not change the tool behaviour, saved data, or backup/import contracts.
+
+The disabled build still accepts scenario reflection backup files. Keep the existing backup/import warning visible and accurate; hiding the active tool must not imply that these files are unsupported.

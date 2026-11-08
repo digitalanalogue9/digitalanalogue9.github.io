@@ -21,6 +21,9 @@ Parent specification: [Public editorial site](../spec.md), especially Accessibil
 - [ ] Record a concise verification outcome with reviewed viewports/states, check results and any residual limitations. Resolve defects that prevent the parent specification's acceptance criteria from passing.
 - [ ] Do not deploy, publish the site, change the parent specification or expand into new product capabilities as part of verification.
 
+- [ ] In a disabled build, hide active behaviour-reflection presentation in History while preserving saved records; scenario reflection backups remain accepted and retain their existing import/export semantics.
+- [ ] Confirm the flag changes visibility only: no changes to behaviour engine, stored Sessions/attempts, or backup formats and contracts.
+
 ## Reviewed wording requirements
 
 Use [the reviewed copy baseline](../copy-review.md), especially [shared wording and adjacent application text](../copy-review.md#shared-wording-and-adjacent-application-text), [metadata](../copy-review.md#proposed-metadata) and [product marketing context](../../../docs/product-marketing.md). This adds a copy consistency check and bounded interface text edits to the existing integrated review.
