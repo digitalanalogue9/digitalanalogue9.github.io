@@ -33,6 +33,8 @@ Parent specification: [Public editorial site](../spec.md), especially Optional s
       remains off before consent/after rejection. Reuse existing consent tests for detailed consent transitions.
 - [x] Sample controls and feedback work on mobile and with reduced motion, with visible focus, sufficient contrast and
       principal targets at least 44px high. Relevant tests and checks pass.
+- [ ] Home shows the secondary behaviour invitation only when `VITE_ENABLE_BEHAVIOUR_REFLECTION` is explicitly true; the
+      optional sample remains available whether behaviour reflection is enabled or disabled.
 
 ## Reviewed wording requirements
 
@@ -72,3 +74,8 @@ and accessibility criteria above.
   `pnpm exec prettier --check src/app/HomeClient.tsx src/styles/editorial.css tests/e2e/home-editorial.spec.ts .scratch/public-editorial-site/issues/03-optional-reflection-sample.md`.
 - Browser checks ran in `C:\dev\worktrees\editorial-03-sample` using dedicated port 5174 with server reuse disabled; no
   integration checkout files or port-5173 process were changed.
+- 2026-11-08 follow-up: the owner approved the public-default behaviour feature gate. Home now reuses the existing
+  `isBehaviourReflectionEnabled()` helper for the secondary invitation. Its default-disabled and explicit-enabled
+  browser cases are added; final green validation awaits the helper update at the latest integration tip.
+- Saved-work isolation was strengthened after review: the browser test creates a Session through the public exercise
+  flow and compares every IndexedDB object-store record before and after the sample journey.

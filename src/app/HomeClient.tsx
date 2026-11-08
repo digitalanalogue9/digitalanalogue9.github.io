@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import valueCatalogue from '@/data/values.json';
+import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 
 const featuredValues = ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS'].map((title) => {
   const value = valueCatalogue.values.find((item) => item.title === title);
@@ -30,6 +31,7 @@ const sampleValues = ['SECURITY', 'INDEPENDENCE'].map((title) => {
 
 export default function HomeClient() {
   const [sampleChoice, setSampleChoice] = useState<string | null>(null);
+  const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
 
   return (
     <div className="editorial-home">
@@ -180,19 +182,21 @@ export default function HomeClient() {
           </blockquote>
         </div>
       </section>
-      <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
-        <div>
-          <h2 id="behaviour-heading">See your choices from another angle</h2>
-          <p>
-            Consider six everyday situations at work and choose how you might respond. Then explore possible intentions
-            and perspectives behind those choices.
-          </p>
-          <p>These prompts offer possibilities for reflection. They do not tell you what another person thinks.</p>
-        </div>
-        <Link className="editorial-button editorial-button--light" to="/behaviour">
-          Explore behaviour reflection
-        </Link>
-      </section>
+      {behaviourReflectionEnabled && (
+        <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
+          <div>
+            <h2 id="behaviour-heading">See your choices from another angle</h2>
+            <p>
+              Consider six everyday situations at work and choose how you might respond. Then explore possible
+              intentions and perspectives behind those choices.
+            </p>
+            <p>These prompts offer possibilities for reflection. They do not tell you what another person thinks.</p>
+          </div>
+          <Link className="editorial-button editorial-button--light" to="/behaviour">
+            Explore behaviour reflection
+          </Link>
+        </section>
+      )}
 
       <section className="editorial-closing" aria-labelledby="closing-heading">
         <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
