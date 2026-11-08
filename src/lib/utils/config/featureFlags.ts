@@ -1,4 +1,4 @@
-// The personal application exposes both local-first exercises without Azure authentication.
+// Vite exposes this build-time flag to the client; only an explicit `true` enables the tool.
 export function isBehaviourReflectionEnabled() {
-  return true;
+  return import.meta.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true';
 }

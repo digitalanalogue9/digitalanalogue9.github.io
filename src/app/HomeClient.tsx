@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import valueCatalogue from '@/data/values.json';
+import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 
 const featuredValues = ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS'].map((title) => {
   const value = valueCatalogue.values.find((item) => item.title === title);
@@ -17,7 +19,20 @@ const situations = [
   'Wondering what you want more of in your working life',
 ];
 
+const sampleValues = ['SECURITY', 'INDEPENDENCE'].map((title) => {
+  const value = valueCatalogue.values.find((item) => item.title === title);
+  if (!value) throw new Error(`The reflection sample value ${title} is missing from the catalogue.`);
+
+  return {
+    ...value,
+    displayTitle: title === 'SECURITY' ? 'Security' : 'Independence',
+  };
+});
+
 export default function HomeClient() {
+  const [sampleChoice, setSampleChoice] = useState<string | null>(null);
+  const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
+
   return (
     <div className="editorial-home">
       <section className="editorial-hero" aria-labelledby="home-heading">
@@ -90,6 +105,57 @@ export default function HomeClient() {
           See how it works
         </Link>
       </section>
+
+      <section className="editorial-sample" aria-labelledby="sample-heading">
+        <div className="editorial-sample-intro">
+          <h2 id="sample-heading">Try a short reflection</h2>
+          <p>When two good things compete, what comes first?</p>
+          <p>There’s no right answer. The interesting part is why.</p>
+          <p className="editorial-aside">A sample only. Your choice isn’t saved.</p>
+          <Link className="editorial-button editorial-button--primary" to="/exercise">
+            Find my core values
+          </Link>
+        </div>
+        <div className="editorial-sample-interaction">
+          <fieldset>
+            <legend className="sr-only">Choose a value for this sample</legend>
+            <div className="editorial-sample-options">
+              {sampleValues.map((value) => (
+                <label className="editorial-sample-option" key={value.id}>
+                  <input
+                    type="radio"
+                    name="reflection-sample"
+                    value={value.title}
+                    checked={sampleChoice === value.title}
+                    onChange={() => setSampleChoice(value.title)}
+                  />
+                  <span>
+                    <strong>{value.displayTitle}</strong>
+                    <span>{value.description}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          {sampleChoice && (
+            <div className="editorial-sample-feedback" role="status" aria-live="polite">
+              <p>What makes that feel more important to you today?</p>
+              <p>Explore the complete set and see which other values you want to keep.</p>
+            </div>
+          )}
+          <button
+            className="editorial-text-link editorial-sample-reset"
+            type="button"
+            onClick={() => setSampleChoice(null)}
+          >
+            Reset sample
+          </button>
+          <Link className="editorial-text-link editorial-sample-full-link" to="/exercise">
+            Find my core values
+          </Link>
+        </div>
+      </section>
+
       <section className="editorial-outcome" aria-labelledby="example-heading">
         <div className="editorial-section-intro">
           <h2 id="example-heading">Example outcome</h2>
@@ -116,19 +182,21 @@ export default function HomeClient() {
           </blockquote>
         </div>
       </section>
-      <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
-        <div>
-          <h2 id="behaviour-heading">See your choices from another angle</h2>
-          <p>
-            Consider six everyday situations at work and choose how you might respond. Then explore possible intentions
-            and perspectives behind those choices.
-          </p>
-          <p>These prompts offer possibilities for reflection. They do not tell you what another person thinks.</p>
-        </div>
-        <Link className="editorial-button editorial-button--light" to="/behaviour">
-          Explore behaviour reflection
-        </Link>
-      </section>
+      {behaviourReflectionEnabled && (
+        <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
+          <div>
+            <h2 id="behaviour-heading">See your choices from another angle</h2>
+            <p>
+              Consider six everyday situations at work and choose how you might respond. Then explore possible
+              intentions and perspectives behind those choices.
+            </p>
+            <p>These prompts offer possibilities for reflection. They do not tell you what another person thinks.</p>
+          </div>
+          <Link className="editorial-button editorial-button--light" to="/behaviour">
+            Explore behaviour reflection
+          </Link>
+        </section>
+      )}
 
       <section className="editorial-closing" aria-labelledby="closing-heading">
         <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
