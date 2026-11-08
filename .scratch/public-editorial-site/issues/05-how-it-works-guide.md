@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 — Launch the editorial home page and public navigation.
 
-**Status:** ready-for-human
+**Status:** resolved
 
 Parent specification: [Public editorial site](../spec.md), especially How it works and Testing Decisions.
 
@@ -42,3 +42,4 @@ Implement the [How it works draft](../copy-review.md#proposed-how-it-works-copy)
 
 - 2026-11-06 implementation: built the Read-mode guide at the existing `/howtouse` route with three labelled synthetic product views, local instruction preference, working exercise/History/behaviour actions and reviewed storage/backup guidance. Playwright guide suite passed 5/5 on isolated Vite port 5195; it covers direct route/refresh, metadata, navigation, preference persistence, broken illustrations, keyboard focus and 320px responsive layout. Captured and reviewed desktop and 390px full-page screenshots. TypeScript, scoped ESLint, Prettier and production build passed.
 - 2026-11-08 ticket 05 feature-visibility acceptance: How it works now asserts the behaviour-reflection section and its action are present only when `VITE_ENABLE_BEHAVIOUR_REFLECTION=true`. The guide suite and explicit false/true runs passed against staging `b4ef051`; the same new assertion failed with the flag unset and false against pre-gate `08cbdbf`. Guide suite: 6/6 (unset); targeted visibility test: 1/1 (false) and 1/1 (true). Typecheck, scoped ESLint, Prettier and `git diff --check` passed. No production code changed.
+- 2026-11-08 orchestration update: feature-gate acceptance integrated at e18467a. The pre-gate 08cbdbf baseline failed for unset/false as expected; current guide suite passed 6/6 unset and the visibility test passed 1/1 each with explicit false and true. Typecheck, scoped ESLint, Prettier and diff checks passed.
