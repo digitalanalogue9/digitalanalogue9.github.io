@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Putting Values into Practice content library",
+  "description": "Authoring format for situation content and curated value relevance. Value links describe topics for exploration and do not score response options.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "contentVersion",
+    "status",
+    "contexts",
+    "areas",
+    "sharedPrompts",
+    "scenarios"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./library.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "contentVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "enum": [
+        "draft-content",
+        "reviewed-content"
+      ]
+    },
+    "contexts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/context"
+      }
+    },
+    "areas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/area"
+      }
+    },
+    "sharedPrompts": {
+      "$ref": "#/$defs/sharedPrompts"
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scenario"
+      }
+    }
+  },
+  "$defs": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "area": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "helpfulExample",
+        "possibleCostExample",
+        "possiblePerspectiveExample",
+        "actionExamples"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "helpfulExample": {
+          "type": "string",
+          "minLength": 1
+        },
+        "possibleCostExample": {
+          "type": "string",
+          "minLength": 1
+        },
+        "possiblePerspectiveExample": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actionExamples": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "sharedPrompts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "response",
+        "motivation",
+        "optionalValueConnection",
+        "optionalRealExample",
+        "strengthsReflection",
+        "perspectiveReflection",
+        "optionalReceivedFeedback",
+        "action"
+      ],
+      "properties": {
+        "response": {
+          "type": "string",
+          "minLength": 1
+        },
+        "motivation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "optionalValueConnection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "optionalRealExample": {
+          "type": "string",
+          "minLength": 1
+        },
+        "strengthsReflection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "perspectiveReflection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "optionalReceivedFeedback": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "responseOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "valueLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "set",
+        "valueId",
+        "reason"
+      ],
+      "properties": {
+        "set": {
+          "enum": [
+            "personal",
+            "team"
+          ]
+        },
+        "valueId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contextId",
+        "areaId",
+        "title",
+        "situation",
+        "responseOptions",
+        "valueLinks",
+        "editorialNote"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "contextId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "areaId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "situation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "responseOptions": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/responseOption"
+          },
+          "maxItems": 3
+        },
+        "valueLinks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/valueLink"
+          },
+          "uniqueItems": true
+        },
+        "editorialNote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

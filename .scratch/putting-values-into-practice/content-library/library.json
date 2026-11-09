@@ -1,0 +1,2226 @@
+{
+  "$schema": "./library.schema.json",
+  "schemaVersion": 1,
+  "contentVersion": "0.1.0",
+  "status": "draft-content",
+  "contexts": [
+    {
+      "id": "work-study",
+      "label": "Work and study"
+    },
+    {
+      "id": "home",
+      "label": "Home and shared responsibilities"
+    },
+    {
+      "id": "relationships",
+      "label": "Friends and close relationships"
+    },
+    {
+      "id": "community",
+      "label": "Community and groups"
+    }
+  ],
+  "areas": [
+    {
+      "id": "support",
+      "label": "Offering support",
+      "helpfulExample": "Your attention, experience or practical help could make a difficult situation easier.",
+      "possibleCostExample": "Help could arrive before the other person has had room to say what they need.",
+      "possiblePerspectiveExample": "Someone might feel supported; someone else might want more room to decide for themselves.",
+      "actionExamples": [
+        "Ask what kind of support would help before offering it.",
+        "Agree one useful contribution and leave room for the other person's approach."
+      ]
+    },
+    {
+      "id": "responsibility",
+      "label": "Sharing responsibility",
+      "helpfulExample": "Following through and making ownership clear could help people rely on one another.",
+      "possibleCostExample": "Taking on more could leave less room for other people to contribute or for your own commitments.",
+      "possiblePerspectiveExample": "Someone might appreciate your reliability; someone else might be unsure what remains theirs to do.",
+      "actionExamples": [
+        "Agree who owns the next step and what help is available.",
+        "Check whether stepping in now will make future responsibility clearer."
+      ]
+    },
+    {
+      "id": "openness",
+      "label": "Speaking openly",
+      "helpfulExample": "A concern, preference or different view could help others understand what matters.",
+      "possibleCostExample": "Timing or delivery could make it harder for someone to hear the point; waiting could also leave it unheard.",
+      "possiblePerspectiveExample": "Someone might welcome your candour; someone else might need more context or a different moment.",
+      "actionExamples": [
+        "Explain one concern and ask what you may be missing.",
+        "Choose a time to express a preference you have been leaving unspoken."
+      ]
+    },
+    {
+      "id": "standards",
+      "label": "Working to a standard",
+      "helpfulExample": "Care and attention could make something more useful, dependable or satisfying.",
+      "possibleCostExample": "Further refinement could consume time or reduce room for another person's way of doing things.",
+      "possiblePerspectiveExample": "Someone might value the care; someone else might be uncertain when the work will be finished.",
+      "actionExamples": [
+        "Agree what good enough means for this task before starting.",
+        "Ask which details matter to the person who will use the result."
+      ]
+    },
+    {
+      "id": "needs",
+      "label": "Making room for your needs",
+      "helpfulExample": "Clear limits and requests for help could make commitments more sustainable.",
+      "possibleCostExample": "An unspoken limit could become resentment; a boundary without context could be hard for others to understand.",
+      "possiblePerspectiveExample": "Someone might appreciate knowing what you can offer; someone else might need time to adjust their expectations.",
+      "actionExamples": [
+        "Say what you can offer and what you need to protect.",
+        "Ask for one specific change or piece of help."
+      ]
+    },
+    {
+      "id": "uncertainty",
+      "label": "Responding to uncertainty",
+      "helpfulExample": "Questions, provisional decisions or small trials could make progress possible with incomplete information.",
+      "possibleCostExample": "Waiting could delay a useful step; moving quickly could make an assumption harder to revisit.",
+      "possiblePerspectiveExample": "Someone might appreciate your caution or momentum; someone else might need the assumptions made clearer.",
+      "actionExamples": [
+        "Name one assumption and agree when to review it.",
+        "Choose a small next step that leaves room to change direction."
+      ]
+    }
+  ],
+  "sharedPrompts": {
+    "response": "What would you most likely do?",
+    "motivation": "What would matter most to you in choosing that response?",
+    "optionalValueConnection": "Does this connect with a value that matters to you?",
+    "optionalRealExample": "Does a real example come to mind?",
+    "strengthsReflection": "What could be helpful about your approach, and when might it become less helpful?",
+    "perspectiveReflection": "How might another person experience your response?",
+    "optionalReceivedFeedback": "Have you received any feedback about that?",
+    "action": "Is there something small you would like to try?"
+  },
+  "scenarios": [
+    {
+      "id": "work-study-support-01",
+      "contextId": "work-study",
+      "areaId": "support",
+      "title": "A question before your own deadline",
+      "situation": "Someone new to a task asks you to explain a part they find difficult. You know it well, but you have a deadline of your own later today. They need a starting point before you will next have time for a longer conversation.",
+      "responseOptions": [
+        {
+          "id": "work-study-support-01-a",
+          "label": "Give a short explanation now and offer a longer conversation after your deadline."
+        },
+        {
+          "id": "work-study-support-01-b",
+          "label": "Point them to a useful example and agree when to check how they got on."
+        },
+        {
+          "id": "work-study-support-01-c",
+          "label": "Ask which part is blocking them and work through that part together."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Explore what helping another person means when your own time is limited."
+        },
+        {
+          "set": "personal",
+          "valueId": "1",
+          "reason": "Consider how you share knowledge without assuming what another person needs."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Explore what useful support could look like in this situation."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Consider the balance between someone else's immediate need and your own commitment."
+        }
+      ],
+      "editorialNote": "Each option offers a different form of help. Do not assume that time spent together is always more supportive than a resource."
+    },
+    {
+      "id": "work-study-support-02",
+      "contextId": "work-study",
+      "areaId": "support",
+      "title": "After disappointing feedback",
+      "situation": "Someone you work or study with has received feedback that disappointed them. They ask to talk during a break. You can see a practical change they could make, but you do not know how they feel about the feedback yet.",
+      "responseOptions": [
+        {
+          "id": "work-study-support-02-a",
+          "label": "Listen to how they experienced the feedback before discussing next steps."
+        },
+        {
+          "id": "work-study-support-02-b",
+          "label": "Offer the practical change you noticed and ask whether they want to explore it."
+        },
+        {
+          "id": "work-study-support-02-c",
+          "label": "Ask whether they would prefer to talk things through or work on a next step."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider how friendship influences the support you offer."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Explore the kind of help you want to give and why."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Consider how understanding someone's experience shapes your response."
+        },
+        {
+          "set": "team",
+          "valueId": "5",
+          "reason": "Explore when feedback can become an opportunity to learn."
+        }
+      ],
+      "editorialNote": "Listening, practical suggestions and checking preferences can all help. Avoid assigning empathy or problem-solving labels from an option alone."
+    },
+    {
+      "id": "work-study-responsibility-01",
+      "contextId": "work-study",
+      "areaId": "responsibility",
+      "title": "A gap in a group contribution",
+      "situation": "A group submission is due tomorrow. One person says their section will be shorter than agreed because something unexpected came up. You have finished your own section, but there is not time for everyone to rewrite the whole piece.",
+      "responseOptions": [
+        {
+          "id": "work-study-responsibility-01-a",
+          "label": "Ask the group to agree which gaps matter most and divide those between you."
+        },
+        {
+          "id": "work-study-responsibility-01-b",
+          "label": "Offer to fill one defined gap and explain what you can finish in time."
+        },
+        {
+          "id": "work-study-responsibility-01-c",
+          "label": "Suggest reducing the scope so the submission still represents what everyone can complete."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "32",
+          "reason": "Explore how working with others affects your response to an uneven contribution."
+        },
+        {
+          "set": "personal",
+          "valueId": "4",
+          "reason": "Consider how a deadline shapes what you are willing to take on."
+        },
+        {
+          "set": "team",
+          "valueId": "1",
+          "reason": "Explore which responsibilities you see as yours and which belong to the group."
+        },
+        {
+          "set": "team",
+          "valueId": "35",
+          "reason": "Consider what a fair response to different circumstances might be."
+        },
+        {
+          "set": "team",
+          "valueId": "33",
+          "reason": "Explore how individual contributions serve an agreed shared outcome."
+        }
+      ],
+      "editorialNote": "Do not assume equal shares are always fair or that taking extra work is always the right expression of responsibility."
+    },
+    {
+      "id": "work-study-responsibility-02",
+      "contextId": "work-study",
+      "areaId": "responsibility",
+      "title": "Representing someone else's work",
+      "situation": "A person you collaborate with cannot attend a discussion and asks you to speak about their work. You understand the main points, but there may be questions you cannot answer. They can send a short note before the meeting.",
+      "responseOptions": [
+        {
+          "id": "work-study-responsibility-02-a",
+          "label": "Agree which points you can represent and which questions you will take back to them."
+        },
+        {
+          "id": "work-study-responsibility-02-b",
+          "label": "Ask for a short written update to share and keep your own contribution to context."
+        },
+        {
+          "id": "work-study-responsibility-02-c",
+          "label": "Invite another person with relevant knowledge to cover the discussion with you."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "23",
+          "reason": "Consider how another person's contribution is recognised when you speak on their behalf."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore what needs to be communicated for a useful handover."
+        },
+        {
+          "set": "team",
+          "valueId": "20",
+          "reason": "Consider what you can reasonably be accountable for."
+        },
+        {
+          "set": "team",
+          "valueId": "21",
+          "reason": "Explore how trust and clear limits can support delegation."
+        }
+      ],
+      "editorialNote": "Representing a contribution does not mean claiming ownership or having every answer."
+    },
+    {
+      "id": "work-study-openness-01",
+      "contextId": "work-study",
+      "areaId": "openness",
+      "title": "A suggestion with momentum",
+      "situation": "During a planning discussion, people begin to favour an approach you think could create extra work later. You have some relevant experience, but another person knows more about the current constraints. A decision is needed by the end of the discussion.",
+      "responseOptions": [
+        {
+          "id": "work-study-openness-01-a",
+          "label": "Explain the possible difficulty and ask how it fits the current constraints."
+        },
+        {
+          "id": "work-study-openness-01-b",
+          "label": "Ask the person with more context to talk through the part you are unsure about."
+        },
+        {
+          "id": "work-study-openness-01-c",
+          "label": "Suggest a small check before the group commits to the full approach."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore how you communicate a concern while information is incomplete."
+        },
+        {
+          "set": "personal",
+          "valueId": "17",
+          "reason": "Consider when you want to influence a group's direction."
+        },
+        {
+          "set": "team",
+          "valueId": "15",
+          "reason": "Explore how different views can enter a decision."
+        },
+        {
+          "set": "team",
+          "valueId": "24",
+          "reason": "Consider how your experience and its limits shape what you say."
+        }
+      ],
+      "editorialNote": "A concern can be useful without being correct. Neither directness nor questions establish a motive."
+    },
+    {
+      "id": "work-study-openness-02",
+      "contextId": "work-study",
+      "areaId": "openness",
+      "title": "A contribution left out",
+      "situation": "A summary of a shared piece of work mentions several contributions but leaves out something another person did. You think the omission was accidental. The summary is already being circulated, and you could either reply to the group or speak to its author.",
+      "responseOptions": [
+        {
+          "id": "work-study-openness-02-a",
+          "label": "Reply with a brief acknowledgement of the contribution that was missed."
+        },
+        {
+          "id": "work-study-openness-02-b",
+          "label": "Contact the author and suggest adding the missing contribution."
+        },
+        {
+          "id": "work-study-openness-02-c",
+          "label": "Ask the person whose work was omitted whether they want you to raise it."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "23",
+          "reason": "Explore what recognition means when someone else's work is overlooked."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Consider the timing and audience for raising an omission."
+        },
+        {
+          "set": "team",
+          "valueId": "3",
+          "reason": "Explore how contributions can be acknowledged."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Consider how to take account of the person affected."
+        }
+      ],
+      "editorialNote": "Do not imply that publicly correcting an omission or privately discussing it is always more considerate."
+    },
+    {
+      "id": "work-study-standards-01",
+      "contextId": "work-study",
+      "areaId": "standards",
+      "title": "The last hour before sharing",
+      "situation": "A piece of work is accurate enough to use, but its presentation is inconsistent. You have one hour before it needs to be shared. You could improve the layout, check the important details again, or ask the recipient which would be most useful.",
+      "responseOptions": [
+        {
+          "id": "work-study-standards-01-a",
+          "label": "Use the hour to make the presentation clearer and more consistent."
+        },
+        {
+          "id": "work-study-standards-01-b",
+          "label": "Check the most consequential details and leave minor presentation differences."
+        },
+        {
+          "id": "work-study-standards-01-c",
+          "label": "Ask the recipient which improvement would help them most, then focus on that."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "7",
+          "reason": "Explore which details deserve care when time is limited."
+        },
+        {
+          "set": "personal",
+          "valueId": "4",
+          "reason": "Consider how a deadline affects the standard you aim for."
+        },
+        {
+          "set": "team",
+          "valueId": "12",
+          "reason": "Explore what excellence means for the person using the work."
+        },
+        {
+          "set": "team",
+          "valueId": "26",
+          "reason": "Consider how you choose where to put limited attention."
+        }
+      ],
+      "editorialNote": "Presentation can affect usefulness. Avoid treating it as vanity or accuracy checking as the automatic best answer."
+    },
+    {
+      "id": "work-study-standards-02",
+      "contextId": "work-study",
+      "areaId": "standards",
+      "title": "A different way to reach the result",
+      "situation": "A person working with you completes part of a shared task in a different way from yours. Their result meets the brief, but it may be harder for you to maintain later. There is time to discuss the approach before the next stage begins.",
+      "responseOptions": [
+        {
+          "id": "work-study-standards-02-a",
+          "label": "Ask them to explain the approach and compare what each method makes easier."
+        },
+        {
+          "id": "work-study-standards-02-b",
+          "label": "Suggest agreeing one method for future work so maintenance is more predictable."
+        },
+        {
+          "id": "work-study-standards-02-c",
+          "label": "Keep their approach for this stage and document the handover you will need."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "34",
+          "reason": "Consider what you might learn from a different way of working."
+        },
+        {
+          "set": "personal",
+          "valueId": "13",
+          "reason": "Explore the value of a predictable method alongside another person's approach."
+        },
+        {
+          "set": "team",
+          "valueId": "28",
+          "reason": "Consider which shared standards genuinely matter."
+        },
+        {
+          "set": "team",
+          "valueId": "29",
+          "reason": "Explore when adapting the method could be useful."
+        }
+      ],
+      "editorialNote": "A different method is not a lower standard. The maintenance concern should remain a practical trade-off."
+    },
+    {
+      "id": "work-study-needs-01",
+      "contextId": "work-study",
+      "areaId": "needs",
+      "title": "A request near your stopping time",
+      "situation": "Near the time you planned to stop, someone asks for help with a task they want to finish today. You have a personal commitment soon afterwards. You could offer a little time now, return tomorrow, or point them towards another source of help.",
+      "responseOptions": [
+        {
+          "id": "work-study-needs-01-a",
+          "label": "Offer a short, clearly bounded piece of help before you stop."
+        },
+        {
+          "id": "work-study-needs-01-b",
+          "label": "Explain your timing and arrange to help tomorrow."
+        },
+        {
+          "id": "work-study-needs-01-c",
+          "label": "Suggest another person or resource that may help them finish today."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Explore how control over your time affects what you can offer."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Consider how helping can take different forms when your capacity is limited."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Explore how you balance commitments."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Consider how clearly you communicate what is available."
+        }
+      ],
+      "editorialNote": "Do not frame a personal commitment as less legitimate than the task or make refusal the only valid boundary."
+    },
+    {
+      "id": "work-study-needs-02",
+      "contextId": "work-study",
+      "areaId": "needs",
+      "title": "Two useful commitments",
+      "situation": "You have agreed to a voluntary group activity and also need time to prepare for something important to you. Both now fall in the same week. The group could adjust if you tell them soon, but people have begun planning around your contribution.",
+      "responseOptions": [
+        {
+          "id": "work-study-needs-02-a",
+          "label": "Ask the group whether your contribution can be reduced or shared."
+        },
+        {
+          "id": "work-study-needs-02-b",
+          "label": "Keep the group commitment and make a smaller preparation plan for yourself."
+        },
+        {
+          "id": "work-study-needs-02-c",
+          "label": "Explain the conflict and propose another contribution at a later date."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Consider which commitments need space in your available time."
+        },
+        {
+          "set": "personal",
+          "valueId": "31",
+          "reason": "Explore how your own priorities sit alongside a group commitment."
+        },
+        {
+          "set": "team",
+          "valueId": "8",
+          "reason": "Consider what dedication means when circumstances change."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Explore a sustainable balance between commitments."
+        }
+      ],
+      "editorialNote": "Neither keeping an agreement at any cost nor changing it automatically expresses a particular value."
+    },
+    {
+      "id": "work-study-uncertainty-01",
+      "contextId": "work-study",
+      "areaId": "uncertainty",
+      "title": "An instruction with two meanings",
+      "situation": "You receive instructions that could reasonably mean two different things. The person who wrote them will be unavailable until later. Part of the work is clear, and the deadline leaves some room to adjust.",
+      "responseOptions": [
+        {
+          "id": "work-study-uncertainty-01-a",
+          "label": "Start with the clear part and list the questions you need answered."
+        },
+        {
+          "id": "work-study-uncertainty-01-b",
+          "label": "Choose the interpretation that seems most likely and make that assumption visible."
+        },
+        {
+          "id": "work-study-uncertainty-01-c",
+          "label": "Sketch both possible approaches so the later clarification is easier."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "27",
+          "reason": "Explore how you make decisions when not everything is known."
+        },
+        {
+          "set": "personal",
+          "valueId": "19",
+          "reason": "Consider what would make a provisional approach feel dependable."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Explore which uncertainties need to be made explicit."
+        },
+        {
+          "set": "team",
+          "valueId": "34",
+          "reason": "Consider how to use the information and time available."
+        }
+      ],
+      "editorialNote": "All options can preserve progress. Do not assume waiting for some information is indecision."
+    },
+    {
+      "id": "work-study-uncertainty-02",
+      "contextId": "work-study",
+      "areaId": "uncertainty",
+      "title": "New information halfway through",
+      "situation": "You are halfway through a project when new information suggests the original approach may be less useful than expected. Changing direction would cost time. The current approach could still deliver something usable.",
+      "responseOptions": [
+        {
+          "id": "work-study-uncertainty-02-a",
+          "label": "Try a small part of the alternative before deciding whether to change direction."
+        },
+        {
+          "id": "work-study-uncertainty-02-b",
+          "label": "Finish the current stage, then review what the new information changes."
+        },
+        {
+          "id": "work-study-uncertainty-02-c",
+          "label": "Bring the trade-off to the people involved and agree what to prioritise."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "22",
+          "reason": "Consider how much uncertainty you are willing to accept in changing direction."
+        },
+        {
+          "set": "personal",
+          "valueId": "34",
+          "reason": "Explore how new information affects what you want to learn or try."
+        },
+        {
+          "set": "team",
+          "valueId": "4",
+          "reason": "Consider when adapting a plan is worthwhile."
+        },
+        {
+          "set": "team",
+          "valueId": "27",
+          "reason": "Explore when persistence helps and when revisiting the plan helps."
+        }
+      ],
+      "editorialNote": "Persistence and adaptation can both be useful. The amount of work already done does not settle the choice."
+    },
+    {
+      "id": "home-support-01",
+      "contextId": "home",
+      "areaId": "support",
+      "title": "Learning a practical task",
+      "situation": "Someone you share everyday responsibilities with is learning a practical task you know well. They ask a question while trying it. Their approach is slower than yours, but there is no urgent deadline.",
+      "responseOptions": [
+        {
+          "id": "home-support-01-a",
+          "label": "Show the part they asked about, then let them continue."
+        },
+        {
+          "id": "home-support-01-b",
+          "label": "Talk them through the next step while they do it themselves."
+        },
+        {
+          "id": "home-support-01-c",
+          "label": "Offer to do it together this time so they can see the whole process."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "1",
+          "reason": "Explore how you share practical knowledge."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Consider what kind of help is useful when someone is learning."
+        },
+        {
+          "set": "team",
+          "valueId": "5",
+          "reason": "Explore how support can leave room for learning."
+        },
+        {
+          "set": "team",
+          "valueId": "21",
+          "reason": "Consider how trust affects the space you give someone."
+        }
+      ],
+      "editorialNote": "Hands-on help is not automatically taking over, and leaving someone to try is not automatically neglect."
+    },
+    {
+      "id": "home-support-02",
+      "contextId": "home",
+      "areaId": "support",
+      "title": "An offer after a tiring week",
+      "situation": "Someone close to you has had a tiring week and mentions that several everyday jobs have built up. They have not asked you to do a particular task. You have some free time, but you do not know which job is weighing on them most.",
+      "responseOptions": [
+        {
+          "id": "home-support-02-a",
+          "label": "Offer to do one job you know is waiting and check whether that would help."
+        },
+        {
+          "id": "home-support-02-b",
+          "label": "Ask which part feels most difficult before offering practical help."
+        },
+        {
+          "id": "home-support-02-c",
+          "label": "Suggest spending some time together making the jobs more manageable."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Explore what you hope to achieve by offering practical help."
+        },
+        {
+          "set": "personal",
+          "valueId": "14",
+          "reason": "Consider when conversation itself is part of the support."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Explore how understanding the person's experience affects your offer."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Consider how different forms of support might be received."
+        }
+      ],
+      "editorialNote": "Do not equate doing a job with care or asking questions with a lack of initiative."
+    },
+    {
+      "id": "home-responsibility-01",
+      "contextId": "home",
+      "areaId": "responsibility",
+      "title": "A recurring job left unfinished",
+      "situation": "A routine job in a shared living arrangement has been left unfinished more than once. You can do it quickly, but you would like a more dependable arrangement. The other person has different availability this week.",
+      "responseOptions": [
+        {
+          "id": "home-responsibility-01-a",
+          "label": "Do the immediate job and arrange a conversation about future responsibility."
+        },
+        {
+          "id": "home-responsibility-01-b",
+          "label": "Leave a clear reminder and ask when the other person can finish it."
+        },
+        {
+          "id": "home-responsibility-01-c",
+          "label": "Suggest changing how the job is divided to fit each person's availability."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "13",
+          "reason": "Explore what a predictable routine contributes to shared life."
+        },
+        {
+          "set": "personal",
+          "valueId": "32",
+          "reason": "Consider how you want responsibility to be shared."
+        },
+        {
+          "set": "team",
+          "valueId": "1",
+          "reason": "Explore ownership of recurring tasks."
+        },
+        {
+          "set": "team",
+          "valueId": "35",
+          "reason": "Consider fairness when people's circumstances differ."
+        }
+      ],
+      "editorialNote": "Do not infer laziness or bad intent from an unfinished job. The situation leaves the reason open."
+    },
+    {
+      "id": "home-responsibility-02",
+      "contextId": "home",
+      "areaId": "responsibility",
+      "title": "Passing on an everyday arrangement",
+      "situation": "You will be unavailable for a few days and someone else is taking over an arrangement you usually handle. They know the basics and prefer a different way of organising it. Some details need to stay consistent, while others can change.",
+      "responseOptions": [
+        {
+          "id": "home-responsibility-02-a",
+          "label": "Explain the details that matter and leave the rest to their judgement."
+        },
+        {
+          "id": "home-responsibility-02-b",
+          "label": "Write a short guide to your usual approach and invite them to adapt it."
+        },
+        {
+          "id": "home-responsibility-02-c",
+          "label": "Talk through their plan together so both of you know what will happen."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "31",
+          "reason": "Explore how much independence each person has in a shared arrangement."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Consider what needs to be communicated in a handover."
+        },
+        {
+          "set": "team",
+          "valueId": "21",
+          "reason": "Explore how trust and practical guidance can work together."
+        },
+        {
+          "set": "team",
+          "valueId": "20",
+          "reason": "Consider which responsibilities need clear agreement."
+        }
+      ],
+      "editorialNote": "The original way is not necessarily better. Separate practical constraints from personal preference."
+    },
+    {
+      "id": "home-openness-01",
+      "contextId": "home",
+      "areaId": "openness",
+      "title": "Different preferences for shared time",
+      "situation": "You and someone you spend time with have different ideas about an evening you planned together. Neither plan has been booked. They seem enthusiastic about their idea, while you had been looking forward to something quieter.",
+      "responseOptions": [
+        {
+          "id": "home-openness-01-a",
+          "label": "Explain what you had hoped for and ask how to make room for both preferences."
+        },
+        {
+          "id": "home-openness-01-b",
+          "label": "Suggest a compromise that includes part of each idea."
+        },
+        {
+          "id": "home-openness-01-c",
+          "label": "Go with their idea this time and propose a quieter plan for another evening."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "33",
+          "reason": "Explore what a peaceful evening means to you."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Consider how you express a preference before plans are settled."
+        },
+        {
+          "set": "team",
+          "valueId": "15",
+          "reason": "Explore how both views can be heard."
+        },
+        {
+          "set": "team",
+          "valueId": "29",
+          "reason": "Consider when flexibility feels worthwhile."
+        }
+      ],
+      "editorialNote": "Quiet and active preferences are equally legitimate. Agreement on this occasion need not imply a recurring pattern."
+    },
+    {
+      "id": "home-openness-02",
+      "contextId": "home",
+      "areaId": "openness",
+      "title": "A small irritation becoming a pattern",
+      "situation": "Something in an everyday arrangement has begun to irritate you. It is not a serious problem, and the other person may not have noticed. You will both have some free time later, but it would also be possible to make a small practical adjustment yourself.",
+      "responseOptions": [
+        {
+          "id": "home-openness-02-a",
+          "label": "Raise the pattern at a calm moment and ask how the other person sees it."
+        },
+        {
+          "id": "home-openness-02-b",
+          "label": "Try a small practical change and see whether it resolves the irritation."
+        },
+        {
+          "id": "home-openness-02-c",
+          "label": "Mention it briefly the next time it happens and suggest an adjustment."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "33",
+          "reason": "Consider what helps shared life feel peaceful."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore how timing affects a difficult conversation."
+        },
+        {
+          "set": "team",
+          "valueId": "22",
+          "reason": "Consider when making a concern visible could help."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Explore how to leave room for the other person's experience."
+        }
+      ],
+      "editorialNote": "Do not assume that immediate discussion or making an adjustment yourself is always better. Avoid escalating a minor irritation."
+    },
+    {
+      "id": "home-standards-01",
+      "contextId": "home",
+      "areaId": "standards",
+      "title": "A shared job done differently",
+      "situation": "Someone finishes a shared household job differently from how you would do it. The main purpose has been met, but a detail you care about is missing. You are not sure whether you have ever explained why that detail matters to you.",
+      "responseOptions": [
+        {
+          "id": "home-standards-01-a",
+          "label": "Explain the detail and ask whether you can agree how to handle it next time."
+        },
+        {
+          "id": "home-standards-01-b",
+          "label": "Accept the result this time and decide which details really need a shared standard."
+        },
+        {
+          "id": "home-standards-01-c",
+          "label": "Finish the detail yourself and discuss it when you next plan the job together."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "7",
+          "reason": "Explore which details you consider important."
+        },
+        {
+          "set": "personal",
+          "valueId": "32",
+          "reason": "Consider how different preferences affect working together."
+        },
+        {
+          "set": "team",
+          "valueId": "28",
+          "reason": "Explore what a shared standard needs to include."
+        },
+        {
+          "set": "team",
+          "valueId": "24",
+          "reason": "Consider what you may have assumed was already understood."
+        }
+      ],
+      "editorialNote": "The scenario must not imply that your preferred method defines competence or care."
+    },
+    {
+      "id": "home-standards-02",
+      "contextId": "home",
+      "areaId": "standards",
+      "title": "Getting ready with limited time",
+      "situation": "You are preparing a space for someone to visit. There is time to make it welcoming and usable, but not to finish everything you had imagined. You could focus on practical comfort, appearance, or asking the visitor what would make the visit easier.",
+      "responseOptions": [
+        {
+          "id": "home-standards-02-a",
+          "label": "Prioritise the practical things that will help the visitor feel comfortable."
+        },
+        {
+          "id": "home-standards-02-b",
+          "label": "Finish a few visible details that make the space feel welcoming to you."
+        },
+        {
+          "id": "home-standards-02-c",
+          "label": "Check whether the visitor has any needs that should guide your remaining time."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "8",
+          "reason": "Consider how creative presentation contributes to something feeling welcoming."
+        },
+        {
+          "set": "personal",
+          "valueId": "7",
+          "reason": "Explore which details deserve your attention."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Consider how the other person's needs affect the standard you aim for."
+        },
+        {
+          "set": "team",
+          "valueId": "26",
+          "reason": "Explore where to focus limited time."
+        }
+      ],
+      "editorialNote": "Creative presentation can have genuine value. Do not set up appearance and care as opposites."
+    },
+    {
+      "id": "home-needs-01",
+      "contextId": "home",
+      "areaId": "needs",
+      "title": "An unplanned request during your own time",
+      "situation": "You have set aside an afternoon for something you enjoy. Someone asks for help with a non-urgent practical task. Another time would be possible, though less convenient for them.",
+      "responseOptions": [
+        {
+          "id": "home-needs-01-a",
+          "label": "Offer another time and keep the afternoon you had planned."
+        },
+        {
+          "id": "home-needs-01-b",
+          "label": "Agree to help with one part, while keeping some of the afternoon for yourself."
+        },
+        {
+          "id": "home-needs-01-c",
+          "label": "Help this afternoon and choose a specific time to return to your own plan."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Explore how you protect time for things you choose."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Consider what you want to offer when another time is possible."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Explore the balance between your plans and someone else's convenience."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Consider different ways to be available without offering unlimited time."
+        }
+      ],
+      "editorialNote": "A compromise is not inherently wiser than keeping or changing the original plan."
+    },
+    {
+      "id": "home-needs-02",
+      "contextId": "home",
+      "areaId": "needs",
+      "title": "More effort than you can keep giving",
+      "situation": "An everyday arrangement is taking more of your energy than you expected. It matters to you, but continuing in the same way would crowd out rest or another commitment. There is an opportunity to discuss how it works next week.",
+      "responseOptions": [
+        {
+          "id": "home-needs-02-a",
+          "label": "Ask to share or reduce part of the arrangement at the next discussion."
+        },
+        {
+          "id": "home-needs-02-b",
+          "label": "Make a temporary adjustment now and explain what you can manage."
+        },
+        {
+          "id": "home-needs-02-c",
+          "label": "Keep it going for one more week while preparing a specific proposal for change."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Consider how much choice you have over recurring demands on your time."
+        },
+        {
+          "set": "personal",
+          "valueId": "31",
+          "reason": "Explore making space for your own priorities."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Consider whether the arrangement is sustainable."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Explore how to communicate what needs to change."
+        }
+      ],
+      "editorialNote": "Do not assume a specific caring role or relationship. Keep the focus on an ordinary arrangement the person can change."
+    },
+    {
+      "id": "home-uncertainty-01",
+      "contextId": "home",
+      "areaId": "uncertainty",
+      "title": "A plan without a confirmed time",
+      "situation": "You need to plan part of your day around a visit or delivery, but the timing is not confirmed. You have some flexible jobs and one activity you would prefer not to miss. A firmer update may arrive later.",
+      "responseOptions": [
+        {
+          "id": "home-uncertainty-01-a",
+          "label": "Make a provisional plan around the flexible jobs and keep the preferred activity in place."
+        },
+        {
+          "id": "home-uncertainty-01-b",
+          "label": "Ask for the best available time estimate before deciding what to rearrange."
+        },
+        {
+          "id": "home-uncertainty-01-c",
+          "label": "Move the preferred activity to another time so the day is easier to manage."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "13",
+          "reason": "Explore what a predictable plan provides."
+        },
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Consider how uncertainty affects the use of your time."
+        },
+        {
+          "set": "team",
+          "valueId": "29",
+          "reason": "Explore which parts of a plan can adapt."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Consider what clarification would actually change your decision."
+        }
+      ],
+      "editorialNote": "Do not reward the most flexible option automatically; a preferred activity can be important."
+    },
+    {
+      "id": "home-uncertainty-02",
+      "contextId": "home",
+      "areaId": "uncertainty",
+      "title": "Trying a different routine",
+      "situation": "A familiar routine is no longer working as well as it used to. Someone suggests a different approach, but neither of you knows whether it will fit your everyday commitments. You could try it briefly without making a permanent change.",
+      "responseOptions": [
+        {
+          "id": "home-uncertainty-02-a",
+          "label": "Try the new approach for a short period and agree when to review it."
+        },
+        {
+          "id": "home-uncertainty-02-b",
+          "label": "Change one part of the current routine before replacing the whole thing."
+        },
+        {
+          "id": "home-uncertainty-02-c",
+          "label": "Talk through the practical concerns first and decide what would make a trial useful."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "12",
+          "reason": "Consider how variety affects your willingness to change a routine."
+        },
+        {
+          "set": "personal",
+          "valueId": "13",
+          "reason": "Explore what you want to retain from a familiar routine."
+        },
+        {
+          "set": "team",
+          "valueId": "4",
+          "reason": "Consider how to adapt as circumstances change."
+        },
+        {
+          "set": "team",
+          "valueId": "23",
+          "reason": "Explore what a small trial could teach you."
+        }
+      ],
+      "editorialNote": "Both continuity and experimentation can be useful; the suggested routine is not assumed to be an improvement."
+    },
+    {
+      "id": "relationships-support-01",
+      "contextId": "relationships",
+      "areaId": "support",
+      "title": "A decision on someone's mind",
+      "situation": "A friend is considering a change that would affect their daily life. They need to decide soon and ask if they can talk it through with you. You have faced something similar, but their circumstances differ from yours.",
+      "responseOptions": [
+        {
+          "id": "relationships-support-01-a",
+          "label": "Share what you learnt from your experience and explain where their situation seems different."
+        },
+        {
+          "id": "relationships-support-01-b",
+          "label": "Ask questions to help them compare the options they are considering."
+        },
+        {
+          "id": "relationships-support-01-c",
+          "label": "Give them space to talk about how they feel before discussing the decision itself."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Explore how friendship influences the kind of support you offer."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Consider what being helpful means in a decision that belongs to someone else."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Explore understanding the person's experience before choosing how to help."
+        },
+        {
+          "set": "team",
+          "valueId": "24",
+          "reason": "Consider how the limits of your own experience affect the advice you offer."
+        }
+      ],
+      "editorialNote": "Each response offers experience, practical thinking or time to be heard. None establishes what the friend wants."
+    },
+    {
+      "id": "relationships-support-02",
+      "contextId": "relationships",
+      "areaId": "support",
+      "title": "More to do than expected",
+      "situation": "A friend is organising a small gathering you will attend. They tell you there is more preparation than they expected and they are unsure what to do next. You have an hour available to help, but cannot stay longer.",
+      "responseOptions": [
+        {
+          "id": "relationships-support-02-a",
+          "label": "Offer to take one preparation task off their hands for the hour you have."
+        },
+        {
+          "id": "relationships-support-02-b",
+          "label": "Talk through what is still needed and help them decide what can be simplified."
+        },
+        {
+          "id": "relationships-support-02-c",
+          "label": "Offer to coordinate the remaining preparation for that hour, if they would welcome it."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Explore how to offer practical help that fits the situation."
+        },
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Consider how your available time shapes what you can offer."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Explore which kind of support might be useful."
+        },
+        {
+          "set": "team",
+          "valueId": "14",
+          "reason": "Consider when coordination helps and what agreement it requires."
+        }
+      ],
+      "editorialNote": "Practical help, simplifying and temporary coordination are all plausible. Do not assume coordination is controlling or one task is always the most considerate response."
+    },
+    {
+      "id": "relationships-responsibility-01",
+      "contextId": "relationships",
+      "areaId": "responsibility",
+      "title": "The arrangements you usually make",
+      "situation": "You usually organise when a small group of friends meets. You enjoy seeing everyone, but keeping track of dates and replies is becoming tiring. No one has explicitly agreed that organising should always be your job.",
+      "responseOptions": [
+        {
+          "id": "relationships-responsibility-01-a",
+          "label": "Ask someone else to arrange the next meeting and offer the information they need."
+        },
+        {
+          "id": "relationships-responsibility-01-b",
+          "label": "Suggest taking turns so the organising is shared more predictably."
+        },
+        {
+          "id": "relationships-responsibility-01-c",
+          "label": "Make a simpler plan that needs fewer replies and explain why you are changing it."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider how friendship affects the effort you put into keeping in touch."
+        },
+        {
+          "set": "personal",
+          "valueId": "32",
+          "reason": "Explore how organising could become a shared activity."
+        },
+        {
+          "set": "team",
+          "valueId": "1",
+          "reason": "Consider how an informal responsibility became established."
+        },
+        {
+          "set": "team",
+          "valueId": "35",
+          "reason": "Explore what a fair arrangement would look like to those involved."
+        }
+      ],
+      "editorialNote": "Do not suggest that others are taking advantage deliberately. The arrangement may never have been discussed."
+    },
+    {
+      "id": "relationships-responsibility-02",
+      "contextId": "relationships",
+      "areaId": "responsibility",
+      "title": "A promise that is harder to keep",
+      "situation": "You promised to help a friend with a practical task this weekend. Something has changed and you can now offer less time than expected. The friend still needs help, and you have a few days to discuss alternatives.",
+      "responseOptions": [
+        {
+          "id": "relationships-responsibility-02-a",
+          "label": "Tell them now what you can still do and agree which part would help most."
+        },
+        {
+          "id": "relationships-responsibility-02-b",
+          "label": "Ask whether moving the task to another time would work for both of you."
+        },
+        {
+          "id": "relationships-responsibility-02-c",
+          "label": "Help them find another source of support while keeping the part you can manage."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Explore how you want to show up for a friend when circumstances change."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Consider what needs to be communicated about a promise."
+        },
+        {
+          "set": "team",
+          "valueId": "20",
+          "reason": "Explore taking responsibility for an agreement that needs to change."
+        },
+        {
+          "set": "team",
+          "valueId": "21",
+          "reason": "Consider how clarity and follow-through can maintain trust."
+        }
+      ],
+      "editorialNote": "The changed circumstances are legitimate. Do not equate keeping the original promise at any cost with reliability."
+    },
+    {
+      "id": "relationships-openness-01",
+      "contextId": "relationships",
+      "areaId": "openness",
+      "title": "The usual plan",
+      "situation": "A group of friends is arranging a get-together. The plan usually follows what a few people prefer. You would enjoy something different this time, but arrangements need to be settled today and someone has already done most of the organising.",
+      "responseOptions": [
+        {
+          "id": "relationships-openness-01-a",
+          "label": "Suggest a different plan in the group conversation and explain what appeals to you about it."
+        },
+        {
+          "id": "relationships-openness-01-b",
+          "label": "Contact the organiser privately to ask whether there is room for an alternative."
+        },
+        {
+          "id": "relationships-openness-01-c",
+          "label": "Join the current plan and offer to organise something different next time."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore how you express a preference in a group."
+        },
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider how friendship and belonging influence your response."
+        },
+        {
+          "set": "team",
+          "valueId": "6",
+          "reason": "Explore how different preferences get included."
+        },
+        {
+          "set": "team",
+          "valueId": "15",
+          "reason": "Consider how to make a different view heard."
+        }
+      ],
+      "editorialNote": "The choices balance expressing a preference, recognising effort and keeping arrangements workable. Joining this plan must not be labelled avoidance."
+    },
+    {
+      "id": "relationships-openness-02",
+      "contextId": "relationships",
+      "areaId": "openness",
+      "title": "A plan you have doubts about",
+      "situation": "A friend asks for your honest opinion about a plan they are excited about. You see something that could make it harder to carry out. You may be missing information, and they are hoping to make a start this week.",
+      "responseOptions": [
+        {
+          "id": "relationships-openness-02-a",
+          "label": "Explain the concern directly and ask how they are thinking about it."
+        },
+        {
+          "id": "relationships-openness-02-b",
+          "label": "Ask them to talk through that part of the plan before offering your view."
+        },
+        {
+          "id": "relationships-openness-02-c",
+          "label": "Start with what you like about the plan, then explain the concern you have."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore how you communicate a difficult view."
+        },
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider what friendship means when encouragement and concern both matter."
+        },
+        {
+          "set": "team",
+          "valueId": "13",
+          "reason": "Explore what giving an honest opinion means in this situation."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Consider how to take account of the friend's experience."
+        }
+      ],
+      "editorialNote": "All choices engage with the concern. Do not assign honesty, kindness or courage solely from the option."
+    },
+    {
+      "id": "relationships-standards-01",
+      "contextId": "relationships",
+      "areaId": "standards",
+      "title": "A shared gift",
+      "situation": "You and a friend are putting together a small gift for someone you both know. Your friend prefers something simple and ready now. You would enjoy adding a personal detail, but it would take another evening and a little more coordination.",
+      "responseOptions": [
+        {
+          "id": "relationships-standards-01-a",
+          "label": "Suggest one personal detail you could add without changing the whole plan."
+        },
+        {
+          "id": "relationships-standards-01-b",
+          "label": "Keep the simple version and put the extra thought into a message."
+        },
+        {
+          "id": "relationships-standards-01-c",
+          "label": "Ask your friend whether they want to spend another evening developing the idea together."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "8",
+          "reason": "Explore what creative detail contributes to a gift."
+        },
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider how friendship shapes the effort you want to make."
+        },
+        {
+          "set": "team",
+          "valueId": "10",
+          "reason": "Explore when a more personal approach feels worthwhile."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Consider the time and coordination involved in adding more."
+        }
+      ],
+      "editorialNote": "Neither a simple gift nor a more elaborate one establishes how much a person cares."
+    },
+    {
+      "id": "relationships-standards-02",
+      "contextId": "relationships",
+      "areaId": "standards",
+      "title": "Two versions of a shared memory",
+      "situation": "You and someone close to you are making a small collection of photos or memories to share. You prefer a carefully edited selection; they would rather include more of the informal moments. There is no requirement to produce one particular style.",
+      "responseOptions": [
+        {
+          "id": "relationships-standards-02-a",
+          "label": "Suggest making a shorter main selection with space for the extra moments separately."
+        },
+        {
+          "id": "relationships-standards-02-b",
+          "label": "Ask what each of you wants the collection to capture before deciding the format."
+        },
+        {
+          "id": "relationships-standards-02-c",
+          "label": "Try putting a few examples together in each style and compare how they feel."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "8",
+          "reason": "Explore how creative choices shape what you want to share."
+        },
+        {
+          "set": "personal",
+          "valueId": "7",
+          "reason": "Consider what editing and attention to detail add to the result."
+        },
+        {
+          "set": "team",
+          "valueId": "10",
+          "reason": "Explore different ways to represent a shared experience."
+        },
+        {
+          "set": "team",
+          "valueId": "29",
+          "reason": "Consider how to adapt when preferences differ."
+        }
+      ],
+      "editorialNote": "Careful editing and informal breadth are different creative priorities, not higher and lower standards."
+    },
+    {
+      "id": "relationships-needs-01",
+      "contextId": "relationships",
+      "areaId": "needs",
+      "title": "A conversation when you are tired",
+      "situation": "A friend asks whether you can talk about something on their mind. You care about them, but you are tired and would find a long conversation difficult tonight. They have not said that the matter is urgent.",
+      "responseOptions": [
+        {
+          "id": "relationships-needs-01-a",
+          "label": "Offer a short conversation tonight and make clear when you will need to stop."
+        },
+        {
+          "id": "relationships-needs-01-b",
+          "label": "Explain that you can listen more fully tomorrow and agree a time."
+        },
+        {
+          "id": "relationships-needs-01-c",
+          "label": "Ask whether they need to talk tonight or whether another time would be helpful."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Explore what being available to a friend means to you."
+        },
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Consider how you make room for rest and your own time."
+        },
+        {
+          "set": "team",
+          "valueId": "11",
+          "reason": "Explore noticing both the friend's need and your own capacity."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Consider how different forms of availability can be sustainable."
+        }
+      ],
+      "editorialNote": "Keep the situation explicitly non-urgent; this is an everyday boundary reflection, not crisis-support guidance."
+    },
+    {
+      "id": "relationships-needs-02",
+      "contextId": "relationships",
+      "areaId": "needs",
+      "title": "A change to how often you meet",
+      "situation": "You have been meeting someone regularly for an activity you both enjoy. Your commitments have changed and the current frequency no longer fits comfortably. You still want to stay in touch, and there are several ways the arrangement could change.",
+      "responseOptions": [
+        {
+          "id": "relationships-needs-02-a",
+          "label": "Suggest meeting less often while keeping the activity you both enjoy."
+        },
+        {
+          "id": "relationships-needs-02-b",
+          "label": "Ask whether a shorter or more flexible arrangement would suit them."
+        },
+        {
+          "id": "relationships-needs-02-c",
+          "label": "Pause the regular arrangement for a while and suggest another way to stay in touch."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Explore how to make room for changing commitments."
+        },
+        {
+          "set": "personal",
+          "valueId": "20",
+          "reason": "Consider what helps a friendship continue when an arrangement changes."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Explore making your needs clear."
+        },
+        {
+          "set": "team",
+          "valueId": "29",
+          "reason": "Consider different ways to adapt a shared routine."
+        }
+      ],
+      "editorialNote": "Changing frequency does not imply that the relationship is less valued."
+    },
+    {
+      "id": "relationships-uncertainty-01",
+      "contextId": "relationships",
+      "areaId": "uncertainty",
+      "title": "An invitation with an unfamiliar group",
+      "situation": "A friend invites you to join an activity with people you do not know. You are interested but unsure how the group works. You could ask more beforehand, attend briefly, or choose a later occasion when the friend can tell you more.",
+      "responseOptions": [
+        {
+          "id": "relationships-uncertainty-01-a",
+          "label": "Ask a few practical questions before deciding whether to join."
+        },
+        {
+          "id": "relationships-uncertainty-01-b",
+          "label": "Go along for part of the activity and see how it feels."
+        },
+        {
+          "id": "relationships-uncertainty-01-c",
+          "label": "Choose a later occasion and ask your friend to tell you how this one goes."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "14",
+          "reason": "Explore your interest in contact with new people."
+        },
+        {
+          "set": "personal",
+          "valueId": "22",
+          "reason": "Consider how you approach an unfamiliar experience."
+        },
+        {
+          "set": "team",
+          "valueId": "25",
+          "reason": "Explore what trying something new would mean for you."
+        },
+        {
+          "set": "team",
+          "valueId": "18",
+          "reason": "Consider which practical information would help you feel comfortable."
+        }
+      ],
+      "editorialNote": "Do not frame attending as brave and declining as failure. Participation is optional and context-dependent."
+    },
+    {
+      "id": "relationships-uncertainty-02",
+      "contextId": "relationships",
+      "areaId": "uncertainty",
+      "title": "A brief reply you are unsure about",
+      "situation": "You send a friend a message about a shared plan and receive a shorter reply than you expected. It could mean several things. The practical plan is still workable, and you do not know what else is happening in their day.",
+      "responseOptions": [
+        {
+          "id": "relationships-uncertainty-02-a",
+          "label": "Ask a simple question to check whether the plan still works for them."
+        },
+        {
+          "id": "relationships-uncertainty-02-b",
+          "label": "Leave some time before following up so they can reply when ready."
+        },
+        {
+          "id": "relationships-uncertainty-02-c",
+          "label": "Continue with the agreed plan and check in when you next speak."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore when clarification through conversation would help."
+        },
+        {
+          "set": "personal",
+          "valueId": "33",
+          "reason": "Consider how you want to handle ambiguity in a relationship."
+        },
+        {
+          "set": "team",
+          "valueId": "21",
+          "reason": "Explore trust when information is limited."
+        },
+        {
+          "set": "team",
+          "valueId": "24",
+          "reason": "Consider how much you can reasonably infer from a short reply."
+        }
+      ],
+      "editorialNote": "Do not supply a hidden meaning for the message or diagnose reassurance-seeking. The uncertainty is intentionally unresolved."
+    },
+    {
+      "id": "community-support-01",
+      "contextId": "community",
+      "areaId": "support",
+      "title": "Someone joining for the first time",
+      "situation": "A person arrives at a group activity for the first time. You are helping with a practical task and can see that they are not sure where to start. Other members are busy, but there is room for someone new to join in.",
+      "responseOptions": [
+        {
+          "id": "community-support-01-a",
+          "label": "Invite them to do part of your task with you and explain as you go."
+        },
+        {
+          "id": "community-support-01-b",
+          "label": "Introduce them to someone who can show them the available activities."
+        },
+        {
+          "id": "community-support-01-c",
+          "label": "Ask what they would enjoy getting involved in and help them find a starting point."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "30",
+          "reason": "Explore what makes a group feel welcoming."
+        },
+        {
+          "set": "personal",
+          "valueId": "29",
+          "reason": "Consider the kind of help a newcomer might find useful."
+        },
+        {
+          "set": "team",
+          "valueId": "6",
+          "reason": "Explore different ways to include someone new."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Consider how support can make participation easier."
+        },
+        {
+          "set": "team",
+          "valueId": "31",
+          "reason": "Explore how welcoming someone contributes to a sense of belonging."
+        }
+      ],
+      "editorialNote": "None of the options establishes whether the newcomer wants company, information or space; leave room to ask."
+    },
+    {
+      "id": "community-support-02",
+      "contextId": "community",
+      "areaId": "support",
+      "title": "A volunteer trying a new role",
+      "situation": "A volunteer is trying a role you have done before. They ask whether you can stay nearby for the first part. You also have another job to complete, but the group could rearrange the timing if needed.",
+      "responseOptions": [
+        {
+          "id": "community-support-02-a",
+          "label": "Stay for the start and agree when you will return to your other job."
+        },
+        {
+          "id": "community-support-02-b",
+          "label": "Talk through the likely questions and offer a check-in partway through."
+        },
+        {
+          "id": "community-support-02-c",
+          "label": "Ask another experienced member to share the support so both jobs can continue."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "24",
+          "reason": "Explore how you contribute to an activity that serves others."
+        },
+        {
+          "set": "personal",
+          "valueId": "1",
+          "reason": "Consider how your experience can help someone try a role."
+        },
+        {
+          "set": "team",
+          "valueId": "5",
+          "reason": "Explore how support can encourage learning."
+        },
+        {
+          "set": "team",
+          "valueId": "2",
+          "reason": "Consider how help can be shared across the group."
+        }
+      ],
+      "editorialNote": "Being present and arranging shared support can both be helpful. Do not imply that only one person is capable of helping."
+    },
+    {
+      "id": "community-responsibility-01",
+      "contextId": "community",
+      "areaId": "responsibility",
+      "title": "Jobs at the end of an event",
+      "situation": "A group event is coming to an end and several clearing-up jobs remain. Some people need to leave soon. You can stay a little longer, but another task you agreed to do has not been finished yet.",
+      "responseOptions": [
+        {
+          "id": "community-responsibility-01-a",
+          "label": "Explain what you can finish and ask the remaining people to divide the other jobs."
+        },
+        {
+          "id": "community-responsibility-01-b",
+          "label": "Complete your agreed task first, then see where extra help is most useful."
+        },
+        {
+          "id": "community-responsibility-01-c",
+          "label": "Suggest simplifying the clearing-up plan so the essential jobs are covered."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "24",
+          "reason": "Consider how you want to contribute to a shared activity."
+        },
+        {
+          "set": "personal",
+          "valueId": "32",
+          "reason": "Explore how to coordinate effort when availability differs."
+        },
+        {
+          "set": "team",
+          "valueId": "1",
+          "reason": "Consider the relationship between agreed duties and extra help."
+        },
+        {
+          "set": "team",
+          "valueId": "34",
+          "reason": "Explore how to use the people and time still available."
+        }
+      ],
+      "editorialNote": "Leaving at an agreed time is legitimate. Avoid moral comparisons between people who can and cannot stay."
+    },
+    {
+      "id": "community-responsibility-02",
+      "contextId": "community",
+      "areaId": "responsibility",
+      "title": "A role no one has offered to take",
+      "situation": "A community group needs someone to coordinate one part of its next activity. You could do it, but would need support. Another member has relevant experience but has not volunteered. The group has a week to agree the arrangement.",
+      "responseOptions": [
+        {
+          "id": "community-responsibility-02-a",
+          "label": "Offer to coordinate if someone else can take a clearly defined part."
+        },
+        {
+          "id": "community-responsibility-02-b",
+          "label": "Ask what the role involves before the group decides who can do it."
+        },
+        {
+          "id": "community-responsibility-02-c",
+          "label": "Suggest sharing the role and invite people to say which parts they could take."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "21",
+          "reason": "Explore whether coordinating others is a contribution you want to make."
+        },
+        {
+          "set": "personal",
+          "valueId": "30",
+          "reason": "Consider how you want to participate in a community."
+        },
+        {
+          "set": "team",
+          "valueId": "14",
+          "reason": "Explore what leadership requires in this particular role."
+        },
+        {
+          "set": "team",
+          "valueId": "2",
+          "reason": "Consider how coordination could be shared."
+        }
+      ],
+      "editorialNote": "Do not assume the experienced person should volunteer. Interest, time and capacity remain open."
+    },
+    {
+      "id": "community-openness-01",
+      "contextId": "community",
+      "areaId": "openness",
+      "title": "A quieter voice in a discussion",
+      "situation": "A group is discussing its next activity. A few people have spoken often, while another person has started to contribute twice without being heard. You do not know whether they want help entering the conversation.",
+      "responseOptions": [
+        {
+          "id": "community-openness-01-a",
+          "label": "Suggest a round where everyone has an opportunity to add a view."
+        },
+        {
+          "id": "community-openness-01-b",
+          "label": "Make space at a pause and ask whether the person wants to finish their point."
+        },
+        {
+          "id": "community-openness-01-c",
+          "label": "Speak to the organiser afterwards about making the next discussion easier to join."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Explore how you help different views enter a conversation."
+        },
+        {
+          "set": "personal",
+          "valueId": "30",
+          "reason": "Consider what belonging in a group means in practice."
+        },
+        {
+          "set": "team",
+          "valueId": "6",
+          "reason": "Explore ways to create an opportunity to participate."
+        },
+        {
+          "set": "team",
+          "valueId": "35",
+          "reason": "Consider fairness in who gets heard."
+        }
+      ],
+      "editorialNote": "Do not assume the quieter person wants to be put on the spot. Each approach has timing and participation trade-offs."
+    },
+    {
+      "id": "community-openness-02",
+      "contextId": "community",
+      "areaId": "openness",
+      "title": "A successful event with one difficulty",
+      "situation": "A group is reviewing an event most people enjoyed. You noticed one arrangement that made it harder for some people to participate. You have an example, but you do not know how widespread the difficulty was.",
+      "responseOptions": [
+        {
+          "id": "community-openness-02-a",
+          "label": "Raise the example during the review and ask whether others noticed it."
+        },
+        {
+          "id": "community-openness-02-b",
+          "label": "Ask the organiser to look into the issue before the next event."
+        },
+        {
+          "id": "community-openness-02-c",
+          "label": "Suggest gathering feedback from participants before proposing a change."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "24",
+          "reason": "Explore how improving participation connects with helping others."
+        },
+        {
+          "set": "personal",
+          "valueId": "16",
+          "reason": "Consider how to communicate a concern with limited evidence."
+        },
+        {
+          "set": "team",
+          "valueId": "6",
+          "reason": "Explore barriers to participation without assuming everyone's experience."
+        },
+        {
+          "set": "team",
+          "valueId": "22",
+          "reason": "Consider what information needs to be made visible."
+        }
+      ],
+      "editorialNote": "A positive event can still have a difficulty worth discussing. Do not generalise one example to all participants."
+    },
+    {
+      "id": "community-standards-01",
+      "contextId": "community",
+      "areaId": "standards",
+      "title": "An invitation ready to send",
+      "situation": "An invitation for a group activity includes the essential information and is ready to send. Some wording and visual details could be improved. Sending it today would give people more notice, but a short delay could make it easier to read.",
+      "responseOptions": [
+        {
+          "id": "community-standards-01-a",
+          "label": "Send the current version and make any later clarification easy to find."
+        },
+        {
+          "id": "community-standards-01-b",
+          "label": "Improve the parts most likely to affect understanding, then send it today."
+        },
+        {
+          "id": "community-standards-01-c",
+          "label": "Ask someone unfamiliar with the activity to read it before deciding what to change."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "7",
+          "reason": "Explore which details affect the invitation's usefulness."
+        },
+        {
+          "set": "personal",
+          "valueId": "35",
+          "reason": "Consider when a creative change could improve communication."
+        },
+        {
+          "set": "team",
+          "valueId": "12",
+          "reason": "Explore what quality means for the people receiving the invitation."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Consider clarity alongside the value of earlier notice."
+        }
+      ],
+      "editorialNote": "Do not imply that decorative details are the same as accessibility needs. Essential access and safety information should already be included."
+    },
+    {
+      "id": "community-standards-02",
+      "contextId": "community",
+      "areaId": "standards",
+      "title": "Different ideas for a shared display",
+      "situation": "A group is making a display of its work. Some members want a consistent style; others want each contribution to look individual. Either could fit the available space, and the group needs to agree before preparation begins.",
+      "responseOptions": [
+        {
+          "id": "community-standards-02-a",
+          "label": "Suggest a shared structure with room for individual choices inside it."
+        },
+        {
+          "id": "community-standards-02-b",
+          "label": "Ask contributors what they most want the display to communicate."
+        },
+        {
+          "id": "community-standards-02-c",
+          "label": "Try a small example of each approach and compare them together."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "8",
+          "reason": "Explore what individual artistic expression contributes."
+        },
+        {
+          "set": "personal",
+          "valueId": "35",
+          "reason": "Consider different creative ways to represent the group."
+        },
+        {
+          "set": "team",
+          "valueId": "10",
+          "reason": "Explore how the group develops an idea together."
+        },
+        {
+          "set": "team",
+          "valueId": "28",
+          "reason": "Consider which common standards are useful and which can vary."
+        }
+      ],
+      "editorialNote": "Consistency and individuality can both serve the display. Avoid treating either preference as a personality trait."
+    },
+    {
+      "id": "community-needs-01",
+      "contextId": "community",
+      "areaId": "needs",
+      "title": "Asked to take another turn",
+      "situation": "A group organiser asks whether you can take an extra turn at a recurring activity. You enjoy contributing, but have already set aside that time for something else. Other members have not yet been asked.",
+      "responseOptions": [
+        {
+          "id": "community-needs-01-a",
+          "label": "Explain that you cannot take the extra turn and ask them to try others."
+        },
+        {
+          "id": "community-needs-01-b",
+          "label": "Offer part of the time and make clear what still needs covering."
+        },
+        {
+          "id": "community-needs-01-c",
+          "label": "Ask whether someone could swap a later turn with you."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Explore how you protect time you have already chosen to use."
+        },
+        {
+          "set": "personal",
+          "valueId": "30",
+          "reason": "Consider how belonging and availability interact."
+        },
+        {
+          "set": "team",
+          "valueId": "9",
+          "reason": "Explore a sustainable level of contribution."
+        },
+        {
+          "set": "team",
+          "valueId": "35",
+          "reason": "Consider how extra work is distributed across members."
+        }
+      ],
+      "editorialNote": "Do not require the user to justify their other plan or portray declining as abandoning the group."
+    },
+    {
+      "id": "community-needs-02",
+      "contextId": "community",
+      "areaId": "needs",
+      "title": "The person people keep contacting",
+      "situation": "You have become the person others contact with questions about a group activity. You like being useful, but the messages now interrupt time you wanted to keep for other things. Some questions could be answered by other members or shared information.",
+      "responseOptions": [
+        {
+          "id": "community-needs-02-a",
+          "label": "Set a regular time to respond and explain when people can expect an answer."
+        },
+        {
+          "id": "community-needs-02-b",
+          "label": "Ask the group to share responsibility for answering questions."
+        },
+        {
+          "id": "community-needs-02-c",
+          "label": "Create a short information note and direct routine questions there."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "15",
+          "reason": "Explore the effect of informal availability on your time."
+        },
+        {
+          "set": "personal",
+          "valueId": "31",
+          "reason": "Consider how much control you want over when you engage."
+        },
+        {
+          "set": "team",
+          "valueId": "19",
+          "reason": "Explore ways to make help available without relying on one person."
+        },
+        {
+          "set": "team",
+          "valueId": "7",
+          "reason": "Consider how clearer information could reduce repeated demands."
+        }
+      ],
+      "editorialNote": "The useful response depends on the questions and group. More structure is not automatically more caring or less accessible."
+    },
+    {
+      "id": "community-uncertainty-01",
+      "contextId": "community",
+      "areaId": "uncertainty",
+      "title": "Plans affected by uncertain weather",
+      "situation": "A group activity could take place outside, but the weather forecast is uncertain. An indoor alternative is available with fewer places. People would appreciate knowing the plan soon, and the forecast may become clearer tomorrow.",
+      "responseOptions": [
+        {
+          "id": "community-uncertainty-01-a",
+          "label": "Announce the outdoor plan with a clear point at which you will confirm or change it."
+        },
+        {
+          "id": "community-uncertainty-01-b",
+          "label": "Choose the indoor alternative now and explain the limit on places."
+        },
+        {
+          "id": "community-uncertainty-01-c",
+          "label": "Ask who needs an early decision and use that information to shape the plan."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "27",
+          "reason": "Explore how you make a group decision with incomplete information."
+        },
+        {
+          "set": "personal",
+          "valueId": "19",
+          "reason": "Consider what makes an arrangement feel dependable."
+        },
+        {
+          "set": "team",
+          "valueId": "4",
+          "reason": "Explore how a plan can adapt to changing information."
+        },
+        {
+          "set": "team",
+          "valueId": "6",
+          "reason": "Consider who may be affected differently by the alternatives."
+        }
+      ],
+      "editorialNote": "Keep this an ordinary planning dilemma. Any safety limits must be observed independently of the reflective choice."
+    },
+    {
+      "id": "community-uncertainty-02",
+      "contextId": "community",
+      "areaId": "uncertainty",
+      "title": "Trying something the group has not done",
+      "situation": "Someone proposes a new kind of group activity. It sounds interesting, but no one knows how many people would take part. There is enough time to try a small version, ask for interest, or adapt an activity people already know.",
+      "responseOptions": [
+        {
+          "id": "community-uncertainty-02-a",
+          "label": "Run a small version first and invite feedback before making it regular."
+        },
+        {
+          "id": "community-uncertainty-02-b",
+          "label": "Ask members what would help them decide whether to take part."
+        },
+        {
+          "id": "community-uncertainty-02-c",
+          "label": "Adapt a familiar activity to include one part of the new idea."
+        }
+      ],
+      "valueLinks": [
+        {
+          "set": "personal",
+          "valueId": "12",
+          "reason": "Explore what variety adds to a shared activity."
+        },
+        {
+          "set": "personal",
+          "valueId": "22",
+          "reason": "Consider the uncertainty involved in trying a new idea."
+        },
+        {
+          "set": "team",
+          "valueId": "23",
+          "reason": "Explore how a group can experiment with something new."
+        },
+        {
+          "set": "team",
+          "valueId": "34",
+          "reason": "Consider what can be learnt with the resources available."
+        }
+      ],
+      "editorialNote": "A trial, consultation and gradual change can all be useful. Do not treat novelty itself as the desired outcome."
+    }
+  ]
+}
