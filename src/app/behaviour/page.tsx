@@ -5,7 +5,7 @@ import BehaviourReflectionClient from './BehaviourReflectionClient';
 
 export default function BehaviourReflectionPage() {
   useEffect(() => {
-    document.title = 'Core Values - Scenario reflection';
+    document.title = 'Core Values - Behaviour reflection';
   }, []);
 
   return <BehaviourReflectionClient />;

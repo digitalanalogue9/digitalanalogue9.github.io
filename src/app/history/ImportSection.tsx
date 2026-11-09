@@ -28,20 +28,20 @@ export default function ImportSection({
           htmlFor="session-json-import"
           className="text-interface-base-small text-sys-color-text-primary block font-semibold"
         >
-          Values session or scenario backup JSON
+          Backup file contents (JSON)
         </label>
         <textarea
           className="apc-field__control h-28 w-full"
           id="session-json-import"
-          placeholder="Paste exported JSON envelope here"
+          placeholder="Paste the contents of your backup file here"
           aria-describedby={`session-json-import-help session-json-import-replacement${hasError ? ' history-action-error' : ''}`}
           aria-invalid={hasError}
           value={importText}
           onChange={(event) => onImportTextChange(event.target.value)}
         />
         <p id="session-json-import-help" className="text-interface-base-small text-sys-color-text-secondary">
-          Paste a values session export or scenario reflection backup. Restoring a scenario backup with an existing ID
-          replaces that saved attempt and may replace newer work.
+          Paste a values exercise backup or a behaviour reflection backup. Restoring a behaviour reflection backup with
+          an existing ID replaces that saved reflection and may replace newer work.
         </p>
         <p id="session-json-import-replacement" className="text-interface-base-small text-sys-color-text-secondary">
           Values session imports keep existing local work: a backup with an existing session ID is restored as a

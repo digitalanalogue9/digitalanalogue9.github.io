@@ -55,9 +55,9 @@ function SiteLayout() {
         ? 'about'
         : location.pathname === '/contact'
           ? 'contact'
-      : valuesFlowPaths.includes(location.pathname)
-        ? 'values'
-        : 'overview';
+          : valuesFlowPaths.includes(location.pathname)
+            ? 'values'
+            : 'overview';
   const backgroundClassName = isNotFoundRoute
     ? 'core-values-error-background'
     : `core-values-background core-values-background--${backgroundVariant}`;
@@ -146,13 +146,15 @@ export const router = createBrowserRouter([
         path: 'behaviour',
         element: isBehaviourReflectionEnabled() ? (
           <RouteMetadata
-            title="Scenario reflection - Core Values"
+            title="Behaviour reflection - Core Values"
             description="Consider possible intentions and perceptions of hypothetical choices."
             path="/behaviour"
           >
             <BehaviourReflectionPage />
           </RouteMetadata>
-        ) : <NotFoundPage />,
+        ) : (
+          <NotFoundPage />
+        ),
       },
       {
         path: 'exercise',

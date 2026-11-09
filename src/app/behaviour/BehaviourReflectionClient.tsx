@@ -57,7 +57,7 @@ export default function BehaviourReflectionClient() {
       setSearchParams({ attemptId: started.id }, { replace: true });
       setPosition(0);
     } catch {
-      setError('This scenario reflection could not be started. Please try again.');
+      setError('This behaviour reflection could not be started. Please try again.');
     } finally {
       setIsBusy(false);
     }
@@ -180,7 +180,7 @@ export default function BehaviourReflectionClient() {
         aria-labelledby="behaviour-heading"
       >
         <h1 id="behaviour-heading" className="text-interface-title-1 text-sys-color-text-primary mb-4 font-semibold">
-          Scenario reflection
+          Behaviour reflection
         </h1>
         <p className="text-interface-base-default text-sys-color-text-primary mx-auto mb-3 max-w-prose">
           Consider six everyday situations at work and choose what you would most likely do. These are hypothetical
@@ -191,7 +191,7 @@ export default function BehaviourReflectionClient() {
           finish.
         </p>
         <button type="button" className="apc-button mx-auto min-h-11" onClick={start} disabled={isBusy}>
-          {isBusy ? 'Starting…' : 'Begin scenarios'}
+          {isBusy ? 'Starting…' : 'Start reflection'}
         </button>
         {error && (
           <p role="alert" className="text-ref-color-rag-red-text mt-4">

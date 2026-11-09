@@ -58,7 +58,7 @@ const backup = {
 async function importBackup(page: Page) {
   await page.goto('/history');
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
-  await page.getByLabel('Values session or scenario backup JSON').fill(JSON.stringify(backup));
+  await page.getByLabel('Backup file contents (JSON)').fill(JSON.stringify(backup));
   await page.getByRole('button', { name: /Import.*text/ }).click();
   await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
 }

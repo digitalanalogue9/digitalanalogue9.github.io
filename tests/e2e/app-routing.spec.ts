@@ -19,8 +19,8 @@ test('visitor can reach personal app pages from the home page', async ({ page })
 test('visitor can open and refresh a direct application route', async ({ page }) => {
   await page.goto('/history');
   await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
-  await expect(page.getByLabel('Values session or scenario backup JSON')).toBeVisible();
-  await expect(page.getByText(/Restoring a scenario backup with an existing ID/)).toBeVisible();
+  await expect(page.getByLabel('Backup file contents (JSON)')).toBeVisible();
+  await expect(page.getByText(/Restoring a behaviour reflection backup with an existing ID/)).toBeVisible();
 
   await page.reload();
   await expect(page).toHaveURL(/\/history\/?$/);
@@ -31,7 +31,7 @@ test('behaviour reflection route follows the build-time feature flag', async ({ 
   await page.goto('/behaviour');
 
   if (process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true') {
-    await expect(page.getByRole('heading', { name: 'Scenario reflection' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Behaviour reflection' })).toBeVisible();
   } else {
     await expect(page.getByRole('heading', { name: 'We couldn’t find that page' })).toBeVisible();
   }

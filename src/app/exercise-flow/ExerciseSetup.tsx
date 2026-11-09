@@ -46,7 +46,7 @@ export function ExerciseSetup() {
           Set up your values exercise
         </h1>
         <p className="text-interface-base-default text-sys-color-text-primary sm:text-interface-base-large leading-relaxed">
-          Sort value cards by importance, then choose how many values you would like to finish with.
+          Choose a value set and how many values you’d like to finish with. Then sort the cards by importance.
         </p>
       </section>
 
@@ -119,7 +119,7 @@ export function ExerciseSetup() {
             onClick={() => navigate('/history')}
             disabled={isStarting}
           >
-            View history
+            View History
           </button>
         </div>
       </form>

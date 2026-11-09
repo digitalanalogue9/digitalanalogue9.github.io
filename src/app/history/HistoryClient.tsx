@@ -82,7 +82,7 @@ export default function HistoryClient() {
       void getBehaviourAttemptServiceSingleton()
         .listAttempts()
         .then(setScenarioAttempts)
-        .catch(() => setScenarioError('Scenario reflections could not be loaded.'));
+        .catch(() => setScenarioError('Behaviour reflections could not be loaded.'));
     }
     return () => {
       isMountedRef.current = false;
@@ -270,7 +270,7 @@ export default function HistoryClient() {
         });
         downloadJsonFile(`core-values-scenario-${attempt.id}`, payload);
       } catch (exportError) {
-        setActionError(exportError instanceof Error ? exportError.message : 'Scenario export failed.');
+        setActionError(exportError instanceof Error ? exportError.message : 'Behaviour reflection export failed.');
       } finally {
         setIsWorking(false);
       }
@@ -314,7 +314,7 @@ export default function HistoryClient() {
           if (
             existing &&
             !window.confirm(
-              'This backup replaces the scenario reflection with the same ID. It can replace newer local work. Continue?'
+              'This backup replaces the behaviour reflection with the same ID. It can replace newer local work. Continue?'
             )
           ) {
             setIsWorking(false);
@@ -460,7 +460,7 @@ export default function HistoryClient() {
             id="scenario-history-heading"
             className="text-interface-base-large text-sys-color-text-primary font-semibold"
           >
-            Scenario reflections
+            Behaviour reflections
           </h2>
           <div className="mt-3 space-y-2">
             <label className="text-interface-base-small text-sys-color-text-primary flex items-start gap-2">
@@ -469,7 +469,7 @@ export default function HistoryClient() {
                 checked={includeScenarioPrivateText}
                 onChange={(event) => setIncludeScenarioPrivateText(event.target.checked)}
               />
-              <span>Include private context and reflection notes in scenario exports</span>
+              <span>Include private context and reflection notes in behaviour reflection exports</span>
             </label>
             <p className="text-interface-base-small text-sys-color-text-secondary">
               Downloads omit private text by default. A full backup can include active progress; unrevealed
@@ -483,7 +483,7 @@ export default function HistoryClient() {
           )}
           {scenarioAttempts.length === 0 ? (
             <p className="text-interface-base-small text-sys-color-text-secondary mt-2">
-              No scenario reflections saved in this browser yet.
+              No behaviour reflections saved in this browser yet.
             </p>
           ) : (
             <ul className="mt-3 space-y-3">
@@ -494,7 +494,9 @@ export default function HistoryClient() {
                 >
                   <div>
                     <h3 className="text-sys-color-text-primary font-semibold">
-                      {attempt.stage === 'active' ? 'Unfinished scenario reflection' : 'Completed scenario reflection'}
+                      {attempt.stage === 'active'
+                        ? 'Unfinished behaviour reflection'
+                        : 'Completed behaviour reflection'}
                     </h3>
                     <p className="text-interface-base-small text-sys-color-text-primary">
                       {attempt.stage === 'active'
@@ -536,7 +538,7 @@ export default function HistoryClient() {
                           await getBehaviourAttemptServiceSingleton().deleteAttempt(attempt.id);
                           setScenarioAttempts(await getBehaviourAttemptServiceSingleton().listAttempts());
                         } catch {
-                          setScenarioError('This scenario reflection could not be deleted. Please retry.');
+                          setScenarioError('This behaviour reflection could not be deleted. Please retry.');
                         }
                       }}
                     >

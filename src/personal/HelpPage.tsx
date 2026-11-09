@@ -87,7 +87,7 @@ export default function HelpPage() {
       <section className="help-guide__views" aria-label="Example exercise">
         <div className="help-guide__section-heading">
           <p className="help-guide__eyebrow">Example exercise</p>
-          <p>These composed views use sample values to show what each stage looks like.</p>
+          <p>These examples show each stage using sample values.</p>
         </div>
         {guideViews.map((view, index) => (
           <figure className="help-guide__view" key={view.title}>
@@ -131,9 +131,9 @@ export default function HelpPage() {
           <p className="help-guide__eyebrow">During the exercise</p>
           <h2 id="sorting-heading">Sort and narrow</h2>
           <p>
-            Choose an importance category for each card. You can move cards between categories if you change your mind.
-            When you advance, values in Not Important are removed. Continue sorting the remaining values until you reach
-            your chosen number.
+            Place each card in Very Important, Quite Important, Important, Of Some Importance or Not Important. You can
+            move cards between categories if you change your mind. When you advance, values in Not Important are
+            removed. Continue sorting the remaining values until you reach your chosen number.
           </p>
         </section>
 
@@ -155,9 +155,8 @@ export default function HelpPage() {
             browser data or moving your work, export a backup from History and keep the file private.
           </p>
           <p>
-            Check what your chosen export includes. The standard values JSON export doesn’t include the additional
-            reflection notes you add on the completed exercise page. Choose <strong>Export reflection backup</strong> in
-            History to include them.
+            In History, <strong>Export</strong> saves your values exercise without the additional notes from the
+            completed exercise page. Choose <strong>Export reflection backup</strong> to include those notes.
           </p>
           <a href="/history">Go to History to export a backup</a>
         </section>

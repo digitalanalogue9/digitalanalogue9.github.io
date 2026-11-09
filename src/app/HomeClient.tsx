@@ -164,7 +164,7 @@ export default function HomeClient() {
             you.
           </p>
           <p className="editorial-aside">
-            This is an illustrative selection, not a prescribed final count. You choose how many values to keep.
+            These example values show what a final set can look like. You choose how many values to keep.
           </p>
         </div>
         <div className="editorial-outcome-content">
@@ -204,7 +204,9 @@ export default function HomeClient() {
           Find your values, make choices between them, then return to your reflections when you want to think them
           through again.
         </p>
-        <p className="editorial-storage-note">Your reflections stay in this browser.</p>
+        <p className="editorial-storage-note">
+          Your reflections stay in this browser and don’t sync automatically. Use History to export a backup.
+        </p>
         <div className="editorial-actions">
           <Link className="editorial-button editorial-button--primary" to="/exercise">
             Find my core values

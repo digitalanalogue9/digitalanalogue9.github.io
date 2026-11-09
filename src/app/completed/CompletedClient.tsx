@@ -332,7 +332,8 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
         <div className="border-sys-color-border-default space-y-5 border-t p-4 sm:p-6">
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
             Reflection is optional and saved on this device with this completed session. Your notes are not included in
-            the standard JSON export.
+            the standard JSON export. To back up saved notes, choose Export reflection backup in{' '}
+            <Link to="/history">History</Link>.
           </p>
           {reflectionFirstResultsEnabled ? (
             <details className="rounded-sys-radius-button-sm border-sys-color-border-default border p-3">

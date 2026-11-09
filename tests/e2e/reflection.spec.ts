@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-test('participant can complete and resume a Scenario reflection', async ({ page, context }) => {
+test('participant can complete and resume a Behaviour reflection', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/behaviour');
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
-  await page.getByRole('button', { name: 'Begin scenarios' }).click();
+  await page.getByRole('button', { name: 'Start reflection' }).click();
 
   for (let position = 0; position < 6; position += 1) {
     await expect(page.getByText(`Situation ${position + 1} of 6`)).toBeVisible();
@@ -17,12 +17,12 @@ test('participant can complete and resume a Scenario reflection', async ({ page,
     }
   }
 
-  await expect(page.getByRole('heading', { name: 'Your scenario reflections' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your reflections' })).toBeVisible();
   await expect(page.getByText('Possible intention:', { exact: false }).first()).toBeVisible();
   await expect(page.getByText('Possible perception:', { exact: false }).first()).toBeVisible();
 
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Your scenario reflections' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your reflections' })).toBeVisible();
   await page.getByRole('button', { name: /Continue with.*conversation prompt/ }).click();
   await page.getByRole('checkbox').first().check();
   await page.getByRole('button', { name: 'Copy prompt', exact: true }).click();
@@ -39,7 +39,7 @@ test('participant can complete and resume a Scenario reflection', async ({ page,
   await expect(page.getByLabel('Local time', { exact: true })).toHaveValue('11:30');
   await page.screenshot({ path: '.scratch/parity-scenario-prompts.png', fullPage: true });
   await page.goto('/history');
-  const history = page.getByRole('region', { name: 'Scenario reflections', exact: true });
+  const history = page.getByRole('region', { name: 'Behaviour reflections', exact: true });
   await expect(history.getByRole('button', { name: 'Review', exact: true })).toBeVisible();
   const downloaded = page.waitForEvent('download');
   await history.getByRole('button', { name: 'Download results', exact: true }).click();
