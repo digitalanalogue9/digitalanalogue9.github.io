@@ -50,6 +50,8 @@ jobs:
 
       - name: Build production site
         run: pnpm build
+        env:
+          VITE_ENABLE_BEHAVIOUR_REFLECTION: 'false'
 
       - name: Validate GitHub Pages artifact
         run: pnpm validate:pages-artifact
