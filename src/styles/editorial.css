@@ -161,11 +161,10 @@
 
 .editorial-hero {
   display: grid;
-  min-height: min(45rem, calc(100svh - 8rem));
   grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
   align-items: center;
   gap: clamp(2rem, 5vw, 5.5rem);
-  padding-block: clamp(2rem, 5vw, 5rem) clamp(4rem, 8vw, 7.5rem);
+  padding-block: clamp(2rem, 3vw, 3rem);
 }
 
 .editorial-hero-copy {
@@ -375,7 +374,7 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.9fr);
   align-items: center;
   gap: clamp(2rem, 7vw, 7rem);
-  padding-block: clamp(3rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 3vw, 3rem);
 }
 
 .editorial-situations-list {
@@ -555,7 +554,7 @@
 }
 
 .editorial-closing {
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(2rem, 3vw, 3rem);
 }
 
 .editorial-home .editorial-storage-note {
@@ -647,6 +646,10 @@
     padding: 0.5rem 0 2rem;
   }
 
+  .editorial-card-composition figcaption {
+    position: static;
+  }
+
   .editorial-value-card,
   .editorial-value-card--1,
   .editorial-value-card--2,
@@ -710,4 +713,61 @@
   .editorial-button:hover {
     transform: none;
   }
+}
+
+/* Compact navigation and sorting controls for narrow screens. */
+.public-menu-toggle { display: none; }
+.editorial-actions .editorial-history-link { margin-top: 0; }
+@media (max-width: 58rem) {
+  .public-header-inner { position: relative; flex-direction: row; align-items: center; min-height: 4rem; }
+  .public-menu-toggle { display: inline-flex; min-height: 44px; align-items: center; gap: .4rem; color: white; font-weight: 600; }
+  .public-menu-toggle svg { width: 1.5rem; height: 1.5rem; }
+  .public-menu-toggle:focus-visible { outline: 3px solid var(--editorial-rose); outline-offset: 3px; }
+  .public-nav { display: none; position: absolute; top: 100%; right: 0; width: min(20rem, 100%); padding: .5rem; background: var(--editorial-plum); box-shadow: 0 10px 20px rgb(60 42 56 / 20%); }
+  .public-nav.is-open { display: flex; flex-direction: column; align-items: stretch; }
+  .public-nav a { width: 100%; }
+}
+@media (max-width: 767px) {
+  #main-content:has(.app-exercise) { padding-top: .75rem; padding-bottom: 1rem; }
+  .mobile-sorting > div:first-child { padding: .6rem .75rem; }
+  .current-card-panel { gap: .5rem; }
+  .current-card-panel > div:first-child { padding: .75rem; }
+  .current-card-panel > div:first-child { min-height: 12rem; }
+  .mobile-placement-grid > button:first-child,
+  .mobile-category-grid > button:first-child { grid-column: 1 / -1; width: calc((100% - .5rem) / 2); justify-self: center; }
+  .mobile-placement-grid > button,
+  .mobile-category-grid > button { font-size: .75rem; line-height: 1.25; gap: .25rem; }
+  .mobile-placement-grid > button {
+    background-color: var(--ref-color-brand-surface-primary);
+    border-color: var(--ref-color-brand-primary);
+  }
+  .mobile-placement-grid > button:active { background-color: var(--ref-color-brand-surface-primary-hover); }
+  .mobile-category-grid > button span:last-child { padding: .2rem .5rem; }
+  .current-card-panel h3 { margin-top: .25rem; }
+  .current-card-panel h3 + p { margin-top: .35rem; line-height: 1.35; }
+  .mobile-sorting [aria-label='Category review'] h2 { font-size: .9rem; }
+  .mobile-sorting [aria-label='Category review'] button { padding: .35rem .65rem; }
+}
+.category-count-feedback { animation: category-arrival 600ms ease-out; }
+@keyframes category-arrival {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 var(--editorial-rose); }
+  35% { transform: scale(1.25); box-shadow: 0 0 0 5px var(--editorial-rose); }
+  100% { transform: scale(1); box-shadow: 0 0 0 10px transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .category-count-feedback { animation: category-arrival-reduced 600ms ease-out; }
+  @keyframes category-arrival-reduced { 50% { background: var(--editorial-rose); } }
+}
+@media (hover: none) {
+  .current-card-panel button:hover { background: transparent; }
+  .mobile-sorting .mobile-placement-grid > button:hover { background-color: var(--ref-color-brand-surface-primary); }
+  .mobile-sorting .mobile-placement-grid > button:active { background-color: var(--ref-color-brand-surface-primary-hover); }
+}
+
+@media (max-width: 42rem) {
+  .public-footer-inner { min-height: 0; flex-direction: row; flex-wrap: wrap; gap: .25rem .75rem; padding-block: .25rem; }
+  .public-footer-copyright { display: none; }
+}
+@media (max-width: 350px) {
+  .current-card-panel > div:first-child { min-height: 17rem; }
 }

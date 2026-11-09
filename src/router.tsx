@@ -1,5 +1,5 @@
 import { createBrowserRouter, Link, NavLink, Outlet, useLocation, useMatches } from 'react-router-dom';
-import { lazy, Suspense, type ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { NotFoundPage, RouteErrorPage } from './app/AppErrorPage';
 import CoreValuesLogoMark from './components/common/Navigation/CoreValuesLogoMark';
 import CookieBanner from './components/common/CookieBanner';
@@ -46,6 +46,7 @@ function RouteMetadata({
 
 function SiteLayout() {
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
   const isNotFoundRoute = useMatches().some((match) => match.handle === 'not-found');
   const valuesFlowPaths = ['/exercise', '/completed', '/reasoning', '/replay'];
   const backgroundVariant =
@@ -74,7 +75,11 @@ function SiteLayout() {
               <CoreValuesLogoMark className="h-8 w-8 flex-shrink-0" />
               <span>Core Values</span>
             </Link>
-            <nav className="public-nav" aria-label="Main navigation">
+            <button className="public-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="public-menu" onClick={() => setMenuOpen((open) => !open)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+              <span>Menu</span>
+            </button>
+            <nav id="public-menu" className={`public-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation" onClick={() => setMenuOpen(false)}>
               <NavLink to="/howtouse">How it works</NavLink>
               <NavLink to="/about">About</NavLink>
               <NavLink to="/history">History</NavLink>
@@ -97,7 +102,7 @@ function SiteLayout() {
         </main>
         <footer className="public-footer print:hidden" role="contentinfo" aria-label="Site footer">
           <div className="public-footer-inner">
-            <span>© {new Date().getFullYear()} Core Values</span>
+            <span className="public-footer-copyright">© {new Date().getFullYear()} Core Values</span>
             <nav aria-label="Footer navigation">
               <Link to="/privacy">Privacy</Link>
               <Link to="/contact">Contact</Link>

@@ -39,7 +39,9 @@ export function ExerciseRoute() {
         onReplayPrevious={() => void replayPrevious()}
         error={error}
       />
-      <Link to="/history">Save and return to history</Link>
+      <div className="text-center">
+        <Link to="/history">Save and come back later</Link>
+      </div>
     </section>
   );
 }

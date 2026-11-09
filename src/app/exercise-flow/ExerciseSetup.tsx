@@ -80,8 +80,7 @@ export function ExerciseSetup() {
             </label>
           </div>
           <p className="text-interface-base-small text-sys-color-text-primary">
-            The team-focused set is an individual exercise about what matters to you at work. You can use your choices
-            to start a conversation with others.
+            Use the team-focused set together to discuss what matters to your team and agree on your team’s core values.
           </p>
         </fieldset>
 

@@ -38,7 +38,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
 
   return (
     <section
-      className="grid w-full min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-6"
+      className="current-card-panel grid w-full min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-6"
       aria-labelledby="current-card-heading"
     >
       <motion.div
@@ -60,7 +60,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
           <div className="min-w-0">
             <p
               id="current-card-heading"
-              className="text-sys-color-text-secondary text-interface-base-small font-semibold tracking-wide uppercase"
+              className="sr-only"
             >
               Current card
             </p>
@@ -74,7 +74,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
         </div>
       </motion.div>
       <div className="min-w-0 md:py-5">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:h-full md:grid-cols-1 md:content-between">
+        <div className="mobile-placement-grid grid grid-cols-2 gap-2 md:h-full md:grid-cols-1 md:content-between">
           {activeCategories.map((category) => (
             <button
               key={`drop-${category}`}

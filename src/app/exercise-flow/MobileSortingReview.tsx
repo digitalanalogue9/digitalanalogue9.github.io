@@ -14,7 +14,7 @@ type Props = {
   valueCard?: ValueCard;
   activeCategories: CategoryName[];
   categories: CategoriesState;
-  onDrop: (category: CategoryName) => void;
+  onDrop: (category: CategoryName) => Promise<boolean>;
   onMove: (valueId: string, fromCategory: CategoryName, toCategory: CategoryName) => Promise<boolean>;
   onReorder: (valueId: string, category: CategoryName, toIndex: number) => Promise<boolean>;
   onAdvance: (earlyFinish: boolean) => void;
@@ -50,6 +50,7 @@ export default function MobileSortingReview({
   const [selectedCategory, setSelectedCategory] = useState<CategoryName>(activeCategories[0] ?? 'Very Important');
   const [isReviewing, setIsReviewing] = useState(false);
   const [editMessage, setEditMessage] = useState('');
+  const [placementFeedback, setPlacementFeedback] = useState<{ category: CategoryName; sequence: number } | null>(null);
   const placementActionsRef = useRef<HTMLDivElement>(null);
   const categoryPickerRef = useRef<HTMLElement>(null);
   const placementFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -105,11 +106,14 @@ export default function MobileSortingReview({
     const activeElement = document.activeElement;
     if (
       activeElement instanceof HTMLButtonElement &&
+      activeElement.matches(':focus-visible') &&
       activeElement.closest('[aria-label="Mobile placement actions"]')
     ) {
       placementFocusRef.current = activeElement;
     }
-    onDrop(category);
+    void onDrop(category).then((success) => {
+      if (success) setPlacementFeedback((previous) => ({ category, sequence: (previous?.sequence ?? 0) + 1 }));
+    });
   };
 
   const handleMove = async (valueId: string, fromCategory: CategoryName, toCategory: CategoryName) => {
@@ -156,8 +160,10 @@ export default function MobileSortingReview({
   ) : null;
   const categoryPicker = (
     <section ref={categoryPickerRef} aria-label="Category review" className="space-y-2">
-      <h2 className="text-sys-color-text-primary text-interface-base-default font-semibold">Review a category</h2>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <h2 className="text-sys-color-text-primary text-interface-base-default text-center font-semibold">
+        Tap a category to review or rearrange its values
+      </h2>
+      <div className="mobile-category-grid grid grid-cols-2 gap-2">
         {activeCategories.map((category) => (
           <button
             key={category}
@@ -172,7 +178,8 @@ export default function MobileSortingReview({
           >
             <span className="wrap-break-word">{category}</span>
             <span
-              className="rounded-ref-radius-999 bg-sys-color-surface-subtle shrink-0 px-2.5 py-1"
+              key={placementFeedback?.category === category ? placementFeedback.sequence : 0}
+              className={`rounded-ref-radius-999 bg-sys-color-surface-subtle shrink-0 px-2.5 py-1 ${placementFeedback?.category === category ? 'category-count-feedback' : ''}`}
               aria-hidden="true"
             >
               {placedCount(category)}
@@ -184,7 +191,7 @@ export default function MobileSortingReview({
   );
 
   return (
-    <section className="space-y-4 md:hidden" aria-label="Mobile exercise">
+    <section className="mobile-sorting space-y-3 md:hidden" aria-label="Mobile exercise">
       <div className="border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default space-y-3 border p-4 shadow-sm">
         <h2 className="sr-only">Round {roundNumber} command center</h2>
         <div className="text-interface-base-small flex flex-wrap items-center justify-between gap-2">

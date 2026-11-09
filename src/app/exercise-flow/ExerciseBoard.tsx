@@ -35,7 +35,8 @@ function SortingBoard({ round, busy, onCommand, onAdvance = () => {}, onReplayPr
     round.deck.length + round.activeCategories.reduce((sum, category) => sum + round.categories[category].length, 0);
   const onDrop = (category: CategoryName, valueId = round.deck[0]?.id, toIndex?: number) => {
     if (valueId)
-      void onCommand({ kind: 'drop', valueId, toCategory: category, ...(toIndex === undefined ? {} : { toIndex }) });
+      return onCommand({ kind: 'drop', valueId, toCategory: category, ...(toIndex === undefined ? {} : { toIndex }) });
+    return Promise.resolve(false);
   };
   const onMove = (valueId: string, fromCategory: CategoryName, toCategory: CategoryName) =>
     onCommand({ kind: 'move', valueId, fromCategory, toCategory });

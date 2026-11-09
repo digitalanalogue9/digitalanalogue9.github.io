@@ -15,7 +15,7 @@ test('start, sort, save, resume, replay a previous round and complete with an op
   await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
   await expect(page.getByRole('article', { name: 'Very Important category' })).toContainText(keptTitle);
   const sessionUrl = page.url();
-  await page.getByRole('link', { name: 'Save and return to history' }).click();
+  await page.getByRole('link', { name: 'Save and come back later' }).click();
   await page.reload();
   await page.getByRole('link', { name: 'Resume' }).click();
   await expect(page).toHaveURL(sessionUrl);

@@ -123,7 +123,7 @@ export default function HelpPage() {
           <h2 id="set-heading">Choose your set and target</h2>
           <p>
             Choose personal values or the team-focused set, then decide how many values you want to finish with. The
-            team-focused set is an individual exercise you can use before a conversation about working together.
+            team-focused set is for your team to discuss and agree on its core values together.
           </p>
         </section>
 

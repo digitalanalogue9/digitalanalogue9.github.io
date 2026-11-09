@@ -115,7 +115,7 @@ test('exercise setup creates a team-focused Session only after an explicit start
   await expect(page.getByRole('radio', { name: 'Team-focused values' })).toBeVisible();
   await expect(
     page.getByText(
-      'The team-focused set is an individual exercise about what matters to you at work. You can use your choices to start a conversation with others.'
+      'Use the team-focused set together to discuss what matters to your team and agree on your team’s core values.'
     )
   ).toBeVisible();
   await page.getByRole('radio', { name: 'Team-focused values' }).check();

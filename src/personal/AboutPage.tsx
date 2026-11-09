@@ -55,8 +55,8 @@ export default function AboutPage() {
           You can use the exercise on your own or bring your chosen values to a conversation with a coach.
         </p>
         <p className="leading-relaxed">
-          There’s also a team-focused set for thinking about what matters to you at work. Each person completes their
-          own exercise. You can then discuss your choices together; the tool doesn’t combine them into a team result.
+          There’s also a team-focused set for discussing what matters to your team at work and agreeing on your team’s
+          core values together.
         </p>
       </section>
 
