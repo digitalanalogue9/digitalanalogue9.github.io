@@ -5,7 +5,6 @@ import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 const featuredValues = ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS'].map((title) => {
   const value = valueCatalogue.values.find((item) => item.title === title);
   if (!value) throw new Error(`The public example value ${title} is missing from the catalogue.`);
-
   return {
     ...value,
     displayTitle: title.toLocaleLowerCase('en-GB').replace(/^\w/, (character) => character.toLocaleUpperCase('en-GB')),
@@ -42,7 +41,6 @@ export default function HomeClient() {
             </Link>
           </div>
         </div>
-
         <figure className="editorial-card-composition" aria-label="Three values from the personal card sort">
           {featuredValues.map((value, index) => (
             <article className={`editorial-value-card editorial-value-card--${index + 1}`} key={value.id}>
@@ -53,6 +51,7 @@ export default function HomeClient() {
           <figcaption>Choose between values that matter in different ways.</figcaption>
         </figure>
       </section>
+
       <section className="editorial-situations" aria-labelledby="situations-heading">
         <div>
           <h2 id="situations-heading">When a decision pulls you in different directions</h2>
@@ -67,6 +66,33 @@ export default function HomeClient() {
           ))}
         </ul>
       </section>
+
+      <section className="editorial-closing" aria-labelledby="closing-heading">
+        <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
+        <p>
+          Find your values, make choices between them, then return to your reflections when you want to think them
+          through again.
+        </p>
+        <p className="editorial-storage-note">
+          Your reflections stay in this browser and don’t sync automatically. Use History to export a backup.
+        </p>
+      </section>
+
+      <section className="editorial-situations" aria-labelledby="team-values-heading">
+        <div>
+          <h2 id="team-values-heading">Or bring your team’s values into the room</h2>
+          <p>
+            Use the team-focused cards together in a meeting. Talk through the choices and trade-offs, then agree which
+            values you want to guide how you work together.
+          </p>
+        </div>
+        <div>
+          <Link className="editorial-button editorial-button--primary" to="/exercise">
+            Start a team values conversation
+          </Link>
+        </div>
+      </section>
+
       {behaviourReflectionEnabled && (
         <section className="editorial-behaviour" aria-labelledby="behaviour-heading">
           <div>
@@ -82,25 +108,6 @@ export default function HomeClient() {
           </Link>
         </section>
       )}
-
-      <section className="editorial-closing" aria-labelledby="closing-heading">
-        <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
-        <p>
-          Find your values, make choices between them, then return to your reflections when you want to think them
-          through again.
-        </p>
-        <p className="editorial-storage-note">
-          Your reflections stay in this browser and don’t sync automatically. Use History to export a backup.
-        </p>
-        <div className="editorial-actions">
-          <Link className="editorial-button editorial-button--primary" to="/exercise">
-            Find my core values
-          </Link>
-          <Link className="editorial-text-link" to="/history">
-            View History
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }

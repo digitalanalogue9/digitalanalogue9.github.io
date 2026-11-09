@@ -7,6 +7,9 @@ Core Values supports reflection on personal priorities and how those priorities 
 **Core value**:
 A priority that a person identifies as important to them and can use to reflect on their choices.
 
+**Team values exercise**:
+A facilitated group exercise for a team meeting. The team uses the team-focused value cards to make choices together, discuss the trade-offs and agree which values they want to guide how they work. The app provides the card-sorting structure for the conversation; it does not combine separate individual results or provide a shared online workspace.
+
 **Putting Values into Practice**:
 A reflection exercise exploring the relationship between a person's values, choices, motivations and possible effects on others.
 _Avoid_: Behaviour assessment, personality test

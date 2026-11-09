@@ -37,11 +37,11 @@ A separate behaviour reflection presents six situations and possible intentions 
 
 **Primary audience:** Individuals considering their own priorities, especially around a decision, change or next step.
 
-**Secondary audience:** People using the exercise alongside a coach, and people preparing for a conversation about priorities at work. The team-focused set remains an individual exercise.
+**Secondary audience:** People using the exercise alongside a coach, and teams using the team-focused set together in a meeting to discuss choices and agree which values should guide how they work.
 
 **Target companies:** No company size, industry or buying segment is established.
 
-**Decision-makers:** The individual chooses to use the tool. A coach or facilitator may introduce it; no organisational procurement or buying committee is evidenced.
+**Decision-makers:** An individual chooses to use the personal set. A team may use the team-focused set together in a facilitated meeting; no organisational procurement or buying committee is evidenced.
 
 **Primary use case:** Turn a broad question about what matters into a set of choices that can be considered and revisited.
 
@@ -79,7 +79,7 @@ The following are categories to research, not validated competitor comparisons.
 
 ## Differentiation
 
-**Supported product characteristics:** A repeatable card-sorting process, a configurable final count, optional notes, browser-local saved work, History, replay and backup support. Personal and team-focused sets are available within the same individual flow.
+**Supported product characteristics:** A repeatable card-sorting process, a configurable final count, optional notes, browser-local saved work, History, replay and backup support. The team-focused set can structure a group conversation during a team meeting. Each exercise session is stored in one browser; separate participants' results are not combined.
 
 **Approach:** Participants make their own importance choices and narrow a set over rounds. The tool provides structure for reflection rather than assigning a personality profile.
 
@@ -95,7 +95,7 @@ These are anticipated questions, not objections recorded in sales or support res
 |---|---|
 | Will this tell me who I really am or what decision to make? | It offers a structured reflection on your choices. It does not diagnose you or make a decision for you. |
 | Who can see my answers, and can I move devices? | Exercise answers and notes stay in this browser. They do not sync automatically. Export a backup before clearing browser data or moving work; keep that file private. Optional Google Analytics loads only after consent. |
-| Can my whole team use one shared exercise? | The team-focused set is an individual exercise that can support a later conversation. Shared Sessions and collective results are not available. |
+| Can my team use one exercise together? | Yes. Use the team-focused set in a meeting to discuss choices and agree which values should guide how the team works. The app does not combine separate sessions or provide a shared online workspace. |
 
 **Poor fit:** Someone seeking a clinical assessment, a prescribed answer, automatic account syncing, or a collaborative workspace with aggregated team results.
 

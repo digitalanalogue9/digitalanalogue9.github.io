@@ -116,7 +116,7 @@ function SiteLayout() {
 }
 
 const homeDescription =
-  'Sort value cards, choose what matters most to you and reflect on your priorities. Save your exercise in this browser and return to it later.';
+  'Sort value cards to explore personal priorities or use the team-focused set together in a meeting to discuss what matters in working together.';
 
 export const router = createBrowserRouter([
   {
