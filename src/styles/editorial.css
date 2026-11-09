@@ -732,9 +732,8 @@
   .mobile-sorting > div:first-child { padding: .6rem .75rem; }
   .current-card-panel { gap: .5rem; }
   .current-card-panel > div:first-child { padding: .75rem; }
-  .current-card-panel > div:first-child { min-height: 12rem; }
-  .mobile-placement-grid > button:first-child,
-  .mobile-category-grid > button:first-child { grid-column: 1 / -1; width: calc((100% - .5rem) / 2); justify-self: center; }
+  .current-card-panel > div:first-child { min-height: 11rem; }
+  .mobile-placement-grid > button:first-child { grid-column: 1 / -1; width: calc((100% - .5rem) / 2); justify-self: center; }
   .mobile-placement-grid > button,
   .mobile-category-grid > button { font-size: .75rem; line-height: 1.25; gap: .25rem; }
   .mobile-placement-grid > button {
@@ -770,4 +769,12 @@
 }
 @media (max-width: 350px) {
   .current-card-panel > div:first-child { min-height: 17rem; }
+}
+@media (orientation: portrait) and (min-width: 1024px) and (max-width: 1279px) {
+  .exercise-bucket-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (orientation: landscape) and (min-width: 1024px) and (max-width: 1439px) {
+  .exercise-bucket-grid [aria-roledescription='Draggable card'] { padding: .5rem; }
+  .exercise-bucket-grid [aria-roledescription='Draggable card'] > div { gap: .25rem; }
+  .exercise-bucket-grid [aria-roledescription='Draggable card'] p:first-child { font-size: .875rem; }
 }

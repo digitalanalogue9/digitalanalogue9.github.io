@@ -163,7 +163,7 @@ export default function MobileSortingReview({
       <h2 className="text-sys-color-text-primary text-interface-base-default text-center font-semibold">
         Tap a category to review or rearrange its values
       </h2>
-      <div className="mobile-category-grid grid grid-cols-2 gap-2">
+      <div className="mobile-category-grid grid grid-cols-3 gap-2">
         {activeCategories.map((category) => (
           <button
             key={category}
@@ -191,7 +191,7 @@ export default function MobileSortingReview({
   );
 
   return (
-    <section className="mobile-sorting space-y-3 md:hidden" aria-label="Mobile exercise">
+    <section className="mobile-sorting space-y-3 lg:hidden" aria-label="Mobile exercise">
       <div className="border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default space-y-3 border p-4 shadow-sm">
         <h2 className="sr-only">Round {roundNumber} command center</h2>
         <div className="text-interface-base-small flex flex-wrap items-center justify-between gap-2">

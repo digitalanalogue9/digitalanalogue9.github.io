@@ -38,7 +38,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
 
   return (
     <section
-      className="current-card-panel grid w-full min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-6"
+      className="current-card-panel grid w-full min-w-0 grid-cols-1 items-stretch gap-4 md:grid-cols-[1.2fr_1fr] md:gap-6"
       aria-labelledby="current-card-heading"
     >
       <motion.div
@@ -64,7 +64,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
             >
               Current card
             </p>
-            <h3 className="text-sys-color-text-primary text-interface-title-1 mt-2 leading-tight font-semibold wrap-break-word">
+            <h3 className="text-sys-color-text-primary text-interface-title-1 mt-2 leading-tight font-semibold wrap-break-word lg:text-interface-title-2 xl:text-interface-title-1">
               {card.title}
             </h3>
             <p className="text-sys-color-text-primary text-interface-base-large mt-3 font-sans leading-relaxed wrap-break-word">

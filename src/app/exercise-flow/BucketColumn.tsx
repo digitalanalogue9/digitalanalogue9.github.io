@@ -68,7 +68,7 @@ export default function BucketColumn({
       aria-label={`${category} category`}
     >
       <div className="flex items-center justify-between gap-3">
-        <h4 className="text-sys-color-text-primary text-interface-base-default font-semibold">{category}</h4>
+        <h4 className="text-sys-color-text-primary text-interface-base-default min-w-0 font-semibold wrap-break-word">{category}</h4>
         <span className="bg-sys-color-surface-warm text-sys-color-text-primary rounded-ref-radius-999 text-interface-tiny-label px-2.5 py-0.5 font-semibold">
           {cards.length}
         </span>

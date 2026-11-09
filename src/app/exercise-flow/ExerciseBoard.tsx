@@ -59,18 +59,11 @@ function SortingBoard({ round, busy, onCommand, onAdvance = () => {}, onReplayPr
     onReplayPrevious,
   };
   const columns: Record<number, string> = {
-    1: 'md:grid-cols-1',
-    2: 'md:grid-cols-2',
-    3: 'md:grid-cols-3',
-    4: 'md:grid-cols-4',
-    5: 'md:grid-cols-5',
-  };
-  const minimumWidths: Record<number, string> = {
-    1: '',
-    2: 'md:min-w-100',
-    3: 'md:min-w-150',
-    4: 'md:min-w-200',
-    5: 'md:min-w-250',
+    1: 'grid-cols-1',
+    2: 'grid-cols-1 lg:grid-cols-2',
+    3: 'grid-cols-1 lg:grid-cols-3',
+    4: 'grid-cols-2 lg:grid-cols-4',
+    5: 'grid-cols-3 lg:grid-cols-5',
   };
   return (
     <section aria-label={`Round ${round.roundNumber}`} aria-busy={busy} className="space-y-6">
@@ -93,9 +86,9 @@ function SortingBoard({ round, busy, onCommand, onAdvance = () => {}, onReplayPr
             Accessibility {isAccessibilityMode ? 'On' : 'Off'}
           </button>
           <CommandCenter {...controls} card={round.deck[0]} onDrop={onDrop} />
-          <section className="overflow-x-auto pb-2" aria-label="Sorting buckets">
+          <section className="pb-2" aria-label="Sorting buckets">
             <div
-              className={`grid grid-cols-1 gap-4 ${minimumWidths[round.activeCategories.length]} ${columns[round.activeCategories.length]}`}
+              className={`exercise-bucket-grid grid gap-4 ${columns[round.activeCategories.length]}`}
             >
               {round.activeCategories.map((category) => (
                 <BucketColumn
