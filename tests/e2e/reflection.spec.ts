@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+test.skip(
+  process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION !== 'true',
+  'The behaviour-reflection journey requires an enabled Vite build.'
+);
+
 test('participant can complete and resume a Behaviour reflection', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/behaviour');
