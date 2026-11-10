@@ -56,6 +56,31 @@ body {
   line-height: 1.5;
   overflow-y: scroll;
 }
+@media (min-width: 768px) and (max-height: 800px) {
+  .exercise-footer {
+    display: none;
+  }
+
+  #main-content.exercise-main {
+    padding-block: 0.5rem;
+  }
+
+  #main-content.exercise-main .app-exercise > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem;
+  }
+
+  #main-content.exercise-main [aria-label^='Round '] > :not([hidden]) ~ :not([hidden]) {
+    margin-block-start: 0.5rem;
+  }
+
+  #main-content.exercise-main .exercise-bucket-grid article {
+    padding: 0.5rem;
+  }
+
+  #main-content.exercise-main .exercise-bucket-grid ul {
+    min-height: 8rem;
+  }
+}
 
 /* Ensure all interactive elements have sufficient contrast */
 .button {

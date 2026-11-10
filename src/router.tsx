@@ -62,6 +62,7 @@ function SiteLayout() {
   const backgroundClassName = isNotFoundRoute
     ? 'core-values-error-background'
     : `core-values-background core-values-background--${backgroundVariant}`;
+  const isExerciseRoute = location.pathname === '/exercise';
 
   return (
     <>
@@ -105,7 +106,7 @@ function SiteLayout() {
         <CookieBanner />
         <main
           id="main-content"
-          className={`${backgroundClassName} flex flex-1 flex-col bg-no-repeat px-4 py-8 sm:px-6 lg:px-8 print:block print:overflow-visible print:bg-none print:px-0 print:py-0`}
+          className={`${backgroundClassName} flex flex-1 flex-col bg-no-repeat px-4 py-8 sm:px-6 lg:px-8 ${isExerciseRoute ? 'exercise-main' : ''} print:block print:overflow-visible print:bg-none print:px-0 print:py-0`}
           role="main"
           aria-label="Main content"
         >
@@ -113,7 +114,7 @@ function SiteLayout() {
             <Outlet />
           </Suspense>
         </main>
-        <footer className="public-footer print:hidden" role="contentinfo" aria-label="Site footer">
+        <footer className={`public-footer print:hidden${isExerciseRoute ? ' exercise-footer' : ''}`} role="contentinfo" aria-label="Site footer">
           <div className="public-footer-inner">
             <span className="public-footer-copyright">© {new Date().getFullYear()} Core Values</span>
             <nav aria-label="Footer navigation">
