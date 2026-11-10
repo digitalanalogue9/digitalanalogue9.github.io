@@ -6,7 +6,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   {
-    ignores: ['coverage/**', 'dist/**', 'node_modules/**', 'public/sw.js', 'public/workbox-*.js'],
+    ignores: ['.stryker-tmp/**', 'coverage/**', 'dist/**', 'node_modules/**', 'public/sw.js', 'public/workbox-*.js'],
   },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],

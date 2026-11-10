@@ -16,6 +16,8 @@ test('About and Contact load directly, refresh, and remain usable at 320px', asy
     await page.setViewportSize({ width: 320, height: 900 });
     await expect(page.getByRole('heading', { name: heading })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+    await page.getByRole('button', { name: 'Menu' }).press('Enter');
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
     for (const target of await page.locator('.public-nav a, .editorial-button, .public-footer nav a').all()) {
       expect(await target.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
     }

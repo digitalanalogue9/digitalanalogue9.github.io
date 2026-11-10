@@ -29,7 +29,7 @@ test('home introduces the values exercise and keeps the public routes within rea
   await expect(page).toHaveTitle('Core Values · Explore what matters to you');
   await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
     'content',
-    'Sort value cards, choose what matters most to you and reflect on your priorities. Save your exercise in this browser and return to it later.'
+    'Sort value cards to explore personal priorities or use the team-focused set together in a meeting to discuss what matters in working together.'
   );
 
   await page.reload();

@@ -18,7 +18,7 @@ for (const [route, metadata] of Object.entries(editorialRouteMetadata)) {
 
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${metadata.title}</title>`);
   html = html.replace(
-    /<meta name="description" content="[^"]*"\s*\/>/,
+    /<meta\s+name="description"\s+content="[^"]*"\s*\/>/,
     `<meta name="description" content="${metadata.description}" />`
   );
   html = html.replace(
@@ -26,7 +26,7 @@ for (const [route, metadata] of Object.entries(editorialRouteMetadata)) {
     `<meta property="og:title" content="${metadata.title}" />`
   );
   html = html.replace(
-    /<meta property="og:description" content="[^"]*"\s*\/>/,
+    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/,
     `<meta property="og:description" content="${metadata.description}" />`
   );
   html = html.replace(
