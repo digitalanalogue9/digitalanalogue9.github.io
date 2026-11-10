@@ -125,9 +125,9 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     return (
       <div className={`${nonExercisePageContainerClassName} space-y-4`} role="status" aria-live="polite">
         <div className="border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default border p-6 shadow-sm">
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm h-4 w-32 animate-pulse" />
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-3 h-7 w-64 animate-pulse" />
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-5 h-28 animate-pulse" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm h-4 w-32 animate-pulse motion-reduce:animate-none" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-3 h-7 w-64 animate-pulse motion-reduce:animate-none" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-5 h-28 animate-pulse motion-reduce:animate-none" />
         </div>
       </div>
     );
@@ -225,7 +225,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
         </button>
         <Link
           to={{ pathname: '/exercise', search: exerciseSearch }}
-          className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border px-4 py-2 no-underline transition-colors"
+          className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border px-4 py-2 no-underline transition-colors motion-reduce:transition-none"
         >
           Back to Board
         </Link>

@@ -105,7 +105,7 @@ export function CardMoveOptions({ value, currentCategory, onMoveBetweenCategorie
         position: 'fixed',
         top: `${position.top}px`,
         left: `${position.left}px`,
-        zIndex: 9999,
+        zIndex: 50,
       }}
       role="dialog"
       aria-label={`Move options for ${value.title}`}

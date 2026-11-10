@@ -75,11 +75,24 @@ function SiteLayout() {
               <CoreValuesLogoMark className="h-8 w-8 flex-shrink-0" />
               <span>Core Values</span>
             </Link>
-            <button className="public-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="public-menu" onClick={() => setMenuOpen((open) => !open)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+            <button
+              className="public-menu-toggle"
+              type="button"
+              aria-expanded={menuOpen}
+              aria-controls="public-menu"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
               <span>Menu</span>
             </button>
-            <nav id="public-menu" className={`public-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation" onClick={() => setMenuOpen(false)}>
+            <nav
+              id="public-menu"
+              className={menuOpen ? 'public-nav is-open' : 'public-nav'}
+              aria-label="Main navigation"
+              onClick={() => setMenuOpen(false)}
+            >
               <NavLink to="/howtouse">How it works</NavLink>
               <NavLink to="/about">About</NavLink>
               <NavLink to="/history">History</NavLink>

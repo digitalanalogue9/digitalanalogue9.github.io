@@ -1,5 +1,3 @@
-'use client';
-
 import { createWithEqualityFn } from 'zustand/traditional';
 import { devtools } from 'zustand/middleware';
 import { emptyCategories } from '@/components/features/Categories/constants/categories';

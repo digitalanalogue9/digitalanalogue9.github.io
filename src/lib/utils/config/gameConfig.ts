@@ -1,5 +1,3 @@
-'use client';
-
 export const getGameConfig = () => ({
   maxCards: Number(import.meta.env.NEXT_PUBLIC_CARDS_IN_GAME || 35),
   defaultCoreValues: Number(import.meta.env.NEXT_PUBLIC_DEFAULT_CORE_VALUES_TO_CHOOSE || 10),

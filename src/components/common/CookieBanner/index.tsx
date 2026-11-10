@@ -55,14 +55,14 @@ export default function CookieBanner() {
             <button
               type="button"
               onClick={() => chooseConsent('granted', 'granted')}
-              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
             >
               Allow analytics
             </button>
             <button
               type="button"
               onClick={() => chooseConsent('denied', 'denied')}
-              className="rounded-sys-radius-button-sm text-interface-base-small min-h-11 border border-white px-5 py-2 font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="rounded-sys-radius-button-sm text-interface-base-small min-h-11 border border-white px-5 py-2 font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
             >
               Reject optional cookies
             </button>
@@ -99,7 +99,7 @@ export default function CookieBanner() {
             <button
               type="button"
               onClick={() => chooseConsent(choices.analytics, choices.functional)}
-              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 w-full px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
+              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 w-full px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none sm:w-auto"
             >
               Save preferences
             </button>

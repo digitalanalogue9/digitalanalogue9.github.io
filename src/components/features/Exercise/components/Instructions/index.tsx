@@ -26,7 +26,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
   }, [shouldShowAgain, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-75 p-2 sm:p-4">
+    <div className="bg-opacity-75 fixed inset-0 z-50 flex items-center justify-center bg-white p-2 sm:p-4">
       <div className="max-h-[90vh] w-full max-w-xs overflow-y-auto rounded-lg border-2 border-black bg-white p-4 sm:max-w-sm sm:p-6 md:max-w-2xl">
         <h2 className="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">How to Use Core Values</h2>
         <ol className="ml-4 list-decimal space-y-1 text-sm sm:ml-6 sm:space-y-2 sm:text-base">
@@ -69,7 +69,7 @@ export default function Instructions({ onClose }: InstructionsProps) {
             type="button"
             aria-label="Confirm instructions understood and start exercise"
             onClick={handleClose}
-            className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 sm:w-auto"
+            className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 motion-reduce:transition-none sm:w-auto"
           >
             Got it!
           </button>

@@ -94,7 +94,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
     if (isLoading) {
       return (
         <div className="flex items-center justify-center p-4" role="status">
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500" />
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500 motion-reduce:animate-none" />
         </div>
       );
     }
@@ -200,7 +200,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(values, setCopySuccess);
             }}
-            className={`h-8 w-8 p-0 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} flex items-center justify-center rounded-none text-white transition-colors duration-200 hover:bg-blue-700`}
+            className={`h-8 w-8 p-0 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} flex items-center justify-center rounded-none text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none`}
             aria-label="Copy values to clipboard"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -210,7 +210,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
           <button
             type="button"
             onClick={handlePrint}
-            className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
+            className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700 motion-reduce:transition-none"
             aria-label="Print values"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -251,7 +251,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                 {value.reason && (
                   <div className="mt-2 border-t border-gray-200 pt-2">
                     <p className="text-sm font-medium text-black">Why it is meaningful:</p>
-                    <p className="text-sm italic text-black">{value.reason}</p>
+                    <p className="text-sm text-black italic">{value.reason}</p>
                   </div>
                 )}
               </div>
@@ -290,12 +290,12 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
               type="button"
               onClick={() => setIsDeleteModalOpen(true)}
               aria-label="Delete selected sessions"
-              className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700"
+              className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700 motion-reduce:transition-none"
             >
               Delete Selected
             </button>
           )}
-          <label className="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700">
+          <label className="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none">
             Import Session
             <input
               type="file"
@@ -310,28 +310,28 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
       <table className="min-w-full rounded-lg bg-white shadow-md">
         <thead>
           <tr className="border-b bg-gray-100">
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               <span className="sr-only">Select</span>
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Session ID
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Last Updated
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Type
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Target Values
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Current Round
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Status
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium tracking-wider text-black uppercase">
               Actions
             </th>
           </tr>
@@ -339,7 +339,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
         <tbody className="divide-y divide-gray-200">
           {sessions.map((session) => (
             <tr key={session.id} className="hover:bg-gray-100">
-              <td className="whitespace-nowrap px-6 py-4">
+              <td className="px-6 py-4 whitespace-nowrap">
                 <label htmlFor={`session-${session.id}`} className="sr-only">
                   Check {session.id} to select for deletion
                 </label>
@@ -351,29 +351,29 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                   className="rounded border-gray-300 text-blue-700 focus:ring-blue-600"
                 />
               </td>
-              <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.id}</td>
-              <td className="whitespace-nowrap px-6 py-4 text-sm text-black">
+              <td className="px-6 py-4 font-mono text-xs whitespace-nowrap text-black">{session.id}</td>
+              <td className="px-6 py-4 text-sm whitespace-nowrap text-black">
                 <time dateTime={new Date(session.timestamp).toISOString()}>
                   {formatRelative(new Date(session.timestamp).toISOString(), new Date())}
                 </time>
               </td>
-              <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-black">{session.exerciseType}</td>
-              <td className="whitespace-nowrap px-6 py-4 text-sm text-black">{session.targetCoreValues}</td>
-              <td className="whitespace-nowrap px-6 py-4 text-sm text-black">{session.currentRound}</td>
-              <td className="whitespace-nowrap px-6 py-4">
+              <td className="px-6 py-4 font-mono text-xs whitespace-nowrap text-black">{session.exerciseType}</td>
+              <td className="px-6 py-4 text-sm whitespace-nowrap text-black">{session.targetCoreValues}</td>
+              <td className="px-6 py-4 text-sm whitespace-nowrap text-black">{session.currentRound}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${session.completed ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}
+                  className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${session.completed ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}
                 >
                   {session.completed ? 'Completed' : 'In Progress'}
                 </span>
               </td>
-              <td className="space-x-2 whitespace-nowrap px-6 py-4 text-sm font-medium">
+              <td className="space-x-2 px-6 py-4 text-sm font-medium whitespace-nowrap">
                 {session.completed ? (
                   <>
                     <button
                       onClick={() => handleShowValues(session.id, setIsLoading, setCurrentValues, setShowValuesFor)}
                       aria-label={`Show values for session ${session.id}`}
-                      className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
+                      className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
                     >
                       My Values
                     </button>
@@ -381,7 +381,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                       <button
                         onClick={() => handleReplay(session.id)}
                         aria-label={`Replay session ${session.id}`}
-                        className="rounded-md bg-green-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-green-800"
+                        className="rounded-md bg-green-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-green-800 motion-reduce:transition-none"
                       >
                         Replay
                       </button>
@@ -391,7 +391,7 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                   <button
                     onClick={() => handleResumeGame(session.id)}
                     aria-label={`Resume session ${session.id}`}
-                    className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
+                    className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
                   >
                     Resume
                   </button>
@@ -401,14 +401,14 @@ export function DesktopSessionList({ sessions, onSessionDeleted, onSessionImport
                     selectAll([session.id]);
                     setIsDeleteModalOpen(true);
                   }}
-                  className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700"
+                  className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700 motion-reduce:transition-none"
                   aria-label={`Delete session from ${formatDate(session.timestamp)}`}
                 >
                   Delete
                 </button>
                 <button
                   onClick={() => handleExportSession(session.id, sessions)}
-                  className="rounded-md bg-orange-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-orange-800"
+                  className="rounded-md bg-orange-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-orange-800 motion-reduce:transition-none"
                   aria-label={`Export session ${session.id}`}
                 >
                   Export

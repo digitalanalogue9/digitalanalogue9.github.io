@@ -240,7 +240,7 @@ export default function Results() {
             <button
               type="button"
               onClick={handlePrint}
-              className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
+              className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700 motion-reduce:transition-none"
               aria-label="Print values"
               title="Print values"
             >
@@ -255,7 +255,7 @@ export default function Results() {
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(veryImportantValues);
             }}
-            className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700"
+            className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
             aria-label="Copy values to clipboard"
             title="Copy values to clipboard"
           >
@@ -318,7 +318,7 @@ export default function Results() {
                           aria-label={`Personal meaning for ${value.title}`}
                         >
                           <p className="mb-1 text-sm font-medium text-black">Why it is meaningful:</p>
-                          <p className="text-sm italic text-black sm:text-base">{value.reason}</p>
+                          <p className="text-sm text-black italic sm:text-base">{value.reason}</p>
                         </div>
                       )}
                     </article>
@@ -337,7 +337,7 @@ export default function Results() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700"
+                className="flex h-8 w-8 items-center justify-center rounded-none bg-green-600 p-0 text-white transition-colors duration-200 hover:bg-green-700 motion-reduce:transition-none"
                 aria-label="Print values"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -351,7 +351,7 @@ export default function Results() {
                 setCopySuccess(!copySuccess);
                 handleCopyToClipboard(veryImportantValues);
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700"
+              className="flex h-8 w-8 items-center justify-center rounded-none bg-blue-600 p-0 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
               aria-label="Copy values to clipboard"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -385,7 +385,7 @@ export default function Results() {
           <button
             type="button"
             onClick={handleViewHistory}
-            className="w-full rounded-lg bg-blue-700 px-6 py-2 text-white transition-colors hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 sm:w-auto"
+            className="w-full rounded-lg bg-blue-700 px-6 py-2 text-white transition-colors hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none sm:w-auto"
             aria-label="View all your previous results"
           >
             View All Previous Results
@@ -393,7 +393,7 @@ export default function Results() {
           <button
             type="button"
             onClick={handleNewExercise}
-            className="w-full rounded-lg bg-green-700 px-6 py-2 text-center text-white transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 sm:w-auto"
+            className="w-full rounded-lg bg-green-700 px-6 py-2 text-center text-white transition-colors hover:bg-green-800 focus:ring-2 focus:ring-green-700 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none sm:w-auto"
             aria-label="Start a new values exercise"
           >
             Start New Exercise

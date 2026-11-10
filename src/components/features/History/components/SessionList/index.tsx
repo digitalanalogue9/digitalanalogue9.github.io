@@ -19,7 +19,7 @@ export function SessionList({ sessions, onSessionDeleted, onSessionImported }: S
   if (!isInitialized) {
     return (
       <div className="flex items-center justify-center p-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500" />
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500 motion-reduce:animate-none" />
       </div>
     );
   }

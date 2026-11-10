@@ -1,5 +1,3 @@
-'use client';
-
 import { generateSessionName } from '@/components/features/Exercise/utils';
 import { openDB, IDBPDatabase } from 'idb';
 import { Session } from '@/lib/types/Session';

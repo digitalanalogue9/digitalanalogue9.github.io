@@ -62,13 +62,15 @@ export default function BucketColumn({
     <motion.article
       ref={bucketRef}
       layout
-      className={`border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default min-w-0 border p-3 shadow-sm transition-all duration-200 ${
+      className={`border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default min-w-0 border p-3 shadow-sm transition-all duration-200 motion-reduce:transition-none ${
         isOver ? 'border-ref-color-brand-primary bg-sys-color-surface-subtle ring-sys-color-focus-ring/25 ring-2' : ''
       }`}
       aria-label={`${category} category`}
     >
       <div className="flex items-center justify-between gap-3">
-        <h4 className="text-sys-color-text-primary text-interface-base-default min-w-0 font-semibold wrap-break-word">{category}</h4>
+        <h4 className="text-sys-color-text-primary text-interface-base-default min-w-0 font-semibold wrap-break-word">
+          {category}
+        </h4>
         <span className="bg-sys-color-surface-warm text-sys-color-text-primary rounded-ref-radius-999 text-interface-tiny-label px-2.5 py-0.5 font-semibold">
           {cards.length}
         </span>

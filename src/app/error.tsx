@@ -61,7 +61,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <button
             type="button"
             onClick={() => reset()}
-            className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full rounded bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none"
             aria-label="Attempt to recover from error"
           >
             Try again

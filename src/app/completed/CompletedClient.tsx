@@ -207,9 +207,9 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     return (
       <div className={`${nonExercisePageContainerClassName} space-y-4`} role="status" aria-live="polite">
         <div className="border-sys-color-border-default rounded-sys-radius-card-sm bg-sys-color-surface-default border p-6 shadow-sm">
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm h-4 w-32 animate-pulse" />
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-3 h-8 w-72 animate-pulse" />
-          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-5 h-40 animate-pulse" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm h-4 w-32 animate-pulse motion-reduce:animate-none" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-3 h-8 w-72 animate-pulse motion-reduce:animate-none" />
+          <div className="bg-sys-color-surface-subtle rounded-sys-radius-button-sm mt-5 h-40 animate-pulse motion-reduce:animate-none" />
         </div>
       </div>
     );
@@ -232,7 +232,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           </Link>
           <Link
             to={{ pathname: '/exercise', search: `?${new URLSearchParams({ sessionId }).toString()}` }}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 no-underline transition-colors md:min-h-9"
+            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 no-underline transition-colors motion-reduce:transition-none md:min-h-9"
           >
             Back to Board
           </Link>
@@ -506,7 +506,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           </Link>
           <Link
             to={{ pathname: '/replay', search: replaySearch }}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-small text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 font-semibold no-underline transition-colors md:min-h-9"
+            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-small text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 font-semibold no-underline transition-colors motion-reduce:transition-none md:min-h-9"
           >
             Replay Session
           </Link>

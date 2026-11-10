@@ -48,7 +48,7 @@ export function RoundActions({
             <button
               onClick={onNextRound}
               disabled={!canProceedToNextRound}
-              className={` ${isMobile ? 'px-3 py-1.5 text-sm' : 'px-6 py-2 text-base'} rounded-md font-medium text-white ${canProceedToNextRound ? 'bg-blue-600 hover:bg-blue-700' : 'cursor-not-allowed bg-gray-400'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+              className={` ${isMobile ? 'px-3 py-1.5 text-sm' : 'px-6 py-2 text-base'} rounded-md font-medium text-white ${canProceedToNextRound ? 'bg-blue-600 hover:bg-blue-700' : 'cursor-not-allowed bg-gray-400'} focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none`}
               aria-label={isEndGame ? 'Complete exercise' : 'Proceed to next round'}
             >
               {isEndGame ? 'Finish' : 'Next Round'}
@@ -57,7 +57,7 @@ export function RoundActions({
               <button
                 onClick={handleFinishClick}
                 disabled={!canProceedToNextRound}
-                className={` ${isMobile ? 'px-3 py-1.5 text-sm' : 'px-6 py-2 text-base'} rounded-md font-medium text-white ${canProceedToNextRound ? 'bg-gray-600 hover:bg-gray-700' : 'cursor-not-allowed bg-gray-400'} focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2`}
+                className={` ${isMobile ? 'px-3 py-1.5 text-sm' : 'px-6 py-2 text-base'} rounded-md font-medium text-white ${canProceedToNextRound ? 'bg-gray-600 hover:bg-gray-700' : 'cursor-not-allowed bg-gray-400'} focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none`}
               >
                 Finish Early
               </button>
@@ -84,7 +84,9 @@ export function RoundActions({
               If you want to continue normally instead:
               <ul className={`${styles.paragraph} list-disc space-y-2 pl-5`}>
                 <li>Click &quot;Cancel&quot; to close this dialog</li>
-                <li>Click &quot;Next Round&quot; to continue with a reduced set of cards (discarding Not Important cards)</li>
+                <li>
+                  Click &quot;Next Round&quot; to continue with a reduced set of cards (discarding Not Important cards)
+                </li>
                 <li>Use the &quot;Replay Previous&quot; button to quickly sort remaining cards</li>
               </ul>
             </div>
@@ -114,7 +116,7 @@ export function RoundActions({
     return (
       <div className="flex h-44 flex-col items-center" role="region" aria-label="Current value card">
         <div
-          className={`flex scale-[0.7] transform cursor-pointer items-center justify-center transition-all duration-200`}
+          className={`flex scale-[0.7] transform cursor-pointer items-center justify-center transition-all duration-200 motion-reduce:transition-none`}
           role="button"
           tabIndex={0}
           onClick={handleCardClick}

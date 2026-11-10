@@ -114,7 +114,7 @@ export function ExerciseSetup() {
           </button>
           <button
             type="button"
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-primary-hover inline-flex min-h-11 w-full items-center justify-center border px-4 py-2 font-normal transition-colors hover:text-white active:translate-y-px disabled:opacity-60 sm:w-auto"
+            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-primary-hover inline-flex min-h-11 w-full items-center justify-center border px-4 py-2 font-normal transition-colors hover:text-white active:translate-y-px disabled:opacity-60 motion-reduce:transition-none sm:w-auto"
             onClick={() => navigate('/history')}
             disabled={isStarting}
           >

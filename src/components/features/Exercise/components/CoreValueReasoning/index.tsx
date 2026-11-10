@@ -67,7 +67,7 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
         <div className="flex justify-end">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-md bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none"
             aria-label="Save reasons and view results"
           >
             Continue to Results
@@ -99,7 +99,7 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
                     </label>
                     <textarea
                       id={`reason-${value.id}`}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                       rows={3}
                       value={reasons[value.id] || ''}
                       onChange={(e) => handleReasonChange(value.id, e.target.value)}
@@ -116,7 +116,7 @@ export function CoreValueReasoning({ values, onComplete }: CoreValueReasoningPro
         <div className="flex justify-end">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-md bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none"
             aria-label="Save reasons and view results"
           >
             Continue to Results

@@ -1,5 +1,4 @@
 // layout.tsx
-'use client';
 
 import '@/styles/globals.css';
 import Navigation from '@/components/common/Navigation';

@@ -93,7 +93,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
     if (isLoading) {
       return (
         <div className="flex items-center justify-center p-4" role="status">
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500" />
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500 motion-reduce:animate-none" />
         </div>
       );
     }
@@ -115,7 +115,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
               setShowValuesFor(null);
             }}
             aria-label={`Close`}
-            className="rounded-none bg-white p-2 text-black transition-colors duration-200 hover:bg-white"
+            className="rounded-none bg-white p-2 text-black transition-colors duration-200 hover:bg-white motion-reduce:transition-none"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path
@@ -126,7 +126,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             </svg>
           </button>
         </div>
-        <h3 className="mb-2 text-lg font-medium leading-6 text-black" id="fake-modal-title">
+        <h3 className="mb-2 text-lg leading-6 font-medium text-black" id="fake-modal-title">
           Share your Core Values
         </h3>
         <div className="mb-4 flex items-center justify-center gap-2">
@@ -136,7 +136,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
               setCopySuccess(!copySuccess);
               handleCopyToClipboard(values, setCopySuccess);
             }}
-            className={`h-8 w-8 p-0 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} flex items-center justify-center rounded-none text-white transition-colors duration-200 hover:bg-blue-700`}
+            className={`h-8 w-8 p-0 ${copySuccess ? 'bg-green-600' : 'bg-blue-600'} flex items-center justify-center rounded-none text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none`}
             aria-label="Copy values to clipboard"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -177,7 +177,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                 {value.reason && (
                   <div className="mt-2 border-t border-gray-200 pt-2">
                     <p className="text-sm font-medium text-black">Why it is meaningful:</p>
-                    <p className="text-sm italic text-black">{value.reason}</p>
+                    <p className="text-sm text-black italic">{value.reason}</p>
                   </div>
                 )}
               </div>
@@ -190,7 +190,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
               setShowValuesFor(null);
             }}
             aria-label={`Close`}
-            className="w-full rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
+            className="w-full rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
           >
             Close
           </button>
@@ -213,7 +213,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             type="button"
             onClick={toggleSelectionMode}
             aria-label={isSelectionMode ? 'Cancel' : 'Select'}
-            className="rounded-md bg-gray-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-gray-700"
+            className="rounded-md bg-gray-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-gray-700 motion-reduce:transition-none"
           >
             {isSelectionMode ? 'Cancel' : 'Select'}
           </button>
@@ -224,7 +224,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                   type="button"
                   onClick={() => setIsDeleteModalOpen(true)}
                   aria-label={`Delete ${selectedSessions.size} sessions`}
-                  className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700"
+                  className="rounded-md bg-red-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-red-700 motion-reduce:transition-none"
                 >
                   Delete ({selectedSessions.size})
                 </button>
@@ -233,13 +233,13 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                 type="button"
                 onClick={handleSelectAll}
                 aria-label={selectedSessions.size === sessions.length ? 'Deselect all sessions' : 'Select all sessions'}
-                className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
+                className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
               >
                 {selectedSessions.size === sessions.length ? 'Select None' : 'Select All'}
               </button>
             </div>
           )}
-          <label className="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700">
+          <label className="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none">
             Import Session
             <input
               type="file"
@@ -258,7 +258,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
             className={`relative rounded-lg bg-white p-4 shadow ${isSelectionMode ? 'pl-12' : ''}`}
           >
             {isSelectionMode && (
-              <div className="absolute left-4 top-1/2 -translate-y-1/2">
+              <div className="absolute top-1/2 left-4 -translate-y-1/2">
                 <label id={`label-select-${session.id}`} htmlFor={`select-${session.id}`} className="sr-only">
                   Show instructions when starting the exercise
                 </label>
@@ -295,14 +295,14 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                         handleShowValues(session.id);
                       }}
                       aria-label={`Show values for ${session.id}`}
-                      className="rounded-md bg-green-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-green-800"
+                      className="rounded-md bg-green-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-green-800 motion-reduce:transition-none"
                     >
                       Show Values
                     </button>
                     <button
                       type="button"
                       onClick={() => handleExportSession(session.id, sessions)}
-                      className="rounded-md bg-orange-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-orange-800"
+                      className="rounded-md bg-orange-700 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-orange-800 motion-reduce:transition-none"
                       aria-label={`Export session ${session.id}`}
                     >
                       Export
@@ -313,7 +313,7 @@ export function MobileSessionList({ sessions, onSessionDeleted, onSessionImporte
                     type="button"
                     onClick={() => (window.location.href = `/exercise?sessionId=${session.id}&resume=true`)}
                     aria-label="Resume session"
-                    className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700"
+                    className="rounded-md bg-blue-600 px-3 py-1.5 text-white transition-colors duration-200 hover:bg-blue-700 motion-reduce:transition-none"
                   >
                     Resume
                   </button>

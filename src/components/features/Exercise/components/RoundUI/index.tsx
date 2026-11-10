@@ -76,7 +76,7 @@ const RoundUI = memo(function RoundUI() {
     return Object.entries(categories)
       .filter(([category]) => category !== 'Not Important')
       .reduce((sum, [_, cards]) => {
-        return sum + ((cards as Array<unknown>)?.length || 0); 
+        return sum + ((cards as Array<unknown>)?.length || 0);
       }, 0);
   }, [categories]);
 
@@ -93,9 +93,7 @@ const RoundUI = memo(function RoundUI() {
     categories,
   });
 
-  const hasTargetCoreValuesInVeryImportant = useMemo(() => {
-    return roundState.veryImportantCount === targetCoreValues;
-  }, [roundState.veryImportantCount, targetCoreValues]);
+  const hasTargetCoreValuesInVeryImportant = roundState.veryImportantCount === targetCoreValues;
   const status = useRoundStatus({
     remainingCards,
     targetCoreValues,
@@ -393,7 +391,7 @@ const RoundUI = memo(function RoundUI() {
   }
   return (
     <div
-      className={`flex h-full flex-col overflow-hidden ${isMobile && selectedMobileCard ? 'bg-gray-100' : ''} transition-colors duration-200`}
+      className={`flex h-full flex-col overflow-hidden ${isMobile && selectedMobileCard ? 'bg-gray-100' : ''} transition-colors duration-200 motion-reduce:transition-none`}
       role="application"
       aria-label="Core Values Sorting Exercise"
     >
@@ -412,7 +410,7 @@ const RoundUI = memo(function RoundUI() {
         )}
 
         <div
-          className={`transition-opacity duration-200 ${isMobile && selectedMobileCard ? 'opacity-30' : 'opacity-100'} `}
+          className={`transition-opacity duration-200 motion-reduce:transition-none ${isMobile && selectedMobileCard ? 'opacity-30' : 'opacity-100'} `}
         >
           <RoundHeader
             targetCoreValues={targetCoreValues}
@@ -464,7 +462,7 @@ const RoundUI = memo(function RoundUI() {
                 <div
                   role="status"
                   aria-live="polite"
-                  className={`transition-opacity duration-200 ${selectedMobileCard ? 'opacity-30' : 'opacity-100'}`}
+                  className={`transition-opacity duration-200 motion-reduce:transition-none ${selectedMobileCard ? 'opacity-30' : 'opacity-100'}`}
                 >
                   <StatusMessage
                     status={status()}
@@ -539,7 +537,7 @@ const RoundUI = memo(function RoundUI() {
       {/* Scrollable Game Content */}
       <div className="flex-1 overflow-auto" role="region" aria-label="Value categories">
         {isMobile ? (
-          <div className="flex h-full flex-col pb-16 pt-4">
+          <div className="flex h-full flex-col pt-4 pb-16">
             {' '}
             {/* Added pt-2 for top padding */}
             <MobileCategoryList

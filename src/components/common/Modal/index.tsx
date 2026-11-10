@@ -44,7 +44,7 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            className="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity motion-reduce:transition-none"
             onClick={handleOverlayClick}
           />
 
@@ -56,13 +56,13 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 ref={modalRef}
-                className={`relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 ${maxWidth}`}
+                className={`relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all motion-reduce:transition-none sm:my-8 ${maxWidth}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 w-full text-center sm:mt-0 sm:text-left">
-                      <h3 className="text-lg font-medium leading-6 text-black" id="modal-title">
+                      <h3 className="text-lg leading-6 font-medium text-black" id="modal-title">
                         {title}
                       </h3>
                       <div className="mt-2">{children}</div>

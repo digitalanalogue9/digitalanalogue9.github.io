@@ -40,10 +40,10 @@ export default function OfflineIndicator() {
     <div
       role="alert"
       aria-live="polite"
-      className="fixed bottom-2 left-2 z-50 max-w-[calc(100vw-1rem)] transform rounded-lg bg-yellow-500 px-3 py-2 text-xs text-white shadow-lg transition-all duration-300 sm:bottom-4 sm:left-4 sm:max-w-md sm:px-4 sm:py-3 sm:text-sm"
+      className="fixed bottom-2 left-2 z-50 max-w-[calc(100vw-1rem)] transform rounded-lg bg-yellow-500 px-3 py-2 text-xs text-white shadow-lg transition-all duration-300 motion-reduce:transition-none sm:bottom-4 sm:left-4 sm:max-w-md sm:px-4 sm:py-3 sm:text-sm"
     >
       <div className="flex items-center space-x-2" aria-label="Offline status indicator">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-white" aria-hidden="true" />
+        <span className="h-2 w-2 animate-pulse rounded-full bg-white motion-reduce:animate-none" aria-hidden="true" />
         <span className="sr-only">Warning:</span>
         <span>You are offline. Some features may be limited.</span>
       </div>

@@ -26,12 +26,7 @@ export function SessionSelectionProvider({ children }: { children: React.ReactNo
     setSelectedSessions(new Set());
   }, []);
 
-  const isSelected = useCallback(
-    (sessionId: string) => {
-      return selectedSessions.has(sessionId);
-    },
-    [selectedSessions]
-  );
+  const isSelected = (sessionId: string) => selectedSessions.has(sessionId);
 
   return (
     <SessionSelectionContext.Provider

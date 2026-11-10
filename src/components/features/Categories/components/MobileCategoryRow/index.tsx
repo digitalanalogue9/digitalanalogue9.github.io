@@ -47,7 +47,7 @@ export function MobileCategoryRow({
   return (
     <motion.div
       layout
-      className={`border-1 rounded-lg transition-all duration-300 ${isActive || lastDroppedCategory === category ? 'bg-green-50' : 'bg-white'} ${showingCardSelection ? 'z-50 cursor-pointer border-black shadow-md' : 'z-0 border-transparent hover:border-gray-200'} `}
+      className={`rounded-lg border-1 transition-all duration-300 motion-reduce:transition-none ${isActive || lastDroppedCategory === category ? 'bg-green-50' : 'bg-white'} ${showingCardSelection ? 'z-50 cursor-pointer border-black shadow-md' : 'z-0 border-transparent hover:border-gray-200'} `}
       role="region"
       aria-labelledby={categoryId}
     >
@@ -106,10 +106,10 @@ export function MobileCategoryRow({
                       aria-label={`${card.title}. Click to ${expandedCards.has(card.id) ? 'collapse' : 'expand'}`}
                     >
                       <ChevronDownIcon
-                        className={`h-4 w-4 flex-shrink-0 bg-yellow-100 text-black transition-transform ${expandedCards.has(card.id) ? 'rotate-180' : ''} `}
+                        className={`h-4 w-4 flex-shrink-0 bg-yellow-100 text-black transition-transform motion-reduce:transition-none ${expandedCards.has(card.id) ? 'rotate-180' : ''} `}
                         aria-hidden="true"
                       />
-                      <span className="min-w-0 max-w-[200px] break-words bg-yellow-100 text-sm font-medium text-black">
+                      <span className="max-w-[200px] min-w-0 bg-yellow-100 text-sm font-medium break-words text-black">
                         {card.title}
                       </span>
                     </button>

@@ -147,7 +147,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
             isReplaying || remainingCards.length === 0
               ? 'cursor-not-allowed bg-gray-100 text-gray-400'
               : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-          } transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+          } transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none`}
           aria-label={isReplaying ? 'Replaying previous round...' : "Replay previous round's moves"}
         >
           <span aria-hidden="true" className="text-lg">
@@ -170,7 +170,7 @@ const ReplayPreviousRound: React.FC<ReplayPreviousRoundProps> = ({
             isReplaying || remainingCards.length === 0
               ? 'cursor-not-allowed bg-gray-400'
               : 'bg-blue-600 hover:bg-blue-700'
-          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+          } focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none`}
           aria-label={isReplaying ? 'Replaying previous round...' : "Replay previous round's moves"}
         >
           {isReplaying ? 'Replaying...' : 'Replay Previous'}

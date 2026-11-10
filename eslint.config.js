@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import antiSlop from 'eslint-plugin-anti-slop';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
@@ -35,5 +36,9 @@ export default [
       'no-unused-vars': 'off',
       'no-undef': 'off',
     },
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    ...antiSlop.configs.recommended,
   },
 ];

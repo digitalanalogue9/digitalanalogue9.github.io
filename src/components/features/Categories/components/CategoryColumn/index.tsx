@@ -112,7 +112,7 @@ export default function CategoryColumn({
   };
   return (
     <div
-      className="w-full rounded-lg bg-white p-4 shadow-sm transition-colors duration-200"
+      className="w-full rounded-lg bg-white p-4 shadow-sm transition-colors duration-200 motion-reduce:transition-none"
       data-category={title}
       aria-label={`${title} category`}
     >
@@ -126,7 +126,7 @@ export default function CategoryColumn({
       </div>
 
       <div
-        className="min-h-[400px] rounded-lg border-2 border-dashed border-gray-400 p-2 transition-colors duration-200"
+        className="min-h-[400px] rounded-lg border-2 border-dashed border-gray-400 p-2 transition-colors duration-200 motion-reduce:transition-none"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -135,7 +135,7 @@ export default function CategoryColumn({
       >
         <div className="space-y-2">
           {cards.map((card, index) => (
-            <div key={card.id} className="transition-all duration-200">
+            <div key={card.id} className="transition-all duration-200 motion-reduce:transition-none">
               <Card
                 data-card-id={card.id}
                 value={card}

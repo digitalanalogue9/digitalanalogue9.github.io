@@ -23,7 +23,7 @@ export default function About() {
   return (
     <div aria-labelledby="about-heading" className={`max-w-4xl ${getContainerClassName(isMobile)}`}>
       <div className="text-center">
-        <h1 id="about-heading" className={`${styles.heading} mb-4 whitespace-nowrap font-extrabold sm:mb-6`}>
+        <h1 id="about-heading" className={`${styles.heading} mb-4 font-extrabold whitespace-nowrap sm:mb-6`}>
           More information about <span className="text-blue-700">Core Values</span>
         </h1>
       </div>
@@ -56,8 +56,8 @@ export default function About() {
         </h2>
         <div className={`rounded-lg border border-gray-100 bg-blue-100 p-4 shadow-sm ${styles.prose} text-black`}>
           <p className={`mb-2 ${styles.paragraph}`}>
-            I&apos;m lucky to have an awesome coach to chat things through with. In one of our first sessions, she had a set
-            of physical cards that she lent me to help me identify my core values. I found the exercise to be very
+            I&apos;m lucky to have an awesome coach to chat things through with. In one of our first sessions, she had a
+            set of physical cards that she lent me to help me identify my core values. I found the exercise to be very
             helpful but understood from my coach that I should periodically revisit my choices because the only constant
             in life is change.
           </p>
@@ -106,7 +106,7 @@ export default function About() {
               href="https://brenebrown.com/podcast/living-into-our-values/"
               target="_blank"
             >
-              Brené Brown and Barrett Guillen : Living Into Our Values (Unlocking Us podcast)
+              Podcast episode: Brené Brown and Barrett Guillen on values in daily life
             </a>
           </p>
           <p className={`${styles.paragraph} mb-2`}>

@@ -289,7 +289,7 @@ export default function ReplayClient() {
               <button
                 type="button"
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700 sm:px-4 sm:py-2 sm:text-base"
+                className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700 motion-reduce:transition-none sm:px-4 sm:py-2 sm:text-base"
                 aria-label={isPlaying ? 'Pause replay' : 'Start replay'}
               >
                 {isPlaying ? 'Pause' : 'Play'}
@@ -297,7 +297,7 @@ export default function ReplayClient() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-gray-700 sm:px-4 sm:py-2 sm:text-base"
+                className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-gray-700 motion-reduce:transition-none sm:px-4 sm:py-2 sm:text-base"
                 aria-label="Reset replay to beginning"
               >
                 Reset
@@ -381,7 +381,7 @@ export default function ReplayClient() {
               position: 'fixed',
               left: animatingCard.sourcePos.x,
               top: animatingCard.sourcePos.y,
-              zIndex: 1000,
+              zIndex: 50,
               pointerEvents: 'none',
               transform: 'translate(-50%, -50%)',
             }}
