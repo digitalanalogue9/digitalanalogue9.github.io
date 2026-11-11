@@ -10,6 +10,3 @@ export const CATEGORY_ORDER = [
 
 export const DEFAULT_TARGET_CORE_VALUES = 10;
 export const DEFAULT_CARDS_IN_GAME = 35;
-
-export const LEGACY_DB_NAME = 'coreValuesDataV2';
-export const LEGACY_DB_VERSION = 1;

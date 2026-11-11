@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useConsent } from '@/lib/hooks/useConsent';
 
 export default function PrivacyPage() {
@@ -19,19 +18,18 @@ export default function PrivacyPage() {
         : 'Rejected';
 
   return (
-    <article className="mx-auto max-w-prose space-y-10 px-5 py-8 sm:px-8" aria-labelledby="privacy-heading">
+    <article className="app-page-panel mx-auto w-full max-w-4xl space-y-10" aria-labelledby="privacy-heading">
       <header className="space-y-4">
-        <p className="text-sys-color-text-secondary text-sm font-semibold tracking-wide uppercase">Privacy</p>
-        <h1 id="privacy-heading" className="font-serif text-4xl leading-tight sm:text-5xl">
-          Your reflections stay in this browser.
+        <h1 id="privacy-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">
+          Privacy
         </h1>
-        <p className="text-sys-color-text-secondary text-lg leading-relaxed">
+        <p className="page-intro">
           Exercise answers and notes are stored on this device. They don’t sync automatically. Optional Google Analytics
           loads only if you allow it.
         </p>
       </header>
 
-      <section aria-labelledby="saved-data-heading" className="space-y-3">
+      <section aria-labelledby="saved-data-heading" className="space-y-3 border-t border-[var(--editorial-line)] pt-8">
         <h2 id="saved-data-heading" className="font-serif text-2xl font-semibold">
           Saved exercises and preferences
         </h2>
@@ -45,7 +43,7 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="backups-heading" className="space-y-3">
+      <section aria-labelledby="backups-heading" className="space-y-3 border-t border-[var(--editorial-line)] pt-8">
         <h2 id="backups-heading" className="font-serif text-2xl font-semibold">
           Exporting and importing backups
         </h2>
@@ -62,13 +60,13 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="analytics-heading" className="space-y-3">
+      <section aria-labelledby="analytics-heading" className="space-y-3 border-t border-[var(--editorial-line)] pt-8">
         <h2 id="analytics-heading" className="font-serif text-2xl font-semibold">
           Optional Google Analytics
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          If you allow analytics, this site loads Google Analytics property G-JZPX5JCP5D and sends page views. Page URLs
-          and referrers omit query strings and fragments, so Session identifiers in links aren’t included.
+          If you allow analytics, this site sends page views to Google Analytics. Page URLs and referrers omit query
+          strings and fragments, so session identifiers in links aren’t included.
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Exercise values, choices, notes and imported or exported backup contents aren’t sent. Google may process
@@ -81,7 +79,7 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="manage-consent-heading" className="space-y-4">
+      <section aria-labelledby="manage-consent-heading" className="space-y-4 border-t border-[var(--editorial-line)] pt-8">
         <h2 id="manage-consent-heading" className="font-serif text-2xl font-semibold">
           Your analytics choice
         </h2>
@@ -111,7 +109,7 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="privacy-contact-heading" className="space-y-3">
+      <section aria-labelledby="privacy-contact-heading" className="space-y-3 border-t border-[var(--editorial-line)] pt-8">
         <h2 id="privacy-contact-heading" className="font-serif text-2xl font-semibold">
           Questions or privacy requests
         </h2>
@@ -120,12 +118,6 @@ export default function PrivacyPage() {
           this notice or a privacy request.
         </p>
       </section>
-
-      <p>
-        <Link className="apc-button inline-flex min-h-11 items-center px-5 py-2" to="/exercise">
-          Find my core values
-        </Link>
-      </p>
     </article>
   );
 }

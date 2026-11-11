@@ -21,19 +21,14 @@ export function ReflectionValueList({
   ) => void;
 }) {
   return (
-    <ol className="space-y-5">
-      {selectedValues.map((value, index) => {
+    <ol>
+      {selectedValues.map((value) => {
         const content = getReflectionContent(exerciseType, value);
         return (
-          <li
-            key={value.id}
-            className="rounded-sys-radius-button-sm border-sys-color-border-default space-y-3 border p-4"
-          >
-            <details open={index === 0}>
-              <summary className="text-interface-base-large text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">
-                {index + 1}. {value.title}
-              </summary>
-              <p className="text-interface-base-small text-sys-color-text-secondary leading-6">{value.description}</p>
+          <li key={value.id} className="space-y-3 border-t border-[var(--editorial-line)] py-6">
+            <div className="space-y-4">
+              <h3 className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl">{value.title}</h3>
+              <p className="page-intro">{value.description}</p>
               <div className="text-interface-base-small text-sys-color-text-secondary space-y-1 leading-6">
                 <p className="font-semibold">Questions to consider</p>
                 {content.questions[exerciseType].map((question) => (
@@ -114,7 +109,7 @@ export function ReflectionValueList({
                   disabled={working}
                 />
               </div>
-            </details>
+            </div>
           </li>
         );
       })}

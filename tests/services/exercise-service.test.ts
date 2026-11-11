@@ -260,11 +260,8 @@ describe('ExerciseService', () => {
       title: 'FAST PACE',
       description: 'You enjoy working rapidly at a high pace.',
     });
-    const team = service.getReflectionContent('team', {
-      id: '12',
-      title: 'EXCELLENCE',
-      description: 'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.',
-    });
+    const teamExcellence = teamValuesData.values.find(({ id }) => id === '12')!;
+    const team = service.getReflectionContent('team', teamExcellence);
 
     expect(personal.possibilities.map(({ id, lens }) => [id, lens])).toEqual([
       ['personal-fast-pace-constructive', 'constructive'],
@@ -273,6 +270,25 @@ describe('ExerciseService', () => {
     ]);
     expect(personal.possibilities[1].personal).toContain('might');
     expect(team.possibilities[0].team).toContain('us');
+  });
+
+  test('recognises current and saved team descriptions without accepting edited cards', () => {
+    const service = new ExerciseServiceImpl(new InMemorySessionRepository());
+    const excellence = teamValuesData.values.find(({ id }) => id === '12')!;
+    const balance = teamValuesData.values.find(({ id }) => id === '9')!;
+    const savedExcellence = { ...excellence, description: 'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.' };
+    const savedBalance = { ...balance, description: 'We prioritise balancing workloads with personal health and happiness, creating a sustainable work environment.' };
+
+    for (const card of [excellence, savedExcellence]) {
+      expect(service.getReflectionContent('team', card).possibilities.map(({ id }) => id)).toContain('team-excellence-constructive');
+    }
+    for (const cards of [[excellence, balance], [savedExcellence, savedBalance], [excellence, savedBalance]]) {
+      expect(service.getReflectionRelationships('team', cards).map(({ id }) => id)).toContain('team-excellence-balance');
+    }
+    const edited = { ...excellence, description: 'A different meaning.' };
+    expect(service.getReflectionContent('team', edited).possibilities).toEqual([]);
+    expect(service.getReflectionRelationships('team', [edited, balance])).toEqual([]);
+    expect(service.getReflectionContent('team', { ...savedExcellence, title: 'CUSTOM' }).possibilities).toEqual([]);
   });
 
   test('returns no curated traits for unknown or mismatched value identities', () => {

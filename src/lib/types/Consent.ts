@@ -6,5 +6,3 @@ export interface CookieConsent {
   advertisement: ConsentStatus;
   timestamp: number;
 }
-
-export type ConsentType = keyof Omit<CookieConsent, 'timestamp'>;

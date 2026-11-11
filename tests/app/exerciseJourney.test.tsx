@@ -41,7 +41,7 @@ test('a normally sorted exercise offers optional reasons and can complete withou
   expect(await screen.findByRole('heading', { name: 'Reflect on your choices' })).toBeInTheDocument();
   expect(await screen.findByRole('textbox', { name: new RegExp(kept.title) })).toHaveValue('');
   fireEvent.click(screen.getByRole('button', { name: 'Save Completed Session' }));
-  expect(await screen.findByLabelText('Reflect on your values')).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Reflect on your values' })).toBeInTheDocument();
 });
 
 test('a placed value is immediately visible and can be moved without reloading', async () => {

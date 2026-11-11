@@ -254,8 +254,13 @@ export function downloadTextFile(filename: string, content: string, type: string
   const anchor = document.createElement('a');
   anchor.href = url;
   anchor.download = filename;
+  document.body.append(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  // Let the browser start the download before releasing its object URL.
+  window.setTimeout(() => {
+    URL.revokeObjectURL(url);
+    anchor.remove();
+  }, 1000);
 }
 
 export function downloadJsonFile(filename: string, payload: unknown) {

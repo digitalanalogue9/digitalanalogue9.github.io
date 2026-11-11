@@ -10,18 +10,18 @@ export default function AboutPage() {
         path="/about"
       />
 
-      <header className="space-y-6">
+      <header className="space-y-4">
         <h1 id="about-heading" className="max-w-[18ch] text-4xl sm:text-5xl lg:text-6xl">
           It started with a borrowed deck of cards.
         </h1>
+        <p className="page-intro max-w-[70ch]">
+          The exercise helped me name what mattered and made me want a way to return to it.
+        </p>
         <div className="max-w-[70ch] space-y-4 text-lg leading-relaxed">
           <p>
-            I was working with a coach when she lent me a deck of cards to help me identify my core values. I found the
-            exercise useful. It also gave me something I wanted to revisit as life changed.
-          </p>
-          <p>
-            The cards belonged to my coach, so I had to return them. I wanted a set of my own that I could come back to
-            when I needed it. That was the starting point for Core Values.
+            While working with a coach, I used a deck of cards to identify my core values. I found the exercise useful,
+            but the cards belonged to her, so I had to return them. I wanted a way to revisit those choices as life
+            changed. That became the starting point for Core Values.
           </p>
           <p>I later decided to share the tool in case it could help others reflect on what matters to them.</p>
         </div>
@@ -107,7 +107,7 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="border-t border-[var(--editorial-line)] pt-8" aria-label="Explore the exercise">
+      <section className="flex justify-end border-t border-[var(--editorial-line)] pt-8" aria-label="Explore the exercise">
         <Link className="editorial-button editorial-button--primary" to="/exercise">
           Find my core values
         </Link>

@@ -26,18 +26,10 @@ const guideViews = [
   },
 ];
 
-const actions = [
-  { href: '/exercise', label: 'Find my core values', primary: true },
-  { href: '/history', label: 'View History' },
-];
-
 export default function HelpPage() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [failedImages, setFailedImages] = useState<string[]>([]);
   const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
-  const visibleActions = behaviourReflectionEnabled
-    ? [...actions, { href: '/behaviour', label: 'Explore behaviour reflection' }]
-    : actions;
 
   useEffect(() => {
     try {
@@ -59,36 +51,27 @@ export default function HelpPage() {
   return (
     <article className="help-guide editorial-page" aria-labelledby="help-heading">
       <PageMetadata
-        title="How Core Values works"
+        title="How it works · Core Values"
         description="See how to sort value cards, narrow your choices and reflect on your final set. Find guidance on saved exercises, History and backups."
         path="/howtouse"
       />
 
       <header className="help-guide__opening">
-        <p className="help-guide__eyebrow">How it works</p>
-        <h1 id="help-heading">Sort. Narrow. Reflect.</h1>
-        <p className="help-guide__lede">
-          Choose how important each value is to you, narrow the set over further rounds, then reflect on the values you
-          keep.
+        <h1 id="help-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">How it works</h1>
+        <p className="page-intro max-w-[60ch]">
+          Sort values, narrow your choices, and reflect on the ones that matter most.
         </p>
-        <nav className="help-guide__actions" aria-label="How it works actions">
-          {visibleActions.map(({ href, label, primary }) => (
-            <a
-              className={primary ? 'editorial-button editorial-button--primary' : 'help-guide__text-link'}
-              href={href}
-              key={href}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
       </header>
 
-      <section className="help-guide__views" aria-label="Example exercise">
-        <div className="help-guide__section-heading">
-          <p className="help-guide__eyebrow">Example exercise</p>
-          <p>These examples show each stage using sample values.</p>
-        </div>
+      <section aria-labelledby="set-heading" className="help-guide__before">
+        <h2 id="set-heading">Before you begin</h2>
+        <p>
+          Choose personal or team values, then set how many you want to keep. For a team exercise, discuss and agree on
+          the values together.
+        </p>
+      </section>
+
+      <section className="help-guide__views" aria-label="Exercise examples">
         {guideViews.map((view, index) => (
           <figure className="help-guide__view" key={view.title}>
             {failedImages.includes(view.src) ? (
@@ -117,97 +100,53 @@ export default function HelpPage() {
         ))}
       </section>
 
-      <div className="help-guide__details">
-        <section aria-labelledby="set-heading">
-          <p className="help-guide__eyebrow">Before you begin</p>
-          <h2 id="set-heading">Choose your set and target</h2>
-          <p>
-            Choose personal values or the team-focused set, then decide how many values you want to finish with. The
-            team-focused set is for your team to discuss and agree on its core values together.
-          </p>
-        </section>
+      <section aria-labelledby="reflection-heading" className="help-guide__reflection">
+        <h2 id="reflection-heading">Reflect on your values</h2>
+        <p>
+          After adding optional notes to your final values, use the reflection section to consider questions about each
+          value, record observations, and set an optional reflection goal. Save your reflection to return to it later.
+        </p>
+      </section>
 
-        <section aria-labelledby="sorting-heading">
-          <p className="help-guide__eyebrow">During the exercise</p>
-          <h2 id="sorting-heading">Sort and narrow</h2>
-          <p>
-            Place each card in Very Important, Quite Important, Important, Of Some Importance or Not Important. You can
-            move cards between categories if you change your mind. When you advance, values in Not Important are
-            removed. Continue sorting the remaining values until you reach your chosen number.
-          </p>
-        </section>
+      <section aria-labelledby="behaviour-heading" className="help-guide__reminders">
+        <h2 id="behaviour-heading">Set up a reflection reminder</h2>
+        <p>After a behaviour reflection, copy a recurring prompt for Claude, Copilot, or ChatGPT:</p>
+        <ol className="help-guide__steps">
+          <li>
+            Choose <strong>Continue with a conversation prompt</strong>, then select <strong>Recurring prompt</strong>.
+          </li>
+          <li>
+            Choose a reflection possibility, select <strong>Daily</strong>, and set the time and time zone.
+          </li>
+          <li>Copy the prompt into Claude, Copilot, or ChatGPT and ask it to create a daily reminder.</li>
+        </ol>
+        <p>The app creates the prompt; reminders depend on the AI service’s scheduling features.</p>
+        {behaviourReflectionEnabled && <a href="/behaviour">Start a behaviour reflection</a>}
+      </section>
 
-        <section aria-labelledby="reflection-heading">
-          <p className="help-guide__eyebrow">After the final round</p>
-          <h2 id="reflection-heading">Reflect and return</h2>
-          <p>
-            Add an optional note about why each final value matters. Use History to resume an unfinished exercise,
-            review a completed one or replay its rounds.
-          </p>
-          <a href="/history">Open History</a>
-        </section>
-
-        <section aria-labelledby="backup-heading">
-          <p className="help-guide__eyebrow">Keep a copy</p>
-          <h2 id="backup-heading">Back up your work</h2>
-          <p>
-            Your progress is saved in this browser. It won’t automatically appear on another device. Before clearing
-            browser data or moving your work, export a backup from History and keep the file private.
-          </p>
-          <p>
-            In History, <strong>Export</strong> saves your values exercise without the additional notes from the
-            completed exercise page. Choose <strong>Export reflection backup</strong> to include those notes.
-          </p>
-          <a href="/history">Go to History to export a backup</a>
-        </section>
-
-        <section aria-labelledby="preference-heading" className="help-guide__preference">
-          <p className="help-guide__eyebrow">Your preference</p>
-          <h2 id="preference-heading">Show instructions next time</h2>
-          <label>
-            <input
-              type="checkbox"
-              checked={showInstructions}
-              onChange={(event) => toggleInstructions(event.currentTarget.checked)}
-              aria-describedby="instructions-description"
-            />
-            Show instructions when starting the exercise
-          </label>
-          <p id="instructions-description" role="status">
-            {showInstructions
-              ? 'Instructions will appear at the start of each new exercise.'
-              : 'Instructions will not appear automatically.'}
-          </p>
-        </section>
-
-        {behaviourReflectionEnabled && (
-          <section aria-labelledby="behaviour-heading">
-            <p className="help-guide__eyebrow">A different kind of reflection</p>
-            <h2 id="behaviour-heading">Explore possible perspectives on your behaviour</h2>
-            <p>
-              Consider how you might respond to six everyday situations at work. You can choose “It depends” or skip any
-              situation. When you finish, explore possible intentions and perspectives on your choices. These prompts do
-              not tell you what another person thinks or feels.
-            </p>
-            <p>Your choices and notes are saved in this browser.</p>
-            <a href="/behaviour">Explore behaviour reflection</a>
-          </section>
-        )}
-      </div>
+      <section aria-labelledby="preference-heading" className="help-guide__preference">
+        <h2 id="preference-heading">Exercise instructions</h2>
+        <label>
+          <input
+            type="checkbox"
+            checked={showInstructions}
+            onChange={(event) => toggleInstructions(event.currentTarget.checked)}
+            aria-describedby="instructions-description"
+          />
+          Show instructions when starting the exercise
+        </label>
+        <p id="instructions-description" role="status">
+          {showInstructions
+            ? 'Instructions will appear at the start of each new exercise.'
+            : 'Instructions will not appear automatically.'}
+        </p>
+      </section>
 
       <footer className="help-guide__closing">
-        <p>Your reflections stay in this browser and don’t sync automatically between devices.</p>
-        <nav className="help-guide__actions" aria-label="Continue from How it works">
-          {visibleActions.map(({ href, label, primary }) => (
-            <a
-              className={primary ? 'editorial-button editorial-button--primary' : 'help-guide__text-link'}
-              href={href}
-              key={href}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
+        <p>
+          Your reflections stay in this browser and don’t sync across devices. Export a backup from History to move them
+          to another device.
+        </p>
       </footer>
     </article>
   );

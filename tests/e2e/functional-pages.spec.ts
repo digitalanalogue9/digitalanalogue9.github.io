@@ -1,5 +1,4 @@
 import { expect, test, type Page } from '@playwright/test';
-import { readFile } from 'node:fs/promises';
 import data from '../../src/data/values.json' with { type: 'json' };
 
 const cards = data.values.slice(0, 3).map(({ id, title, description }) => ({ id, title, description }));
@@ -60,13 +59,24 @@ async function importBackup(page: Page) {
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
   await page.getByLabel('Backup file contents (JSON)').fill(JSON.stringify(backup));
   await page.getByRole('button', { name: /Import.*text/ }).click();
-  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
 }
 async function downloadJson(page: Page, button: string) {
-  const pending = page.waitForEvent('download');
+  const previousCount = await page.evaluate(
+    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+  );
   await page.getByRole('button', { name: button, exact: true }).click();
-  const downloaded = await pending;
-  return JSON.parse(await readFile((await downloaded.path())!, 'utf8'));
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+      )
+    )
+    .toBe(previousCount + 1);
+  const captured = await page.evaluate(
+    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.at(-1)!
+  );
+  return JSON.parse(captured.content);
 }
 
 test('history imports, exports, copies and deletes sessions; results provide print, HTML and prompt workflows', async ({
@@ -76,18 +86,34 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await context.addInitScript(() => {
     window.print = () => {};
+    const target = window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> };
+    target.__capturedDownloads = [];
+    document.addEventListener(
+      'click',
+      (event) => {
+        const anchor = (event.target as Element).closest<HTMLAnchorElement>('a[download]');
+        if (!anchor) return;
+        event.preventDefault();
+        void fetch(anchor.href)
+          .then((response) => response.text())
+          .then((content) => target.__capturedDownloads.push({ filename: anchor.download, content }));
+      },
+      true
+    );
   });
   await importBackup(page);
-  const legacy = await downloadJson(page, 'Export legacy backup');
+  const legacy = await downloadJson(page, 'Legacy backup');
   expect(legacy.session.timestamp).toBeDefined();
   const ordinary = await downloadJson(page, 'Export');
   expect(ordinary.completedSession.reflection).toBeUndefined();
-  const full = await downloadJson(page, 'Export reflection backup');
+  const full = await downloadJson(page, 'Reflection backup');
   expect(full.completedSession.reflection.goal).toBe('My private goal.');
-  await page.getByRole('button', { name: 'Copy to clipboard', exact: true }).click();
+  await page.getByRole('button', { name: 'Copy values', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
-  await page.getByRole('link', { name: 'View results', exact: true }).click();
+  await page.getByRole('link', { name: 'Resume session', exact: true }).click();
+  await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
+  await page.getByRole('link', { name: 'Back to results', exact: true }).click();
   await expect(page).toHaveURL(/\/completed\?sessionId=/);
   await page.getByText('Session goal (optional)', { exact: true }).first().click();
   await expect(page.getByRole('textbox', { name: 'Session goal', exact: true })).toHaveValue('My private goal.');
@@ -108,9 +134,22 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await expect(page.getByLabel('Recurring reflection local time')).toHaveValue('11:15');
   await page.getByLabel('Original results', { exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
-  const htmlDownload = page.waitForEvent('download');
+  const previousDownloadCount = await page.evaluate(
+    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+  );
   await page.getByRole('button', { name: 'Export HTML', exact: true }).click();
-  expect(await readFile((await (await htmlDownload).path())!, 'utf8')).toContain('My saved reason.');
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+      )
+    )
+    .toBe(previousDownloadCount + 1);
+  expect(
+    await page.evaluate(
+      () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.at(-1)!.content
+    )
+  ).toContain('My saved reason.');
   await page.screenshot({ path: '.scratch/parity-completed.png', fullPage: true });
   const popupPending = page.waitForEvent('popup');
   await page.getByRole('button', { name: 'Print', exact: true }).click();
@@ -120,11 +159,11 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.goto('/history');
   await page.screenshot({ path: '.scratch/parity-history.png', fullPage: true });
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await expect(page.getByRole('link', { name: 'View results', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toHaveCount(0);
   await page.reload();
   await expect(page.getByText('No sessions saved in this browser yet.', { exact: true })).toBeVisible();
   await page
     .locator('input[type="file"]')
     .setInputFiles({ name: 'legacy.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
-  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
 });

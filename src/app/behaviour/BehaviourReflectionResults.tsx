@@ -45,7 +45,7 @@ export function BehaviourReflectionResults({
       <h1 id="reveal-heading" className="text-interface-title-1 text-sys-color-text-primary font-semibold">
         Your reflections
       </h1>
-      <p className="text-interface-base-small text-sys-color-text-primary max-w-prose">
+      <p className="page-intro max-w-prose">
         These are possibilities to consider, not conclusions about your behaviour or anyone else’s experience.
       </p>
       {!hasReveals && (

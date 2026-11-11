@@ -40,26 +40,26 @@ export function RecurringReflectionControls({
   recurringCopyFeedback: string | null;
 }) {
   return (
-    <section className="rounded-sys-radius-button-sm border-sys-color-border-default border p-4">
+    <>
       <button
         type="button"
         aria-expanded={recurringPromptExpanded}
-        className="text-interface-base-small text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+        className={`${actionButtonClasses} order-1`}
         onClick={() => setRecurringPromptExpanded((expanded) => !expanded)}
       >
         Set up recurring reflection
       </button>
       {recurringPromptExpanded && (
-        <div className="mt-3 space-y-4">
+        <div className="order-2 basis-full space-y-4 pt-3">
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
             Choose reminder preferences and review the prompt. Select Save reflection above to keep these preferences on
             this device. The app has not scheduled or sent anything. Confirm the time, timezone and cadence in the
             external service, and replace its saved prompt if your values or reflection context change.
           </p>
-          <details className="rounded-sys-radius-button-sm border-sys-color-border-default p-3">
-            <summary className="text-interface-base-small text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">
+          <section className="space-y-3 border-t border-[var(--editorial-line)] pt-4">
+            <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
               Microsoft 365 Copilot setup
-            </summary>
+            </h3>
             <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
               <span className="block">
                 For the agent route, create an agent in Microsoft 365 Copilot and run it manually, usually with this
@@ -82,7 +82,7 @@ export function RecurringReflectionControls({
                 Microsoft guidance for scheduling Copilot prompts
               </a>
             </p>
-          </details>
+          </section>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-interface-base-small text-sys-color-text-primary block font-semibold">
               Frequency
@@ -209,6 +209,6 @@ export function RecurringReflectionControls({
           </section>
         </div>
       )}
-    </section>
+    </>
   );
 }

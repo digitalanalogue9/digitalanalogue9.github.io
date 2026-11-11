@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import teamValuesData from '@/data/team-values.json';
 import { InMemorySessionRepository } from '@/lib/repository/inMemorySessionRepository';
 import { ExerciseServiceImpl } from '@/lib/services/exerciseService';
 
@@ -30,15 +31,8 @@ describe('ExerciseService one-off coaching prompt', () => {
 
   test('composes a team prompt and includes only individually selected optional context', () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
-    const selectedValues = [
-      {
-        id: '12',
-        title: 'EXCELLENCE',
-        description:
-          'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.',
-        reason: 'Keep the private reason.',
-      },
-    ];
+    const excellence = teamValuesData.values.find(({ id }) => id === '12')!;
+    const selectedValues = [{ ...excellence, reason: 'Keep the private reason.' }];
     const reflection = {
       version: 1 as const,
       goal: 'Keep quality sustainable.',
@@ -71,7 +65,7 @@ describe('ExerciseService one-off coaching prompt', () => {
     expect(prompt).toContain('facilitated team discussion');
     expect(prompt).toContain('only if we choose to');
     expect(prompt).not.toContain('only if I choose to');
-    expect(prompt).toContain('1. EXCELLENCE — We strive for the highest standards');
+    expect(prompt).toContain(`1. EXCELLENCE — ${excellence.description}`);
     expect(prompt).toContain('Keep the private reason.');
     expect(prompt).toContain('Keep quality sustainable.');
     expect(prompt).toContain('Private example.');

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-10T00:00:00Z",
+  "title": "Design System: Core Values",
+  "extensions": {
+    "shadows": [
+      { "name": "panel", "value": "0 1px 3px rgb(23 50 77 / 10%)", "purpose": "Subtle depth for content panels." }
+    ],
+    "breakpoints": [{ "name": "sm", "value": "640px" }, { "name": "lg", "value": "1024px" }]
+  },
+  "components": [
+    {
+      "name": "Content panel",
+      "kind": "card",
+      "description": "A bordered, lightly elevated reading surface.",
+      "html": "<article class=\"ds-panel\"><h2>What matters to you?</h2><p>Take time to reflect on your values.</p></article>",
+      "css": ".ds-panel{padding:clamp(1.5rem,3vw,2.5rem);border:1px solid #d6bdcc;border-radius:8px;background:#faf5f8;color:#3c2a38;box-shadow:0 1px 3px rgb(23 50 77 / 10%)}.ds-panel h2{font-family:'Source Serif 4',Georgia,serif;font-weight:400}"
+    }
+  ],
+  "narrative": {
+    "overview": "A quiet, warm editorial interface with serif headings and practical sans-serif controls.",
+    "dos": ["Use the About page heading scale for standard public page titles."],
+    "donts": ["Reduce the home hero to the standard page-title scale."]
+  }
+}

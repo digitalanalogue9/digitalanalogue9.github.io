@@ -24,7 +24,7 @@ describe('personal site content', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'It started with a borrowed deck of cards.' })).toBeInTheDocument();
-    expect(screen.getByText(/The cards belonged to my coach, so I had to return them/)).toBeInTheDocument();
+    expect(screen.getByText(/the cards belonged to her, so I had to return them/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Sort and reflect on your values' })).toBeInTheDocument();
     expect(screen.getByText(/agreeing on your team’s core values together/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Further perspectives' })).toBeInTheDocument();
@@ -76,7 +76,6 @@ describe('personal site content', () => {
       screen.getByRole('heading', { name: 'A question, an idea, or something that didn’t work?' })
     ).toBeInTheDocument();
     expect(screen.getByText(/I’d like to hear from you/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Find my core values' })).toHaveAttribute('href', '/exercise');
     await waitFor(() => expect(document.title).toBe('Contact · Core Values'));
     expect(document.querySelector('meta[name="description"]')).toHaveAttribute(
       'content',

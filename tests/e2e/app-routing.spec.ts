@@ -13,7 +13,7 @@ test('visitor can reach personal app pages from the home page', async ({ page })
 
   await page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'Privacy' }).click();
   await expect(page).toHaveURL(/\/privacy\/?$/);
-  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Privacy', exact: true })).toBeVisible();
 });
 
 test('visitor can open and refresh a direct application route', async ({ page }) => {
@@ -37,10 +37,10 @@ test('behaviour reflection route follows the build-time feature flag', async ({ 
   }
 });
 
-test('privacy page loads directly, refreshes, manages consent and links to the exercise', async ({ page }) => {
+test('privacy page loads directly, refreshes and manages consent', async ({ page }) => {
   await page.goto('/privacy');
 
-  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Privacy', exact: true })).toBeVisible();
   await expect(page).toHaveTitle('Privacy · Core Values');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
@@ -72,10 +72,8 @@ test('privacy page loads directly, refreshes, manages consent and links to the e
     page.getByRole('main', { name: 'Main content' }).getByRole('button', { name: 'Allow analytics' })
   ).toHaveAttribute('aria-pressed', 'false');
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Privacy', exact: true })).toBeVisible();
   await expect(page.getByText('Rejected', { exact: true })).toBeVisible();
-  await page.getByRole('main', { name: 'Main content' }).getByRole('link', { name: 'Find my core values' }).click();
-  await expect(page).toHaveURL(/\/exercise\/?$/);
 });
 
 test('home and direct exercise setup load and refresh without browser runtime errors', async ({ page }) => {
@@ -98,13 +96,14 @@ test('home and direct exercise setup load and refresh without browser runtime er
 });
 
 test('exercise setup creates a team-focused Session only after an explicit start', async ({ page }) => {
-  const sessionsLoaded = page
-    .getByText('No sessions saved in this browser yet.')
-    .or(page.getByRole('listitem').first());
+  const sessionSelector = page.getByRole('combobox', { name: 'Choose a session' });
+  const sessionOptions = sessionSelector.locator('option');
+  const noSavedSessions = page.getByText('No sessions saved in this browser yet.');
+  const sessionsLoaded = sessionSelector.or(noSavedSessions);
 
   await page.goto('/history');
   await expect(sessionsLoaded).toBeVisible();
-  const initialSessionCount = await page.getByRole('listitem').count();
+  const initialSessionCount = await sessionOptions.count();
 
   await page.goto('/');
   await expect(
@@ -124,7 +123,7 @@ test('exercise setup creates a team-focused Session only after an explicit start
 
   await page.goto('/history');
   await expect(sessionsLoaded).toBeVisible();
-  expect(await page.getByRole('listitem').count()).toBe(initialSessionCount);
+  expect(await sessionOptions.count()).toBe(initialSessionCount);
 
   await page.goto('/exercise');
   await page.getByRole('button', { name: 'Start exercise' }).click();
@@ -133,6 +132,6 @@ test('exercise setup creates a team-focused Session only after an explicit start
   await expect(page.getByRole('region', { name: 'Current card' })).toBeVisible();
   await page.goto('/history');
   await expect(sessionsLoaded).toBeVisible();
-  await expect(page.getByRole('listitem')).toHaveCount(initialSessionCount + 1);
-  await expect(page.getByRole('link', { name: 'Resume' }).first()).toBeVisible();
+  await expect(sessionOptions).toHaveCount(initialSessionCount + 1);
+  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
 });

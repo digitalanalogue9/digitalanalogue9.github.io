@@ -39,7 +39,7 @@ export function CompletedExercise({ record }: { record: SessionRecord }) {
   return (
     <section aria-labelledby="completed-heading" className="space-y-6">
       <h1 id="completed-heading">Exercise complete</h1>
-      <h2>Your core values</h2>
+      <h2 className="border-t border-[var(--editorial-line)] pt-8">Your core values</h2>
       <ul>
         {values.map((card) => (
           <li key={card.id}>
@@ -48,7 +48,7 @@ export function CompletedExercise({ record }: { record: SessionRecord }) {
           </li>
         ))}
       </ul>
-      <section aria-labelledby="values-reflection-heading">
+      <section aria-labelledby="values-reflection-heading" className="border-t border-[var(--editorial-line)] pt-8">
         <h2 id="values-reflection-heading">Reflect on your values</h2>
         <p>
           These possibilities are prompts for consideration. Recognition is self-reported and notes describe your own

@@ -46,7 +46,7 @@ The app is aimed at:
 
 ### Technology Stack
 
-- **Framework:** Next.js
+- **Framework:** React and Vite, with React Router
 - **Styling:** Tailwind CSS
 - **Animation:** Framer Motion
 - **Database:** IndexedDB for local storage
@@ -56,7 +56,7 @@ The app is aimed at:
 
 The project adheres to a modular structure, organised as follows:
 
-- `src/app`: Contains Next.js pages.
+- `src/app`: Routed page and view components.
 - `src/components`: Reusable UI components.
 - `src/lib`: Utility functions, hooks, and global contexts.
 - `src/styles`: Global styling configurations.
@@ -66,8 +66,8 @@ The project adheres to a modular structure, organised as follows:
 
 - **Interactive Features:**
 
-  - `src/components/features/Home/components/StartScreen/index.tsx`: Entry screen for starting the value discovery
-    process.
+  - `src/app/HomeClient.tsx`: Home page rendered at `/` by `src/router.tsx`.
+  - `src/router.tsx`: Application routes and shared site layout.
   - `src/components/features/Cards/components`: Manages drag-and-drop card functionality.
   - `src/components/features/Categories`: Handles categorisation of values.
 

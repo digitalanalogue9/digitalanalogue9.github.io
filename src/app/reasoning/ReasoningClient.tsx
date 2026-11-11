@@ -24,6 +24,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
+  const [editingCompleted, setEditingCompleted] = useState(false);
   const loadSequenceRef = useRef(0);
   const mutationLockedRef = useRef(false);
 
@@ -41,34 +42,31 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     setRound(null);
     setFinalValues([]);
     setReasonsById({});
+    setEditingCompleted(false);
 
     try {
       const record = await service.loadSession(sessionId);
       if (requestSequence !== loadSequenceRef.current) return;
 
+      setSession(record.session);
+      setRound(record.currentRound);
       if (record.session.status === 'completed' && record.completedSession) {
-        navigate(
-          {
-            pathname: '/completed',
-            search: `?${new URLSearchParams({ sessionId: record.session.id }).toString()}`,
-          },
-          { replace: true }
+        setEditingCompleted(true);
+        setFinalValues(record.completedSession.finalValues);
+        setReasonsById(
+          Object.fromEntries(record.completedSession.finalValues.map((value) => [value.id, value.reason ?? '']))
         );
         return;
       }
 
       const transition = evaluateRoundTransition(record.currentRound);
       if (!transition.canComplete) {
-        setSession(record.session);
-        setRound(record.currentRound);
         setError('Session is not ready for reasoning.');
         return;
       }
 
       const values = record.currentRound.categories['Very Important'];
       const initialReasons = Object.fromEntries(values.map((value) => [value.id, '']));
-      setSession(record.session);
-      setRound(record.currentRound);
       setFinalValues(values);
       setReasonsById(initialReasons);
     } catch (loadError) {
@@ -96,11 +94,11 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     setError(null);
 
     try {
-      await service.completeSession({
-        session,
-        round,
-        reasonsById,
-      });
+      if (editingCompleted) {
+        await service.updateCompletedReasons(session.id, reasonsById);
+      } else {
+        await service.completeSession({ session, round, reasonsById });
+      }
       navigate(
         {
           pathname: '/completed',
@@ -114,7 +112,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       mutationLockedRef.current = false;
       setWorking(false);
     }
-  }, [navigate, reasonsById, round, service, session]);
+  }, [editingCompleted, navigate, reasonsById, round, service, session]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -157,15 +155,12 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
   const exerciseSearch = `?${new URLSearchParams({ sessionId }).toString()}`;
 
   return (
-    <form className={`${nonExercisePageContainerClassName} space-y-4`} onSubmit={handleSubmit}>
-      <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-5 shadow-sm sm:p-6">
-        <p className="text-interface-base-small text-ref-color-brand-primary font-semibold tracking-wide uppercase">
-          Final step
-        </p>
-        <h1 className="text-interface-title-2 text-sys-color-text-primary mt-1 font-semibold">
+    <form className={`${nonExercisePageContainerClassName} space-y-8`} onSubmit={handleSubmit}>
+      <section className="space-y-4" aria-labelledby="reasoning-heading">
+        <h1 id="reasoning-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">
           Reflect on your choices
         </h1>
-        <p className="text-interface-base-small text-sys-color-text-secondary mt-2 max-w-2xl">
+        <p className="page-intro max-w-2xl">
           You can add a short note about why each final value matters to you. These notes are optional and saved with
           the completed session in this browser.
         </p>
@@ -180,22 +175,23 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       </section>
 
       {finalValues.length > 0 && (
-        <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-5 shadow-sm sm:p-6">
+        <div className="border-t border-[var(--editorial-line)] pt-8">
           <ul className="space-y-4">
-            {finalValues.map((value, index) => {
+            {finalValues.map((value) => {
               const reasonId = `reason-${value.id}`;
               return (
                 <li key={value.id} className="border-sys-color-border-default border-b pb-4 last:border-b-0 last:pb-0">
                   <label className="block" htmlFor={reasonId}>
-                    <span className="text-interface-tiny-label text-sys-color-text-secondary font-semibold tracking-wide uppercase">
-                      Value {index + 1}
-                    </span>
-                    <span className="text-interface-base-large text-sys-color-text-primary mt-1 block font-semibold">
+                    <span className="page-section-heading text-sys-color-text-primary block text-3xl sm:text-4xl">
                       {value.title}
                     </span>
                   </label>
+              <p id={`${reasonId}-description`} className="text-sys-color-text-secondary mt-2 text-lg leading-relaxed">
+                {value.description}
+              </p>
                   <textarea
                     id={reasonId}
+                aria-describedby={`${reasonId}-description`}
                     className="apc-field__control mt-3 min-h-28 w-full resize-y"
                     value={reasonsById[value.id] ?? ''}
                     onChange={(event) =>
@@ -212,22 +208,22 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
               );
             })}
           </ul>
-        </section>
+        </div>
       )}
 
-      <div className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default flex flex-wrap items-center gap-3 border p-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[var(--editorial-line)] pt-6">
         <button
           type="submit"
           className="apc-button min-h-11"
           disabled={working || Boolean(error && finalValues.length === 0)}
         >
-          {working ? 'Saving...' : 'Save Completed Session'}
+          {working ? 'Saving...' : editingCompleted ? 'Save changes' : 'Save Completed Session'}
         </button>
         <Link
-          to={{ pathname: '/exercise', search: exerciseSearch }}
+          to={{ pathname: editingCompleted ? '/completed' : '/exercise', search: exerciseSearch }}
           className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border px-4 py-2 no-underline transition-colors motion-reduce:transition-none"
         >
-          Back to Board
+          {editingCompleted ? 'Back to results' : 'Back to Board'}
         </Link>
       </div>
     </form>

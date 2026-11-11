@@ -29,7 +29,7 @@ describe('privacy choices', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { name: 'Your reflections stay in this browser.' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Privacy' })).toBeVisible();
     expect(
       screen.getByText(/Exercise answers and notes are stored on this device\. They don’t sync automatically\./)
     ).toBeVisible();
@@ -44,7 +44,6 @@ describe('privacy choices', () => {
     expect(screen.getByText('Rejected', { selector: 'strong' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Allow analytics' })).toHaveAttribute('aria-pressed', 'false');
     expect(screen.getByRole('button', { name: 'Reject analytics' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByRole('link', { name: 'Find my core values' })).toHaveAttribute('href', '/exercise');
   });
 
   it('lets visitors reject optional tracking and remembers that choice', async () => {

@@ -21,8 +21,8 @@ export default function ImportSection({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm">
-      <h3 className="text-interface-base-default text-sys-color-text-primary font-semibold">Import saved work</h3>
+    <section className="space-y-4">
+      <h2 className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl">Import saved work</h2>
       <div className="mt-3 space-y-3">
         <label
           htmlFor="session-json-import"

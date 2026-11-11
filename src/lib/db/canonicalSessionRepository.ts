@@ -545,11 +545,6 @@ export async function deleteSession(sessionId: string): Promise<void> {
   await tx.done;
 }
 
-export async function hasCanonicalSession(sessionId: string): Promise<boolean> {
-  const db = await initRepositoryDb();
-  return Boolean(await db.get(STORES.sessions, sessionId));
-}
-
 /** Accept current canonical exports and supported historical personal backups. */
 export async function importSessionData(value: unknown): Promise<string> {
   let record: SessionRecord | null;

@@ -52,7 +52,7 @@ test('start, sort, save, resume, replay a previous round and complete with an op
     );
   await page.getByRole('textbox').first().fill('This helps me choose deliberately.');
   await page.getByRole('button', { name: 'Save Completed Session', exact: true }).click();
-  await expect(page.getByLabel('Reflect on your values', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Reflect on your values', exact: true })).toBeVisible();
   await page.getByLabel('Original results', { exact: true }).click();
   await expect(page.getByText('This helps me choose deliberately.', { exact: true })).toBeVisible();
   await page
@@ -70,7 +70,7 @@ test('start, sort, save, resume, replay a previous round and complete with an op
     .getByRole('navigation', { name: 'Main navigation' })
     .getByRole('link', { name: 'History', exact: true })
     .click();
-  await expect(page.getByRole('link', { name: 'View results' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume session' })).toBeVisible();
   await page.getByRole('link', { name: 'Replay', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Replay', exact: true })).toBeVisible();
   await page.getByLabel('Playback speed').selectOption('2x');

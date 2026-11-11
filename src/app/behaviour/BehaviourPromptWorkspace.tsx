@@ -269,7 +269,7 @@ export function BehaviourPromptWorkspace({
         >
           Continue this reflection
         </h1>
-        <p className="text-interface-base-default text-sys-color-text-primary mt-3">
+        <p className="page-intro max-w-prose">
           Choose what to include, then review and copy the complete text for a conversational service. Nothing is sent
           from this app.
         </p>
@@ -293,7 +293,7 @@ export function BehaviourPromptWorkspace({
         </div>
       </header>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.4fr)]">
+      <div className="grid items-start gap-6 border-t border-[var(--editorial-line)] pt-8 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.4fr)]">
         <aside
           className="rounded-sys-radius-card-sm bg-ref-color-brand-surface-secondary space-y-6 p-5"
           aria-label="Prompt sharing choices"

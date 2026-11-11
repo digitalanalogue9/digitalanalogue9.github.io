@@ -2,7 +2,6 @@
 
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
-import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import type { CompletedSession } from '@/lib/contracts/types';
 import {
   copyCompletedValuesText,
@@ -13,7 +12,7 @@ import {
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 import { exportSessionData } from '@/lib/db/canonicalSessionRepository';
 import ImportSection from './ImportSection';
-import SessionListItem from './SessionListItem';
+import HistorySessionSelector from './HistorySessionSelector';
 import { historyButtonClassName } from '@/app/history/constants/buttonStyles';
 import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 import { useNavigate } from 'react-router-dom';
@@ -373,35 +372,14 @@ export default function HistoryClient() {
   const handlePrintCompletedValuesFromList = (id: string) => {
     void handlePrintCompletedValues(id);
   };
-  const sessionListItems = sessions.map((session) => {
-    return (
-      <SessionListItem
-        key={session.id}
-        session={session}
-        isWorking={isWorking}
-        copyCompletedValuesLoading={copyingCompletedValuesSessionId === session.id}
-        printCompletedValuesLoading={printingCompletedValuesSessionId === session.id}
-        copyCompletedValuesSucceeded={copiedCompletedValuesSessionId === session.id}
-        onExportLegacy={(id) => {
-          setIsWorking(true);
-          setActionError(null);
-          void exportSessionData(id, { format: 'legacy' })
-            .then((payload) => downloadJsonFile(`core-values-${id}-legacy`, payload))
-            .catch(() => setActionError('Legacy backup export failed.'))
-            .finally(() => setIsWorking(false));
-        }}
-        onDelete={handleDelete}
-        onExport={handleExport}
-        onExportReflectionBackup={handleExportReflectionBackup}
-        onCopyCompletedValues={handleCopyCompletedValuesFromList}
-        onPrintCompletedValues={handlePrintCompletedValuesFromList}
-      />
-    );
-  });
-
   return (
-    <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-      <h1 className="text-interface-title-1 text-sys-color-text-primary font-semibold">Session History</h1>
+    <div className="app-page-panel mx-auto w-full max-w-4xl space-y-4">
+<header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
+<h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Session History</h1>
+<p className="page-intro">
+Review saved exercises, continue where you left off, and manage your backups.
+</p>
+</header>
       {actionError && (
         <p
           id="history-action-error"
@@ -421,10 +399,10 @@ export default function HistoryClient() {
         hasError={isImportError}
       />
 
-      <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm">
-        <h3 className="text-interface-base-large text-sys-color-text-primary font-semibold">
+      <section className="space-y-4 border-t border-[var(--editorial-line)] pt-8">
+        <h2 className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl">
           Sessions saved in this browser
-        </h3>
+        </h2>
         {isLoading ? (
           <p className="text-interface-base-small text-sys-color-text-secondary mt-2">Loading sessions...</p>
         ) : loadError ? (
@@ -448,17 +426,38 @@ export default function HistoryClient() {
             No sessions saved in this browser yet.
           </p>
         ) : (
-          <ul className="mt-3 space-y-3">{sessionListItems}</ul>
+          <div className="mt-3">
+            <HistorySessionSelector
+              sessions={sessions}
+              isWorking={isWorking}
+              copyCompletedValuesLoading={(id) => copyingCompletedValuesSessionId === id}
+              printCompletedValuesLoading={(id) => printingCompletedValuesSessionId === id}
+              copyCompletedValuesSucceeded={(id) => copiedCompletedValuesSessionId === id}
+              onDelete={handleDelete}
+              onExport={handleExport}
+              onExportLegacy={(id) => {
+                setIsWorking(true);
+                setActionError(null);
+                void exportSessionData(id, { format: 'legacy' })
+                  .then((payload) => downloadJsonFile(`core-values-${id}-legacy`, payload))
+                  .catch(() => setActionError('Legacy backup export failed.'))
+                  .finally(() => setIsWorking(false));
+              }}
+              onExportReflectionBackup={handleExportReflectionBackup}
+              onCopyCompletedValues={handleCopyCompletedValuesFromList}
+              onPrintCompletedValues={handlePrintCompletedValuesFromList}
+            />
+          </div>
         )}
       </section>
       {behaviourReflectionEnabled && (
         <section
-          className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm"
+          className="space-y-4 border-t border-[var(--editorial-line)] pt-8"
           aria-labelledby="scenario-history-heading"
         >
           <h2
             id="scenario-history-heading"
-            className="text-interface-base-large text-sys-color-text-primary font-semibold"
+            className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
           >
             Behaviour reflections
           </h2>

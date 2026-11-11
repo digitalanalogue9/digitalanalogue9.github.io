@@ -182,7 +182,7 @@ export default function BehaviourReflectionClient() {
         <h1 id="behaviour-heading" className="text-interface-title-1 text-sys-color-text-primary mb-4 font-semibold">
           Behaviour reflection
         </h1>
-        <p className="text-interface-base-default text-sys-color-text-primary mx-auto mb-3 max-w-prose">
+        <p className="page-intro mx-auto max-w-prose">
           Consider six everyday situations at work and choose what you would most likely do. These are hypothetical
           choices, not observations or an assessment.
         </p>

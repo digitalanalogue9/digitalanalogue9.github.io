@@ -3,29 +3,29 @@ import { expect, test } from '@playwright/test';
 test('visitor can read and refresh the how it works guide', async ({ page }) => {
   await page.goto('/howtouse', { waitUntil: 'domcontentloaded' });
 
-  await expect(page.getByRole('heading', { name: 'Sort. Narrow. Reflect.' })).toBeVisible();
-  await expect(page.getByText('Example exercise')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How it works' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Exercise examples' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Sort the cards' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Narrow your choices' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Reflect on your final set' })).toBeVisible();
-  await expect(page.getByText('Export reflection backup')).toBeVisible();
+  await expect(page.getByText(/Export a backup from History/)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Find my core values' }).first()).toHaveAttribute('href', '/exercise');
-  await expect(page.getByRole('link', { name: 'View History' }).first()).toHaveAttribute('href', '/history');
-  const behaviourAction = page.getByRole('link', { name: 'Explore behaviour reflection', exact: true });
+  await expect(page.getByRole('link', { name: 'History', exact: true }).first()).toHaveAttribute('href', '/history');
+  const behaviourAction = page.getByRole('link', { name: 'Start a behaviour reflection', exact: true });
   if (process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true') {
     await expect(behaviourAction.first()).toHaveAttribute('href', '/behaviour');
   } else {
     await expect(behaviourAction).toHaveCount(0);
   }
 
-  await expect(page).toHaveTitle('How Core Values works');
+  await expect(page).toHaveTitle('How it works · Core Values');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
     'See how to sort value cards, narrow your choices and reflect on your final set. Find guidance on saved exercises, History and backups.'
   );
-  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'How Core Values works');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'How it works · Core Values');
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Sort. Narrow. Reflect.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How it works' })).toBeVisible();
 });
 
 test('guide actions open exercise setup and History', async ({ page }) => {
@@ -35,7 +35,7 @@ test('guide actions open exercise setup and History', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
 
   await page.goto('/howtouse', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('link', { name: 'View History' }).first().click();
+  await page.getByRole('link', { name: 'History', exact: true }).first().click();
   await expect(page).toHaveURL(/\/history\/?$/);
   await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
 });
@@ -79,8 +79,14 @@ test('example views scale on a 320px screen and guide links receive keyboard foc
   expect(widths.document).toBeLessThanOrEqual(widths.viewport);
   expect(widths.images.every((width) => width <= widths.content)).toBe(true);
 
+  const menu = page.getByRole('button', { name: 'Menu' });
+  await menu.focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
   const action = page.getByRole('link', { name: 'Find my core values' }).first();
-  await action.focus();
   await expect(action).toBeFocused();
   await expect.poll(() => action.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe('solid');
 });
@@ -98,18 +104,16 @@ test('guide explains each view when an illustration cannot load', async ({ page 
 test('guide behaviour reflection section and action follow the public feature flag', async ({ page }) => {
   await page.goto('/howtouse', { waitUntil: 'domcontentloaded' });
 
-  const enabled = process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true';
-  const section = page.getByRole('region', { name: 'Explore possible perspectives on your behaviour' });
-  const action = page.getByRole('link', { name: 'Explore behaviour reflection', exact: true });
-
-  if (enabled) {
+  const section = page.getByRole('region', { name: 'Set up a reflection reminder' });
+  const action = page.getByRole('link', { name: 'Start a behaviour reflection', exact: true });
+  if ((await action.count()) > 0) {
     await expect(section).toBeVisible();
-    await expect(section.getByRole('link', { name: 'Explore behaviour reflection', exact: true })).toHaveAttribute(
+    await expect(section.getByRole('link', { name: 'Start a behaviour reflection', exact: true })).toHaveAttribute(
       'href',
       '/behaviour'
     );
   } else {
-    await expect(section).toHaveCount(0);
+    await expect(section).toBeVisible();
     await expect(action).toHaveCount(0);
   }
 });

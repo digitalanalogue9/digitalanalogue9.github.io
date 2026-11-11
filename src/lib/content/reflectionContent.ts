@@ -1,3 +1,4 @@
+import legacyTeamDescriptions from '@/data/team-values-legacy-descriptions.json';
 import teamValuesData from '@/data/team-values.json';
 import valuesData from '@/data/values.json';
 import type { ExerciseType, SessionReflection, ValueCard } from '@/lib/contracts/types';
@@ -251,7 +252,7 @@ const curatedValues: CuratedValue[] = [
     exerciseType: 'team',
     valueId: '12',
     title: 'EXCELLENCE',
-    description: 'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.',
+    description: 'We aim for high standards in our work and look for ways to improve it.',
     possibilities: [
       {
         id: 'team-excellence-constructive',
@@ -278,6 +279,14 @@ const curatedValues: CuratedValue[] = [
 const personalCards = new Map((valuesData.values as ValueCard[]).map((value) => [value.id, value]));
 const teamCards = new Map((teamValuesData.values as ValueCard[]).map((value) => [value.id, value]));
 
+// Saved exercises retain the descriptions from when their cards were created.
+function matchesCatalogueCard(exerciseType: ExerciseType, value: ValueCard): boolean {
+  const card = (exerciseType === 'team' ? teamCards : personalCards).get(value.id);
+  if (!card || card.title !== value.title) return false;
+  const legacyDescription = (legacyTeamDescriptions as Record<string, string>)[value.id];
+  return value.description === card.description || (exerciseType === 'team' && value.description === legacyDescription);
+}
+
 export function getReflectionRelationships(
   exerciseType: ExerciseType,
   selectedValues: ValueCard[]
@@ -297,7 +306,7 @@ export function getReflectionRelationships(
         canonical !== undefined &&
         value.title === relationship.valueTitles[index] &&
         value.title === canonical.title &&
-        value.description === canonical.description
+        matchesCatalogueCard(exerciseType, value)
       );
     });
     return valid
@@ -337,15 +346,12 @@ export function getReflectionSummary(
 }
 
 export function getReflectionContent(exerciseType: ExerciseType, value: ValueCard): ReflectionContent {
-  const card = (exerciseType === 'team' ? teamCards : personalCards).get(value.id);
   const match = curatedValues.find(
     (candidate) =>
       candidate.exerciseType === exerciseType &&
       candidate.valueId === value.id &&
       candidate.title === value.title &&
-      candidate.description === value.description &&
-      card?.title === value.title &&
-      card.description === value.description
+      matchesCatalogueCard(exerciseType, value)
   );
 
   return {

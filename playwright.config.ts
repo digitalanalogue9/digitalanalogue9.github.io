@@ -5,6 +5,7 @@ export default defineConfig({
   testMatch: '**/*.spec.ts',
   use: {
     baseURL: 'http://127.0.0.1:5173',
+    acceptDownloads: true,
     ...devices['Desktop Chrome'],
   },
   webServer: {

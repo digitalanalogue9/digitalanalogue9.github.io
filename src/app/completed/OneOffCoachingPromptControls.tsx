@@ -24,17 +24,17 @@ export function OneOffCoachingPromptControls({
   coachingCopyFeedback: string | null;
 }) {
   return (
-    <section className="rounded-sys-radius-button-sm border-sys-color-border-default border p-4">
+    <>
       <button
         type="button"
         aria-expanded={coachingPromptExpanded}
-        className="text-interface-base-small text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+        className={`${actionButtonClasses} order-1`}
         onClick={() => setCoachingPromptExpanded((expanded) => !expanded)}
       >
         Preview one-off coaching prompt
       </button>
       {coachingPromptExpanded && (
-        <div className="mt-3 space-y-4">
+        <div className="order-2 basis-full space-y-4 pt-3">
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
             Review the complete prompt before copying it into a service you choose. Optional text stays excluded until
             you select it.
@@ -95,6 +95,6 @@ export function OneOffCoachingPromptControls({
           </section>
         </div>
       )}
-    </section>
+    </>
   );
 }

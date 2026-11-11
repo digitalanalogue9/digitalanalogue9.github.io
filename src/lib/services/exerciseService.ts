@@ -131,6 +131,7 @@ export interface ExerciseService {
   advanceRound(input: AdvanceRoundInput): Promise<AdvanceRoundResult>;
   replayPreviousRound(input: ReplayPreviousRoundInput): Promise<ReplayPreviousRoundResult>;
   completeSession(input: CompleteSessionInput): Promise<CompletedSession>;
+  updateCompletedReasons(sessionId: string, reasonsById: Record<string, string>): Promise<CompletedSession>;
   getReflectionContent(exerciseType: ExerciseType, value: ValueCard): ReflectionContent;
   getReflectionRelationships(exerciseType: ExerciseType, selectedValues: ValueCard[]): ReflectionRelationship[];
   getReflectionSummary(
@@ -342,6 +343,22 @@ export class ExerciseServiceImpl implements ExerciseService {
       completedSession,
     });
 
+    return completedSession;
+  }
+
+  async updateCompletedReasons(sessionId: string, reasonsById: Record<string, string>): Promise<CompletedSession> {
+    const record = await this.repository.read(sessionId);
+    if (!record?.completedSession) throw new Error('Completed values are unavailable for this session.');
+
+    const completedSession: CompletedSession = {
+      ...record.completedSession,
+      finalValues: record.completedSession.finalValues.map((value) => {
+        const reason = reasonsById[value.id]?.trim();
+        return { ...value, reason: reason || undefined };
+      }),
+    };
+    const session: Session = { ...record.session, updatedAt: Date.now() };
+    await this.repository.saveRound({ session, round: record.currentRound, completedSession });
     return completedSession;
   }
 

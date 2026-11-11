@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Link } from 'react-router-dom';
 
-import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 import { CategoryGrid } from './CategoryGrid';
 import { CurrentCardPreview } from './CurrentCardPreview';
@@ -130,15 +129,21 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
     };
   }, [frameIndex, isPlaying, playbackSpeed, replayFrames.length]);
 
+  const replayHeader = (
+    <header className="space-y-4">
+      <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Replay</h1>
+      <p className="page-intro max-w-[70ch]">
+        Follow each recorded round to see how your choices shaped the final set.
+      </p>
+    </header>
+  );
+
   if ((currentFrame === undefined || currentSnapshot === undefined) && rounds.length > 0) {
     if (!isLoading && !error && session) {
       return (
-        <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-          <h1 className="text-interface-title-1 text-sys-color-text-primary font-semibold">Replay</h1>
-          <section
-            className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm"
-            role="status"
-          >
+        <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
+          {replayHeader}
+          <section className="space-y-3 border-t border-[var(--editorial-line)] pt-6" role="status">
             <p className="text-interface-base-small text-sys-color-text-secondary">
               Session: {session.id} | Status: {session.status} | Rounds recorded: {rounds.length}
             </p>
@@ -156,13 +161,9 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
 
   if (isLoading) {
     return (
-      <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-        <h1 className="text-interface-title-1 text-sys-color-text-primary font-semibold">Replay</h1>
-        <section
-          className="rounded-sys-radius-button-sm bg-sys-color-surface-default p-6 shadow-sm"
-          role="status"
-          aria-live="polite"
-        >
+      <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
+        {replayHeader}
+        <section className="border-t border-[var(--editorial-line)] pt-6" role="status" aria-live="polite">
           Loading replay...
         </section>
       </div>
@@ -171,9 +172,9 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
 
   if (error || !session) {
     return (
-      <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-        <h1 className="text-interface-title-1 text-sys-color-text-primary font-semibold">Replay</h1>
-        <section className="rounded-sys-radius-button-sm bg-sys-color-surface-default space-y-3 p-6 shadow-sm">
+      <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
+        {replayHeader}
+        <section className="space-y-3 border-t border-[var(--editorial-line)] pt-6">
           <p
             className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-ref-color-rag-red-text px-3 py-2"
             role="alert"
@@ -215,21 +216,16 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
   };
 
   return (
-    <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-      <h1 className="text-interface-title-1 text-sys-color-text-primary font-semibold">Replay</h1>
-      <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm">
-        <p className="text-interface-base-small text-sys-color-text-secondary">
-          Session: {sessionReference} | Status: {session.status} | Rounds recorded: {rounds.length}
-        </p>
-      </section>
+    <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
+      {replayHeader}
+      <p className="text-interface-base-small text-sys-color-text-secondary">
+        Session: {sessionReference} · Status: {session.status} · Rounds recorded: {rounds.length}
+      </p>
       {rounds.length === 0 ? (
-        <section
-          className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm"
-          role="status"
-        >
-          <h3 className="text-interface-base-default text-sys-color-text-primary font-semibold">
+        <section className="space-y-3 border-t border-[var(--editorial-line)] pt-6" role="status">
+          <h2 className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl">
             No rounds available to replay
-          </h3>
+          </h2>
           <p className="text-interface-base-small text-sys-color-text-secondary mt-1">
             This session is saved, but it has no round snapshots to show.
           </p>
@@ -239,10 +235,12 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
         </section>
       ) : (
         <>
-          <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm">
+          <section className="space-y-4 border-t border-[var(--editorial-line)] pt-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-interface-base-default text-sys-color-text-primary font-semibold">Replay controls</p>
+                <h2 className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl">
+                  Replay controls
+                </h2>
                 <p className="text-interface-base-small text-sys-color-text-secondary mt-2">
                   Round {currentFrame.roundIndex + 1} of {currentFrame.totalRounds} |{' '}
                   {getCommandStepLabel(
@@ -302,11 +300,11 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
 
           <CurrentCardPreview card={currentCard} />
 
-          <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm">
+          <section className="space-y-4 border-t border-[var(--editorial-line)] pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-interface-base-default text-sys-color-text-primary font-semibold">
+              <h2 className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl">
                 Round {currentFrame.roundNumber} snapshot
-              </h3>
+              </h2>
               <span className="rounded-ref-radius-999 border-sys-color-border-default text-interface-tiny-label text-sys-color-text-primary border px-3 py-1 font-semibold">
                 Deck remaining: {currentSnapshot.deck.length}
               </span>

@@ -20,11 +20,11 @@ export function ReflectionSummary({
   return (
     <section
       aria-labelledby="reflection-summary-heading"
-      className="rounded-sys-radius-button-sm border-sys-color-border-default space-y-3 border p-4"
+      className="space-y-3 border-t border-[var(--editorial-line)] pt-6"
     >
       <h2
         id="reflection-summary-heading"
-        className="text-interface-base-large text-sys-color-text-primary font-semibold"
+        className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl"
       >
         Reflection summary
       </h2>

@@ -313,50 +313,50 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   );
 
   return (
-    <div className={`${nonExercisePageContainerClassName} space-y-4`}>
-      <div className="print:hidden"></div>
-      {!reflectionFirstResultsEnabled && (
-        <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
-      )}
-
-      <details
-        open={reflectionFirstResultsEnabled}
-        className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border shadow-sm print:hidden"
-      >
-        <summary
-          aria-label="Reflect on your values"
-          className="text-interface-base-large text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer p-4 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          Reflect on your values
-        </summary>
-        <div className="border-sys-color-border-default space-y-5 border-t p-4 sm:p-6">
-          <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+    <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
+      <section className="space-y-8 print:hidden">
+        <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
+          <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Reflect on your values</h1>
+          <p className="page-intro max-w-[70ch]">
             Reflection is optional and saved on this device with this completed session. Your notes are not included in
             the standard JSON export. To back up saved notes, choose Export reflection backup in{' '}
             <Link to="/history">History</Link>.
           </p>
-          {reflectionFirstResultsEnabled ? (
-            <details className="rounded-sys-radius-button-sm border-sys-color-border-default border p-3">
-              <summary
-                aria-label="Session goal (optional)"
-                className="text-interface-base-small text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
-              >
-                Session goal (optional)
-              </summary>
-              <div className="pt-3">{sessionGoalEditor}</div>
-            </details>
-          ) : (
-            sessionGoalEditor
-          )}
+        </header>
+
+        {!reflectionFirstResultsEnabled && (
+          <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
+        )}
+
+        {reflectionFirstResultsEnabled && (
+          <section
+            className="space-y-4 border-b border-[var(--editorial-line)] pb-8"
+            aria-labelledby="original-results-heading"
+          >
+            <h2
+              id="original-results-heading"
+              className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
+            >
+              Original results
+            </h2>
+            <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
+          </section>
+        )}
+
+        <div className="space-y-8">
+          {sessionGoalEditor}
           <ReflectionSummary
             summary={service.getReflectionSummary(exerciseType, completed.finalValues, reflection)}
             exerciseType={exerciseType}
           />
           {service.getReflectionRelationships(exerciseType, completed.finalValues).length > 0 && (
-            <section aria-labelledby="value-relationships-heading" className="space-y-3">
+            <section
+              aria-labelledby="value-relationships-heading"
+              className="space-y-3 border-t border-[var(--editorial-line)] pt-8"
+            >
               <h2
                 id="value-relationships-heading"
-                className="text-interface-base-large text-sys-color-text-primary font-semibold"
+                className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl"
               >
                 Values in context
               </h2>
@@ -417,62 +417,50 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             updateValueReflection={updateValueReflection}
             updateSuggestionResponse={updateSuggestionResponse}
           />
-          <button
-            type="button"
-            className={actionButtonClasses}
-            onClick={() => void handleSaveReflection()}
-            disabled={working}
-          >
-            {working ? 'Saving reflection…' : 'Save reflection'}
-          </button>
+          <div className="flex flex-wrap items-center gap-3 border-t border-[var(--editorial-line)] pt-6">
+            <OneOffCoachingPromptControls
+              coachingPromptExpanded={coachingPromptExpanded}
+              setCoachingPromptExpanded={setCoachingPromptExpanded}
+              coachingContextOptions={coachingContextOptions}
+              includedCoachingContextIds={includedCoachingContextIds}
+              setIncludedCoachingContextIds={setIncludedCoachingContextIds}
+              coachingPrompt={coachingPrompt}
+              handleCopyCoachingPrompt={() => void handleCopyCoachingPrompt()}
+              coachingCopyFeedback={coachingCopyFeedback}
+            />
+            <RecurringReflectionControls
+              recurringPromptExpanded={recurringPromptExpanded}
+              setRecurringPromptExpanded={setRecurringPromptExpanded}
+              schedulePreferences={schedulePreferences}
+              updateSchedulePreferences={updateSchedulePreferences}
+              working={working}
+              recurringContextOptions={recurringContextOptions}
+              includedRecurringContextIds={includedRecurringContextIds}
+              setIncludedRecurringContextIds={setIncludedRecurringContextIds}
+              recurringPrompt={recurringPrompt}
+              handleCopyRecurringPrompt={() => void handleCopyRecurringPrompt()}
+              recurringCopyFeedback={recurringCopyFeedback}
+            />
+            <button
+              type="button"
+              className="apc-button order-1 ml-auto min-h-11 md:min-h-10"
+              onClick={() => void handleSaveReflection()}
+              disabled={working}
+            >
+              {working ? 'Saving reflection…' : 'Save reflection'}
+            </button>
+          </div>
           {reflectionDirty ? (
-            <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
+            <p className="text-interface-base-small text-sys-color-text-secondary text-right" role="status">
               Unsaved changes. Save to keep these notes on this device.
             </p>
           ) : completed.reflection ? (
-            <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
+            <p className="text-interface-base-small text-sys-color-text-secondary text-right" role="status">
               Reflection saved on this device.
             </p>
           ) : null}
-          <OneOffCoachingPromptControls
-            coachingPromptExpanded={coachingPromptExpanded}
-            setCoachingPromptExpanded={setCoachingPromptExpanded}
-            coachingContextOptions={coachingContextOptions}
-            includedCoachingContextIds={includedCoachingContextIds}
-            setIncludedCoachingContextIds={setIncludedCoachingContextIds}
-            coachingPrompt={coachingPrompt}
-            handleCopyCoachingPrompt={() => void handleCopyCoachingPrompt()}
-            coachingCopyFeedback={coachingCopyFeedback}
-          />
         </div>
-        <RecurringReflectionControls
-          recurringPromptExpanded={recurringPromptExpanded}
-          setRecurringPromptExpanded={setRecurringPromptExpanded}
-          schedulePreferences={schedulePreferences}
-          updateSchedulePreferences={updateSchedulePreferences}
-          working={working}
-          recurringContextOptions={recurringContextOptions}
-          includedRecurringContextIds={includedRecurringContextIds}
-          setIncludedRecurringContextIds={setIncludedRecurringContextIds}
-          recurringPrompt={recurringPrompt}
-          handleCopyRecurringPrompt={() => void handleCopyRecurringPrompt()}
-          recurringCopyFeedback={recurringCopyFeedback}
-        />
-      </details>
-
-      {reflectionFirstResultsEnabled && (
-        <details className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border shadow-sm">
-          <summary
-            aria-label="Original results"
-            className="text-interface-base-large text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer p-4 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            Original results
-          </summary>
-          <div className="border-sys-color-border-default border-t p-4 sm:p-6">
-            <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
-          </div>
-        </details>
-      )}
+      </section>
 
       <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm print:hidden">
         {actionError && (
@@ -484,6 +472,12 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           </p>
         )}
         <div className="flex flex-wrap gap-3">
+          <Link
+            to={{ pathname: '/reasoning', search: replaySearch }}
+            className="apc-button text-sys-color-text-inverse min-h-11 no-underline md:min-h-10"
+          >
+            Edit final values
+          </Link>
           <button type="button" className={actionButtonClasses} onClick={handlePrint}>
             <Printer className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
             Print

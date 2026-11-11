@@ -57,9 +57,9 @@ describe('Session history and replay', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'View results' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Resume session' })).toHaveAttribute(
       'href',
-      '/completed?sessionId=history-session'
+      '/reasoning?sessionId=history-session'
     );
     fireEvent.click(screen.getByRole('link', { name: 'Replay' }));
     expect(await screen.findByRole('heading', { name: 'Replay', exact: true })).toBeInTheDocument();
