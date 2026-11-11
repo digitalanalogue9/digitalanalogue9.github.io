@@ -9,7 +9,7 @@
 }
 
 .core-values-shell {
-  font-family: var(--font-body, Inter, Arial, sans-serif);
+  font-family: var(--font-body, 'Source Sans 3', Arial, sans-serif);
   color: var(--editorial-ink);
 }
 
@@ -122,8 +122,8 @@
 
 .core-values-background--overview:has(.editorial-home) {
   background-color: var(--editorial-paper);
-  background-image: linear-gradient(rgb(250 245 248 / 50%), rgb(250 245 248 / 50%)),
-    url('/images/home-watercolor-expressive.webp');
+  background-image:
+    linear-gradient(rgb(250 245 248 / 50%), rgb(250 245 248 / 50%)), url('/images/home-watercolor-expressive.webp');
   background-position: center top;
   background-size: cover;
 }
@@ -166,7 +166,7 @@
 #main-content .page-intro {
   margin-block-start: 1rem !important;
   color: var(--editorial-ink);
-  font-family: var(--font-body, Inter, Arial, sans-serif);
+  font-family: var(--font-body, 'Source Sans 3', Arial, sans-serif);
   font-size: 1.125rem;
   line-height: 1.6;
 }

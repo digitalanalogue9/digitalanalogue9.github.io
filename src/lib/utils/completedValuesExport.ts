@@ -91,7 +91,7 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       body {
         background: #f7f5e6;
         color: #14363f;
-        font-family: Inter, Arial, sans-serif;
+        font-family: 'Source Sans 3', Arial, sans-serif;
         line-height: 1.45;
         margin: 0;
       }
@@ -113,7 +113,7 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       }
 
       h1 {
-        font-family: Inter, Arial;
+        font-family: 'Source Sans 3', Arial;
         font-size: 32px;
         font-weight: 400;
         line-height: 1.15;
@@ -178,7 +178,7 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       }
 
       h2 {
-        font-family: Inter, Arial;
+        font-family: 'Source Sans 3', Arial;
         font-size: 18px;
         margin: 0 0 4px;
       }
