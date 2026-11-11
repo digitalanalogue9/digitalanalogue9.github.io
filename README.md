@@ -53,7 +53,8 @@ conventions, design guidance and domain language.
 
 ```bash
 pnpm check                  # Typecheck, lint and Vitest
-pnpm format:check           # Check formatting of changed files
+pnpm check:ci               # Run the Pages workflow checks locally
+pnpm format:check           # Check the latest commit and uncommitted files
 pnpm test:coverage          # Vitest with coverage
 pnpm build                  # Production build and Pages route artifacts
 pnpm validate:pages-artifact
@@ -64,6 +65,12 @@ pnpm test:e2e               # Playwright browser journeys
 The [Pages workflow](.github/workflows/pages.yml) defines the full CI checks, including Playwright runs with behaviour
 reflection disabled and enabled. Outside CI, Playwright builds and serves the site unless it finds a server already
 running on its configured port.
+
+Before pushing, use `pnpm check:ci` to run the same validation sequence as GitHub, including both production builds.
+Install the Playwright Chromium browser first. GitHub uses Node 22.19.0 and pnpm 10.33.2; use those versions locally for
+the closest match. The command requires port 5173 to be free. On a pull request, the formatting check compares the whole
+branch against its target; locally it checks the latest commit and uncommitted files. To check a whole branch locally in
+PowerShell, set `$env:GITHUB_BASE_REF = 'main'` before running it and remove that variable afterwards.
 
 ## Contributing
 

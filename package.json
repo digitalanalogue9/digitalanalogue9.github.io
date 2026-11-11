@@ -18,6 +18,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "check:ci": "node scripts/check-ci.js",
     "ts-prune": "ts-prune --project tsconfig.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

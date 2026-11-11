@@ -1,14 +1,9 @@
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { formattingDiffArguments } from './formatting-diff.js';
 
 const repositoryRoot = fileURLToPath(new URL('../', import.meta.url));
-const baseRef =
-  process.env.GITHUB_BASE_REF ?? process.env.SYSTEM_PULLREQUEST_TARGETBRANCH?.replace(/^refs\/heads\//, '');
-const diffArguments = baseRef
-  ? ['diff', '--name-only', '--diff-filter=ACMR', `origin/${baseRef}...HEAD`]
-  : process.env.CI
-    ? ['diff', '--name-only', '--diff-filter=ACMR', 'HEAD^...HEAD']
-    : ['diff', '--name-only', '--diff-filter=ACMR', 'HEAD'];
+const diffArguments = formattingDiffArguments(process.env);
 
 const diff = spawnSync('git', diffArguments, {
   cwd: repositoryRoot,
