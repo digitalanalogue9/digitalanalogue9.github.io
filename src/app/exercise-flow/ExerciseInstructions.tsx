@@ -32,7 +32,9 @@ export function ExerciseInstructions() {
       aria-labelledby="instructions-heading"
       className="app-instructions-dialog m-auto backdrop:bg-black/40"
     >
-      <h2 id="instructions-heading">How to use Core Values</h2>
+      <h2 id="instructions-heading" tabIndex={-1} autoFocus>
+        How to use Core Values
+      </h2>
       <p>
         Sort each value card by how important it is to you. Choose a category button beside the current card, or drag it
         into a category. You can move placed cards between categories and drag them above or below other cards to change

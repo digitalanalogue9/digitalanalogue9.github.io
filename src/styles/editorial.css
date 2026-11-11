@@ -105,6 +105,14 @@
   align-items: center;
   gap: 0.45rem;
 }
+.public-footer [aria-label='Share Core Values'] button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.public-footer [aria-label='Share Core Values'] button:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
 
 .public-footer a:focus-visible,
 .public-header a:focus-visible {
@@ -774,7 +782,7 @@
   .mobile-category-grid > button span:last-child { padding: .2rem .5rem; }
   .current-card-panel h3 { margin-top: .25rem; }
   .current-card-panel h3 + p { margin-top: .35rem; line-height: 1.35; }
-  .mobile-sorting [aria-label='Category review'] h2 { font-size: .9rem; }
+  #main-content section.mobile-sorting section[aria-label='Category review'] h2 { font-size: .9rem; line-height: 1.35; }
   .mobile-sorting [aria-label='Category review'] button { padding: .35rem .65rem; }
 }
 .category-count-feedback { animation: category-arrival 600ms ease-out; }
@@ -798,6 +806,7 @@
   .public-footer-copyright { display: none; }
 }
 @media (max-width: 350px) {
+  .mobile-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .current-card-panel > div:first-child { min-height: 17rem; }
 }
 @media (orientation: portrait) and (min-width: 1024px) and (max-width: 1279px) {
