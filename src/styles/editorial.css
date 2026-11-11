@@ -38,7 +38,7 @@
   align-items: center;
   gap: 0.65rem;
   color: white;
-  font-family: var(--font-editorial);
+  font-family: var(--font-heading);
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;
@@ -60,6 +60,7 @@
   border-radius: 0.25rem;
   padding: 0.55rem 0.8rem;
   color: white;
+  font-family: var(--font-interface);
   font-size: 0.95rem;
   font-weight: 600;
   text-underline-offset: 0.25rem;
@@ -158,24 +159,24 @@
 #main-content .editorial-home h2,
 #main-content .editorial-home h3 {
   margin: 0;
-  font-family: var(--font-editorial);
-  font-weight: 400;
+  font-family: var(--font-heading);
+  font-weight: 600;
   line-height: 1.08;
 }
 
 #main-content .page-intro {
   margin-block-start: 1rem !important;
   color: var(--editorial-ink);
-  font-family: var(--font-body, 'Source Sans 3', Arial, sans-serif);
+  font-family: var(--font-body, 'Source Serif 4', Georgia, serif);
   font-size: 1.125rem;
   line-height: 1.6;
 }
 
 /* Public pages and exercise views share the About page's section-heading scale. */
 #main-content h2:not(.editorial-home:not(.app-page-panel) h2) {
-  font-family: var(--font-editorial);
+  font-family: var(--font-heading);
   font-size: 1.875rem;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.08;
 }
 
@@ -195,8 +196,8 @@
 .editorial-home h1,
 .editorial-home h2,
 .editorial-home h3 {
-  font-family: var(--font-editorial);
-  font-weight: 400;
+  font-family: var(--font-heading);
+  font-weight: 600;
   line-height: 1.08;
 }
 

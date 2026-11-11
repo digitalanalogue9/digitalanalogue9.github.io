@@ -22,7 +22,7 @@
 
 .help-guide h1,
 .help-guide h2 {
-  font-family: var(--font-editorial, Georgia, 'Times New Roman', serif);
+  font-family: var(--font-heading, 'DM Sans', Arial, sans-serif);
   font-weight: 600;
 }
 

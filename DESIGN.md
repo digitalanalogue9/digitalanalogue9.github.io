@@ -10,11 +10,11 @@ colors:
   line: '#d6bdcc'
 typography:
   heading:
-    fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
-    fontWeight: 400
+    fontFamily: 'DM Sans, Arial, sans-serif'
+    fontWeight: 600
     lineHeight: 1.08
   body:
-    fontFamily: 'Source Sans 3, Arial, sans-serif'
+    fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
 rounded:
   card: '8px'
 spacing:
@@ -25,8 +25,8 @@ spacing:
 
 ## Overview
 
-The public site has a quiet, warm editorial character. Serif headings and generous reading space support reflection,
-while clear sans-serif controls keep the exercise practical.
+The public site has a quiet, warm editorial character. Clear sans-serif headings and readable serif copy support
+reflection, while sans-serif controls keep the exercise practical.
 
 ## Colors
 
@@ -36,12 +36,12 @@ and text tokens for application controls.
 
 ## Typography
 
-Source Serif 4 gives page and exercise headings their editorial voice; Source Sans 3 carries navigation, body text and
-controls. Standard public page titles follow the About page: regular weight, with sizes of 2.25rem, 3rem and 3.75rem at
-the existing responsive breakpoints. Section headings use regular Source Serif 4 at 1.875rem, rising to 2.25rem at
-640px. Page introductions use Source Sans 3 at 1.125rem with 1.6 line height, ink color, and a consistent 1rem gap below
-the title. The home page retains its own heading and hero introduction. Keep headings readable as they wrap on small
-screens.
+DM Sans gives page and exercise headings a clear, modern hierarchy; Source Serif 4 carries body copy and reflection
+text. Source Sans 3 remains on navigation and compact interface controls. Standard public page titles follow the About
+page scale, with sizes of 2.25rem, 3rem and 3.75rem at the existing responsive breakpoints. Section headings use DM Sans
+at 1.875rem, rising to 2.25rem at 640px. Page introductions use Source Serif 4 at 1.125rem with 1.6 line height, ink
+color, and a consistent 1rem gap below the title. The home page retains its own heading and hero introduction. Keep
+headings readable as they wrap on small screens.
 
 ## Layout
 
