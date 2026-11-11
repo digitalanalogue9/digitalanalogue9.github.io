@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-label="Delicate rose and plum botanical branches on pale blush paper">
+  <defs>
+    <linearGradient id="paper" x2="1" y2="1"><stop stop-color="#fcf5f8"/><stop offset="1" stop-color="#f7ecf1"/></linearGradient>
+    <linearGradient id="leaf" x2="1" y2="1"><stop stop-color="#bc92a9" stop-opacity=".48"/><stop offset="1" stop-color="#80576f" stop-opacity=".65"/></linearGradient>
+    <linearGradient id="rose" x2="1" y2="1"><stop stop-color="#e1afc0" stop-opacity=".58"/><stop offset="1" stop-color="#b7809d" stop-opacity=".62"/></linearGradient>
+    <g id="bud"><ellipse rx="5.5" ry="10" fill="#c991a8" opacity=".65" transform="rotate(-30)"/></g>
+    <g id="spray" fill="none" stroke="#9c6c83" stroke-width="2.5" stroke-linecap="round" opacity=".66">
+      <path d="M0 0C-12-35-23-73-25-120M-9-38c-21-14-34-30-42-50M-15-61c14-13 21-28 23-47M-21-86c-14-9-23-20-27-34M-24-105c12-10 18-22 19-35"/>
+      <g stroke="none"><use href="#bud" x="-25" y="-123"/><use href="#bud" x="-51" y="-91"/><use href="#bud" x="8" y="-111"/><use href="#bud" x="-48" y="-123"/><use href="#bud" x="-5" y="-143"/></g>
+    </g>
+    <g id="foliage">
+      <path d="M0 0C24-104 56-206 100-309C139-401 175-492 192-610" fill="none" stroke="#805b70" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+      <path d="M44-171C-16-174-79-151-136-113C-87-166-42-196 44-171Z" fill="url(#leaf)"/>
+      <path d="M44-171C-20-165-77-143-136-113" fill="none" stroke="#8a6278" stroke-opacity=".37" stroke-width="2"/>
+      <path d="M90-287C160-342 224-362 294-346C243-293 178-274 90-287Z" fill="url(#rose)"/>
+      <path d="M90-287C169-318 230-337 294-346" fill="none" stroke="#9f6b83" stroke-opacity=".36" stroke-width="2"/>
+      <path d="M154-462C119-512 114-561 140-613C167-568 177-522 154-462Z" fill="url(#leaf)"/>
+      <path d="M154-462C149-520 144-570 140-613" fill="none" stroke="#8a6278" stroke-opacity=".35" stroke-width="2"/>
+      <path d="M122-366C87-400 56-432 34-476M171-513C220-548 250-587 261-632M63-228C37-277 24-325 22-372" fill="none" stroke="#91657c" stroke-width="2.5" opacity=".7"/>
+      <use href="#spray" transform="translate(34 -476) rotate(-24) scale(.85)"/>
+      <use href="#spray" transform="translate(261 -632) rotate(35) scale(.76)"/>
+      <use href="#spray" transform="translate(22 -372) rotate(-30) scale(.8)"/>
+      <use href="#spray" transform="translate(192 -610) rotate(13) scale(.7)"/>
+    </g>
+  </defs>
+  <path fill="url(#paper)" d="M0 0h1672v941H0z"/>
+  <use href="#foliage" transform="translate(1205 1055) rotate(19) scale(1.23)"/>
+  <use href="#foliage" transform="translate(1760 365) rotate(141) scale(.91)" opacity=".8"/>
+  <use href="#foliage" transform="translate(-125 1000) rotate(22) scale(.48)" opacity=".42"/>
+</svg>
