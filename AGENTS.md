@@ -1,5 +1,9 @@
 ## Agent skills
 
+### Coding standards
+
+For implementation and code review, read `CODING_STANDARDS.md`.
+
 ### Issue tracker
 
 Issues and specs live as markdown files under `.scratch/`. See `docs/agents/issue-tracker.md`.
