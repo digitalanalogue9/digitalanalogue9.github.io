@@ -122,7 +122,10 @@
 
 .core-values-background--overview:has(.editorial-home) {
   background-color: var(--editorial-paper);
-  background-image: none;
+  background-image: linear-gradient(rgb(250 245 248 / 50%), rgb(250 245 248 / 50%)),
+    url('/images/home-watercolor-expressive.webp');
+  background-position: center top;
+  background-size: cover;
 }
 
 .core-values-background--howtouse {
