@@ -47,7 +47,7 @@ export default function PrivacyPage() {
 
       <section aria-labelledby="backups-heading" className="space-y-3">
         <h2 id="backups-heading" className="font-serif text-2xl font-semibold">
-          Backups you download
+          Exporting and importing backups
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Use History to export a backup before clearing browser data or moving your work. In History,{' '}

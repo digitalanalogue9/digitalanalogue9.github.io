@@ -32,7 +32,7 @@ export default function AboutPage() {
         aria-labelledby="what-you-can-do"
       >
         <h2 id="what-you-can-do" className="text-3xl sm:text-4xl">
-          What you can do here
+          Sort and reflect on your values
         </h2>
         <p className="leading-relaxed">
           Core Values gives you a set of cards to sort by importance. Over a series of rounds, you choose which values

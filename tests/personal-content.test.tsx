@@ -25,7 +25,7 @@ describe('personal site content', () => {
 
     expect(screen.getByRole('heading', { name: 'It started with a borrowed deck of cards.' })).toBeInTheDocument();
     expect(screen.getByText(/The cards belonged to my coach, so I had to return them/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'What you can do here' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Sort and reflect on your values' })).toBeInTheDocument();
     expect(screen.getByText(/agreeing on your team’s core values together/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Further perspectives' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'James Clear: Let Your Values Drive Your Choices' })).toHaveAttribute(

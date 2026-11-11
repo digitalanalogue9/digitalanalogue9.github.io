@@ -34,7 +34,7 @@ describe('privacy choices', () => {
       screen.getByText(/Exercise answers and notes are stored on this device\. They don’t sync automatically\./)
     ).toBeVisible();
     expect(screen.getByRole('heading', { name: 'Saved exercises and preferences' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'Backups you download' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Exporting and importing backups' })).toBeVisible();
     expect(
       screen.getByText(/saves your values exercise without the additional notes from the completed exercise page/)
     ).toBeVisible();
