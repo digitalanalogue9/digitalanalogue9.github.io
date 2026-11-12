@@ -55,10 +55,7 @@ export default function HomeClient() {
       <section className="editorial-situations" aria-labelledby="situations-heading">
         <div>
           <h2 id="situations-heading">When a decision pulls you in different directions</h2>
-          <p>
-            Sorting the cards gives you a way to consider which priorities come first. You can return to the exercise as
-            your circumstances change.
-          </p>
+          <p>Understanding your values can help you weigh competing priorities.</p>
         </div>
         <ul className="editorial-situations-list" aria-label="Possible moments for reflection">
           {situations.map((situation) => (
@@ -69,12 +66,13 @@ export default function HomeClient() {
 
       <section className="editorial-closing" aria-labelledby="closing-heading">
         <h2 id="closing-heading">Make room to reflect on what matters to you.</h2>
-        <p>
-          Find your values, make choices between them, then return to your reflections when you want to think them
-          through again.
-        </p>
+        <p>You can return to your reflections when you want to think them through again.</p>
         <p className="editorial-storage-note">
-          Your reflections stay in this browser and don’t sync automatically. Use History to export a backup.
+          Your reflections stay in this browser and don’t sync automatically. Use{' '}
+          <Link className="editorial-history-link" to="/history">
+            History
+          </Link>{' '}
+          to export a backup before clearing browser data or changing devices.
         </p>
       </section>
 
