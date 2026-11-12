@@ -81,10 +81,10 @@ describe('personal site content', () => {
       'content',
       'Ask a question, share an idea or report a problem with Core Values. Find the email address for feedback and privacy requests.'
     );
-    expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', `${PERSONAL_SITE_URL}/contact`);
+    expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', `${PERSONAL_SITE_URL}/contact/`);
     expect(document.querySelector('meta[property="og:url"]')).toHaveAttribute(
       'content',
-      `${PERSONAL_SITE_URL}/contact`
+      `${PERSONAL_SITE_URL}/contact/`
     );
   });
 

@@ -68,13 +68,13 @@ export function validatePagesArtifact(directory) {
       ['name="description"', metadata.description],
       ['property="og:title"', metadata.title],
       ['property="og:description"', metadata.description],
-      ['property="og:url"', `https://core-values.me/${route}`],
+      ['property="og:url"', `https://core-values.me/${route}/`],
     ]) {
       if (!html.includes(`<meta ${attribute} content="${value}" />`)) {
         errors.push(`${route}/index.html must publish the approved ${attribute} metadata`);
       }
     }
-    if (!html.includes(`<link rel="canonical" href="https://core-values.me/${route}" />`)) {
+    if (!html.includes(`<link rel="canonical" href="https://core-values.me/${route}/" />`)) {
       errors.push(`${route}/index.html must publish the canonical URL`);
     }
   }

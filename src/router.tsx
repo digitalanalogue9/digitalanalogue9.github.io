@@ -48,23 +48,24 @@ function SiteLayout() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const isNotFoundRoute = useMatches().some((match) => match.handle === 'not-found');
+  const routePath = location.pathname.replace(/\/+$/, '') || '/';
   const valuesFlowPaths = ['/exercise', '/completed', '/reasoning', '/replay'];
   const backgroundVariant =
-    location.pathname === '/behaviour' && isBehaviourReflectionEnabled()
+    routePath === '/behaviour' && isBehaviourReflectionEnabled()
       ? 'behaviour'
-: location.pathname === '/howtouse'
-? 'howtouse'
-      : location.pathname === '/about'
-        ? 'about'
-        : location.pathname === '/contact'
-          ? 'contact'
-          : valuesFlowPaths.includes(location.pathname)
-            ? 'values'
-            : 'overview';
+      : routePath === '/howtouse'
+        ? 'howtouse'
+        : routePath === '/about'
+          ? 'about'
+          : routePath === '/contact'
+            ? 'contact'
+            : valuesFlowPaths.includes(routePath)
+              ? 'values'
+              : 'overview';
   const backgroundClassName = isNotFoundRoute
     ? 'core-values-error-background'
     : `core-values-background core-values-background--${backgroundVariant}`;
-  const isExerciseRoute = location.pathname === '/exercise';
+  const isExerciseRoute = routePath === '/exercise';
 
   return (
     <>
@@ -116,7 +117,11 @@ function SiteLayout() {
             <Outlet />
           </Suspense>
         </main>
-        <footer className={`public-footer print:hidden${isExerciseRoute ? ' exercise-footer' : ''}`} role="contentinfo" aria-label="Site footer">
+        <footer
+          className={`public-footer print:hidden${isExerciseRoute ? 'exercise-footer' : ''}`}
+          role="contentinfo"
+          aria-label="Site footer"
+        >
           <div className="public-footer-inner">
             <span className="public-footer-copyright">© {new Date().getFullYear()} Core Values</span>
             <nav aria-label="Footer navigation">

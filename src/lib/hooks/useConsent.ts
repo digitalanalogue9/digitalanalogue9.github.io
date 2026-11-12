@@ -48,13 +48,10 @@ function broadcastConsent(consent: CookieConsent) {
 }
 
 export function useConsent() {
-  const [consent, setConsent] = useState<CookieConsent>(DEFAULT_CONSENT);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [consent, setConsent] = useState<CookieConsent>(readStoredConsent);
+  const isInitialized = true;
 
   useEffect(() => {
-    setConsent(readStoredConsent());
-    setIsInitialized(true);
-
     const handleConsentChanged = (event: Event) => {
       setConsent(normalizeConsent((event as CustomEvent<CookieConsent>).detail));
     };
@@ -85,16 +82,9 @@ export function useConsent() {
     [consent]
   );
 
-  const updateBeforeInitialization = useCallback((newConsent: Partial<CookieConsent>) => {
-    const nextConsent = normalizeConsent({ ...DEFAULT_CONSENT, ...newConsent, timestamp: Date.now() });
-    setConsent(nextConsent);
-    saveConsent(nextConsent);
-    broadcastConsent(nextConsent);
-  }, []);
-
   return {
     consent,
-    updateConsent: isInitialized ? updateConsent : updateBeforeInitialization,
+    updateConsent,
     isInitialized,
   };
 }

@@ -9,7 +9,8 @@ type PageMetadataProps = {
 
 export default function PageMetadata({ title, description, path }: PageMetadataProps) {
   useEffect(() => {
-    const canonicalUrl = new URL(path, PERSONAL_SITE_URL).toString();
+    const canonicalPath = path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`;
+    const canonicalUrl = new URL(canonicalPath, PERSONAL_SITE_URL).toString();
     document.title = title;
 
     const setMeta = (selector: string, attribute: string, value: string, content: string) => {

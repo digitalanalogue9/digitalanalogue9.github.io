@@ -13,7 +13,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${routes
   .map(
     (route) => `  <url>
-    <loc>${baseUrl}${route === '/' ? '' : route}</loc>
+    <loc>${baseUrl}${route === '/' ? '/' : `${route}/`}</loc>
     <lastmod>${lastmod}</lastmod>
   </url>`
   )

@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Link, MemoryRouter } from 'react-router-dom';
 import CookieBanner from '@/components/common/CookieBanner';
@@ -7,6 +8,32 @@ import GoogleAnalytics from '@/components/common/GoogleAnalytics';
 import PrivacyPage from '@/app/privacy/page';
 
 const consentKey = 'cookie-consent';
+
+describe('initial cookie banner layout', () => {
+  it('renders the first-visit banner in the initial markup', () => {
+    const markup = renderToStaticMarkup(
+      <MemoryRouter>
+        <CookieBanner />
+      </MemoryRouter>
+    );
+
+    expect(markup).toContain('Privacy preferences');
+  });
+
+  it('keeps the banner out of the initial markup when consent is already stored', () => {
+    localStorage.setItem(
+      consentKey,
+      JSON.stringify({ analytics: 'denied', functional: 'denied', advertisement: 'denied', timestamp: 1 })
+    );
+    const markup = renderToStaticMarkup(
+      <MemoryRouter>
+        <CookieBanner />
+      </MemoryRouter>
+    );
+
+    expect(markup).not.toContain('Privacy preferences');
+  });
+});
 
 describe('privacy choices', () => {
   beforeEach(() => {

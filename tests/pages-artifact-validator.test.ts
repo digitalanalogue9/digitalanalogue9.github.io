@@ -38,7 +38,7 @@ function createPagesArtifact() {
   write('CNAME', 'core-values.me\n');
   write('googlebfe6ddd34d4e4f70.html', 'google-site-verification: googlebfe6ddd34d4e4f70.html');
   write('robots.txt', 'Sitemap: https://core-values.me/sitemap.xml');
-  write('sitemap.xml', '<loc>https://core-values.me/about</loc>');
+  write('sitemap.xml', '<loc>https://core-values.me/about/</loc>');
   write(
     'manifest.webmanifest',
     JSON.stringify({ start_url: 'https://core-values.me/', scope: 'https://core-values.me/' })
@@ -48,7 +48,7 @@ function createPagesArtifact() {
   for (const route of routes) {
     const metadata = pageMetadata[route as keyof typeof pageMetadata];
     const routeMetadata = metadata
-      ? `<head><title>${metadata.title}</title><meta name="description" content="${metadata.description}" /><meta property="og:title" content="${metadata.title}" /><meta property="og:description" content="${metadata.description}" /><meta property="og:url" content="https://core-values.me/${route}" /><link rel="canonical" href="https://core-values.me/${route}" /></head>`
+      ? `<head><title>${metadata.title}</title><meta name="description" content="${metadata.description}" /><meta property="og:title" content="${metadata.title}" /><meta property="og:description" content="${metadata.description}" /><meta property="og:url" content="https://core-values.me/${route}/" /><link rel="canonical" href="https://core-values.me/${route}/" /></head>`
       : '';
     write(`${route}/index.html`, `<html>${routeMetadata}<div id="root"></div></html>`);
   }

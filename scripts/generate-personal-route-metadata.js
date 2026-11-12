@@ -14,7 +14,7 @@ for (const [route, metadata] of Object.entries(editorialRouteMetadata)) {
   let html = fs.existsSync(routeIndex)
     ? fs.readFileSync(routeIndex, 'utf8')
     : fs.readFileSync(path.join(outputDirectory, 'index.html'), 'utf8');
-  const canonicalUrl = `${baseUrl}/${route}`;
+  const canonicalUrl = `${baseUrl}/${route}/`;
 
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${metadata.title}</title>`);
   html = html.replace(

@@ -27,6 +27,17 @@ test('visitor can open and refresh a direct application route', async ({ page })
   await expect(page.getByRole('heading', { name: 'Session History' })).toBeVisible();
 });
 
+test('trailing-slash routes preserve their page-specific layout', async ({ page }) => {
+  await page.goto('/about/');
+  await expect(page).toHaveURL(/\/about\/$/);
+  await expect(page.getByRole('main', { name: 'Main content' })).toHaveClass(/core-values-background--about/);
+
+  await page.goto('/exercise/');
+  await expect(page).toHaveURL(/\/exercise\/$/);
+  await expect(page.getByRole('main', { name: 'Main content' })).toHaveClass(/exercise-main/);
+  await expect(page.locator('footer')).toHaveClass(/exercise-footer/);
+});
+
 test('behaviour reflection route follows the build-time feature flag', async ({ page }) => {
   await page.goto('/behaviour');
 
@@ -46,7 +57,7 @@ test('privacy page loads directly, refreshes and manages consent', async ({ page
     'content',
     'Understand what Core Values saves in your browser, how backups work and how to allow or reject optional Google Analytics.'
   );
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://core-values.me/privacy');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://core-values.me/privacy/');
 
   const banner = page.getByRole('region', { name: 'Privacy preferences' });
   await expect(banner).toContainText('Optional Google Analytics helps me understand visits to this site.');

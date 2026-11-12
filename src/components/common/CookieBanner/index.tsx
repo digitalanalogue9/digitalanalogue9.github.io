@@ -4,25 +4,20 @@ import { useConsent } from '@/lib/hooks/useConsent';
 import type { ConsentStatus } from '@/lib/types/Consent';
 
 export default function CookieBanner() {
-  const { consent, updateConsent, isInitialized } = useConsent();
+  const { consent, updateConsent } = useConsent();
   const [choices, setChoices] = useState(consent);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => setChoices(consent), [consent]);
-  useEffect(() => {
-    if (isInitialized && consent.analytics === 'pending') setIsVisible(true);
-  }, [consent.analytics, isInitialized]);
 
   const chooseConsent = (analytics: ConsentStatus, functional: ConsentStatus) => {
     updateConsent({ analytics, functional, advertisement: 'denied' });
-    setIsVisible(false);
   };
 
   const updateChoice = (type: 'analytics' | 'functional', granted: boolean) => {
     setChoices((current) => ({ ...current, [type]: granted ? 'granted' : 'denied' }));
   };
 
-  if (!isVisible) return null;
+  if (consent.analytics !== 'pending') return null;
 
   return (
     <section

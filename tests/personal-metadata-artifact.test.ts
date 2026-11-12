@@ -20,9 +20,10 @@ describe('personal Pages metadata artifacts', () => {
     expect(index).toContain('https://core-values.me/icons/icon-192x192.png');
     expect(index).toContain('<link rel="manifest" href="/manifest.webmanifest" />');
     expect(robots).toContain('Sitemap: https://core-values.me/sitemap.xml');
-    expect(sitemap).toContain('https://core-values.me/about');
-    expect(sitemap).toContain('https://core-values.me/howtouse');
-    expect(sitemap).toContain('https://core-values.me/contact');
+    expect(sitemap).toContain('<loc>https://core-values.me/about/</loc>');
+    expect(sitemap).toContain('<loc>https://core-values.me/howtouse/</loc>');
+    expect(sitemap).toContain('<loc>https://core-values.me/contact/</loc>');
+    expect(sitemap).not.toContain('<loc>https://core-values.me/about</loc>');
     expect(`${robots}\n${sitemap}`).not.toContain('localhost');
   });
 });
