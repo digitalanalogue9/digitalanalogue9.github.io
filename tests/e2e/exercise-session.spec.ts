@@ -42,11 +42,15 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
     await expect(page.getByLabel(`Current card ${title}`, { exact: true })).toHaveCount(0);
   }
   await page.getByRole('button', { name: 'Next Round' }).click();
+  await expect(finishDialog).toBeVisible();
+  await expect(finishDialog).toContainText('only the top 1 value in Very Important will be used');
+  await finishDialog.getByRole('button', { name: 'Next Round' }).click();
   await expect(page.getByRole('heading', { name: 'Round 2 command center', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Replay Previous Round' }).click();
   await expect(page.getByLabel(/^Current card /)).toHaveCount(0);
   await page.getByRole('button', { name: 'Finish', exact: true }).click();
   await expect(finishDialog).toBeVisible();
+  await expect(finishDialog).toContainText('only the top 1 value in Very Important will be used');
   await finishDialog.getByRole('button', { name: 'Cancel' }).click();
   await expect(finishDialog).toBeHidden();
   await page.getByRole('button', { name: 'Finish', exact: true }).click();

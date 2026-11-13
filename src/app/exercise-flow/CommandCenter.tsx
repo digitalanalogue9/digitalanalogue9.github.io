@@ -45,6 +45,7 @@ export default function CommandCenter({
   canReplayPrevious,
 }: CommandCenterProps) {
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
+  const [isNextRoundChoice, setIsNextRoundChoice] = useState(false);
   const currentCardAreaRef = useRef<HTMLDivElement>(null);
   const primaryActionRef = useRef<HTMLButtonElement>(null);
   const placementFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -138,7 +139,14 @@ export default function CommandCenter({
               ref={primaryActionRef}
               type="button"
               className="cv-button active:scale-[0.98] motion-reduce:active:scale-100"
-              onClick={() => onAdvance(false)}
+              onClick={() => {
+                if (!canComplete && canEarlyFinish && round.categories['Very Important'].length >= targetCoreValues) {
+                  setIsNextRoundChoice(true);
+                  setIsFinishDialogOpen(true);
+                } else {
+                  onAdvance(false);
+                }
+              }}
               disabled={working || !canUsePrimaryAction}
               aria-disabled={working || !canUsePrimaryAction}
             >
@@ -148,7 +156,10 @@ export default function CommandCenter({
               <button
                 type="button"
                 className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm bg-sys-color-surface-default border px-4 py-2 font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45 motion-reduce:transition-none motion-reduce:active:scale-100"
-                onClick={() => setIsFinishDialogOpen(true)}
+                onClick={() => {
+                  setIsNextRoundChoice(false);
+                  setIsFinishDialogOpen(true);
+                }}
                 disabled={working || !canEarlyFinish}
               >
                 Finish
@@ -198,6 +209,14 @@ export default function CommandCenter({
         round={round}
         working={working}
         onCancel={() => setIsFinishDialogOpen(false)}
+        onNextRound={
+          isNextRoundChoice
+            ? () => {
+                setIsFinishDialogOpen(false);
+                onAdvance(false);
+              }
+            : undefined
+        }
         onContinue={() => {
           setIsFinishDialogOpen(false);
           onAdvance(true);

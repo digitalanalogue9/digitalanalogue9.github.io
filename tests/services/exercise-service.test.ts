@@ -3,6 +3,7 @@ import teamValuesData from '@/data/team-values.json';
 import valuesData from '@/data/values.json';
 import type { CategoryName, ValueCard } from '@/lib/contracts/types';
 import { InMemorySessionRepository } from '@/lib/repository/inMemorySessionRepository';
+import { applyRoundCommand, evaluateRoundTransition } from '@/lib/domain/roundEngine';
 import { ExerciseServiceImpl } from '@/lib/services/exerciseService';
 import { makeCompletedSession, makeImportEnvelope, makeSession, makeValueCards } from '../utils/importFixtures';
 
@@ -134,7 +135,7 @@ describe('ExerciseService', () => {
 
     expect(result.kind).toBe('ready-to-complete');
     if (result.kind === 'ready-to-complete') {
-      expect(result.round.activeCategories).toEqual(['Very Important', 'Not Important']);
+      expect(result.round.activeCategories).toEqual(sorted.round.activeCategories);
       expect(result.round.categories['Very Important']).toHaveLength(2);
       expect(result.round.categories['Not Important']).toHaveLength(3);
       expect(result.round.categories['Quite Important']).toHaveLength(0);
@@ -143,9 +144,62 @@ describe('ExerciseService', () => {
     }
 
     const stored = await service.loadSession(record.session.id);
-    expect(stored.currentRound.activeCategories).toEqual(['Very Important', 'Not Important']);
+    expect(stored.currentRound.activeCategories).toEqual(sorted.round.activeCategories);
     expect(stored.currentRound.categories['Very Important']).toHaveLength(2);
     expect(stored.currentRound.categories['Not Important']).toHaveLength(3);
+  });
+
+  test('finishing retains top values and moves overflow to the top of the next category', async () => {
+    const service = new ExerciseServiceImpl(new InMemorySessionRepository());
+    const record = await service.startSession({ targetCoreValues: 2, cardsInGame: 5 });
+    const sorted = await sortAllCards(service, record, [
+      'Very Important',
+      'Very Important',
+      'Very Important',
+      'Quite Important',
+      'Not Important',
+    ]);
+    const [first, second, overflow] = sorted.round.categories['Very Important'];
+    const [next] = sorted.round.categories['Quite Important'];
+    const result = await service.advanceRound({ session: sorted.session, round: sorted.round, earlyFinish: true });
+    expect(result.kind).toBe('ready-to-complete');
+    if (result.kind !== 'ready-to-complete') throw new Error('Expected a completed selection');
+    expect(result.finalValues.map((value) => value.id)).toEqual([first.id, second.id]);
+    expect(evaluateRoundTransition(result.round).canComplete).toBe(true);
+    const edited = applyRoundCommand(
+      result.round,
+      { kind: 'move', valueId: first.id, fromCategory: 'Very Important', toCategory: 'Not Important' },
+      Date.now()
+    );
+    expect(evaluateRoundTransition(edited).canComplete).toBe(false);
+    expect(result.round.categories['Quite Important'].map((value) => value.id)).toEqual([overflow.id, next.id]);
+    await service.completeSession({ session: result.session, round: result.round, reasonsById: {} });
+    const restored = await service.loadSession(record.session.id);
+    expect(restored.completedSession?.finalValues.map((value) => value.id)).toEqual([first.id, second.id]);
+    expect(restored.currentRound.categories['Quite Important'].map((value) => value.id)).toEqual([
+      overflow.id,
+      next.id,
+    ]);
+    const importedService = new ExerciseServiceImpl(new InMemorySessionRepository());
+    await importedService.importSession(await service.exportSession(record.session.id));
+    const imported = await importedService.loadSession(record.session.id);
+    expect(evaluateRoundTransition(imported.currentRound).canComplete).toBe(true);
+    expect(imported.currentRound.categories['Quite Important'].map((value) => value.id)).toEqual([
+      overflow.id,
+      next.id,
+    ]);
+  });
+
+  test('places overflow ahead of Not Important when it is the next category', async () => {
+    const service = new ExerciseServiceImpl(new InMemorySessionRepository());
+    const record = await service.startSession({ targetCoreValues: 2, cardsInGame: 3 });
+    const sorted = await sortAllCards(service, record, ['Very Important', 'Very Important', 'Very Important']);
+    const overflow = sorted.round.categories['Very Important'][2];
+    const result = await service.advanceRound({ session: sorted.session, round: sorted.round, earlyFinish: true });
+    expect(result.kind).toBe('ready-to-complete');
+    if (result.kind !== 'ready-to-complete') throw new Error('Expected a completed selection');
+    expect(result.round.categories['Not Important'].map((value) => value.id)).toEqual([overflow.id]);
+    expect(result.finalValues).toHaveLength(2);
   });
 
   test('completeSession defensively normalizes the persisted completed round', async () => {
@@ -178,11 +232,11 @@ describe('ExerciseService', () => {
     const stored = await service.loadSession(record.session.id);
     expect(stored.session.status).toBe('completed');
     expect(stored.completedSession?.finalValues).toHaveLength(2);
-    expect(stored.currentRound.activeCategories).toEqual(['Very Important', 'Not Important']);
+    expect(stored.currentRound.activeCategories).toEqual(sorted.round.activeCategories);
     expect(stored.currentRound.categories['Very Important']).toHaveLength(2);
-    expect(stored.currentRound.categories['Not Important']).toHaveLength(3);
-    expect(stored.currentRound.categories['Quite Important']).toHaveLength(0);
-    expect(stored.currentRound.categories.Important).toHaveLength(0);
+    expect(stored.currentRound.categories['Not Important']).toHaveLength(1);
+    expect(stored.currentRound.categories['Quite Important']).toHaveLength(1);
+    expect(stored.currentRound.categories.Important).toHaveLength(1);
     expect(stored.currentRound.commands).toHaveLength(5);
   });
 
