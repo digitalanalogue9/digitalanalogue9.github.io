@@ -63,7 +63,7 @@ describe('privacy choices', () => {
     expect(screen.getByRole('heading', { name: 'Saved exercises and preferences' })).toBeVisible();
     expect(screen.getByRole('heading', { name: 'Exporting and importing backups' })).toBeVisible();
     expect(
-      screen.getByText(/saves your values exercise without the additional notes from the completed exercise page/)
+      screen.getByText(/saves your values exercise, including reflection notes and any saved reasons/)
     ).toBeVisible();
     expect(screen.getByText(/creates a separate copy/)).toBeVisible();
     expect(screen.getByText(/replaces that saved reflection and may replace newer work/)).toBeVisible();
