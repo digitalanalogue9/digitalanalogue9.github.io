@@ -25,7 +25,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const [working, setWorking] = useState(false);
   const [includedRecurringContextIds, setIncludedRecurringContextIds] = useState<string[]>([]);
   const [recurringCopyFeedback, setRecurringCopyFeedback] = useState<string | null>(null);
-  const [recurringPromptExpanded, setRecurringPromptExpanded] = useState(false);
   const loadSequenceRef = useRef(0);
 
   const loadSession = useCallback(async () => {
@@ -190,7 +189,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             id="recurring-reflection-heading"
             className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
           >
-            Recurring reflection
+            Set up recurring reflection
           </h2>
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
             Create a recurring prompt to reflect on your selected values over time. It includes those values and any
@@ -199,8 +198,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <RecurringReflectionControls
-              recurringPromptExpanded={recurringPromptExpanded}
-              setRecurringPromptExpanded={setRecurringPromptExpanded}
               working={working}
               recurringContextOptions={recurringContextOptions}
               includedRecurringContextIds={includedRecurringContextIds}

@@ -124,33 +124,47 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.getByRole('link', { name: 'Back to reflection', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue('My private goal.');
   await page.getByRole('link', { name: 'Back to results', exact: true }).click();
-  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
+  await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Codex', exact: true })).toHaveCount(0);
+  await expect(page.getByText(/Microsoft calls these Scheduled tasks\./)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Microsoft guide to scheduled tasks in Copilot Chat' })).toHaveAttribute(
     'href',
     'https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts'
   );
-  await page.getByRole('radio', { name: 'Claude Cowork', exact: true }).check();
-  await expect(page.getByRole('heading', { name: 'Claude Cowork' })).toBeVisible();
+  await page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true }).focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('radio', { name: 'Claude Cowork', exact: true })).toBeChecked();
+  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat', exact: true })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Claude guide to scheduled tasks' })).toHaveAttribute(
     'href',
     'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork'
   );
-  await page.getByRole('radio', { name: 'Codex', exact: true }).check();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('radio', { name: 'Codex', exact: true })).toBeChecked();
   await expect(page.getByRole('heading', { name: 'Codex', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toHaveCount(0);
   await expect(
     page.getByRole('link', { name: 'Official OpenAI documentation for Codex scheduled tasks' })
   ).toHaveAttribute('href', 'https://developers.openai.com/codex/app/automations');
-  await page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true }).check();
-  await expect(page.getByText(/Microsoft calls these Scheduled tasks\./)).toBeVisible();
   const preview = page.getByRole('region', { name: 'Recurring prompt', exact: true });
+  await expect(preview.getByText('Review full prompt', { exact: true })).toBeVisible();
+  await expect(page.locator('pre')).toBeHidden();
   await page.getByText('Optional context for this recurring prompt', { exact: true }).click();
+  await expect(page.getByRole('checkbox', { name: /Observation.*My private observation/ })).toBeVisible();
+  await expect(page.locator('pre')).toBeHidden();
   await preview.getByText('Review full prompt', { exact: true }).click();
-  await expect(preview).not.toContainText('My private observation.');
+  await expect(page.locator('pre')).not.toContainText('My private observation.');
+  await preview.getByText('Review full prompt', { exact: true }).click();
   await page.getByRole('checkbox', { name: /Observation.*My private observation/ }).check();
-  await expect(preview).toContainText('My private observation.');
-  await preview.getByRole('button', { name: 'Copy prompt', exact: true }).click();
+  await preview.getByText('Review full prompt', { exact: true }).click();
+  await expect(page.locator('pre')).toContainText('My private observation.');
+  await page.getByRole('button', { name: 'Copy prompt', exact: true }).click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('My private observation.');
+  await expect(page.getByText('Copied the preview.', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Preview one-off coaching prompt' })).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection frequency')).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection local time')).toHaveCount(0);
@@ -158,11 +172,16 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.getByRole('link', { name: 'Back to reflection', exact: true }).click();
   await page.getByRole('button', { name: 'Save reflection', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
-  const restoredPrompt = page.getByRole('region', { name: 'Recurring prompt', exact: true });
-  await restoredPrompt.getByText('Review full prompt', { exact: true }).click();
-  await expect(restoredPrompt).toContainText('Selected values, in original rank order:');
+  await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
+  await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy prompt', exact: true })).toBeVisible();
+  await page
+    .getByRole('region', { name: 'Recurring prompt', exact: true })
+    .getByText('Review full prompt', { exact: true })
+    .click();
+  await expect(page.locator('pre')).toContainText('Selected values, in original rank order:');
   await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
   const previousDownloadCount = await page.evaluate(
     () =>
