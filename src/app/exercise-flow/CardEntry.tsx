@@ -222,7 +222,7 @@ export default function CardEntry({
           {index > 0 && (
             <button
               type="button"
-              className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
+              className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
               onClick={() => handleReorder(index - 1)}
               disabled={disabled}
               aria-label={`Move ${card.title} up in ${category}`}
@@ -234,7 +234,7 @@ export default function CardEntry({
           {index < total - 1 && (
             <button
               type="button"
-              className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
+              className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
               onClick={() => handleReorder(index + 1)}
               disabled={disabled}
               aria-label={`Move ${card.title} down in ${category}`}
@@ -249,7 +249,7 @@ export default function CardEntry({
               <button
                 key={`${card.id}-${category}-${next}`}
                 type="button"
-                className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
+                className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-tiny-label inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border px-2 py-1 font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 motion-reduce:transition-none"
                 onClick={() => onMove(card.id, category, next)}
                 disabled={disabled}
                 aria-label={`Move ${card.title} to ${next}`}

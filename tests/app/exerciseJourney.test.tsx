@@ -114,7 +114,7 @@ test('a failed completion save keeps entries on the reflection page and can be r
   expect(goal).toHaveValue('Retry this completed reflection.');
 
   fireEvent.click(screen.getByRole('button', { name: 'Save reflection and complete' }));
-  expect(await screen.findByRole('heading', { name: 'Your Core Values' })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Your core values' })).toBeInTheDocument();
   await waitFor(() => expect(service.completeSession).toHaveBeenCalledTimes(2));
 });
 

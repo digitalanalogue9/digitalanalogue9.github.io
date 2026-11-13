@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { OneOffCoachingContextOption } from '@/lib/content/oneOffCoachingPrompt';
 
 const actionButtonClasses =
-  'inline-flex min-h-11 items-center gap-2 rounded-sys-radius-button-sm border border-sys-color-border-strong px-4 py-2 text-interface-base-small font-semibold text-sys-color-text-primary transition-colors hover:bg-sys-color-surface-subtle disabled:opacity-60 md:min-h-9';
+  'inline-flex min-h-11 items-center gap-2 rounded-sys-radius-button-sm border border-sys-color-border-strong bg-sys-color-surface-subtle px-4 py-2 text-interface-base-small font-semibold text-sys-color-text-primary transition-colors hover:bg-sys-color-surface-subtle-hover disabled:opacity-60 md:min-h-9';
 
 export function OneOffCoachingPromptControls({
   coachingPromptExpanded,

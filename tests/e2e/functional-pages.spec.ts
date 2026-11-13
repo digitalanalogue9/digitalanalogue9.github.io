@@ -125,6 +125,19 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue('My private goal.');
   await page.getByRole('link', { name: 'Back to results', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your core values', level: 1 })).toBeVisible();
+  const resultDetails = page.getByRole('region', { name: 'Selected core values' });
+  await expect(resultDetails.locator('ol')).toBeVisible();
+  await expect(resultDetails.locator('dt')).toHaveText(['Session reference', 'Completed']);
+  expect(
+    await resultDetails
+      .locator('ol')
+      .evaluate((list) =>
+        Boolean(
+          list.compareDocumentPosition(list.parentElement!.querySelector('dl')!) & Node.DOCUMENT_POSITION_FOLLOWING
+        )
+      )
+  ).toBe(true);
   await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toHaveCount(0);
@@ -150,39 +163,57 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await expect(
     page.getByRole('link', { name: 'Official OpenAI documentation for Codex scheduled tasks' })
   ).toHaveAttribute('href', 'https://developers.openai.com/codex/app/automations');
-  const preview = page.getByRole('region', { name: 'Recurring prompt', exact: true });
-  await expect(preview.getByText('Review full prompt', { exact: true })).toBeVisible();
-  await expect(page.locator('pre')).toBeHidden();
-  await page.getByText('Optional context for this recurring prompt', { exact: true }).click();
-  await expect(page.getByRole('checkbox', { name: /Observation.*My private observation/ })).toBeVisible();
-  await expect(page.locator('pre')).toBeHidden();
-  await preview.getByText('Review full prompt', { exact: true }).click();
-  await expect(page.locator('pre')).not.toContainText('My private observation.');
-  await preview.getByText('Review full prompt', { exact: true }).click();
-  await page.getByRole('checkbox', { name: /Observation.*My private observation/ }).check();
-  await preview.getByText('Review full prompt', { exact: true }).click();
-  await expect(page.locator('pre')).toContainText('My private observation.');
+  const prompt = page.getByRole('textbox', { name: 'Recurring prompt' });
+  expect(
+    await prompt.evaluate((field) =>
+      Boolean(
+        field.compareDocumentPosition(document.querySelector('input[name="recurring-reflection-service"]')!) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+      )
+    )
+  ).toBe(true);
+  await expect(prompt).not.toHaveValue(/This prompt contains all exercise context/);
+  expect(
+    await prompt.evaluate((field) =>
+      Boolean(
+        field.compareDocumentPosition(document.querySelector('#recurring-reflection-heading')!) &
+        Node.DOCUMENT_POSITION_PRECEDING
+      )
+    )
+  ).toBe(true);
+  expect(
+    await prompt.evaluate((field) =>
+      Boolean(
+        field.compareDocumentPosition(
+          Array.from(document.querySelectorAll('h3')).find((heading) => heading.textContent === 'Codex')!
+        ) & Node.DOCUMENT_POSITION_FOLLOWING
+      )
+    )
+  ).toBe(true);
+  await expect(prompt).toHaveValue(/My private observation\./);
+  await expect(prompt).toHaveValue(/My private goal\./);
+  await expect(prompt).toHaveValue(/My saved reason\./);
+  await prompt.fill('An edited reflection prompt.');
   await page.getByRole('button', { name: 'Copy prompt', exact: true }).click();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('My private observation.');
-  await expect(page.getByText('Copied the preview.', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('An edited reflection prompt.');
+  await expect(page.getByText('Prompt copied.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open History', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Preview one-off coaching prompt' })).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection frequency')).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection local time')).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection timezone')).toHaveCount(0);
   await page.getByRole('link', { name: 'Back to reflection', exact: true }).click();
   await page.getByRole('button', { name: 'Save reflection', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your core values', exact: true })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy prompt', exact: true })).toBeVisible();
-  await page
-    .getByRole('region', { name: 'Recurring prompt', exact: true })
-    .getByText('Review full prompt', { exact: true })
-    .click();
-  await expect(page.locator('pre')).toContainText('Selected values, in original rank order:');
-  await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Recurring prompt' })).toHaveValue(
+    /Selected values, in original rank order:/
+  );
+  await expect(page.getByRole('heading', { name: 'Your core values', exact: true })).toBeVisible();
   const previousDownloadCount = await page.evaluate(
     () =>
       (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> })

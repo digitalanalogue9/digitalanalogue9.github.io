@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import { RecurringReflectionControls } from '@/app/completed/RecurringReflectionControls';
 import { CompletedValuesCard } from '@/app/completed/CompletedValuesCard';
-import type { CompletedSession, ExerciseType, SessionReflection } from '@/lib/contracts/types';
+import type { CompletedSession } from '@/lib/contracts/types';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 import { downloadCompletedValuesHtml, downloadJsonFile, printCompletedValues } from '@/lib/utils/completedValuesExport';
 
@@ -16,14 +16,12 @@ const secondaryActionButtonClasses = `${primaryActionButtonClasses} cv-button--s
 export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const service = useExerciseService();
   const [completed, setCompleted] = useState<CompletedSession | null>(null);
-  const [reflection, setReflection] = useState<SessionReflection>({ version: 1, values: {} });
-  const [exerciseType, setExerciseType] = useState<ExerciseType>('personal');
+  const [recurringPrompt, setRecurringPrompt] = useState('');
   const [sessionReference, setSessionReference] = useState(sessionId);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
-  const [includedRecurringContextIds, setIncludedRecurringContextIds] = useState<string[]>([]);
   const [recurringCopyFeedback, setRecurringCopyFeedback] = useState<string | null>(null);
   const loadSequenceRef = useRef(0);
 
@@ -50,10 +48,18 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
         throw new Error('Completed values are unavailable for this session.');
       }
       setCompleted(record.completedSession);
-      setReflection(record.completedSession.reflection ?? { version: 1, values: {} });
-      setIncludedRecurringContextIds([]);
+      const { exerciseType } = record.session;
+      const { finalValues, reflection } = record.completedSession;
+      const context = service.getRecurringReflectionContextOptions(exerciseType, finalValues, reflection);
+      setRecurringPrompt(
+        service.composeRecurringReflectionPrompt({
+          exerciseType,
+          selectedValues: finalValues,
+          reflection,
+          includedContextIds: context.map((option) => option.id),
+        })
+      );
       setRecurringCopyFeedback(null);
-      setExerciseType(record.session.exerciseType);
       setSessionReference(record.session.id);
     } catch (loadError) {
       if (requestSequence !== loadSequenceRef.current) return;
@@ -144,26 +150,15 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   }
 
   const replaySearch = `?${new URLSearchParams({ sessionId }).toString()}`;
-  const recurringContextOptions = service.getRecurringReflectionContextOptions(
-    exerciseType,
-    completed.finalValues,
-    reflection
-  );
-  const recurringPrompt = service.composeRecurringReflectionPrompt({
-    exerciseType,
-    selectedValues: completed.finalValues,
-    reflection,
-    includedContextIds: includedRecurringContextIds,
-  });
   const handleCopyRecurringPrompt = async () => {
     setRecurringCopyFeedback(null);
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard access is unavailable.');
       await navigator.clipboard.writeText(recurringPrompt);
-      setRecurringCopyFeedback('Copied the preview.');
+      setRecurringCopyFeedback('Prompt copied.');
     } catch (copyError) {
       setRecurringCopyFeedback(
-        copyError instanceof Error ? `Could not copy preview: ${copyError.message}` : 'Could not copy preview.'
+        copyError instanceof Error ? `Could not copy prompt: ${copyError.message}` : 'Could not copy prompt.'
       );
     }
   };
@@ -172,10 +167,10 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
       <section className="space-y-8 print:hidden">
         <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
-          <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Reflect on your values</h1>
+          <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Your core values</h1>
           <p className="page-intro max-w-[70ch]">
-            Reflection is optional and saved on this device with this completed session. The JSON backup includes your
-            reflection notes and may contain personal information. Keep the downloaded file private.
+            Your values and any notes you’ve added are saved on this device. If you download a backup, it will include
+            your notes, so keep it somewhere private.
           </p>
         </header>
 
@@ -192,19 +187,16 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             Set up recurring reflection
           </h2>
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-            Create a recurring prompt to reflect on your selected values over time. It includes those values and any
-            saved reasons, goals or reflection notes you choose. Copy it into a service that supports scheduled tasks
-            and follow its setup steps below.
+            Use this prompt to reflect on your values over time. It includes your saved notes; you can edit it before
+            copying.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <RecurringReflectionControls
-              working={working}
-              recurringContextOptions={recurringContextOptions}
-              includedRecurringContextIds={includedRecurringContextIds}
-              setIncludedRecurringContextIds={setIncludedRecurringContextIds}
               recurringPrompt={recurringPrompt}
-              handleCopyRecurringPrompt={() => void handleCopyRecurringPrompt()}
-              recurringCopyFeedback={recurringCopyFeedback}
+              onPromptChange={(value) => {
+                setRecurringPrompt(value);
+                setRecurringCopyFeedback(null);
+              }}
             />
           </div>
         </section>
@@ -219,7 +211,18 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             {actionError}
           </p>
         )}
+        {recurringCopyFeedback && (
+          <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
+            {recurringCopyFeedback}
+          </p>
+        )}
         <div className="flex flex-wrap justify-end gap-3">
+          <Link
+            to={{ pathname: '/reasoning', search: replaySearch }}
+            className={`${secondaryActionButtonClasses} no-underline sm:mr-auto`}
+          >
+            Back to reflection
+          </Link>
           <button type="button" className={secondaryActionButtonClasses} onClick={handlePrint}>
             Print
           </button>
@@ -234,21 +237,15 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           <button type="button" className={secondaryActionButtonClasses} onClick={handleExportHtml}>
             Export HTML
           </button>
-          <Link to="/history" className={`${secondaryActionButtonClasses} no-underline`}>
-            Open History
-          </Link>
           <Link
             to={{ pathname: '/replay', search: replaySearch }}
             className={`${secondaryActionButtonClasses} no-underline`}
           >
             Replay Session
           </Link>
-          <Link
-            to={{ pathname: '/reasoning', search: replaySearch }}
-            className={`${primaryActionButtonClasses} no-underline`}
-          >
-            Back to reflection
-          </Link>
+          <button type="button" className={primaryActionButtonClasses} onClick={() => void handleCopyRecurringPrompt()}>
+            Copy prompt
+          </button>
         </div>
       </section>
     </div>

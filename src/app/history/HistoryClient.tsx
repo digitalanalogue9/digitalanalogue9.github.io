@@ -399,7 +399,7 @@ export default function HistoryClient() {
             </p>
             <button
               type="button"
-              className={`${historyButtonClassName} border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border`}
+              className={`${historyButtonClassName} border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover border`}
               onClick={() => void loadSessions()}
             >
               Retry
@@ -489,7 +489,7 @@ export default function HistoryClient() {
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      className={historyButtonClassName}
+                      className={`${historyButtonClassName} bg-sys-color-surface-subtle hover:bg-sys-color-surface-subtle-hover`}
                       onClick={() => navigate(`/behaviour?attemptId=${encodeURIComponent(attempt.id)}`)}
                     >
                       {attempt.stage === 'active' ? 'Resume' : 'Review'}
@@ -497,7 +497,7 @@ export default function HistoryClient() {
                     {attempt.stage === 'finished' && (
                       <button
                         type="button"
-                        className={historyButtonClassName}
+                        className={`${historyButtonClassName} bg-sys-color-surface-subtle hover:bg-sys-color-surface-subtle-hover`}
                         disabled={isWorking}
                         onClick={() => void handleScenarioExport(attempt, false)}
                       >
@@ -506,7 +506,7 @@ export default function HistoryClient() {
                     )}
                     <button
                       type="button"
-                      className={historyButtonClassName}
+                      className={`${historyButtonClassName} bg-sys-color-surface-subtle hover:bg-sys-color-surface-subtle-hover`}
                       disabled={isWorking}
                       onClick={() => void handleScenarioExport(attempt, true)}
                     >
@@ -514,7 +514,7 @@ export default function HistoryClient() {
                     </button>
                     <button
                       type="button"
-                      className={historyButtonClassName}
+                      className={`${historyButtonClassName} bg-sys-color-surface-subtle hover:bg-sys-color-surface-subtle-hover`}
                       onClick={async () => {
                         try {
                           await getBehaviourAttemptServiceSingleton().deleteAttempt(attempt.id);

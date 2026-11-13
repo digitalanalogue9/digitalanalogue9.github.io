@@ -50,7 +50,7 @@ export default function ImportSection({
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            className={`${historyButtonClassName} border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border disabled:opacity-60`}
+            className={`${historyButtonClassName} border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover border disabled:opacity-60`}
             onClick={onImportFromText}
             disabled={isWorking || importText.trim().length === 0}
           >
@@ -58,7 +58,7 @@ export default function ImportSection({
           </button>
           <button
             type="button"
-            className={`${historyButtonClassName} border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border disabled:opacity-60`}
+            className={`${historyButtonClassName} border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover border disabled:opacity-60`}
             onClick={() => fileInputRef.current?.click()}
             disabled={isWorking}
           >

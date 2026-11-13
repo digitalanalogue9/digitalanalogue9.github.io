@@ -261,7 +261,7 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
                 </button>
                 <button
                   type="button"
-                  className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-small text-sys-color-text-primary hover:bg-sys-color-surface-subtle min-h-11 border px-4 py-2 md:min-h-9"
+                  className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-subtle text-interface-base-small text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover min-h-11 border px-4 py-2 md:min-h-9"
                   onClick={handleReset}
                 >
                   Reset

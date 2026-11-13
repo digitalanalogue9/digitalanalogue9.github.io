@@ -1,9 +1,35 @@
 import fs from 'node:fs';
-const dir='reports/lighthouse';
-const groups=[
- ['Home','/','home'],['About','/about','about'],['Contact','/contact','contact'],['How it works','/howtouse','howtouse'],['Privacy','/privacy','privacy'],['History · empty','/history','history-empty'],['History · saved sessions','/history','history-populated'],['Exercise · setup','/exercise','exercise-setup'],['Exercise · active board','/exercise?sessionId=lighthouse-active-session','exercise-active'],['Behaviour reflection','/behaviour','behaviour'],['Reasoning form · saved session','/reasoning?sessionId=lighthouse-reasoning-session','reasoning-session'],['Completed results · saved session','/completed?sessionId=lighthouse-completed-session','completed-session'],['Replay · saved session','/replay?sessionId=lighthouse-completed-session','replay-session'],['Not found','/not-a-real-page','not-found']
+const dir = 'reports/lighthouse';
+const groups = [
+  ['Home', '/', 'home'],
+  ['About', '/about', 'about'],
+  ['Contact', '/contact', 'contact'],
+  ['How it works', '/howtouse', 'howtouse'],
+  ['Privacy', '/privacy', 'privacy'],
+  ['History · empty', '/history', 'history-empty'],
+  ['History · saved sessions', '/history', 'history-populated'],
+  ['Exercise · setup', '/exercise', 'exercise-setup'],
+  ['Exercise · active board', '/exercise?sessionId=lighthouse-active-session', 'exercise-active'],
+  ['Behaviour reflection', '/behaviour', 'behaviour'],
+  ['Reasoning form · saved session', '/reasoning?sessionId=lighthouse-reasoning-session', 'reasoning-session'],
+  ['Completed results · saved session', '/completed?sessionId=lighthouse-completed-session', 'completed-session'],
+  ['Replay · saved session', '/replay?sessionId=lighthouse-completed-session', 'replay-session'],
+  ['Not found', '/not-a-real-page', 'not-found'],
 ];
-const score=(name,mode)=>{const file=`${dir}/${name}-${mode}.report.json`;if(!fs.existsSync(file))return 'missing';const r=JSON.parse(fs.readFileSync(file,'utf8'));if(r.runtimeError)return `Error: ${r.runtimeError.code}`;return ['performance','accessibility','best-practices','seo'].map(k=>Math.round(r.categories[k].score*100)).join('/');};
-const row=groups.map(([label,path,name])=>`| ${label} | ${path} | ${score(name,'mobile')} | ${score(name,'desktop')} | [Mobile](./${name}-mobile.report.html) · [Desktop](./${name}-desktop.report.html) |`).join('\n');
-const md=`# Lighthouse production report\n\nAudited https://core-values.me on 12 November 2026 with Lighthouse 13.6.0. Scores are ordered **Performance / Accessibility / Best Practices / SEO**. Mobile used Lighthouse mobile emulation; desktop used the desktop preset.\n\n| Page/view | URL | Mobile P/A/B/S | Desktop P/A/B/S | Full reports |\n|---|---|---:|---:|---|\n${row}\n\n## Scope and notes\n\n- Includes the public editorial routes, app entry views, and workflow views reached through History and completed exercise sessions.\n- Workflow views used sample sessions imported into a temporary Chrome profile. Those saved sessions are local to that profile.\n- Empty History and exercise setup reports are also included. No-session fallbacks for reasoning, completed, and replay are available as files with the no-session name if you need to compare those states.\n- The not-found response is quick. Lighthouse reports ERRORED_DOCUMENT_REQUEST because this is an HTTP 404, so it cannot assign category scores; this is expected and is not a performance finding.\n- Every HTML report has a companion JSON report in this folder.\n`;
-fs.writeFileSync(`${dir}/README.md`,md);\n
+const score = (name, mode) => {
+  const file = `${dir}/${name}-${mode}.report.json`;
+  if (!fs.existsSync(file)) return 'missing';
+  const r = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (r.runtimeError) return `Error: ${r.runtimeError.code}`;
+  return ['performance', 'accessibility', 'best-practices', 'seo']
+    .map((k) => Math.round(r.categories[k].score * 100))
+    .join('/');
+};
+const row = groups
+  .map(
+    ([label, path, name]) =>
+      `| ${label} | ${path} | ${score(name, 'mobile')} | ${score(name, 'desktop')} | [Mobile](./${name}-mobile.report.html) · [Desktop](./${name}-desktop.report.html) |`
+  )
+  .join('\n');
+const md = `# Lighthouse production report\n\nAudited https://core-values.me on 12 November 2026 with Lighthouse 13.6.0. Scores are ordered **Performance / Accessibility / Best Practices / SEO**. Mobile used Lighthouse mobile emulation; desktop used the desktop preset.\n\n| Page/view | URL | Mobile P/A/B/S | Desktop P/A/B/S | Full reports |\n|---|---|---:|---:|---|\n${row}\n\n## Scope and notes\n\n- Includes the public editorial routes, app entry views, and workflow views reached through History and completed exercise sessions.\n- Workflow views used sample sessions imported into a temporary Chrome profile. Those saved sessions are local to that profile.\n- Empty History and exercise setup reports are also included. No-session fallbacks for reasoning, completed, and replay are available as files with the no-session name if you need to compare those states.\n- The not-found response is quick. Lighthouse reports ERRORED_DOCUMENT_REQUEST because this is an HTTP 404, so it cannot assign category scores; this is expected and is not a performance finding.\n- Every HTML report has a companion JSON report in this folder.\n`;
+fs.writeFileSync(`${dir}/README.md`, md);

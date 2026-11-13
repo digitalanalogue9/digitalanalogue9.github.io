@@ -11,29 +11,8 @@ export function CompletedValuesCard({
   const completedAt = formatCompletedAt(completed.completedAt);
 
   return (
-    <section aria-labelledby="completed-values-heading" className="print:break-inside-avoid">
-      <div className="space-y-4 sm:space-y-6">
-        <h2
-          id="completed-values-heading"
-          className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
-        >
-          Your Core Values
-        </h2>
-        <dl className="text-interface-base-small text-sys-color-text-primary grid gap-4 md:grid-cols-2">
-          <div className="min-w-0 md:flex md:items-baseline md:gap-2">
-            <dt className="text-sys-color-text-secondary font-semibold tracking-wide uppercase">Completed</dt>
-            <dd className="mt-1 min-w-0 md:mt-0 md:whitespace-nowrap">{completedAt}</dd>
-          </div>
-          <div className="min-w-0 md:flex md:items-baseline md:gap-2">
-            <dt className="text-sys-color-text-secondary shrink-0 font-semibold tracking-wide whitespace-nowrap uppercase">
-              Session reference
-            </dt>
-            <dd className="mt-1 min-w-0 md:mt-0 md:whitespace-nowrap">{sessionReference}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <ol className="mt-8 space-y-5 sm:mt-12">
+    <section aria-label="Selected core values" className="print:break-inside-avoid">
+      <ol className="space-y-5">
         {completed.finalValues.map((value, index) => {
           const reason = normalizeCompletedValueReason(value.reason);
 
@@ -44,9 +23,9 @@ export function CompletedValuesCard({
                   {index + 1}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-interface-base-large text-sys-color-text-primary font-semibold [overflow-wrap:anywhere] break-words">
+                  <h2 className="text-interface-base-large text-sys-color-text-primary font-semibold [overflow-wrap:anywhere] break-words">
                     {value.title}
-                  </h3>
+                  </h2>
                   <p className="text-interface-base-small text-sys-color-text-secondary mt-1 leading-6 [overflow-wrap:anywhere] break-words">
                     {value.description}
                   </p>
@@ -61,6 +40,20 @@ export function CompletedValuesCard({
           );
         })}
       </ol>
+      <div className="mt-8">
+        <dl className="text-interface-base-small text-sys-color-text-primary flex flex-wrap justify-end gap-x-6 gap-y-2 text-right">
+          <div className="flex min-w-0 flex-col items-end gap-x-2 sm:flex-row sm:items-baseline">
+            <dt className="text-sys-color-text-secondary shrink-0 font-semibold tracking-wide whitespace-nowrap uppercase">
+              Session reference
+            </dt>
+            <dd className="min-w-0 break-words">{sessionReference}</dd>
+          </div>
+          <div className="flex min-w-0 flex-col items-end gap-x-2 sm:flex-row sm:items-baseline">
+            <dt className="text-sys-color-text-secondary font-semibold tracking-wide uppercase">Completed</dt>
+            <dd>{completedAt}</dd>
+          </div>
+        </dl>
+      </div>
     </section>
   );
 }

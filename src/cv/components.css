@@ -88,13 +88,13 @@
 }
 
 .cv-button--secondary {
-  background-color: var(--sys-color-surface-default);
+  background-color: var(--sys-color-surface-subtle);
   border: 1px solid var(--sys-color-border-strong);
   color: var(--sys-color-text-primary);
 }
 
 .cv-button--secondary:hover {
-  background-color: var(--sys-color-surface-subtle);
+  background-color: var(--sys-color-surface-subtle-hover);
   border-color: var(--ref-color-brand-primary);
   color: var(--sys-color-text-primary);
 }

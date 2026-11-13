@@ -76,7 +76,7 @@ export default function CurrentCardPanel({ card, activeCategories, onDrop, disab
             <button
               key={`drop-${category}`}
               type="button"
-              className="border-sys-color-border-strong text-sys-color-text-primary hover:border-ref-color-brand-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-base-small inline-flex min-h-11 items-center justify-between gap-2 border px-3 py-2 text-left font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none motion-reduce:active:scale-100"
+              className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:border-ref-color-brand-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm text-interface-base-small inline-flex min-h-11 items-center justify-between gap-2 border px-3 py-2 text-left font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none motion-reduce:active:scale-100"
               onClick={() => onDrop(category)}
               disabled={disabled}
               aria-label={`Place current card in ${category}`}

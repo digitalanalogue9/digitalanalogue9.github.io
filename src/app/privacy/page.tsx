@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             type="button"
             onClick={() => saveAnalyticsChoice(false)}
             aria-pressed={isInitialized && consent.analytics === 'denied'}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary min-h-11 border px-5 py-2 font-semibold hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-subtle hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary min-h-11 border px-5 py-2 font-semibold hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             Reject analytics
           </button>

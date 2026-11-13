@@ -99,7 +99,7 @@ export default function FinishConfirmationDialog({ open, round, working, onConti
         <footer className="border-sys-color-border-default grid shrink-0 grid-cols-2 gap-2 border-t pt-3 sm:flex sm:justify-end">
           <button
             type="button"
-            className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm min-h-11 border px-4 py-2 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-45"
+            className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm min-h-11 border px-4 py-2 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-45"
             onClick={onCancel}
             disabled={working}
           >

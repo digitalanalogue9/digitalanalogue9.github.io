@@ -21,7 +21,7 @@ function formatDate(value: number) {
 }
 
 const secondaryActionClassName =
-  'inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-sys-radius-button-sm border border-sys-color-border-strong px-2.5 py-1.5 text-xs font-semibold text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ref-color-brand-primary disabled:cursor-not-allowed disabled:opacity-45';
+  'inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-sys-radius-button-sm border border-sys-color-border-strong bg-sys-color-surface-subtle px-2.5 py-1.5 text-xs font-semibold text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ref-color-brand-primary disabled:cursor-not-allowed disabled:opacity-45';
 
 export default function HistorySessionSelector(props: Props) {
   const [selectedId, setSelectedId] = useState(props.sessions[0]?.id ?? '');

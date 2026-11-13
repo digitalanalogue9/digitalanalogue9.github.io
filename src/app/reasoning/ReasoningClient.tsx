@@ -259,7 +259,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[var(--editorial-line)] pt-6">
         <Link
           to={{ pathname: editingCompleted ? '/completed' : '/exercise', search: exerciseSearch }}
-          className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle border px-4 py-2 no-underline transition-colors motion-reduce:transition-none"
+          className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover border px-4 py-2 no-underline transition-colors motion-reduce:transition-none"
         >
           {editingCompleted ? 'Back to results' : 'Back to Board'}
         </Link>
