@@ -257,7 +257,7 @@ export function BehaviourPromptWorkspace({
         {onBackToReflections && (
           <button
             type="button"
-            className="apc-link mb-5 min-h-11 underline underline-offset-4"
+            className="cv-link mb-5 min-h-11 underline underline-offset-4"
             onClick={onBackToReflections}
           >
             Back to your reflections
@@ -276,7 +276,7 @@ export function BehaviourPromptWorkspace({
         <div className="mt-5 flex flex-wrap gap-3" role="group" aria-label="Prompt type">
           <button
             type="button"
-            className="apc-button min-h-11"
+            className="cv-button min-h-11"
             aria-pressed={mode === 'conversation'}
             onClick={() => setMode('conversation')}
           >
@@ -284,7 +284,7 @@ export function BehaviourPromptWorkspace({
           </button>
           <button
             type="button"
-            className="apc-button min-h-11"
+            className="cv-button min-h-11"
             aria-pressed={mode === 'recurring'}
             onClick={() => setMode('recurring')}
           >
@@ -316,7 +316,7 @@ export function BehaviourPromptWorkspace({
                       className="text-interface-base-small text-sys-color-text-primary flex min-h-11 cursor-pointer items-start gap-3"
                     >
                       <input
-                        className="apc-checkbox__control mt-0.5 shrink-0"
+                        className="cv-checkbox__control mt-0.5 shrink-0"
                         type="checkbox"
                         checked={selectedForCurrentMode.includes(id)}
                         onChange={() => togglePossibility(id)}
@@ -346,7 +346,7 @@ export function BehaviourPromptWorkspace({
                 </legend>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={includeContext}
                     onChange={(event) => setIncludeContext(event.target.checked)}
@@ -355,7 +355,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={includeResponses}
                     onChange={(event) => setIncludeResponses(event.target.checked)}
@@ -364,7 +364,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={includeNotes}
                     onChange={(event) => setIncludeNotes(event.target.checked)}
@@ -381,7 +381,7 @@ export function BehaviourPromptWorkspace({
                 </legend>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={includeValuesConnections}
                     onChange={(event) => setIncludeValuesConnections(event.target.checked)}
@@ -390,7 +390,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={includeConnectionObservations}
                     onChange={(event) => setIncludeConnectionObservations(event.target.checked)}
@@ -414,7 +414,7 @@ export function BehaviourPromptWorkspace({
                 </legend>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={reminderSettings.includeOptionalContext}
                     onChange={(event) => updateReminderSetting({ includeOptionalContext: event.target.checked })}
@@ -423,7 +423,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={reminderSettings.includeReflectionResponses}
                     onChange={(event) => updateReminderSetting({ includeReflectionResponses: event.target.checked })}
@@ -432,7 +432,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={reminderSettings.includeReflectionNotes}
                     onChange={(event) => updateReminderSetting({ includeReflectionNotes: event.target.checked })}
@@ -441,7 +441,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={reminderSettings.includeValuesConnections}
                     onChange={(event) => updateReminderSetting({ includeValuesConnections: event.target.checked })}
@@ -450,7 +450,7 @@ export function BehaviourPromptWorkspace({
                 </label>
                 <label className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3">
                   <input
-                    className="apc-checkbox__control shrink-0"
+                    className="cv-checkbox__control shrink-0"
                     type="checkbox"
                     checked={reminderSettings.includeConnectionObservations}
                     onChange={(event) => updateReminderSetting({ includeConnectionObservations: event.target.checked })}
@@ -464,7 +464,7 @@ export function BehaviourPromptWorkspace({
               {reminderSettingsError && (
                 <button
                   type="button"
-                  className="apc-link min-h-11 underline underline-offset-4"
+                  className="cv-link min-h-11 underline underline-offset-4"
                   onClick={() => setReminderSaveRetry((value) => value + 1)}
                 >
                   Retry saving prompt preferences

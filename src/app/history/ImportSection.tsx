@@ -31,7 +31,7 @@ export default function ImportSection({
           Backup file contents (JSON)
         </label>
         <textarea
-          className="apc-field__control h-28 w-full"
+          className="cv-field__control h-28 w-full"
           id="session-json-import"
           placeholder="Paste the contents of your backup file here"
           aria-describedby={`session-json-import-help session-json-import-replacement${hasError ? ' history-action-error' : ''}`}

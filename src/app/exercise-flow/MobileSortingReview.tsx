@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import type { CategoryName, CategoriesState, ValueCard } from '@/lib/contracts/types';
+import type { CategoryName, CategoriesState, RoundSnapshot, ValueCard } from '@/lib/contracts/types';
 import CardEntry from './CardEntry';
 import CurrentCardPanel from './CurrentCardPanel';
 import EmptyCurrentCard from './EmptyCurrentCard';
+import FinishConfirmationDialog from './FinishConfirmationDialog';
 
 type Props = {
+  round: RoundSnapshot;
   roundNumber: number;
   targetCoreValues: number;
   remainingCards: number;
@@ -27,6 +29,7 @@ type Props = {
 };
 
 export default function MobileSortingReview({
+  round,
   roundNumber,
   targetCoreValues,
   remainingCards,
@@ -49,6 +52,7 @@ export default function MobileSortingReview({
 }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<CategoryName>(activeCategories[0] ?? 'Very Important');
   const [isReviewing, setIsReviewing] = useState(false);
+  const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const [editMessage, setEditMessage] = useState('');
   const [placementFeedback, setPlacementFeedback] = useState<{ category: CategoryName; sequence: number } | null>(null);
   const placementActionsRef = useRef<HTMLDivElement>(null);
@@ -251,7 +255,7 @@ export default function MobileSortingReview({
             <div className="rounded-b-sys-radius-card-sm bg-sys-color-surface-default sticky bottom-0 -mx-4 -mb-4 px-4 pt-2 pb-4">
               <button
                 type="button"
-                className="apc-button min-h-11 w-full"
+                className="cv-button min-h-11 w-full"
                 onClick={() => {
                   restorePlacementFocusRef.current = true;
                   setIsReviewing(false);
@@ -286,7 +290,7 @@ export default function MobileSortingReview({
               {(canAdvance || canComplete) && (
                 <button
                   type="button"
-                  className="apc-button min-h-11 w-full"
+                  className="cv-button min-h-11 w-full"
                   onClick={() => onAdvance(false)}
                   disabled={working}
                 >
@@ -296,17 +300,17 @@ export default function MobileSortingReview({
               {canEarlyFinish && !canComplete && (
                 <button
                   type="button"
-                  className="apc-button min-h-11 w-full"
-                  onClick={() => onAdvance(true)}
+                  className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm bg-sys-color-surface-default min-h-11 w-full border px-4 py-2 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-45"
+                  onClick={() => setIsFinishDialogOpen(true)}
                   disabled={working}
                 >
-                  Early Finish
+                  Finish
                 </button>
               )}
               {canReplayPrevious && (
                 <button
                   type="button"
-                  className="apc-button min-h-11 w-full"
+                  className="cv-button min-h-11 w-full"
                   onClick={onReplayPrevious}
                   disabled={working}
                 >
@@ -328,6 +332,17 @@ export default function MobileSortingReview({
           {errorAlert}
         </>
       )}
+
+      <FinishConfirmationDialog
+        open={isFinishDialogOpen}
+        round={round}
+        working={working}
+        onCancel={() => setIsFinishDialogOpen(false)}
+        onContinue={() => {
+          setIsFinishDialogOpen(false);
+          onAdvance(true);
+        }}
+      />
     </section>
   );
 }

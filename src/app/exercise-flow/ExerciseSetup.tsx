@@ -42,7 +42,7 @@ export function ExerciseSetup() {
       className={`${nonExercisePageContainerClassName} rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default space-y-8 border px-6 py-8 shadow-sm sm:px-10 sm:py-10`}
     >
       <section className="space-y-5" aria-labelledby="exercise-setup-heading">
-        <h1 id="exercise-setup-heading" className="page-heading text-balance text-4xl sm:text-5xl lg:text-6xl">
+        <h1 id="exercise-setup-heading" className="page-heading text-4xl text-balance sm:text-5xl lg:text-6xl">
           Set up your values exercise
         </h1>
         <p className="page-intro max-w-2xl">
@@ -67,7 +67,7 @@ export function ExerciseSetup() {
                 value="personal"
                 checked={exerciseType === 'personal'}
                 onChange={() => setExerciseType('personal')}
-                className="apc-selector__control"
+                className="cv-selector__control"
               />
               <span>Personal values</span>
             </label>
@@ -78,7 +78,7 @@ export function ExerciseSetup() {
                 value="team"
                 checked={exerciseType === 'team'}
                 onChange={() => setExerciseType('team')}
-                className="apc-selector__control"
+                className="cv-selector__control"
               />
               <span>Team-focused values</span>
             </label>
@@ -104,7 +104,7 @@ export function ExerciseSetup() {
             type="number"
             min={1}
             max={gameConfig.maxCards}
-            className="apc-field__control w-24 text-center not-focus:[appearance:textfield] focus:[&::-webkit-inner-spin-button]:opacity-100 [&:not(:focus)::-webkit-inner-spin-button]:appearance-none [&:not(:focus)::-webkit-outer-spin-button]:appearance-none"
+            className="cv-field__control w-24 text-center not-focus:[appearance:textfield] focus:[&::-webkit-inner-spin-button]:opacity-100 [&:not(:focus)::-webkit-inner-spin-button]:appearance-none [&:not(:focus)::-webkit-outer-spin-button]:appearance-none"
             value={targetCoreValues}
             onChange={(event) => setTargetCoreValues(Number(event.target.value))}
             disabled={isStarting}
@@ -113,7 +113,7 @@ export function ExerciseSetup() {
         </div>
 
         <div className="flex flex-col items-end justify-end gap-3 border-t border-[var(--editorial-line)] pt-7 sm:flex-row">
-          <button type="submit" className="apc-button min-h-11" disabled={isStarting}>
+          <button type="submit" className="cv-button min-h-11" disabled={isStarting}>
             {isStarting ? 'Starting...' : 'Start exercise'}
           </button>
           <button

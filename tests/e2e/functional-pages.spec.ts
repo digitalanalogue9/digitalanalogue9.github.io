@@ -63,18 +63,24 @@ async function importBackup(page: Page) {
 }
 async function downloadJson(page: Page, button: string) {
   const previousCount = await page.evaluate(
-    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+    () =>
+      (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> })
+        .__capturedDownloads.length
   );
   await page.getByRole('button', { name: button, exact: true }).click();
   await expect
     .poll(() =>
       page.evaluate(
-        () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+        () =>
+          (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> })
+            .__capturedDownloads.length
       )
     )
     .toBe(previousCount + 1);
-  const captured = await page.evaluate(
-    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.at(-1)!
+  const captured = await page.evaluate(() =>
+    (
+      window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }
+    ).__capturedDownloads.at(-1)!
   );
   return JSON.parse(captured.content);
 }
@@ -117,37 +123,62 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await expect(page).toHaveURL(/\/completed\?sessionId=/);
   await page.getByText('Session goal (optional)', { exact: true }).first().click();
   await expect(page.getByRole('textbox', { name: 'Session goal', exact: true })).toHaveValue('My private goal.');
-  await page.getByRole('button', { name: 'Preview one-off coaching prompt' }).click();
-  const preview = page.getByRole('region', { name: 'Exact prompt preview', exact: true });
+  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Claude Cowork' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Codex', exact: true })).toBeVisible();
+  await expect(page.getByText(/Microsoft calls these Scheduled tasks\./)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Microsoft guide to scheduled tasks in Copilot Chat' })).toHaveAttribute(
+    'href',
+    'https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts'
+  );
+  await expect(page.getByRole('link', { name: 'Claude guide to scheduled tasks' })).toHaveAttribute(
+    'href',
+    'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork'
+  );
+  await expect(
+    page.getByRole('link', { name: 'Official OpenAI documentation for Codex scheduled tasks' })
+  ).toHaveAttribute('href', 'https://developers.openai.com/codex/app/automations');
+  const preview = page.getByRole('region', { name: 'Exact recurring prompt preview', exact: true });
   await expect(preview).not.toContainText('My private observation.');
   await page.getByRole('checkbox', { name: /Observation.*My private observation/ }).check();
   await expect(preview).toContainText('My private observation.');
   await preview.getByRole('button', { name: 'Copy preview', exact: true }).click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('My private observation.');
-  await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
-  await page.getByLabel('Recurring reflection frequency').selectOption('weekly');
-  await page.getByLabel('Recurring reflection local time').fill('11:15');
+  await expect(page.getByRole('button', { name: 'Preview one-off coaching prompt' })).toHaveCount(0);
+  await expect(page.getByLabel('Recurring reflection frequency')).toHaveCount(0);
+  await expect(page.getByLabel('Recurring reflection local time')).toHaveCount(0);
+  await expect(page.getByLabel('Recurring reflection timezone')).toHaveCount(0);
   await page.getByRole('button', { name: 'Save reflection', exact: true }).click();
   await expect(page.getByText('Reflection saved on this device.', { exact: true })).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Set up recurring reflection', exact: true }).click();
-  await expect(page.getByLabel('Recurring reflection local time')).toHaveValue('11:15');
+  await expect(page.getByRole('region', { name: 'Exact recurring prompt preview', exact: true })).toContainText(
+    'Selected values, in original rank order:'
+  );
   await page.getByLabel('Original results', { exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Your Core Values', exact: true })).toBeVisible();
   const previousDownloadCount = await page.evaluate(
-    () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+    () =>
+      (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> })
+        .__capturedDownloads.length
   );
   await page.getByRole('button', { name: 'Export HTML', exact: true }).click();
   await expect
     .poll(() =>
       page.evaluate(
-        () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.length
+        () =>
+          (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> })
+            .__capturedDownloads.length
       )
     )
     .toBe(previousDownloadCount + 1);
   expect(
     await page.evaluate(
-      () => (window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }).__capturedDownloads.at(-1)!.content
+      () =>
+        (
+          window as unknown as Window & { __capturedDownloads: Array<{ filename: string; content: string }> }
+        ).__capturedDownloads.at(-1)!.content
     )
   ).toContain('My saved reason.');
   await page.screenshot({ path: '.scratch/parity-completed.png', fullPage: true });

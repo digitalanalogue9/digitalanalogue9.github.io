@@ -63,14 +63,8 @@ describe('catalog-backed prompt examples', () => {
       exerciseType: 'personal',
       selectedValues,
       reflection,
-      schedulePreferences: {
-        frequency: 'weekly',
-        weeklyDay: 'friday',
-        localTime: '08:15',
-        timeZone: 'Europe/London',
-      },
     });
-    expect(recurring).toContain('Chosen reminder schedule: weekly on friday at 08:15 in Europe/London.');
+    expect(recurring).not.toContain('Chosen reminder schedule');
     expect(recurring).toContain('1. FAST PACE — You enjoy working rapidly at a high pace.');
     expect(recurring).toContain(
       '2. PRECISE WORK — You like working on things which involve great care and concentration.'

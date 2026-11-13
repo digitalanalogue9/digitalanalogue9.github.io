@@ -43,6 +43,7 @@ function SortingBoard({ round, busy, onCommand, onAdvance = () => {}, onReplayPr
   const onReorder = (valueId: string, category: CategoryName, toIndex: number) =>
     onCommand({ kind: 'move', valueId, fromCategory: category, toCategory: category, toIndex });
   const controls = {
+    round,
     roundNumber: round.roundNumber,
     targetCoreValues: round.targetCoreValues,
     remainingCards: round.deck.length,
@@ -87,9 +88,7 @@ function SortingBoard({ round, busy, onCommand, onAdvance = () => {}, onReplayPr
           </button>
           <CommandCenter {...controls} card={round.deck[0]} onDrop={onDrop} />
           <section className="pb-2" aria-label="Sorting buckets">
-            <div
-              className={`exercise-bucket-grid grid gap-4 ${columns[round.activeCategories.length]}`}
-            >
+            <div className={`exercise-bucket-grid grid gap-4 ${columns[round.activeCategories.length]}`}>
               {round.activeCategories.map((category) => (
                 <BucketColumn
                   key={category}

@@ -175,7 +175,7 @@ function ConnectionEditor({
       </label>
       <select
         id={`value-source-${scenarioId}`}
-        className="apc-field__control min-h-11 w-full"
+        className="cv-field__control min-h-11 w-full"
         value={sourceSessionId}
         onChange={(event) => {
           setSourceSessionId(event.target.value);
@@ -198,7 +198,7 @@ function ConnectionEditor({
       </label>
       <select
         id={`value-choice-${scenarioId}`}
-        className="apc-field__control min-h-11 w-full"
+        className="cv-field__control min-h-11 w-full"
         value={valueId}
         onChange={handleValueChange}
         disabled={!source}
@@ -218,7 +218,7 @@ function ConnectionEditor({
       </label>
       <select
         id={`reflection-choice-${scenarioId}`}
-        className="apc-field__control min-h-11 w-full"
+        className="cv-field__control min-h-11 w-full"
         value={possibilityId}
         onChange={handlePossibilityChange}
       >
@@ -233,23 +233,23 @@ function ConnectionEditor({
       </label>
       <textarea
         id={`connection-observation-${scenarioId}`}
-        className="apc-field__control min-h-20 w-full"
+        className="cv-field__control min-h-20 w-full"
         value={observation}
         onChange={handleObservationChange}
       />
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          className="apc-button min-h-11"
+          className="cv-button min-h-11"
           onClick={saveConnected}
           disabled={!source || !valueId || !possibilityId}
         >
           Save chosen connection
         </button>
-        <button type="button" className="apc-link min-h-11 underline" onClick={saveNoConnection}>
+        <button type="button" className="cv-link min-h-11 underline" onClick={saveNoConnection}>
           No connection
         </button>
-        <button type="button" className="apc-link min-h-11 underline" onClick={saveUnanswered}>
+        <button type="button" className="cv-link min-h-11 underline" onClick={saveUnanswered}>
           Leave unanswered
         </button>
       </div>

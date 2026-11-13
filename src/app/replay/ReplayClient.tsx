@@ -253,7 +253,7 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  className="apc-button min-h-11 md:min-h-10"
+                  className="cv-button min-h-11 md:min-h-10"
                   onClick={handlePlayPause}
                   disabled={replayFrames.length <= 1}
                 >
@@ -273,7 +273,7 @@ export default function ReplayClient({ sessionId }: { sessionId: string }) {
                   Playback speed
                   <select
                     id="replay-speed"
-                    className="apc-select__control min-h-11 md:min-h-9"
+                    className="cv-select__control min-h-11 md:min-h-9"
                     value={playbackSpeed}
                     onChange={(event) => setPlaybackSpeed(event.target.value as PlaybackSpeed)}
                   >

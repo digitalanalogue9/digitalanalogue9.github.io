@@ -12,6 +12,9 @@ make choices together, discuss the trade-offs and agree which values they want t
 the card-sorting structure for the conversation; it does not combine separate individual results or provide a shared
 online workspace.
 
+**Finish option**: A choice to end the current sorting round and complete the selected set using the highest-ranked
+values available. _Avoid_: Early Finish as a user-facing action label
+
 **Putting Values into Practice**: A reflection exercise exploring the relationship between a person's values, choices,
 motivations and possible effects on others. _Avoid_: Behaviour assessment, personality test
 

@@ -1,24 +1,20 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { SchedulePreferences, WeeklyDay } from '@/lib/contracts/types';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import type { OneOffCoachingContextOption } from '@/lib/content/oneOffCoachingPrompt';
 
-const actionButtonClasses =
-  'inline-flex min-h-11 items-center gap-2 rounded-sys-radius-button-sm border border-sys-color-border-strong px-4 py-2 text-interface-base-small font-semibold text-sys-color-text-primary transition-colors hover:bg-sys-color-surface-subtle disabled:opacity-60 md:min-h-9';
-const weeklyDays: { value: WeeklyDay; label: string }[] = [
-  { value: 'monday', label: 'Monday' },
-  { value: 'tuesday', label: 'Tuesday' },
-  { value: 'wednesday', label: 'Wednesday' },
-  { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' },
+const primaryActionButtonClasses = 'cv-button min-h-11 text-interface-base-small md:min-h-10';
+const secondaryActionButtonClasses = `${primaryActionButtonClasses} cv-button--secondary`;
+
+type ScheduleService = 'microsoft' | 'claude' | 'codex';
+
+const scheduleServices: { id: ScheduleService; name: string }[] = [
+  { id: 'microsoft', name: 'Microsoft 365 Copilot' },
+  { id: 'claude', name: 'Claude Cowork' },
+  { id: 'codex', name: 'Codex' },
 ];
 
 export function RecurringReflectionControls({
   recurringPromptExpanded,
   setRecurringPromptExpanded,
-  schedulePreferences,
-  updateSchedulePreferences,
   working,
   recurringContextOptions,
   includedRecurringContextIds,
@@ -29,8 +25,6 @@ export function RecurringReflectionControls({
 }: {
   recurringPromptExpanded: boolean;
   setRecurringPromptExpanded: Dispatch<SetStateAction<boolean>>;
-  schedulePreferences: SchedulePreferences;
-  updateSchedulePreferences: (next: SchedulePreferences) => void;
   working: boolean;
   recurringContextOptions: OneOffCoachingContextOption[];
   includedRecurringContextIds: string[];
@@ -39,168 +33,176 @@ export function RecurringReflectionControls({
   handleCopyRecurringPrompt: () => void;
   recurringCopyFeedback: string | null;
 }) {
+  const [selectedService, setSelectedService] = useState<ScheduleService>('microsoft');
+
   return (
     <>
       <button
         type="button"
         aria-expanded={recurringPromptExpanded}
-        className={`${actionButtonClasses} order-1`}
+        className={`${primaryActionButtonClasses} order-1`}
         onClick={() => setRecurringPromptExpanded((expanded) => !expanded)}
       >
         Set up recurring reflection
       </button>
+
       {recurringPromptExpanded && (
         <div className="order-2 basis-full space-y-4 pt-3">
           <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-            Choose reminder preferences and review the prompt. Select Save reflection above to keep these preferences on
-            this device. The app has not scheduled or sent anything. Confirm the time, timezone and cadence in the
-            external service, and replace its saved prompt if your values or reflection context change.
+            Copy this prompt into your chosen service and follow its steps to schedule it. This app creates the prompt
+            but does not schedule or send it.
           </p>
-          <section className="space-y-3 border-t border-[var(--editorial-line)] pt-4">
-            <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
-              Microsoft 365 Copilot setup
-            </h3>
-            <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-              <span className="block">
-                For the agent route, create an agent in Microsoft 365 Copilot and run it manually, usually with this
-                prompt but not exclusively. After a result appears, use its menu to turn it into a recurring prompt,
-                then choose the cadence, number of days and time. Available options can vary.
-              </span>
-              <span className="mt-2 block">
-                Microsoft also documents direct scheduled prompts in Copilot Chat, Microsoft Copilot in Teams, and
-                Outlook on the web and desktop. Where available, hover over your prompt and choose “Schedule this
-                prompt”, choose when and how often it should run, and save it. A Microsoft Copilot licence is required,
-                and account or administrator settings may affect availability. Check Copilot’s Scheduled prompts list to
-                confirm it was saved. This app has not scheduled or sent anything.
-              </span>{' '}
-              <a
-                href="https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
-                target="_blank"
-                rel="noreferrer"
-                className="text-ref-color-brand-primary underline"
-              >
-                Microsoft guidance for scheduling Copilot prompts
-              </a>
-            </p>
-          </section>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-interface-base-small text-sys-color-text-primary block font-semibold">
-              Frequency
-              <select
-                aria-label="Recurring reflection frequency"
-                className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default focus-visible:outline-ref-color-brand-primary mt-1 min-h-11 w-full border px-3 font-normal focus-visible:outline-2 focus-visible:outline-offset-2"
-                disabled={working}
-                value={schedulePreferences.frequency}
-                onChange={(event) => {
-                  const frequency = event.target.value as SchedulePreferences['frequency'];
-                  updateSchedulePreferences({
-                    ...schedulePreferences,
-                    frequency,
-                    ...(frequency === 'weekly'
-                      ? { weeklyDay: schedulePreferences.weeklyDay ?? 'monday' }
-                      : { weeklyDay: undefined }),
-                  });
-                }}
-              >
-                <option value="daily">Daily</option>
-                <option value="weekdays">Weekdays</option>
-                <option value="weekly">Weekly</option>
-              </select>
-            </label>
-            <label className="text-interface-base-small text-sys-color-text-primary block font-semibold">
-              Local time
-              <input
-                aria-label="Recurring reflection local time"
-                type="time"
-                className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default focus-visible:outline-ref-color-brand-primary mt-1 min-h-11 w-full border px-3 font-normal focus-visible:outline-2 focus-visible:outline-offset-2"
-                disabled={working}
-                value={schedulePreferences.localTime}
-                onChange={(event) =>
-                  updateSchedulePreferences({ ...schedulePreferences, localTime: event.target.value })
-                }
-              />
-            </label>
-            <label className="text-interface-base-small text-sys-color-text-primary block font-semibold">
-              Timezone
-              <input
-                aria-label="Recurring reflection timezone"
-                type="text"
-                className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default focus-visible:outline-ref-color-brand-primary mt-1 min-h-11 w-full border px-3 font-normal focus-visible:outline-2 focus-visible:outline-offset-2"
-                disabled={working}
-                value={schedulePreferences.timeZone}
-                onChange={(event) =>
-                  updateSchedulePreferences({ ...schedulePreferences, timeZone: event.target.value })
-                }
-              />
-            </label>
-            {schedulePreferences.frequency === 'weekly' && (
-              <label className="text-interface-base-small text-sys-color-text-primary block font-semibold">
-                Day of the week
-                <select
-                  aria-label="Recurring reflection weekday"
-                  className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default focus-visible:outline-ref-color-brand-primary mt-1 min-h-11 w-full border px-3 font-normal focus-visible:outline-2 focus-visible:outline-offset-2"
-                  disabled={working}
-                  value={schedulePreferences.weeklyDay ?? 'monday'}
-                  onChange={(event) =>
-                    updateSchedulePreferences({
-                      ...schedulePreferences,
-                      weeklyDay: event.target.value as WeeklyDay,
-                    })
-                  }
-                >
-                  {weeklyDays.map((day) => (
-                    <option key={day.value} value={day.value}>
-                      {day.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-          </div>
-          <fieldset className="space-y-2">
+
+          <fieldset className="space-y-2 border-t border-[var(--editorial-line)] pt-4">
             <legend className="text-interface-base-small text-sys-color-text-primary mb-2 font-semibold">
-              Optional context for this recurring prompt (all off by default)
+              Schedule with
             </legend>
-            {recurringContextOptions.length === 0 ? (
-              <p className="text-interface-base-small text-sys-color-text-secondary">
-                There is no optional context to include yet.
-              </p>
-            ) : (
-              recurringContextOptions.map((option) => (
+            <div className="flex flex-wrap gap-2">
+              {scheduleServices.map((service) => (
                 <label
-                  key={option.id}
-                  className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-start gap-2 py-2"
+                  key={service.id}
+                  className={`text-interface-base-small rounded-sys-radius-button-sm flex min-h-11 cursor-pointer items-center gap-2 border px-3 py-2 ${
+                    selectedService === service.id
+                      ? 'border-sys-color-border-strong bg-sys-color-surface-subtle font-semibold'
+                      : 'border-sys-color-border-default text-sys-color-text-secondary'
+                  }`}
                 >
                   <input
-                    type="checkbox"
-                    disabled={working}
-                    checked={includedRecurringContextIds.includes(option.id)}
-                    onChange={(event) =>
-                      setIncludedRecurringContextIds((current) =>
-                        event.target.checked ? [...current, option.id] : current.filter((id) => id !== option.id)
-                      )
-                    }
+                    type="radio"
+                    name="recurring-reflection-service"
+                    value={service.id}
+                    checked={selectedService === service.id}
+                    onChange={() => setSelectedService(service.id)}
+                    className="accent-ref-color-brand-primary"
                   />
-                  <span>
-                    {option.label}: <span className="text-sys-color-text-secondary">{option.text}</span>
-                  </span>
+                  {service.name}
                 </label>
-              ))
-            )}
+              ))}
+            </div>
           </fieldset>
-          <section aria-labelledby="recurring-prompt-preview-heading" className="space-y-2">
+
+          <section aria-live="polite" className="space-y-3 border-t border-[var(--editorial-line)] pt-4">
+            {selectedService === 'microsoft' && (
+              <>
+                <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
+                  Microsoft 365 Copilot Chat
+                </h3>
+                <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+                  Microsoft calls these Scheduled tasks. In Copilot Chat, submit this prompt, choose “Schedule this”,
+                  set when and how often it should run, then save it. Manage your tasks in Task Hub under Scheduled. A
+                  Microsoft 365 Copilot licence is required, and availability may vary by account.{' '}
+                  <a
+                    href="https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-ref-color-brand-primary underline"
+                  >
+                    Microsoft guide to scheduled tasks in Copilot Chat
+                  </a>
+                </p>
+              </>
+            )}
+            {selectedService === 'claude' && (
+              <>
+                <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">Claude Cowork</h3>
+                <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+                  Open Scheduled, choose New task, then Create with Claude. Give Claude this prompt and the cadence you
+                  want. Review the task details and schedule before confirming. You can review, edit, pause, or run it
+                  from Scheduled. Availability depends on your plan and workspace settings.{' '}
+                  <a
+                    href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-ref-color-brand-primary underline"
+                  >
+                    Claude guide to scheduled tasks
+                  </a>
+                </p>
+              </>
+            )}
+            {selectedService === 'codex' && (
+              <>
+                <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">Codex</h3>
+                <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+                  In a Codex chat, ask it to run this prompt on a schedule. Choose whether each run should return to
+                  this chat or start a new one, then review it under Scheduled. Tasks that use a local project need the
+                  ChatGPT desktop app and computer running.{' '}
+                  <a
+                    href="https://developers.openai.com/codex/app/automations"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-ref-color-brand-primary underline"
+                  >
+                    Official OpenAI documentation for Codex scheduled tasks
+                  </a>
+                </p>
+              </>
+            )}
+          </section>
+
+          <details className="border-t border-[var(--editorial-line)] pt-4">
+            <summary className="text-interface-base-small text-sys-color-text-primary min-h-11 cursor-pointer py-2 font-semibold">
+              Optional context for this recurring prompt
+              {includedRecurringContextIds.length > 0 && ` (${includedRecurringContextIds.length} selected)`}
+            </summary>
+            <fieldset className="space-y-2 pt-2">
+              <legend className="sr-only">Choose optional context to include</legend>
+              {recurringContextOptions.length === 0 ? (
+                <p className="text-interface-base-small text-sys-color-text-secondary">
+                  There is no optional context to include yet.
+                </p>
+              ) : (
+                recurringContextOptions.map((option) => (
+                  <label
+                    key={option.id}
+                    className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-start gap-2 py-2"
+                  >
+                    <input
+                      type="checkbox"
+                      disabled={working}
+                      checked={includedRecurringContextIds.includes(option.id)}
+                      onChange={(event) =>
+                        setIncludedRecurringContextIds((current) =>
+                          event.target.checked ? [...current, option.id] : current.filter((id) => id !== option.id)
+                        )
+                      }
+                    />
+                    <span>
+                      {option.label}: <span className="text-sys-color-text-secondary">{option.text}</span>
+                    </span>
+                  </label>
+                ))
+              )}
+            </fieldset>
+          </details>
+
+          <section
+            aria-labelledby="recurring-prompt-preview-heading"
+            className="space-y-2 border-t border-[var(--editorial-line)] pt-4"
+          >
             <h3
               id="recurring-prompt-preview-heading"
               className="text-interface-base-small text-sys-color-text-primary font-semibold"
             >
-              Exact recurring prompt preview
+              Recurring prompt
             </h3>
-            <pre className="rounded-sys-radius-button-sm border-sys-color-border-default bg-sys-color-surface-subtle text-interface-base-small text-sys-color-text-primary max-h-[32rem] overflow-auto border p-4 break-words whitespace-pre-wrap">
-              {recurringPrompt}
-            </pre>
-            <button type="button" className={actionButtonClasses} onClick={() => void handleCopyRecurringPrompt()}>
-              Copy preview
-            </button>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                className={secondaryActionButtonClasses}
+                onClick={() => void handleCopyRecurringPrompt()}
+              >
+                Copy prompt
+              </button>
+              <details>
+                <summary className="text-interface-base-small text-ref-color-brand-primary min-h-11 cursor-pointer py-2 underline">
+                  Review full prompt
+                </summary>
+                <pre className="rounded-sys-radius-button-sm border-sys-color-border-default bg-sys-color-surface-subtle text-interface-base-small text-sys-color-text-primary mt-2 max-h-[32rem] overflow-auto border p-4 break-words whitespace-pre-wrap">
+                  {recurringPrompt}
+                </pre>
+              </details>
+            </div>
             {recurringCopyFeedback && (
               <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
                 {recurringCopyFeedback}

@@ -50,7 +50,7 @@ export function BehaviourReminderSettings({ value, onChange }: BehaviourReminder
           <span>Cadence</span>
           <select
             id="behaviour-reminder-cadence"
-            className="apc-field__control min-h-11"
+            className="cv-field__control min-h-11"
             value={schedule.cadence}
             onChange={(event) =>
               updateSchedule({ cadence: event.target.value as BehaviourReminderSchedule['cadence'] })
@@ -68,7 +68,7 @@ export function BehaviourReminderSettings({ value, onChange }: BehaviourReminder
           <span>Local time</span>
           <input
             id="behaviour-reminder-time"
-            className="apc-field__control min-h-11"
+            className="cv-field__control min-h-11"
             type="time"
             value={schedule.time}
             onChange={(event) => updateSchedule({ time: event.target.value })}
@@ -78,7 +78,7 @@ export function BehaviourReminderSettings({ value, onChange }: BehaviourReminder
           <label htmlFor="behaviour-reminder-timezone">Time zone</label>
           <input
             id="behaviour-reminder-timezone"
-            className="apc-field__control min-h-11"
+            className="cv-field__control min-h-11"
             type="text"
             inputMode="text"
             autoComplete="off"
@@ -104,7 +104,7 @@ export function BehaviourReminderSettings({ value, onChange }: BehaviourReminder
             <span>Day of week</span>
             <select
               id="behaviour-reminder-weekday"
-              className="apc-field__control min-h-11"
+              className="cv-field__control min-h-11"
               value={schedule.weekday}
               onChange={(event) => updateSchedule({ weekday: Number(event.target.value) })}
             >

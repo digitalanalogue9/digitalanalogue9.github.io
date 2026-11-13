@@ -1,41 +1,28 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Download, FileText, Printer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import { ReflectionValueList } from '@/app/completed/ReflectionValueList';
 import { RecurringReflectionControls } from '@/app/completed/RecurringReflectionControls';
-import { OneOffCoachingPromptControls } from '@/app/completed/OneOffCoachingPromptControls';
 import { CompletedValuesCard } from '@/app/completed/CompletedValuesCard';
-import { isReflectionFirstResultsEnabled } from '@/app/completed/reflectionFirstResults';
 import { ReflectionSummary } from '@/app/completed/ReflectionSummary';
 import type {
   CompletedSession,
   ExerciseType,
   RelationshipReflectionNotes,
-  SchedulePreferences,
   SessionReflection,
   ValueReflectionNotes,
 } from '@/lib/contracts/types';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 import { downloadCompletedValuesHtml, downloadJsonFile, printCompletedValues } from '@/lib/utils/completedValuesExport';
 
-const actionButtonClasses =
-  'inline-flex min-h-11 items-center gap-2 rounded-sys-radius-button-sm border border-sys-color-border-strong px-4 py-2 text-interface-base-small font-semibold text-sys-color-text-primary transition-colors hover:bg-sys-color-surface-subtle disabled:opacity-60 md:min-h-9';
-
-function getDefaultSchedulePreferences(): SchedulePreferences {
-  return {
-    frequency: 'daily',
-    localTime: '09:00',
-    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-  };
-}
+const primaryActionButtonClasses = 'cv-button min-h-11 text-interface-base-small md:min-h-10';
+const secondaryActionButtonClasses = `${primaryActionButtonClasses} cv-button--secondary`;
 
 export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const service = useExerciseService();
-  const reflectionFirstResultsEnabled = isReflectionFirstResultsEnabled();
   const [completed, setCompleted] = useState<CompletedSession | null>(null);
   const [reflection, setReflection] = useState<SessionReflection>({ version: 1, values: {} });
   const [exerciseType, setExerciseType] = useState<ExerciseType>('personal');
@@ -45,12 +32,8 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
   const [reflectionDirty, setReflectionDirty] = useState(false);
-  const [schedulePreferences, setSchedulePreferences] = useState<SchedulePreferences>(getDefaultSchedulePreferences);
-  const [includedCoachingContextIds, setIncludedCoachingContextIds] = useState<string[]>([]);
   const [includedRecurringContextIds, setIncludedRecurringContextIds] = useState<string[]>([]);
-  const [coachingCopyFeedback, setCoachingCopyFeedback] = useState<string | null>(null);
   const [recurringCopyFeedback, setRecurringCopyFeedback] = useState<string | null>(null);
-  const [coachingPromptExpanded, setCoachingPromptExpanded] = useState(false);
   const [recurringPromptExpanded, setRecurringPromptExpanded] = useState(false);
   const loadSequenceRef = useRef(0);
 
@@ -78,12 +61,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
       }
       setCompleted(record.completedSession);
       setReflection(record.completedSession.reflection ?? { version: 1, values: {} });
-      setSchedulePreferences(
-        record.completedSession.reflection?.schedulePreferences ?? getDefaultSchedulePreferences()
-      );
-      setIncludedCoachingContextIds([]);
       setIncludedRecurringContextIds([]);
-      setCoachingCopyFeedback(null);
       setRecurringCopyFeedback(null);
       setReflectionDirty(false);
       setExerciseType(record.session.exerciseType);
@@ -102,7 +80,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     setWorking(true);
     setActionError(null);
     try {
-      const saved = await service.saveReflection(sessionId, { ...reflection, schedulePreferences });
+      const saved = await service.saveReflection(sessionId, reflection);
       setCompleted(saved);
       setReflection(saved.reflection ?? { version: 1, values: {} });
       setReflectionDirty(false);
@@ -111,12 +89,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     } finally {
       setWorking(false);
     }
-  }, [service, sessionId, reflection, schedulePreferences]);
-
-  const updateSchedulePreferences = (next: SchedulePreferences) => {
-    setSchedulePreferences(next);
-    setReflectionDirty(true);
-  };
+  }, [service, sessionId, reflection]);
 
   const updateValueReflection = useCallback((valueId: string, field: keyof ValueReflectionNotes, value: string) => {
     setReflectionDirty(true);
@@ -227,12 +200,12 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           {loadError ?? 'Completed values are unavailable for this session.'}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link to="/history" className="apc-button text-sys-color-text-inverse min-h-11 no-underline md:min-h-10">
+          <Link to="/history" className={`${primaryActionButtonClasses} no-underline`}>
             Open History
           </Link>
           <Link
             to={{ pathname: '/exercise', search: `?${new URLSearchParams({ sessionId }).toString()}` }}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 no-underline transition-colors motion-reduce:transition-none md:min-h-9"
+            className={`${secondaryActionButtonClasses} no-underline`}
           >
             Back to Board
           </Link>
@@ -242,17 +215,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   }
 
   const replaySearch = `?${new URLSearchParams({ sessionId }).toString()}`;
-  const coachingContextOptions = service.getOneOffCoachingContextOptions(
-    exerciseType,
-    completed.finalValues,
-    reflection
-  );
-  const coachingPrompt = service.composeOneOffCoachingPrompt({
-    exerciseType,
-    selectedValues: completed.finalValues,
-    reflection,
-    includedContextIds: includedCoachingContextIds,
-  });
   const recurringContextOptions = service.getRecurringReflectionContextOptions(
     exerciseType,
     completed.finalValues,
@@ -262,21 +224,8 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     exerciseType,
     selectedValues: completed.finalValues,
     reflection,
-    schedulePreferences,
     includedContextIds: includedRecurringContextIds,
   });
-  const handleCopyCoachingPrompt = async () => {
-    setCoachingCopyFeedback(null);
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error('Clipboard access is unavailable.');
-      await navigator.clipboard.writeText(coachingPrompt);
-      setCoachingCopyFeedback('Copied the preview.');
-    } catch (copyError) {
-      setCoachingCopyFeedback(
-        copyError instanceof Error ? `Could not copy preview: ${copyError.message}` : 'Could not copy preview.'
-      );
-    }
-  };
   const handleCopyRecurringPrompt = async () => {
     setRecurringCopyFeedback(null);
     try {
@@ -291,16 +240,13 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   };
 
   const sessionGoalEditor = (
-    <div>
-      <label
-        htmlFor="reflection-goal"
-        className="text-interface-base-small text-sys-color-text-primary mb-1 block font-semibold"
-      >
+    <div className="space-y-2 pt-4">
+      <h3 id="reflection-goal-heading" className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
         Session goal (optional)
-      </label>
+      </h3>
       <textarea
         id="reflection-goal"
-        aria-label="Session goal"
+        aria-labelledby="reflection-goal-heading"
         className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default text-interface-base-default text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-20 w-full border p-3 focus-visible:outline-2 focus-visible:outline-offset-2"
         value={reflection.goal ?? ''}
         onChange={(event) => {
@@ -324,42 +270,61 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           </p>
         </header>
 
-        {!reflectionFirstResultsEnabled && (
-          <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
-        )}
+        <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
 
-        {reflectionFirstResultsEnabled && (
-          <section
-            className="space-y-4 border-b border-[var(--editorial-line)] pb-8"
-            aria-labelledby="original-results-heading"
+        <section
+          className="space-y-4 border-t border-[var(--editorial-line)] pt-8"
+          aria-labelledby="recurring-reflection-heading"
+        >
+          <h2
+            id="recurring-reflection-heading"
+            className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
           >
-            <h2
-              id="original-results-heading"
-              className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
-            >
-              Original results
-            </h2>
-            <CompletedValuesCard completed={completed} sessionReference={sessionReference} />
-          </section>
-        )}
+            Recurring reflection
+          </h2>
+          <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+            Create a recurring prompt to reflect on your selected values over time. It includes those values and any
+            saved reasons, goals or reflection notes you choose. Copy it into a service that supports scheduled tasks
+            and follow its setup steps below.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <RecurringReflectionControls
+              recurringPromptExpanded={recurringPromptExpanded}
+              setRecurringPromptExpanded={setRecurringPromptExpanded}
+              working={working}
+              recurringContextOptions={recurringContextOptions}
+              includedRecurringContextIds={includedRecurringContextIds}
+              setIncludedRecurringContextIds={setIncludedRecurringContextIds}
+              recurringPrompt={recurringPrompt}
+              handleCopyRecurringPrompt={() => void handleCopyRecurringPrompt()}
+              recurringCopyFeedback={recurringCopyFeedback}
+            />
+          </div>
+        </section>
 
-        <div className="space-y-8">
-          {sessionGoalEditor}
+        <section
+          aria-labelledby="further-reflection-heading"
+          className="space-y-8 border-t border-b border-[var(--editorial-line)] py-8"
+        >
+          <h2
+            id="further-reflection-heading"
+            className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
+          >
+            Further reflection
+          </h2>
           <ReflectionSummary
             summary={service.getReflectionSummary(exerciseType, completed.finalValues, reflection)}
             exerciseType={exerciseType}
           />
+          {sessionGoalEditor}
           {service.getReflectionRelationships(exerciseType, completed.finalValues).length > 0 && (
-            <section
-              aria-labelledby="value-relationships-heading"
-              className="space-y-3 border-t border-[var(--editorial-line)] pt-8"
-            >
-              <h2
+            <section aria-labelledby="value-relationships-heading" className="space-y-3">
+              <h3
                 id="value-relationships-heading"
-                className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl"
+                className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"
               >
                 Values in context
-              </h2>
+              </h3>
               <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
                 Selected values can complement each other or pull in different directions depending on the situation.
                 These are possibilities to explore, not fixed opposites.
@@ -409,6 +374,9 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
               ))}
             </section>
           )}
+          <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
+            Reflect on each value
+          </h3>
           <ReflectionValueList
             selectedValues={completed.finalValues}
             exerciseType={exerciseType}
@@ -417,33 +385,10 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             updateValueReflection={updateValueReflection}
             updateSuggestionResponse={updateSuggestionResponse}
           />
-          <div className="flex flex-wrap items-center gap-3 border-t border-[var(--editorial-line)] pt-6">
-            <OneOffCoachingPromptControls
-              coachingPromptExpanded={coachingPromptExpanded}
-              setCoachingPromptExpanded={setCoachingPromptExpanded}
-              coachingContextOptions={coachingContextOptions}
-              includedCoachingContextIds={includedCoachingContextIds}
-              setIncludedCoachingContextIds={setIncludedCoachingContextIds}
-              coachingPrompt={coachingPrompt}
-              handleCopyCoachingPrompt={() => void handleCopyCoachingPrompt()}
-              coachingCopyFeedback={coachingCopyFeedback}
-            />
-            <RecurringReflectionControls
-              recurringPromptExpanded={recurringPromptExpanded}
-              setRecurringPromptExpanded={setRecurringPromptExpanded}
-              schedulePreferences={schedulePreferences}
-              updateSchedulePreferences={updateSchedulePreferences}
-              working={working}
-              recurringContextOptions={recurringContextOptions}
-              includedRecurringContextIds={includedRecurringContextIds}
-              setIncludedRecurringContextIds={setIncludedRecurringContextIds}
-              recurringPrompt={recurringPrompt}
-              handleCopyRecurringPrompt={() => void handleCopyRecurringPrompt()}
-              recurringCopyFeedback={recurringCopyFeedback}
-            />
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              className="apc-button order-1 ml-auto min-h-11 md:min-h-10"
+              className={`${primaryActionButtonClasses} order-1 ml-auto`}
               onClick={() => void handleSaveReflection()}
               disabled={working}
             >
@@ -459,10 +404,10 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
               Reflection saved on this device.
             </p>
           ) : null}
-        </div>
+        </section>
       </section>
 
-      <section className="rounded-sys-radius-card-sm border-sys-color-border-default bg-sys-color-surface-default border p-4 shadow-sm print:hidden">
+      <section className="space-y-3 print:hidden">
         {actionError && (
           <p
             className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-interface-base-small text-ref-color-rag-red-text mb-3 px-3 py-2"
@@ -471,38 +416,35 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             {actionError}
           </p>
         )}
-        <div className="flex flex-wrap gap-3">
-          <Link
-            to={{ pathname: '/reasoning', search: replaySearch }}
-            className="apc-button text-sys-color-text-inverse min-h-11 no-underline md:min-h-10"
-          >
-            Edit final values
-          </Link>
-          <button type="button" className={actionButtonClasses} onClick={handlePrint}>
-            <Printer className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+        <div className="flex flex-wrap justify-end gap-3">
+          <button type="button" className={secondaryActionButtonClasses} onClick={handlePrint}>
             Print
           </button>
           <button
             type="button"
-            className={actionButtonClasses}
+            className={secondaryActionButtonClasses}
             onClick={() => void handleExportJson()}
             disabled={working}
           >
-            <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
             Export JSON
           </button>
-          <button type="button" className={actionButtonClasses} onClick={handleExportHtml}>
-            <FileText className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          <button type="button" className={secondaryActionButtonClasses} onClick={handleExportHtml}>
             Export HTML
           </button>
-          <Link to="/history" className="apc-button text-sys-color-text-inverse min-h-11 no-underline md:min-h-10">
+          <Link to="/history" className={`${secondaryActionButtonClasses} no-underline`}>
             Open History
           </Link>
           <Link
             to={{ pathname: '/replay', search: replaySearch }}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong text-interface-base-small text-sys-color-text-primary hover:bg-sys-color-surface-subtle inline-flex min-h-11 items-center border px-4 py-2 font-semibold no-underline transition-colors motion-reduce:transition-none md:min-h-9"
+            className={`${secondaryActionButtonClasses} no-underline`}
           >
             Replay Session
+          </Link>
+          <Link
+            to={{ pathname: '/reasoning', search: replaySearch }}
+            className={`${primaryActionButtonClasses} no-underline`}
+          >
+            Edit final values
           </Link>
         </div>
       </section>

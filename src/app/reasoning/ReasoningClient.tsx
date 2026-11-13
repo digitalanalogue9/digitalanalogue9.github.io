@@ -186,13 +186,16 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
                       {value.title}
                     </span>
                   </label>
-              <p id={`${reasonId}-description`} className="text-sys-color-text-secondary mt-2 text-lg leading-relaxed">
-                {value.description}
-              </p>
+                  <p
+                    id={`${reasonId}-description`}
+                    className="text-sys-color-text-secondary mt-2 text-lg leading-relaxed"
+                  >
+                    {value.description}
+                  </p>
                   <textarea
                     id={reasonId}
-                aria-describedby={`${reasonId}-description`}
-                    className="apc-field__control mt-3 min-h-28 w-full resize-y"
+                    aria-describedby={`${reasonId}-description`}
+                    className="cv-field__control mt-3 min-h-28 w-full resize-y"
                     value={reasonsById[value.id] ?? ''}
                     onChange={(event) =>
                       setReasonsById((prev) => ({
@@ -214,7 +217,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[var(--editorial-line)] pt-6">
         <button
           type="submit"
-          className="apc-button min-h-11"
+          className="cv-button min-h-11"
           disabled={working || Boolean(error && finalValues.length === 0)}
         >
           {working ? 'Saving...' : editingCompleted ? 'Save changes' : 'Save Completed Session'}

@@ -190,7 +190,7 @@ export default function BehaviourReflectionClient() {
           You can choose “It depends” or skip any situation. Possible perspectives appear only after you choose to
           finish.
         </p>
-        <button type="button" className="apc-button mx-auto min-h-11" onClick={start} disabled={isBusy}>
+        <button type="button" className="cv-button mx-auto min-h-11" onClick={start} disabled={isBusy}>
           {isBusy ? 'Starting…' : 'Start reflection'}
         </button>
         {error && (
@@ -278,7 +278,7 @@ export default function BehaviourReflectionClient() {
             className="rounded-sys-radius-card-sm border-sys-color-border-default text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-surface-primary flex cursor-pointer items-start gap-3 border p-4"
           >
             <input
-              className="apc-selector__control mt-1"
+              className="cv-selector__control mt-1"
               type="radio"
               name={`scenario-${scenario.id}`}
               value={response.id}
@@ -290,7 +290,7 @@ export default function BehaviourReflectionClient() {
         ))}
         <label className="rounded-sys-radius-card-sm border-sys-color-border-default text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-surface-primary flex cursor-pointer items-center gap-3 border p-4">
           <input
-            className="apc-selector__control"
+            className="cv-selector__control"
             type="radio"
             name={`scenario-${scenario.id}`}
             value="depends"
@@ -301,7 +301,7 @@ export default function BehaviourReflectionClient() {
         </label>
         <label className="rounded-sys-radius-card-sm border-sys-color-border-default text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-surface-primary flex cursor-pointer items-center gap-3 border p-4">
           <input
-            className="apc-selector__control"
+            className="cv-selector__control"
             type="radio"
             name={`scenario-${scenario.id}`}
             value="skip"
@@ -319,7 +319,7 @@ export default function BehaviourReflectionClient() {
       </label>
       <textarea
         id="scenario-context"
-        className="apc-field__control mt-2 min-h-24 w-full"
+        className="cv-field__control mt-2 min-h-24 w-full"
         value={scenario.optionalContext ?? ''}
         onChange={(event) => updateContext(event.target.value)}
         placeholder="Add anything that would shape your response"
@@ -348,7 +348,7 @@ export default function BehaviourReflectionClient() {
       <div className="mt-7 flex flex-wrap justify-between gap-3">
         <button
           type="button"
-          className="apc-button min-h-11"
+          className="cv-button min-h-11"
           onClick={() => void goTo(Math.max(0, position - 1))}
           disabled={position === 0 || isBusy}
         >
@@ -357,14 +357,14 @@ export default function BehaviourReflectionClient() {
         {position < attempt.scenarios.length - 1 ? (
           <button
             type="button"
-            className="apc-button min-h-11"
+            className="cv-button min-h-11"
             onClick={() => void goTo(position + 1)}
             disabled={isBusy}
           >
             Next situation
           </button>
         ) : (
-          <button type="button" className="apc-button min-h-11" onClick={finish} disabled={isBusy}>
+          <button type="button" className="cv-button min-h-11" onClick={finish} disabled={isBusy}>
             {isBusy ? 'Finishing…' : 'Finish and see perspectives'}
           </button>
         )}

@@ -76,7 +76,7 @@ export default function CookieBanner() {
                   type="checkbox"
                   checked={choices.analytics === 'granted'}
                   onChange={(event) => updateChoice('analytics', event.target.checked)}
-                  className="apc-checkbox__control"
+                  className="cv-checkbox__control"
                 />
                 <span>Google Analytics</span>
               </label>
@@ -86,7 +86,7 @@ export default function CookieBanner() {
                   type="checkbox"
                   checked={choices.functional === 'granted'}
                   onChange={(event) => updateChoice('functional', event.target.checked)}
-                  className="apc-checkbox__control"
+                  className="cv-checkbox__control"
                 />
                 <span>Functional preferences</span>
               </label>

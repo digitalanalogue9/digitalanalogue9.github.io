@@ -9,12 +9,7 @@ export function ReflectionSummary({
   summary: ReflectionSummaryData;
   exerciseType: ExerciseType;
 }) {
-  const hasSummary =
-    summary.recognisedPossibilities.length +
-      summary.observations.length +
-      summary.actions.length +
-      summary.unconfirmedPossibilities.length >
-    0;
+  const hasSummary = summary.recognisedPossibilities.length + summary.observations.length + summary.actions.length > 0;
   if (!hasSummary) return null;
 
   return (
@@ -22,15 +17,14 @@ export function ReflectionSummary({
       aria-labelledby="reflection-summary-heading"
       className="space-y-3 border-t border-[var(--editorial-line)] pt-6"
     >
-      <h2
+      <h3
         id="reflection-summary-heading"
-        className="page-section-heading text-sys-color-text-primary text-2xl sm:text-3xl"
+        className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"
       >
         Reflection summary
-      </h2>
+      </h3>
       <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-        Recognition is self-reported; unanswered suggestions remain open questions. Recorded notes describe the
-        participant’s or team’s own account.
+        Recognition is self-reported. Recorded notes describe the participant’s or team’s own account.
       </p>
       {summary.recognisedPossibilities.length > 0 && (
         <SummaryGroup
@@ -48,13 +42,6 @@ export function ReflectionSummary({
       )}
       {summary.actions.length > 0 && (
         <SummaryGroup title="Chosen actions" exerciseType={exerciseType} items={summary.actions} />
-      )}
-      {summary.unconfirmedPossibilities.length > 0 && (
-        <SummaryGroup
-          title="Possibilities not confirmed"
-          exerciseType={exerciseType}
-          items={summary.unconfirmedPossibilities}
-        />
       )}
     </section>
   );

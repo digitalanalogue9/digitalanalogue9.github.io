@@ -3,7 +3,7 @@ import { InMemorySessionRepository } from '@/lib/repository/inMemorySessionRepos
 import { ExerciseServiceImpl } from '@/lib/services/exerciseService';
 
 describe('ExerciseService recurring reflection prompt', () => {
-  test('composes self-contained personal context, selected schedule, freshness and honest limits', () => {
+  test('composes self-contained personal context, freshness and honest limits', () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
     const prompt = service.composeRecurringReflectionPrompt({
       exerciseType: 'personal',
@@ -11,18 +11,12 @@ describe('ExerciseService recurring reflection prompt', () => {
         { id: 'care', title: 'Care', description: 'Make space for people.' },
         { id: 'craft', title: 'Craft', description: 'Take care with the details.' },
       ],
-      schedulePreferences: {
-        frequency: 'weekdays',
-        localTime: '08:15',
-        timeZone: 'Europe/London',
-      },
     });
 
     expect(prompt).toContain('personal exercise');
     expect(prompt).toContain('1. Care — Make space for people.');
     expect(prompt).toContain('2. Craft — Take care with the details.');
-    expect(prompt).toContain('weekdays at 08:15');
-    expect(prompt).toContain('Europe/London');
+    expect(prompt).not.toContain('Chosen reminder schedule');
     expect(prompt).toContain('one focused question');
     expect(prompt).toContain('Awareness is enough');
     expect(prompt).toContain('positive expression');
@@ -55,16 +49,10 @@ describe('ExerciseService recurring reflection prompt', () => {
       selectedValues,
       reflection,
       includedContextIds: [contextOptions.find((option) => option.id === 'goal')!.id],
-      schedulePreferences: {
-        frequency: 'weekly',
-        localTime: '17:40',
-        timeZone: 'Europe/London',
-        weeklyDay: 'friday',
-      },
     });
 
     expect(prompt).toContain('team facilitator');
-    expect(prompt).toContain('friday at 17:40');
+    expect(prompt).not.toContain('Chosen reminder schedule');
     expect(prompt).toContain('Make quality sustainable.');
     expect(prompt).not.toContain('Private reason.');
     expect(prompt).not.toContain('Recorded observation.');

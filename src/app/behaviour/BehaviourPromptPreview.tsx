@@ -50,7 +50,7 @@ export function BehaviourPromptPreview({
             This full text is copied as shown. Review it before sharing.
           </p>
         </div>
-        <button type="button" className="apc-button min-h-11" onClick={() => void copyPrompt()} disabled={!canCopy}>
+        <button type="button" className="cv-button min-h-11" onClick={() => void copyPrompt()} disabled={!canCopy}>
           {mode === 'recurring' ? 'Copy recurring prompt' : 'Copy prompt'}
         </button>
       </div>
@@ -64,7 +64,7 @@ export function BehaviourPromptPreview({
         readOnly
         rows={22}
         value={prompt}
-        className="apc-field__control font-interface-base-small selection:bg-ref-color-brand-surface-primary min-h-[28rem] w-full resize-y leading-relaxed"
+        className="cv-field__control font-interface-base-small selection:bg-ref-color-brand-surface-primary min-h-[28rem] w-full resize-y leading-relaxed"
         spellCheck={false}
       />
       {mode === 'recurring' && !hasSelectedPossibility && (
@@ -96,7 +96,7 @@ export function BehaviourPromptPreview({
         {copyStatus.includes('could not access') && (
           <button
             type="button"
-            className="apc-link min-h-11 underline underline-offset-4"
+            className="cv-link min-h-11 underline underline-offset-4"
             onClick={selectForManualCopy}
             aria-label="Select prompt text for manual copying"
           >

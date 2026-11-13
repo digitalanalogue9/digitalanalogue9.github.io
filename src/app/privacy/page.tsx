@@ -79,7 +79,10 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="manage-consent-heading" className="space-y-4 border-t border-[var(--editorial-line)] pt-8">
+      <section
+        aria-labelledby="manage-consent-heading"
+        className="space-y-4 border-t border-[var(--editorial-line)] pt-8"
+      >
         <h2 id="manage-consent-heading" className="font-serif text-2xl font-semibold">
           Your analytics choice
         </h2>
@@ -91,7 +94,7 @@ export default function PrivacyPage() {
             type="button"
             onClick={() => saveAnalyticsChoice(true)}
             aria-pressed={isInitialized && consent.analytics === 'granted'}
-            className="apc-button min-h-11 px-5 py-2"
+            className="cv-button min-h-11 px-5 py-2"
           >
             Allow analytics
           </button>
@@ -109,7 +112,10 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section aria-labelledby="privacy-contact-heading" className="space-y-3 border-t border-[var(--editorial-line)] pt-8">
+      <section
+        aria-labelledby="privacy-contact-heading"
+        className="space-y-3 border-t border-[var(--editorial-line)] pt-8"
+      >
         <h2 id="privacy-contact-heading" className="font-serif text-2xl font-semibold">
           Questions or privacy requests
         </h2>

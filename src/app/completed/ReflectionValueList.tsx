@@ -25,11 +25,8 @@ export function ReflectionValueList({
       {selectedValues.map((value, index) => {
         const content = getReflectionContent(exerciseType, value);
         return (
-          <li
-            key={value.id}
-            className="rounded-sys-radius-button-sm border-sys-color-border-default space-y-3 border p-4"
-          >
-            <details open={index === 0}>
+          <li key={value.id} className="min-w-0 space-y-3">
+            <details open={index === 0} className="min-w-0 [overflow-wrap:anywhere] break-words">
               <summary className="text-interface-base-large text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">
                 {index + 1}. {value.title}
               </summary>

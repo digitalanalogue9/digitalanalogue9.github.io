@@ -148,6 +148,29 @@ function activeCardsCount(round: RoundSnapshot): number {
     .reduce((sum, category) => sum + round.categories[category].length, 0);
 }
 
+const completionPriority: CategoryName[] = [
+  'Very Important',
+  'Quite Important',
+  'Important',
+  'Of Some Importance',
+  'Not Important',
+];
+
+export function getFinishSelectionByCategory(round: RoundSnapshot): Partial<Record<CategoryName, ValueCard[]>> {
+  const selected: Partial<Record<CategoryName, ValueCard[]>> = {};
+  let selectedCount = 0;
+
+  for (const category of completionPriority) {
+    const remaining = round.targetCoreValues - selectedCount;
+    if (remaining <= 0) break;
+    const values = round.categories[category].slice(0, remaining);
+    if (values.length > 0) selected[category] = values;
+    selectedCount += values.length;
+  }
+
+  return selected;
+}
+
 export function evaluateRoundTransition(round: RoundSnapshot): RoundTransitionResult {
   const deckEmpty = round.deck.length === 0;
   const veryImportantCount = round.categories['Very Important'].length;
@@ -156,9 +179,12 @@ export function evaluateRoundTransition(round: RoundSnapshot): RoundTransitionRe
 
   const hasEnoughCards = activeCount >= round.targetCoreValues;
   const hasNotImportant = notImportantCount > 0;
+  const minimumVeryImportantCount =
+    round.roundNumber === 1 ? round.targetCoreValues : Math.ceil(round.targetCoreValues / 2);
+  const hasEnoughVeryImportant = veryImportantCount >= minimumVeryImportantCount;
   const canComplete = deckEmpty && veryImportantCount === round.targetCoreValues && activeCount === veryImportantCount;
   const canAdvance = deckEmpty && hasEnoughCards && hasNotImportant;
-  const canEarlyFinish = deckEmpty && hasEnoughCards;
+  const canEarlyFinish = deckEmpty && hasEnoughCards && hasEnoughVeryImportant;
 
   if (!deckEmpty) {
     return {
@@ -173,7 +199,7 @@ export function evaluateRoundTransition(round: RoundSnapshot): RoundTransitionRe
       canAdvance,
       canComplete,
       canEarlyFinish,
-      message: `You need at least ${round.targetCoreValues} active cards to continue.`,
+      message: `You need at least ${round.targetCoreValues} active values to continue.`,
     };
   }
   if (canComplete) {
@@ -189,38 +215,35 @@ export function evaluateRoundTransition(round: RoundSnapshot): RoundTransitionRe
       canAdvance,
       canComplete,
       canEarlyFinish,
-      message: 'Keep at least one value in Not Important to end a round.',
+      message: canEarlyFinish
+        ? 'You can finish now or place a value in Not Important to start another round.'
+        : `Place at least ${minimumVeryImportantCount} values in Very Important to finish, or move one to Not Important to start another round.`,
+    };
+  }
+  if (canAdvance && !canEarlyFinish) {
+    const valuesNeeded = minimumVeryImportantCount - veryImportantCount;
+    return {
+      canAdvance,
+      canComplete,
+      canEarlyFinish,
+      message: `Start the next round or move ${valuesNeeded} more ${valuesNeeded === 1 ? 'value' : 'values'} to Very Important to finish now.`,
     };
   }
   return {
     canAdvance,
     canComplete,
     canEarlyFinish,
-    message: 'Start the next round or finish early.',
+    message: 'Start the next round or finish now.',
   };
 }
 
 export function normalizeRoundForCompletion(round: RoundSnapshot, now: number): RoundSnapshot {
-  const priority: CategoryName[] = [
-    'Very Important',
-    'Quite Important',
-    'Important',
-    'Of Some Importance',
-    'Not Important',
-  ];
-
-  const promoted: ValueCard[] = [];
-  const demoted: ValueCard[] = [];
-
-  for (const category of priority) {
-    for (const card of round.categories[category]) {
-      if (promoted.length < round.targetCoreValues) {
-        promoted.push(card);
-      } else {
-        demoted.push(card);
-      }
-    }
-  }
+  const selectedByCategory = getFinishSelectionByCategory(round);
+  const promoted = completionPriority.flatMap((category) => selectedByCategory[category] ?? []);
+  const promotedIds = new Set(promoted.map((card) => card.id));
+  const demoted = completionPriority.flatMap((category) =>
+    round.categories[category].filter((card) => !promotedIds.has(card.id))
+  );
 
   const nextCategories = createEmptyCategories();
   nextCategories['Very Important'] = promoted;

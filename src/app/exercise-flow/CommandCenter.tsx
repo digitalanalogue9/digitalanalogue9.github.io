@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import type { CategoryName, ValueCard } from '@/lib/contracts/types';
+import type { CategoryName, RoundSnapshot, ValueCard } from '@/lib/contracts/types';
 import CurrentCardPanel from './CurrentCardPanel';
 import EmptyCurrentCard from './EmptyCurrentCard';
+import FinishConfirmationDialog from './FinishConfirmationDialog';
 
 interface CommandCenterProps {
+  round: RoundSnapshot;
   roundNumber: number;
   targetCoreValues: number;
   remainingCards: number;
@@ -24,6 +26,7 @@ interface CommandCenterProps {
 }
 
 export default function CommandCenter({
+  round,
   roundNumber,
   targetCoreValues,
   remainingCards,
@@ -41,6 +44,7 @@ export default function CommandCenter({
   canEarlyFinish,
   canReplayPrevious,
 }: CommandCenterProps) {
+  const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const currentCardAreaRef = useRef<HTMLDivElement>(null);
   const primaryActionRef = useRef<HTMLButtonElement>(null);
   const placementFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -133,21 +137,23 @@ export default function CommandCenter({
             <button
               ref={primaryActionRef}
               type="button"
-              className="apc-button active:scale-[0.98] motion-reduce:active:scale-100"
+              className="cv-button active:scale-[0.98] motion-reduce:active:scale-100"
               onClick={() => onAdvance(false)}
               disabled={working || !canUsePrimaryAction}
               aria-disabled={working || !canUsePrimaryAction}
             >
               {working ? 'Working...' : primaryActionLabel}
             </button>
-            <button
-              type="button"
-              className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm bg-sys-color-surface-default border px-4 py-2 font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45 motion-reduce:transition-none motion-reduce:active:scale-100"
-              onClick={() => onAdvance(true)}
-              disabled={working || !canEarlyFinish || canComplete}
-            >
-              Early Finish
-            </button>
+            {!canComplete && (
+              <button
+                type="button"
+                className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm bg-sys-color-surface-default border px-4 py-2 font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45 motion-reduce:transition-none motion-reduce:active:scale-100"
+                onClick={() => setIsFinishDialogOpen(true)}
+                disabled={working || !canEarlyFinish}
+              >
+                Finish
+              </button>
+            )}
             {canReplayPrevious && (
               <button
                 type="button"
@@ -187,6 +193,16 @@ export default function CommandCenter({
           )}
         </div>
       </div>
+      <FinishConfirmationDialog
+        open={isFinishDialogOpen}
+        round={round}
+        working={working}
+        onCancel={() => setIsFinishDialogOpen(false)}
+        onContinue={() => {
+          setIsFinishDialogOpen(false);
+          onAdvance(true);
+        }}
+      />
     </section>
   );
 }

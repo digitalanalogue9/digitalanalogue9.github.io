@@ -103,7 +103,7 @@ export function BehaviourReflectionResults({
                               className="text-interface-base-small text-sys-color-text-primary flex min-h-11 items-center gap-3"
                             >
                               <input
-                                className="apc-selector__control"
+                                className="cv-selector__control"
                                 type="radio"
                                 name={`reflection-${scenario.id}-${possibility.id}`}
                                 value={value}
@@ -135,7 +135,7 @@ export function BehaviourReflectionResults({
                         </label>
                         <textarea
                           id={`reflection-note-${scenario.id}-${possibility.id}`}
-                          className="apc-field__control min-h-24 w-full"
+                          className="cv-field__control min-h-24 w-full"
                           value={reflection?.note ?? ''}
                           onChange={(event) =>
                             onUpdateReflection(scenario.id, possibility.id, reflection?.response, event.target.value)
@@ -172,10 +172,10 @@ export function BehaviourReflectionResults({
           </p>
         )}
       </div>
-      <button type="button" className="apc-button min-h-11" onClick={onStartFresh} disabled={isBusy}>
+      <button type="button" className="cv-button min-h-11" onClick={onStartFresh} disabled={isBusy}>
         Start a fresh reflection
       </button>
-      <button type="button" className="apc-button min-h-11" onClick={onContinuePrompt}>
+      <button type="button" className="cv-button min-h-11" onClick={onContinuePrompt}>
         Continue with a conversation prompt
       </button>
     </section>
