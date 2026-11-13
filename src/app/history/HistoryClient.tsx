@@ -277,23 +277,6 @@ export default function HistoryClient() {
     [includeScenarioPrivateText]
   );
 
-  const handleExportReflectionBackup = useCallback(
-    async (sessionId: string) => {
-      setIsWorking(true);
-      setActionError(null);
-      setIsImportError(false);
-      try {
-        const payload = await service.exportSession(sessionId, { includeReflection: true });
-        downloadJsonFile(`core-values-${getSessionNameById(sessionId)}-reflection-backup`, payload);
-      } catch (exportError) {
-        setActionError(exportError instanceof Error ? exportError.message : 'Reflection backup export failed.');
-      } finally {
-        setIsWorking(false);
-      }
-    },
-    [getSessionNameById, service]
-  );
-
   const handleImportPayload = useCallback(
     async (payload: unknown) => {
       setIsWorking(true);
@@ -374,12 +357,13 @@ export default function HistoryClient() {
   };
   return (
     <div className="app-page-panel mx-auto w-full max-w-4xl space-y-4">
-<header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
-<h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Session History</h1>
-<p className="page-intro">
-Review saved exercises, continue where you left off, and manage your backups.
-</p>
-</header>
+      <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
+        <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Session History</h1>
+        <p className="page-intro">
+          Review saved exercises, continue where you left off, and manage your backups. Values JSON backups include
+          saved reflection notes and may contain personal information.
+        </p>
+      </header>
       {actionError && (
         <p
           id="history-action-error"
@@ -443,7 +427,6 @@ Review saved exercises, continue where you left off, and manage your backups.
                   .catch(() => setActionError('Legacy backup export failed.'))
                   .finally(() => setIsWorking(false));
               }}
-              onExportReflectionBackup={handleExportReflectionBackup}
               onCopyCompletedValues={handleCopyCompletedValuesFromList}
               onPrintCompletedValues={handlePrintCompletedValuesFromList}
             />

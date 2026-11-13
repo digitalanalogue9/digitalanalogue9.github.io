@@ -111,9 +111,9 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   const legacy = await downloadJson(page, 'Legacy backup');
   expect(legacy.session.timestamp).toBeDefined();
   const ordinary = await downloadJson(page, 'Export');
-  expect(ordinary.completedSession.reflection).toBeUndefined();
-  const full = await downloadJson(page, 'Reflection backup');
-  expect(full.completedSession.reflection.goal).toBe('My private goal.');
+  expect(ordinary.completedSession.reflection.goal).toBe('My private goal.');
+  expect(ordinary.completedSession.reflection.values[cards[0].id].observation).toBe('My private observation.');
+  await expect(page.getByRole('button', { name: 'Reflection backup', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Copy values', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
