@@ -3,8 +3,8 @@ import { InMemorySessionRepository } from '@/lib/repository/inMemorySessionRepos
 import { ExerciseServiceImpl } from '@/lib/services/exerciseService';
 import { makeCompletedSession, makeImportEnvelope, makeSession, makeValueCards } from '../utils/importFixtures';
 
-describe('reflection backup export and replacement import', () => {
-  test('keeps default v2 export reflection-free and explicitly round-trips reflection backups', async () => {
+describe('complete values-session backup export and import', () => {
+  test('includes saved reflection in the standard export and round-trips it', async () => {
     const source = new ExerciseServiceImpl(new InMemorySessionRepository());
     const session = makeSession({ id: 'reflection-backup', status: 'completed' });
     const fastPaceValue = {
@@ -34,7 +34,7 @@ describe('reflection backup export and replacement import', () => {
 
     const defaultExport = await source.exportSession(session.id);
     expect(defaultExport.completedSession?.finalValues).toEqual(completedSession.finalValues);
-    expect(defaultExport.completedSession).not.toHaveProperty('reflection');
+    expect(defaultExport.completedSession?.reflection).toEqual(reflection);
 
     const reflectionBackup = await source.exportSession(session.id, { includeReflection: true });
     expect(reflectionBackup.completedSession?.finalValues).toEqual(completedSession.finalValues);

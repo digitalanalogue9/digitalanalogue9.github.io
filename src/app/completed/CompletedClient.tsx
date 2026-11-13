@@ -264,9 +264,8 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
         <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
           <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Reflect on your values</h1>
           <p className="page-intro max-w-[70ch]">
-            Reflection is optional and saved on this device with this completed session. Your notes are not included in
-            the standard JSON export. To back up saved notes, choose Export reflection backup in{' '}
-            <Link to="/history">History</Link>.
+            Reflection is optional and saved on this device with this completed session. The JSON backup includes your
+            reflection notes and may contain personal information. Keep the downloaded file private.
           </p>
         </header>
 

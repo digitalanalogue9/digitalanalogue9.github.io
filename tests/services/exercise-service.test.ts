@@ -184,7 +184,7 @@ describe('ExerciseService', () => {
     expect(stored.currentRound.commands).toHaveLength(5);
   });
 
-  test('saves and reopens optional reflection without adding it to the default export', async () => {
+  test('saves and reopens optional reflection in the standard export', async () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
     const session = makeSession({ id: 'saved-reflection', status: 'completed' });
     const fastPaceValue = {
@@ -235,7 +235,7 @@ describe('ExerciseService', () => {
       weeklyDay: 'friday',
     });
     const exported = await service.exportSession(session.id);
-    expect(exported.completedSession).not.toHaveProperty('reflection');
+    expect(exported.completedSession).toHaveProperty('reflection');
   });
 
   test('rejects reflection notes for values outside the completed selection', async () => {
@@ -276,14 +276,29 @@ describe('ExerciseService', () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
     const excellence = teamValuesData.values.find(({ id }) => id === '12')!;
     const balance = teamValuesData.values.find(({ id }) => id === '9')!;
-    const savedExcellence = { ...excellence, description: 'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.' };
-    const savedBalance = { ...balance, description: 'We prioritise balancing workloads with personal health and happiness, creating a sustainable work environment.' };
+    const savedExcellence = {
+      ...excellence,
+      description: 'We strive for the highest standards in everything we do, inspiring ourselves and others to excel.',
+    };
+    const savedBalance = {
+      ...balance,
+      description:
+        'We prioritise balancing workloads with personal health and happiness, creating a sustainable work environment.',
+    };
 
     for (const card of [excellence, savedExcellence]) {
-      expect(service.getReflectionContent('team', card).possibilities.map(({ id }) => id)).toContain('team-excellence-constructive');
+      expect(service.getReflectionContent('team', card).possibilities.map(({ id }) => id)).toContain(
+        'team-excellence-constructive'
+      );
     }
-    for (const cards of [[excellence, balance], [savedExcellence, savedBalance], [excellence, savedBalance]]) {
-      expect(service.getReflectionRelationships('team', cards).map(({ id }) => id)).toContain('team-excellence-balance');
+    for (const cards of [
+      [excellence, balance],
+      [savedExcellence, savedBalance],
+      [excellence, savedBalance],
+    ]) {
+      expect(service.getReflectionRelationships('team', cards).map(({ id }) => id)).toContain(
+        'team-excellence-balance'
+      );
     }
     const edited = { ...excellence, description: 'A different meaning.' };
     expect(service.getReflectionContent('team', edited).possibilities).toEqual([]);

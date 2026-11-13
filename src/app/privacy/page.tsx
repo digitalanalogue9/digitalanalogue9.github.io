@@ -49,8 +49,8 @@ export default function PrivacyPage() {
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Use History to export a backup before clearing browser data or moving your work. In History,{' '}
-          <strong>Export</strong> saves your values exercise without the additional notes from the completed exercise
-          page. Choose <strong>Export reflection backup</strong> to include those notes.
+          <strong>Export</strong> saves your values exercise, including reflection notes and any saved reasons. The
+          backup file may contain personal information, so keep it private.
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Backup files are saved wherever your browser downloads files. Keep them private and delete them when you no
