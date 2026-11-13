@@ -186,7 +186,7 @@ describe('ExerciseService', () => {
     expect(stored.currentRound.commands).toHaveLength(5);
   });
 
-  test('saves and reopens optional reflection without adding it to the default export', async () => {
+  test('saves and reopens optional reflection in the standard export', async () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
     const session = makeSession({ id: 'saved-reflection', status: 'completed' });
     const fastPaceValue = {
@@ -237,7 +237,7 @@ describe('ExerciseService', () => {
       weeklyDay: 'friday',
     });
     const exported = await service.exportSession(session.id);
-    expect(exported.completedSession).not.toHaveProperty('reflection');
+    expect(exported.completedSession).toHaveProperty('reflection');
   });
 
   test('rejects reflection notes for values outside the completed selection', async () => {

@@ -71,7 +71,7 @@ export class InMemorySessionRepository implements SessionRepository {
     }
 
     const completedSession =
-      record.completedSession && !options.includeReflection
+      record.completedSession && options.includeReflection === false
         ? (({ reflection: _reflection, ...sessionWithoutReflection }) => sessionWithoutReflection)(
             record.completedSession
           )

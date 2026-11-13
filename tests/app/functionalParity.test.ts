@@ -17,7 +17,7 @@ afterEach(async () => {
   localStorage.clear();
 });
 
-test('source service saves completed reasons and reflection, omits private reflection from ordinary exports and deletes all session data', async () => {
+test('source service saves completed reasons and reflection in standard exports and deletes all session data', async () => {
   const record = await service.startSession({ targetCoreValues: 1, cardsInGame: 2 });
   const kept = record.currentRound.deck[0];
   const placed = await service.applyCommand({
@@ -38,7 +38,7 @@ test('source service saves completed reasons and reflection, omits private refle
   await service.saveReflection(record.session.id, reflection);
   expect((await service.loadSession(record.session.id)).completedSession?.finalValues[0].reason).toBe('My reason');
   const ordinary = await service.exportSession(record.session.id);
-  expect(ordinary.completedSession?.reflection).toBeUndefined();
+  expect(ordinary.completedSession?.reflection).toEqual(reflection);
   const backup = await service.exportSession(record.session.id, { includeReflection: true });
   expect(backup.completedSession?.reflection).toEqual(reflection);
   // Restoring a duplicate keeps the personal site's existing local session intact.

@@ -21,7 +21,7 @@ const repository: SessionRepository = {
     const record = await loadSession(id);
     if (!record) throw new Error('Session not found.');
     const completedSession = record.completedSession ? { ...record.completedSession } : undefined;
-    if (completedSession && !options.includeReflection) delete completedSession.reflection;
+    if (completedSession && options.includeReflection === false) delete completedSession.reflection;
     return {
       version: 2,
       exportedAt: Date.now(),
