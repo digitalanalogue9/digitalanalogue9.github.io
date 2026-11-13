@@ -10,6 +10,11 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   await instructions.getByRole('checkbox', { name: "Don't show again" }).check();
   await instructions.getByRole('button', { name: 'Start sorting' }).click();
 
+  const finishDialog = page
+    .locator('dialog')
+    .filter({ has: page.getByRole('heading', { name: 'Finish now?', includeHidden: true }) });
+  await expect(finishDialog).toBeHidden();
+
   const firstCard = page.getByLabel(/^Current card /);
   const keptTitle = await firstCard.getByRole('heading').innerText();
   await page.getByRole('button', { name: 'Place current card in Very Important' }).click();
@@ -41,7 +46,11 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   await page.getByRole('button', { name: 'Replay Previous Round' }).click();
   await expect(page.getByLabel(/^Current card /)).toHaveCount(0);
   await page.getByRole('button', { name: 'Finish', exact: true }).click();
-  await page.getByRole('dialog', { name: 'Finish now?' }).getByRole('button', { name: 'Continue' }).click();
+  await expect(finishDialog).toBeVisible();
+  await finishDialog.getByRole('button', { name: 'Cancel' }).click();
+  await expect(finishDialog).toBeHidden();
+  await page.getByRole('button', { name: 'Finish', exact: true }).click();
+  await finishDialog.getByRole('button', { name: 'Continue' }).click();
   await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Reflect on your values', exact: true })).toBeVisible();

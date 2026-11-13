@@ -359,7 +359,7 @@
 .cv-attention-box,
 .cv-toast,
 .cv-alert-banner,
-.cv-dialog {
+.cv-dialog[open] {
   display: grid;
   gap: var(--ref-space-300);
 }
