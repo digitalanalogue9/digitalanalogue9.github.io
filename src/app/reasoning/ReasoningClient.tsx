@@ -29,11 +29,14 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
   const [finalValues, setFinalValues] = useState<ValueCard[]>([]);
   const [reflection, setReflection] = useState<SessionReflection>(emptyReflection);
   const [error, setError] = useState<string | null>(null);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const [draftSaved, setDraftSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
   const [editingCompleted, setEditingCompleted] = useState(false);
   const loadSequenceRef = useRef(0);
   const mutationLockedRef = useRef(false);
+  const draftSaveRef = useRef<Promise<void>>(Promise.resolve());
 
   const loadSession = useCallback(async () => {
     const requestSequence = ++loadSequenceRef.current;
@@ -49,6 +52,8 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     setRound(null);
     setFinalValues([]);
     setReflection(emptyReflection);
+    setDraftError(null);
+    setDraftSaved(false);
     setEditingCompleted(false);
 
     try {
@@ -71,6 +76,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       }
 
       setFinalValues(record.currentRound.categories['Very Important']);
+      setReflection(record.reflectionDraft ?? emptyReflection);
     } catch (loadError) {
       if (requestSequence !== loadSequenceRef.current) return;
       setError(loadError instanceof Error ? loadError.message : 'Failed to load session.');
@@ -85,6 +91,24 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       loadSequenceRef.current += 1;
     };
   }, [loadSession]);
+  useEffect(() => {
+    if (!session || loading || editingCompleted) return;
+    setDraftError(null);
+    setDraftSaved(false);
+    draftSaveRef.current = draftSaveRef.current
+      .catch(() => undefined)
+      .then(() => service.saveReflectionDraft(session.id, reflection))
+      .then(() => {
+        setDraftError(null);
+        setDraftSaved(true);
+      })
+      .catch((saveError: unknown) => {
+        setDraftSaved(false);
+        setDraftError(
+          saveError instanceof Error ? saveError.message : 'Unable to save this draft. Your entries are still here.'
+        );
+      });
+  }, [editingCompleted, loading, reflection, service, session]);
 
   const handleComplete = useCallback(async () => {
     if (!session || !round || mutationLockedRef.current) return;
@@ -92,6 +116,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     setWorking(true);
     setError(null);
     try {
+      if (!editingCompleted) await draftSaveRef.current;
       if (editingCompleted) {
         await service.saveReflection(session.id, reflection);
       } else {
@@ -199,6 +224,19 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
             role="alert"
           >
             {error}
+          </p>
+        )}
+        {draftError && (
+          <p
+            className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-interface-base-small text-ref-color-rag-red-text px-3 py-2"
+            role="alert"
+          >
+            Draft could not be saved. Your entries are still here; try again. {draftError}
+          </p>
+        )}
+        {draftSaved && !draftError && (
+          <p className="text-interface-base-small text-sys-color-text-secondary" role="status" aria-live="polite">
+            Draft saved on this device.
           </p>
         )}
       </header>

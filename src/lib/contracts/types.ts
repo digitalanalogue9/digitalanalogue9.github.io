@@ -108,6 +108,7 @@ export type ImportEnvelope = {
   session: Session;
   rounds: RoundSnapshot[];
   completedSession?: CompletedSession;
+  reflectionDraft?: SessionReflection;
 };
 
 export type SessionRecord = {
@@ -115,6 +116,7 @@ export type SessionRecord = {
   currentRound: RoundSnapshot;
   rounds: RoundSnapshot[];
   completedSession?: CompletedSession;
+  reflectionDraft?: SessionReflection;
 };
 
 export type RoundTransitionResult = {

@@ -125,6 +125,43 @@ function hasKnownRelationshipReferences(
   );
 }
 
+function filterReflectionForSelection(
+  reflection: SessionReflection,
+  exerciseType: ExerciseType,
+  selectedValues: ValueCard[]
+): SessionReflection {
+  const selectedIds = new Set(selectedValues.map(({ id }) => id));
+  const values = Object.fromEntries(
+    Object.entries(reflection.values)
+      .filter(([valueId]) => selectedIds.has(valueId))
+      .map(([valueId, notes]) => {
+        return [
+          valueId,
+          {
+            ...(notes.observation === undefined ? {} : { observation: notes.observation }),
+            ...(notes.action === undefined ? {} : { action: notes.action }),
+            ...(notes.suggestions === undefined ? {} : { suggestions: notes.suggestions }),
+          },
+        ];
+      })
+  );
+  const relationshipIds = new Set(getReflectionRelationships(exerciseType, selectedValues).map(({ id }) => id));
+  const allValues = (exerciseType === 'team' ? teamValuesData.values : valuesData.values) as ValueCard[];
+  const knownRelationshipIds = new Set(getReflectionRelationships(exerciseType, allValues).map(({ id }) => id));
+  const relationships = Object.fromEntries(
+    Object.entries(reflection.relationships ?? {}).filter(
+      ([id]) => relationshipIds.has(id) || !knownRelationshipIds.has(id)
+    )
+  );
+  return {
+    version: reflection.version,
+    values,
+    ...(reflection.goal === undefined ? {} : { goal: reflection.goal }),
+    ...(Object.keys(relationships).length === 0 ? {} : { relationships }),
+    ...(reflection.schedulePreferences === undefined ? {} : { schedulePreferences: reflection.schedulePreferences }),
+  };
+}
+
 export interface ExerciseService {
   startSession(input?: StartSessionInput): Promise<SessionRecord>;
   loadSession(sessionId: string): Promise<SessionRecord>;
@@ -153,6 +190,7 @@ export interface ExerciseService {
   ): OneOffCoachingContextOption[];
   composeRecurringReflectionPrompt(input: ComposeRecurringReflectionPromptInput): string;
   saveReflection(sessionId: string, reflection: SessionReflection): Promise<CompletedSession>;
+  saveReflectionDraft(sessionId: string, reflection: SessionReflection): Promise<void>;
   listSessions(): Promise<Session[]>;
   deleteSession(sessionId: string): Promise<void>;
   exportSession(sessionId: string, options?: SessionExportOptions): Promise<ImportEnvelope>;
@@ -219,7 +257,15 @@ export class ExerciseServiceImpl implements ExerciseService {
     if (!record) {
       throw new Error('Session not found');
     }
-    return record;
+    if (!record.reflectionDraft || record.session.status !== 'active') return record;
+    return {
+      ...record,
+      reflectionDraft: filterReflectionForSelection(
+        record.reflectionDraft,
+        record.session.exerciseType,
+        record.currentRound.categories['Very Important']
+      ),
+    };
   }
 
   async applyCommand(input: ApplyCommandInput): Promise<ApplyCommandResult> {
@@ -324,11 +370,14 @@ export class ExerciseServiceImpl implements ExerciseService {
       return withReason;
     });
 
+    const reflection = input.reflection
+      ? filterReflectionForSelection(input.reflection, input.session.exerciseType, finalValues)
+      : undefined;
     if (
-      input.reflection &&
-      (!isSessionReflection(input.reflection, finalValues) ||
-        !hasKnownSuggestionReferences(input.reflection, input.session.exerciseType, finalValues) ||
-        !hasKnownRelationshipReferences(input.reflection, input.session.exerciseType, finalValues))
+      reflection &&
+      (!isSessionReflection(reflection, finalValues) ||
+        !hasKnownSuggestionReferences(reflection, input.session.exerciseType, finalValues) ||
+        !hasKnownRelationshipReferences(reflection, input.session.exerciseType, finalValues))
     ) {
       throw new Error('Reflection data is invalid for this session.');
     }
@@ -339,7 +388,7 @@ export class ExerciseServiceImpl implements ExerciseService {
       completedAt: now,
       ...(completedBy ? { completedBy } : {}),
       finalValues,
-      ...(input.reflection ? { reflection: input.reflection } : {}),
+      ...(reflection ? { reflection } : {}),
     };
 
     const nextSession: Session = {
@@ -390,6 +439,23 @@ export class ExerciseServiceImpl implements ExerciseService {
     const session: Session = { ...record.session, updatedAt: Date.now() };
     await this.repository.saveRound({ session, round: record.currentRound, completedSession });
     return completedSession;
+  }
+
+  async saveReflectionDraft(sessionId: string, reflection: SessionReflection): Promise<void> {
+    const record = await this.repository.read(sessionId);
+    if (!record || record.session.status !== 'active') {
+      throw new Error('This unfinished Session reflection draft could not be saved.');
+    }
+    const selectedValues = record.currentRound.categories['Very Important'];
+    const applicableReflection = filterReflectionForSelection(reflection, record.session.exerciseType, selectedValues);
+    if (
+      !isSessionReflection(applicableReflection, selectedValues) ||
+      !hasKnownSuggestionReferences(applicableReflection, record.session.exerciseType, selectedValues) ||
+      !hasKnownRelationshipReferences(applicableReflection, record.session.exerciseType, selectedValues)
+    ) {
+      throw new Error('Reflection data is invalid for this session.');
+    }
+    await this.repository.saveReflectionDraft(sessionId, applicableReflection);
   }
 
   getReflectionContent(exerciseType: ExerciseType, value: ValueCard): ReflectionContent {
@@ -453,6 +519,20 @@ export class ExerciseServiceImpl implements ExerciseService {
     }
     if (!validateImportEnvelope(envelope)) {
       throw new Error('Import payload is invalid');
+    }
+    if (envelope.reflectionDraft) {
+      const currentRound = envelope.rounds.find(
+        ({ roundNumber }) => roundNumber === envelope.session.currentRoundNumber
+      );
+      const selectedValues = currentRound?.categories['Very Important'];
+      if (
+        !selectedValues ||
+        !isSessionReflection(envelope.reflectionDraft, selectedValues) ||
+        !hasKnownSuggestionReferences(envelope.reflectionDraft, envelope.session.exerciseType, selectedValues) ||
+        !hasKnownRelationshipReferences(envelope.reflectionDraft, envelope.session.exerciseType, selectedValues)
+      ) {
+        throw new Error('Import payload is invalid');
+      }
     }
     if (
       envelope.completedSession?.reflection &&

@@ -186,6 +186,97 @@ describe('ExerciseService', () => {
     expect(stored.currentRound.commands).toHaveLength(5);
   });
 
+  test('keeps an unfinished reflection draft in local session storage and its backup', async () => {
+    const repository = new InMemorySessionRepository();
+    const service = new ExerciseServiceImpl(repository);
+    const record = await service.startSession({ targetCoreValues: 2, cardsInGame: 5 });
+    const sorted = await sortAllCards(service, record, [
+      'Very Important',
+      'Very Important',
+      'Not Important',
+      'Not Important',
+      'Not Important',
+    ]);
+    const selectedValue = sorted.round.categories['Very Important'][0];
+    const draft = {
+      version: 1 as const,
+      goal: 'Pause before replying.',
+      values: { [selectedValue.id]: { observation: 'I noticed my pace.' } },
+    };
+
+    await service.saveReflectionDraft(record.session.id, draft);
+
+    const reopened = await service.loadSession(record.session.id);
+    expect(reopened.session.status).toBe('active');
+    expect(reopened.reflectionDraft).toEqual(draft);
+    const backup = await service.exportSession(record.session.id);
+    expect(backup.reflectionDraft).toEqual(draft);
+    const restoredService = new ExerciseServiceImpl(new InMemorySessionRepository());
+    await restoredService.importSession(backup);
+    expect((await restoredService.loadSession(record.session.id)).reflectionDraft).toEqual(draft);
+  });
+
+  test('keeps answers for retained values and removes no-longer-applicable draft answers', async () => {
+    const service = new ExerciseServiceImpl(new InMemorySessionRepository());
+    const fastPace = { id: '2', title: 'FAST PACE', description: 'You enjoy working rapidly at a high pace.' };
+    const preciseWork = {
+      id: '7',
+      title: 'PRECISE WORK',
+      description: valuesData.values.find((value) => value.id === '7')?.description ?? '',
+    };
+    const session = makeSession({
+      id: 'reflection-draft-selection',
+      initialValues: [fastPace, preciseWork],
+      targetCoreValues: 2,
+    });
+    const envelope = makeImportEnvelope({ session });
+    envelope.rounds[0].deck = [];
+    envelope.rounds[0].categories['Very Important'] = [fastPace, preciseWork];
+    await service.importSession(envelope);
+
+    const [relationship] = service.getReflectionRelationships('personal', [fastPace, preciseWork]);
+    const draft = {
+      version: 1 as const,
+      goal: 'Keep my next choice deliberate.',
+      values: {
+        [fastPace.id]: { observation: 'This still applies.' },
+        [preciseWork.id]: { observation: 'This value is no longer selected.' },
+      },
+      relationships: {
+        [relationship.id]: { observation: 'This relationship no longer applies.' },
+      },
+    };
+    await service.saveReflectionDraft(session.id, draft);
+
+    const beforeChange = await service.loadSession(session.id);
+    const changed = await service.applyCommand({
+      session: beforeChange.session,
+      round: beforeChange.currentRound,
+      command: {
+        kind: 'move',
+        valueId: preciseWork.id,
+        fromCategory: 'Very Important',
+        toCategory: 'Not Important',
+      },
+    });
+    const resumed = await service.loadSession(session.id);
+
+    expect(resumed.reflectionDraft?.goal).toBe(draft.goal);
+    expect(resumed.reflectionDraft?.values).toEqual({
+      [fastPace.id]: { observation: 'This still applies.' },
+    });
+    expect(resumed.reflectionDraft?.relationships).toBeUndefined();
+    const completed = await service.completeSession({
+      session: changed.session,
+      round: changed.round,
+      reasonsById: {},
+      reflection: resumed.reflectionDraft,
+    });
+    expect(completed.reflection?.values).toEqual({ [fastPace.id]: { observation: 'This still applies.' } });
+    expect(completed.reflection?.relationships).toBeUndefined();
+    expect((await service.loadSession(session.id)).reflectionDraft).toBeUndefined();
+  });
+
   test('saves and reopens optional reflection in the standard export', async () => {
     const service = new ExerciseServiceImpl(new InMemorySessionRepository());
     const session = makeSession({ id: 'saved-reflection', status: 'completed' });

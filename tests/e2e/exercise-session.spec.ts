@@ -51,6 +51,14 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   await page
     .getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })
     .fill('I noticed this in a recent choice.');
+  await expect(page.getByRole('status')).toContainText('Draft saved on this device.');
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue(
+    'Make one deliberate choice each day.'
+  );
+  await expect(page.getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })).toHaveValue(
+    'I noticed this in a recent choice.'
+  );
   await expect(page.getByRole('heading', { name: 'Reflection summary' })).toBeVisible();
   await expect(page.getByText('I noticed this in a recent choice.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Save reflection and complete', exact: true }).click();

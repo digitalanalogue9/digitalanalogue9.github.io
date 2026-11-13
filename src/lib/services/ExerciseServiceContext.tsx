@@ -6,11 +6,13 @@ import {
   listSessions,
   loadSession,
   saveCanonicalSession,
+  saveReflectionDraft,
 } from '../db/canonicalSessionRepository';
 
 const repository: SessionRepository = {
   create: saveCanonicalSession,
   saveRound: saveCanonicalSession,
+  saveReflectionDraft,
   read: loadSession,
   list: listSessions,
   delete: deleteSession,
@@ -28,6 +30,7 @@ const repository: SessionRepository = {
       session: record.session,
       rounds: record.rounds,
       ...(completedSession ? { completedSession } : {}),
+      ...(record.reflectionDraft ? { reflectionDraft: record.reflectionDraft } : {}),
     };
   },
 };

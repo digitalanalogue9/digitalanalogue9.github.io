@@ -20,11 +20,12 @@ const STORES = {
   sessions: 'canonicalSessions',
   rounds: 'canonicalRounds',
   completed: 'canonicalCompletedSessions',
+  drafts: 'canonicalReflectionDrafts',
   metadata: 'metadata',
 } as const;
 const MIGRATION_KEY = 'v4-session-canonical-migration-v1';
 const DB_NAME = 'coreValuesData';
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 type Category = (typeof CATEGORIES)[number];
 export type { CompletedSession, RoundSnapshot, Session, SessionRecord, SessionReflection } from '../contracts/types';
 export type SessionBackup = {
@@ -92,6 +93,7 @@ function openRepositoryDb(): Promise<IDBPDatabase> {
       }
       if (!db.objectStoreNames.contains(STORES.completed))
         db.createObjectStore(STORES.completed, { keyPath: 'sessionId' });
+      if (!db.objectStoreNames.contains(STORES.drafts)) db.createObjectStore(STORES.drafts, { keyPath: 'sessionId' });
       if (!db.objectStoreNames.contains(STORES.metadata)) db.createObjectStore(STORES.metadata, { keyPath: 'key' });
     },
   });
@@ -470,7 +472,16 @@ export async function loadSession(sessionId: string): Promise<SessionRecord | nu
   const currentRound = rounds.find((round) => round.roundNumber === session.currentRoundNumber);
   if (!currentRound) return null;
   const completedSession = (await db.get(STORES.completed, sessionId)) as CompletedSession | undefined;
-  return { session, currentRound, rounds, ...(completedSession ? { completedSession } : {}) };
+  const draftRecord = (await db.get(STORES.drafts, sessionId)) as
+    { sessionId: string; reflection: SessionReflection } | undefined;
+  const reflectionDraft = draftRecord?.reflection;
+  return {
+    session,
+    currentRound,
+    rounds,
+    ...(completedSession ? { completedSession } : {}),
+    ...(reflectionDraft ? { reflectionDraft } : {}),
+  };
 }
 
 export async function completeSession(
@@ -483,21 +494,35 @@ export async function completeSession(
   const completedAt = Date.now();
   const session = { ...record.session, status: 'completed' as const, updatedAt: completedAt };
   const completedSession: CompletedSession = { version: 2, sessionId, completedAt, finalValues };
-  const tx = db.transaction([STORES.sessions, STORES.completed], 'readwrite');
+  const tx = db.transaction([STORES.sessions, STORES.completed, STORES.drafts], 'readwrite');
   await tx.objectStore(STORES.sessions).put(session);
   await tx.objectStore(STORES.completed).put(completedSession);
+  await tx.objectStore(STORES.drafts).delete(sessionId);
   await tx.done;
 }
 
 export async function saveSessionReflection(sessionId: string, reflection: SessionReflection): Promise<void> {
   const db = await initRepositoryDb();
-  const tx = db.transaction([STORES.sessions, STORES.completed], 'readwrite');
+  const tx = db.transaction([STORES.sessions, STORES.completed, STORES.drafts], 'readwrite');
   const session = (await tx.objectStore(STORES.sessions).get(sessionId)) as Session | undefined;
   const completed = (await tx.objectStore(STORES.completed).get(sessionId)) as CompletedSession | undefined;
   if (!session || !completed || !isSessionReflection(reflection, completed.finalValues)) {
     throw new Error('This completed Session reflection could not be saved.');
   }
   await tx.objectStore(STORES.completed).put({ ...completed, reflection });
+  await tx.objectStore(STORES.drafts).delete(sessionId);
+  await tx.objectStore(STORES.sessions).put({ ...session, updatedAt: Date.now() });
+  await tx.done;
+}
+
+export async function saveReflectionDraft(sessionId: string, reflection: SessionReflection): Promise<void> {
+  const db = await initRepositoryDb();
+  const tx = db.transaction([STORES.sessions, STORES.drafts], 'readwrite');
+  const session = (await tx.objectStore(STORES.sessions).get(sessionId)) as Session | undefined;
+  if (!session || session.status !== 'active') {
+    throw new Error('This unfinished Session reflection draft could not be saved.');
+  }
+  await tx.objectStore(STORES.drafts).put({ sessionId, reflection });
   await tx.objectStore(STORES.sessions).put({ ...session, updatedAt: Date.now() });
   await tx.done;
 }
@@ -515,10 +540,13 @@ export async function saveCanonicalSession(payload: {
   completedSession?: CompletedSession;
 }): Promise<void> {
   const db = await initRepositoryDb();
-  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed], 'readwrite');
+  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed, STORES.drafts], 'readwrite');
   await tx.objectStore(STORES.sessions).put(payload.session);
   await tx.objectStore(STORES.rounds).put(payload.round);
-  if (payload.completedSession) await tx.objectStore(STORES.completed).put(payload.completedSession);
+  if (payload.completedSession) {
+    await tx.objectStore(STORES.completed).put(payload.completedSession);
+    await tx.objectStore(STORES.drafts).delete(payload.session.id);
+  }
   await tx.done;
 }
 
@@ -529,6 +557,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
       STORES.sessions,
       STORES.rounds,
       STORES.completed,
+      STORES.drafts,
       STORES.legacySessions,
       STORES.legacyRounds,
       STORES.legacyCompleted,
@@ -539,7 +568,13 @@ export async function deleteSession(sessionId: string): Promise<void> {
     const rounds = await tx.objectStore(store).index('sessionId').getAllKeys(sessionId);
     for (const key of rounds) await tx.objectStore(store).delete(key);
   }
-  for (const store of [STORES.sessions, STORES.completed, STORES.legacySessions, STORES.legacyCompleted]) {
+  for (const store of [
+    STORES.sessions,
+    STORES.completed,
+    STORES.drafts,
+    STORES.legacySessions,
+    STORES.legacyCompleted,
+  ]) {
     await tx.objectStore(store).delete(sessionId);
   }
   await tx.done;
@@ -558,6 +593,7 @@ export async function importSessionData(value: unknown): Promise<string> {
       rounds,
       currentRound: rounds.find((round) => round.roundNumber === value.session.currentRoundNumber)!,
       ...(value.completedSession ? { completedSession: value.completedSession } : {}),
+      ...(value.reflectionDraft ? { reflectionDraft: value.reflectionDraft } : {}),
     };
   } else if (isRecord(value) && value.version === undefined && Array.isArray(value.rounds)) {
     record = buildCanonicalRecord(value.session, value.rounds, value.completedSession);
@@ -566,13 +602,15 @@ export async function importSessionData(value: unknown): Promise<string> {
   }
   if (!record) throw new Error('This Session backup is incomplete or invalid.');
   const db = await initRepositoryDb();
-  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed], 'readwrite');
+  const tx = db.transaction([STORES.sessions, STORES.rounds, STORES.completed, STORES.drafts], 'readwrite');
   const existing = await tx.objectStore(STORES.sessions).get(record.session.id);
   const importedId = existing ? crypto.randomUUID() : record.session.id;
   await tx.objectStore(STORES.sessions).put({ ...record.session, id: importedId });
   for (const round of record.rounds) await tx.objectStore(STORES.rounds).put({ ...round, sessionId: importedId });
   if (record.completedSession)
     await tx.objectStore(STORES.completed).put({ ...record.completedSession, sessionId: importedId });
+  if (record.reflectionDraft)
+    await tx.objectStore(STORES.drafts).put({ sessionId: importedId, reflection: record.reflectionDraft });
   await tx.done;
   return importedId;
 }
@@ -590,6 +628,7 @@ export async function exportSessionData(
       session: record.session,
       rounds: record.rounds,
       ...(record.completedSession ? { completedSession: record.completedSession } : {}),
+      ...(record.reflectionDraft ? { reflectionDraft: record.reflectionDraft } : {}),
     };
   }
   return exportLegacySessionData(record);

@@ -1,10 +1,18 @@
-import { CompletedSession, ImportEnvelope, RoundSnapshot, Session, SessionRecord } from '@/lib/contracts/types';
+import {
+  CompletedSession,
+  ImportEnvelope,
+  RoundSnapshot,
+  Session,
+  SessionRecord,
+  SessionReflection,
+} from '@/lib/contracts/types';
 import { SessionExportOptions, SessionRepository, SessionSavePayload } from '@/lib/repository/sessionRepository';
 
 type MemoryRecord = {
   session: Session;
   rounds: Map<number, RoundSnapshot>;
   completedSession?: CompletedSession;
+  reflectionDraft?: SessionReflection;
 };
 
 function clone<T>(value: T): T {
@@ -37,6 +45,7 @@ export class InMemorySessionRepository implements SessionRepository {
       currentRound: clone(currentRound),
       rounds: clone(rounds),
       completedSession: record.completedSession ? clone(record.completedSession) : undefined,
+      reflectionDraft: record.reflectionDraft ? clone(record.reflectionDraft) : undefined,
     };
   }
 
@@ -51,7 +60,14 @@ export class InMemorySessionRepository implements SessionRepository {
     existing.rounds.set(payload.round.roundNumber, clone(payload.round));
     if (payload.completedSession) {
       existing.completedSession = clone(payload.completedSession);
+      existing.reflectionDraft = undefined;
     }
+  }
+
+  async saveReflectionDraft(sessionId: string, reflection: SessionReflection): Promise<void> {
+    const existing = this.records.get(sessionId);
+    if (!existing) throw new Error('Session not found');
+    existing.reflectionDraft = clone(reflection);
   }
 
   async list(): Promise<Session[]> {
@@ -82,6 +98,7 @@ export class InMemorySessionRepository implements SessionRepository {
       session: record.session,
       rounds: record.rounds,
       completedSession,
+      ...(record.reflectionDraft ? { reflectionDraft: record.reflectionDraft } : {}),
     };
   }
 
@@ -95,6 +112,7 @@ export class InMemorySessionRepository implements SessionRepository {
       session: clone(envelope.session),
       rounds,
       completedSession: envelope.completedSession ? clone(envelope.completedSession) : undefined,
+      reflectionDraft: envelope.reflectionDraft ? clone(envelope.reflectionDraft) : undefined,
     });
   }
 }

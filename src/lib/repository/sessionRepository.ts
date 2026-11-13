@@ -1,4 +1,11 @@
-import { CompletedSession, ImportEnvelope, RoundSnapshot, Session, SessionRecord } from '@/lib/contracts/types';
+import {
+  CompletedSession,
+  ImportEnvelope,
+  RoundSnapshot,
+  Session,
+  SessionRecord,
+  SessionReflection,
+} from '@/lib/contracts/types';
 
 export type SessionSavePayload = {
   session: Session;
@@ -14,6 +21,7 @@ export interface SessionRepository {
   create(payload: SessionSavePayload): Promise<void>;
   read(sessionId: string): Promise<SessionRecord | null>;
   saveRound(payload: SessionSavePayload): Promise<void>;
+  saveReflectionDraft(sessionId: string, reflection: SessionReflection): Promise<void>;
   list(): Promise<Session[]>;
   delete(sessionId: string): Promise<void>;
   export(sessionId: string, options?: SessionExportOptions): Promise<ImportEnvelope>;

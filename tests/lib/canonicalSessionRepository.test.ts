@@ -10,6 +10,8 @@ import {
   loadSession,
   migrateLegacySessions,
   saveSessionProgress,
+  saveReflectionDraft,
+  exportSessionData,
 } from '../../src/lib/db/canonicalSessionRepository';
 
 const DB_NAME = 'coreValuesData';
@@ -114,6 +116,27 @@ async function seedVersionFourDatabase() {
 afterEach(async () => {
   await closeSessionRepository();
   await deleteDB(DB_NAME);
+});
+
+test('persists an unfinished reflection draft in the standard backup and removes it at completion', async () => {
+  const record = await createSession({
+    initialValues: [value('draft-value')],
+    targetCoreValues: 1,
+    exerciseType: 'personal',
+  });
+  const draft = { version: 1 as const, goal: 'Take one deliberate step.', values: {} };
+
+  await saveReflectionDraft(record.session.id, draft);
+
+  expect((await loadSession(record.session.id))?.reflectionDraft).toEqual(draft);
+  const exported = await exportSessionData(record.session.id, { format: 'canonical' });
+  expect('reflectionDraft' in exported ? exported.reflectionDraft : undefined).toEqual(draft);
+
+  await completeSession(record.session.id, [value('draft-value')]);
+
+  expect((await loadSession(record.session.id))?.reflectionDraft).toBeUndefined();
+  const completedExport = await exportSessionData(record.session.id, { format: 'canonical' });
+  expect('reflectionDraft' in completedExport ? completedExport.reflectionDraft : undefined).toBeUndefined();
 });
 
 describe('v4 Session preservation', () => {
