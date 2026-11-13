@@ -1,6 +1,6 @@
 import type { ExerciseType } from '@/lib/contracts/types';
 import type { ReflectionSummary as ReflectionSummaryData } from '@/lib/content/reflectionContent';
-import { SummaryGroup } from '@/app/completed/SummaryGroup';
+import { SummaryGroup } from '@/app/reasoning/SummaryGroup';
 
 export function ReflectionSummary({
   summary,

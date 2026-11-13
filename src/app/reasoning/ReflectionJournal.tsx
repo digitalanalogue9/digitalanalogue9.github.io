@@ -9,8 +9,8 @@ import type {
   ReflectionRelationship,
   ReflectionSummary as ReflectionSummaryData,
 } from '@/lib/content/reflectionContent';
-import { ReflectionSummary } from '@/app/completed/ReflectionSummary';
-import { ReflectionValueList } from '@/app/completed/ReflectionValueList';
+import { ReflectionSummary } from '@/app/reasoning/ReflectionSummary';
+import { ReflectionValueList } from '@/app/reasoning/ReflectionValueList';
 
 export function ReflectionJournal({
   selectedValues,
