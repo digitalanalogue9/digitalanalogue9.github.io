@@ -4,17 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
-import { ReflectionValueList } from '@/app/completed/ReflectionValueList';
 import { RecurringReflectionControls } from '@/app/completed/RecurringReflectionControls';
 import { CompletedValuesCard } from '@/app/completed/CompletedValuesCard';
-import { ReflectionSummary } from '@/app/completed/ReflectionSummary';
-import type {
-  CompletedSession,
-  ExerciseType,
-  RelationshipReflectionNotes,
-  SessionReflection,
-  ValueReflectionNotes,
-} from '@/lib/contracts/types';
+import type { CompletedSession, ExerciseType, SessionReflection } from '@/lib/contracts/types';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 import { downloadCompletedValuesHtml, downloadJsonFile, printCompletedValues } from '@/lib/utils/completedValuesExport';
 
@@ -31,7 +23,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
-  const [reflectionDirty, setReflectionDirty] = useState(false);
   const [includedRecurringContextIds, setIncludedRecurringContextIds] = useState<string[]>([]);
   const [recurringCopyFeedback, setRecurringCopyFeedback] = useState<string | null>(null);
   const [recurringPromptExpanded, setRecurringPromptExpanded] = useState(false);
@@ -63,7 +54,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
       setReflection(record.completedSession.reflection ?? { version: 1, values: {} });
       setIncludedRecurringContextIds([]);
       setRecurringCopyFeedback(null);
-      setReflectionDirty(false);
       setExerciseType(record.session.exerciseType);
       setSessionReference(record.session.id);
     } catch (loadError) {
@@ -75,66 +65,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
       }
     }
   }, [service, sessionId]);
-
-  const handleSaveReflection = useCallback(async () => {
-    setWorking(true);
-    setActionError(null);
-    try {
-      const saved = await service.saveReflection(sessionId, reflection);
-      setCompleted(saved);
-      setReflection(saved.reflection ?? { version: 1, values: {} });
-      setReflectionDirty(false);
-    } catch (saveError) {
-      setActionError(saveError instanceof Error ? saveError.message : 'Reflection could not be saved.');
-    } finally {
-      setWorking(false);
-    }
-  }, [service, sessionId, reflection]);
-
-  const updateValueReflection = useCallback((valueId: string, field: keyof ValueReflectionNotes, value: string) => {
-    setReflectionDirty(true);
-    setReflection((current) => ({
-      ...current,
-      values: {
-        ...current.values,
-        [valueId]: { ...current.values[valueId], [field]: value },
-      },
-    }));
-  }, []);
-
-  const updateSuggestionResponse = useCallback(
-    (valueId: string, suggestionId: string, response: 'recognised' | 'rejected' | 'unsure') => {
-      setReflectionDirty(true);
-      setReflection((current) => {
-        const valueNotes = current.values[valueId] ?? {};
-        return {
-          ...current,
-          values: {
-            ...current.values,
-            [valueId]: {
-              ...valueNotes,
-              suggestions: { ...valueNotes.suggestions, [suggestionId]: response },
-            },
-          },
-        };
-      });
-    },
-    []
-  );
-
-  const updateRelationshipReflection = useCallback(
-    (relationshipId: string, field: keyof RelationshipReflectionNotes, value: string) => {
-      setReflectionDirty(true);
-      setReflection((current) => ({
-        ...current,
-        relationships: {
-          ...current.relationships,
-          [relationshipId]: { ...current.relationships?.[relationshipId], [field]: value },
-        },
-      }));
-    },
-    []
-  );
 
   useEffect(() => {
     void loadSession();
@@ -239,25 +169,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     }
   };
 
-  const sessionGoalEditor = (
-    <div className="space-y-2 pt-4">
-      <h3 id="reflection-goal-heading" className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
-        Session goal (optional)
-      </h3>
-      <textarea
-        id="reflection-goal"
-        aria-labelledby="reflection-goal-heading"
-        className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default text-interface-base-default text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-20 w-full border p-3 focus-visible:outline-2 focus-visible:outline-offset-2"
-        value={reflection.goal ?? ''}
-        onChange={(event) => {
-          setReflectionDirty(true);
-          setReflection((current) => ({ ...current, goal: event.target.value }));
-        }}
-        disabled={working}
-      />
-    </div>
-  );
-
   return (
     <div className="app-page-panel mx-auto w-full max-w-4xl space-y-8">
       <section className="space-y-8 print:hidden">
@@ -301,110 +212,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             />
           </div>
         </section>
-
-        <section
-          aria-labelledby="further-reflection-heading"
-          className="space-y-8 border-t border-b border-[var(--editorial-line)] py-8"
-        >
-          <h2
-            id="further-reflection-heading"
-            className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl"
-          >
-            Further reflection
-          </h2>
-          <ReflectionSummary
-            summary={service.getReflectionSummary(exerciseType, completed.finalValues, reflection)}
-            exerciseType={exerciseType}
-          />
-          {sessionGoalEditor}
-          {service.getReflectionRelationships(exerciseType, completed.finalValues).length > 0 && (
-            <section aria-labelledby="value-relationships-heading" className="space-y-3">
-              <h3
-                id="value-relationships-heading"
-                className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"
-              >
-                Values in context
-              </h3>
-              <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-                Selected values can complement each other or pull in different directions depending on the situation.
-                These are possibilities to explore, not fixed opposites.
-              </p>
-              {service.getReflectionRelationships(exerciseType, completed.finalValues).map((relationship) => (
-                <fieldset
-                  key={relationship.id}
-                  className="rounded-sys-radius-button-sm border-sys-color-border-default space-y-3 border p-4"
-                >
-                  <legend className="text-interface-base-small text-sys-color-text-primary px-1 font-semibold">
-                    {relationship.title}
-                  </legend>
-                  <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
-                    {relationship[exerciseType]}
-                  </p>
-                  <label
-                    className="text-interface-base-small text-sys-color-text-primary block font-semibold"
-                    htmlFor={`relationship-observation-${relationship.id}`}
-                  >
-                    Observation (optional)
-                  </label>
-                  <textarea
-                    id={`relationship-observation-${relationship.id}`}
-                    aria-label={`Observation for ${relationship.title}`}
-                    className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default text-interface-base-default text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-20 w-full border p-3 focus-visible:outline-2 focus-visible:outline-offset-2"
-                    value={reflection.relationships?.[relationship.id]?.observation ?? ''}
-                    onChange={(event) =>
-                      updateRelationshipReflection(relationship.id, 'observation', event.target.value)
-                    }
-                    disabled={working}
-                  />
-                  <label
-                    className="text-interface-base-small text-sys-color-text-primary block font-semibold"
-                    htmlFor={`relationship-action-${relationship.id}`}
-                  >
-                    Practical action (optional)
-                  </label>
-                  <textarea
-                    id={`relationship-action-${relationship.id}`}
-                    aria-label={`Action for ${relationship.title}`}
-                    className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-default text-interface-base-default text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-20 w-full border p-3 focus-visible:outline-2 focus-visible:outline-offset-2"
-                    value={reflection.relationships?.[relationship.id]?.action ?? ''}
-                    onChange={(event) => updateRelationshipReflection(relationship.id, 'action', event.target.value)}
-                    disabled={working}
-                  />
-                </fieldset>
-              ))}
-            </section>
-          )}
-          <h3 className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl">
-            Reflect on each value
-          </h3>
-          <ReflectionValueList
-            selectedValues={completed.finalValues}
-            exerciseType={exerciseType}
-            reflection={reflection}
-            working={working}
-            updateValueReflection={updateValueReflection}
-            updateSuggestionResponse={updateSuggestionResponse}
-          />
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className={`${primaryActionButtonClasses} order-1 ml-auto`}
-              onClick={() => void handleSaveReflection()}
-              disabled={working}
-            >
-              {working ? 'Saving reflection…' : 'Save reflection'}
-            </button>
-          </div>
-          {reflectionDirty ? (
-            <p className="text-interface-base-small text-sys-color-text-secondary text-right" role="status">
-              Unsaved changes. Save to keep these notes on this device.
-            </p>
-          ) : completed.reflection ? (
-            <p className="text-interface-base-small text-sys-color-text-secondary text-right" role="status">
-              Reflection saved on this device.
-            </p>
-          ) : null}
-        </section>
       </section>
 
       <section className="space-y-3 print:hidden">
@@ -444,7 +251,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             to={{ pathname: '/reasoning', search: replaySearch }}
             className={`${primaryActionButtonClasses} no-underline`}
           >
-            Edit final values
+            Back to reflection
           </Link>
         </div>
       </section>

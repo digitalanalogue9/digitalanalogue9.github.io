@@ -26,10 +26,10 @@ export function ReflectionValueList({
         const content = getReflectionContent(exerciseType, value);
         return (
           <li key={value.id} className="min-w-0 space-y-3">
-            <details open={index === 0} className="min-w-0 [overflow-wrap:anywhere] break-words">
-              <summary className="text-interface-base-large text-sys-color-text-primary focus-visible:outline-ref-color-brand-primary min-h-11 cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">
+            <div className="min-w-0 space-y-3 [overflow-wrap:anywhere] break-words">
+              <h3 className="text-interface-base-large text-sys-color-text-primary font-semibold">
                 {index + 1}. {value.title}
-              </summary>
+              </h3>
               <p className="text-interface-base-small text-sys-color-text-secondary leading-6">{value.description}</p>
               <div className="text-interface-base-small text-sys-color-text-secondary space-y-1 leading-6">
                 <p className="font-semibold">Questions to consider</p>
@@ -111,7 +111,7 @@ export function ReflectionValueList({
                   disabled={working}
                 />
               </div>
-            </details>
+            </div>
           </li>
         );
       })}

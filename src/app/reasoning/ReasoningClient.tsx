@@ -4,7 +4,13 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
-import type { ValueCard } from '@/lib/contracts/types';
+import { ReflectionJournal } from '@/app/reasoning/ReflectionJournal';
+import type {
+  RelationshipReflectionNotes,
+  SessionReflection,
+  ValueReflectionNotes,
+  ValueCard,
+} from '@/lib/contracts/types';
 import { evaluateRoundTransition } from '@/lib/domain/roundEngine';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 
@@ -13,14 +19,15 @@ type SessionRecord = Awaited<ReturnType<ExerciseService['loadSession']>>;
 type Session = SessionRecord['session'];
 type RoundSnapshot = SessionRecord['currentRound'];
 
+const emptyReflection: SessionReflection = { version: 1, values: {} };
+
 export default function ReasoningClient({ sessionId }: { sessionId: string }) {
   const service = useExerciseService();
-
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [round, setRound] = useState<RoundSnapshot | null>(null);
   const [finalValues, setFinalValues] = useState<ValueCard[]>([]);
-  const [reasonsById, setReasonsById] = useState<Record<string, string>>({});
+  const [reflection, setReflection] = useState<SessionReflection>(emptyReflection);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
@@ -41,7 +48,7 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     setSession(null);
     setRound(null);
     setFinalValues([]);
-    setReasonsById({});
+    setReflection(emptyReflection);
     setEditingCompleted(false);
 
     try {
@@ -53,31 +60,24 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       if (record.session.status === 'completed' && record.completedSession) {
         setEditingCompleted(true);
         setFinalValues(record.completedSession.finalValues);
-        setReasonsById(
-          Object.fromEntries(record.completedSession.finalValues.map((value) => [value.id, value.reason ?? '']))
-        );
+        setReflection(record.completedSession.reflection ?? emptyReflection);
         return;
       }
 
       const transition = evaluateRoundTransition(record.currentRound);
       if (!transition.canComplete) {
-        setError('Session is not ready for reasoning.');
+        setError('Session is not ready for reflection.');
         return;
       }
 
-      const values = record.currentRound.categories['Very Important'];
-      const initialReasons = Object.fromEntries(values.map((value) => [value.id, '']));
-      setFinalValues(values);
-      setReasonsById(initialReasons);
+      setFinalValues(record.currentRound.categories['Very Important']);
     } catch (loadError) {
       if (requestSequence !== loadSequenceRef.current) return;
       setError(loadError instanceof Error ? loadError.message : 'Failed to load session.');
     } finally {
-      if (requestSequence === loadSequenceRef.current) {
-        setLoading(false);
-      }
+      if (requestSequence === loadSequenceRef.current) setLoading(false);
     }
-  }, [navigate, service, sessionId]);
+  }, [service, sessionId]);
 
   useEffect(() => {
     void loadSession();
@@ -87,17 +87,15 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
   }, [loadSession]);
 
   const handleComplete = useCallback(async () => {
-    if (!session || !round) return;
-    if (mutationLockedRef.current) return;
+    if (!session || !round || mutationLockedRef.current) return;
     mutationLockedRef.current = true;
     setWorking(true);
     setError(null);
-
     try {
       if (editingCompleted) {
-        await service.updateCompletedReasons(session.id, reasonsById);
+        await service.saveReflection(session.id, reflection);
       } else {
-        await service.completeSession({ session, round, reasonsById });
+        await service.completeSession({ session, round, reasonsById: {}, reflection });
       }
       navigate(
         {
@@ -107,17 +105,50 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
         { replace: true }
       );
     } catch (completeError) {
-      setError(completeError instanceof Error ? completeError.message : 'Unable to save results.');
+      setError(completeError instanceof Error ? completeError.message : 'Unable to save reflection. Try again.');
     } finally {
       mutationLockedRef.current = false;
       setWorking(false);
     }
-  }, [editingCompleted, navigate, reasonsById, round, service, session]);
+  }, [editingCompleted, navigate, reflection, round, service, session]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     void handleComplete();
   };
+  const updateValueReflection = useCallback((valueId: string, field: keyof ValueReflectionNotes, value: string) => {
+    setReflection((current) => ({
+      ...current,
+      values: { ...current.values, [valueId]: { ...current.values[valueId], [field]: value } },
+    }));
+  }, []);
+  const updateSuggestionResponse = useCallback(
+    (valueId: string, suggestionId: string, response: 'recognised' | 'rejected' | 'unsure') => {
+      setReflection((current) => {
+        const notes = current.values[valueId] ?? {};
+        return {
+          ...current,
+          values: {
+            ...current.values,
+            [valueId]: { ...notes, suggestions: { ...notes.suggestions, [suggestionId]: response } },
+          },
+        };
+      });
+    },
+    []
+  );
+  const updateRelationshipReflection = useCallback(
+    (relationshipId: string, field: keyof RelationshipReflectionNotes, value: string) => {
+      setReflection((current) => ({
+        ...current,
+        relationships: {
+          ...current.relationships,
+          [relationshipId]: { ...current.relationships?.[relationshipId], [field]: value },
+        },
+      }));
+    },
+    []
+  );
 
   if (loading) {
     return (
@@ -130,7 +161,6 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       </div>
     );
   }
-
   if (error && !session) {
     return (
       <div
@@ -151,76 +181,46 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       </div>
     );
   }
-
   const exerciseSearch = `?${new URLSearchParams({ sessionId }).toString()}`;
+  const relationships = service.getReflectionRelationships(session?.exerciseType ?? 'personal', finalValues);
+  const summary = service.getReflectionSummary(session?.exerciseType ?? 'personal', finalValues, reflection);
 
   return (
-    <form className={`${nonExercisePageContainerClassName} space-y-8`} onSubmit={handleSubmit}>
-      <section className="space-y-4" aria-labelledby="reasoning-heading">
-        <h1 id="reasoning-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">
-          Reflect on your choices
-        </h1>
-        <p className="page-intro max-w-2xl">
-          You can add a short note about why each final value matters to you. These notes are optional and saved with
-          the completed session in this browser.
+    <form className={`${nonExercisePageContainerClassName} mx-auto max-w-4xl space-y-8`} onSubmit={handleSubmit}>
+      <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
+        <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Reflect on your values</h1>
+        <p className="page-intro max-w-[70ch]">
+          These optional prompts help you explore the values you selected. Your answers are saved with this session on
+          this device.
         </p>
         {error && (
           <p
-            className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-interface-base-small text-ref-color-rag-red-text mt-4 px-3 py-2"
+            className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-interface-base-small text-ref-color-rag-red-text px-3 py-2"
             role="alert"
           >
             {error}
           </p>
         )}
-      </section>
+      </header>
 
       {finalValues.length > 0 && (
-        <div className="border-t border-[var(--editorial-line)] pt-8">
-          <ul className="space-y-4">
-            {finalValues.map((value) => {
-              const reasonId = `reason-${value.id}`;
-              return (
-                <li key={value.id} className="border-sys-color-border-default border-b pb-4 last:border-b-0 last:pb-0">
-                  <label className="block" htmlFor={reasonId}>
-                    <span className="page-section-heading text-sys-color-text-primary block text-3xl sm:text-4xl">
-                      {value.title}
-                    </span>
-                  </label>
-                  <p
-                    id={`${reasonId}-description`}
-                    className="text-sys-color-text-secondary mt-2 text-lg leading-relaxed"
-                  >
-                    {value.description}
-                  </p>
-                  <textarea
-                    id={reasonId}
-                    aria-describedby={`${reasonId}-description`}
-                    className="cv-field__control mt-3 min-h-28 w-full resize-y"
-                    value={reasonsById[value.id] ?? ''}
-                    onChange={(event) =>
-                      setReasonsById((prev) => ({
-                        ...prev,
-                        [value.id]: event.target.value,
-                      }))
-                    }
-                    rows={4}
-                    placeholder="Optional reason"
-                    disabled={working}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ReflectionJournal
+          selectedValues={finalValues}
+          exerciseType={session?.exerciseType ?? 'personal'}
+          reflection={reflection}
+          relationships={relationships}
+          summary={summary}
+          working={working}
+          onGoalChange={(goal) => setReflection((current) => ({ ...current, goal }))}
+          onValueChange={updateValueReflection}
+          onSuggestionChange={updateSuggestionResponse}
+          onRelationshipChange={updateRelationshipReflection}
+        />
       )}
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[var(--editorial-line)] pt-6">
-        <button
-          type="submit"
-          className="cv-button min-h-11"
-          disabled={working || Boolean(error && finalValues.length === 0)}
-        >
-          {working ? 'Saving...' : editingCompleted ? 'Save changes' : 'Save Completed Session'}
+        <button type="submit" className="cv-button min-h-11" disabled={working || finalValues.length === 0}>
+          {working ? 'Saving…' : editingCompleted ? 'Save reflection' : 'Save reflection and complete'}
         </button>
         <Link
           to={{ pathname: editingCompleted ? '/completed' : '/exercise', search: exerciseSearch }}

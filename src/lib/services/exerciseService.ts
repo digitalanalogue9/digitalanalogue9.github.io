@@ -94,6 +94,7 @@ export type CompleteSessionInput = {
   session: Session;
   round: RoundSnapshot;
   reasonsById: Record<string, string>;
+  reflection?: SessionReflection;
   completedBy?: string;
 };
 
@@ -323,12 +324,22 @@ export class ExerciseServiceImpl implements ExerciseService {
       return withReason;
     });
 
+    if (
+      input.reflection &&
+      (!isSessionReflection(input.reflection, finalValues) ||
+        !hasKnownSuggestionReferences(input.reflection, input.session.exerciseType, finalValues) ||
+        !hasKnownRelationshipReferences(input.reflection, input.session.exerciseType, finalValues))
+    ) {
+      throw new Error('Reflection data is invalid for this session.');
+    }
+
     const completedSession: CompletedSession = {
       version: SCHEMA_VERSION,
       sessionId: input.session.id,
       completedAt: now,
       ...(completedBy ? { completedBy } : {}),
       finalValues,
+      ...(input.reflection ? { reflection: input.reflection } : {}),
     };
 
     const nextSession: Session = {

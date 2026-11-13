@@ -15,7 +15,7 @@ afterEach(async () => {
   localStorage.clear();
 });
 
-test('a normally sorted exercise offers optional reasons and can complete without entering one', async () => {
+test('a normally sorted exercise opens optional reflection and completes with saved answers', async () => {
   localStorage.setItem('show-instructions', 'false');
   const record = await createSession({
     initialValues: ['a', 'b'].map((id) => ({ id, title: `Value ${id}`, description: `Description ${id}` })),
@@ -38,9 +38,12 @@ test('a normally sorted exercise offers optional reasons and can complete withou
   await screen.findByLabelText(`Current card ${rejected.title}`);
   fireEvent.click(screen.getByRole('button', { name: 'Place current card in Not Important' }));
   fireEvent.click(await screen.findByRole('button', { name: 'Proceed to reasoning' }));
-  expect(await screen.findByRole('heading', { name: 'Reflect on your choices' })).toBeInTheDocument();
-  expect(await screen.findByRole('textbox', { name: new RegExp(kept.title) })).toHaveValue('');
-  fireEvent.click(screen.getByRole('button', { name: 'Save Completed Session' }));
+  expect(await screen.findByRole('heading', { name: 'Reflect on your values' })).toBeInTheDocument();
+  expect(
+    await screen.findByText(new RegExp(`Where have we seen ${kept.title} shape the way we work together`))
+  ).toBeInTheDocument();
+  expect(screen.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue('');
+  fireEvent.click(screen.getByRole('button', { name: 'Save reflection and complete' }));
   expect(await screen.findByRole('heading', { name: 'Reflect on your values' })).toBeInTheDocument();
 });
 
