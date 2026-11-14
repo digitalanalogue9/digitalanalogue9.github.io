@@ -57,7 +57,9 @@ export default function HelpPage() {
       />
 
       <header className="help-guide__opening">
-        <h1 id="help-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">How it works</h1>
+        <h1 id="help-heading" className="page-heading text-4xl sm:text-5xl lg:text-6xl">
+          How it works
+        </h1>
         <p className="page-intro max-w-[60ch]">
           Sort values, narrow your choices, and reflect on the ones that matter most.
         </p>
@@ -108,21 +110,24 @@ export default function HelpPage() {
         </p>
       </section>
 
-      <section aria-labelledby="behaviour-heading" className="help-guide__reminders">
-        <h2 id="behaviour-heading">Set up a reflection reminder</h2>
-        <p>After a behaviour reflection, copy a recurring prompt for Claude, Copilot, or ChatGPT:</p>
-        <ol className="help-guide__steps">
-          <li>
-            Choose <strong>Continue with a conversation prompt</strong>, then select <strong>Recurring prompt</strong>.
-          </li>
-          <li>
-            Choose a reflection possibility, select <strong>Daily</strong>, and set the time and time zone.
-          </li>
-          <li>Copy the prompt into Claude, Copilot, or ChatGPT and ask it to create a daily reminder.</li>
-        </ol>
-        <p>The app creates the prompt; reminders depend on the AI service’s scheduling features.</p>
-        {behaviourReflectionEnabled && <a href="/behaviour">Start a behaviour reflection</a>}
-      </section>
+      {behaviourReflectionEnabled && (
+        <section aria-labelledby="behaviour-heading" className="help-guide__reminders">
+          <h2 id="behaviour-heading">Set up a reflection reminder</h2>
+          <p>After a behaviour reflection, copy a recurring prompt for Claude, Copilot, or ChatGPT:</p>
+          <ol className="help-guide__steps">
+            <li>
+              Choose <strong>Continue with a conversation prompt</strong>, then select <strong>Recurring prompt</strong>
+              .
+            </li>
+            <li>
+              Choose a reflection possibility, select <strong>Daily</strong>, and set the time and time zone.
+            </li>
+            <li>Copy the prompt into Claude, Copilot, or ChatGPT and ask it to create a daily reminder.</li>
+          </ol>
+          <p>The app creates the prompt; reminders depend on the AI service’s scheduling features.</p>
+          <a href="/behaviour">Start a behaviour reflection</a>
+        </section>
+      )}
 
       <section aria-labelledby="preference-heading" className="help-guide__preference">
         <h2 id="preference-heading">Exercise instructions</h2>

@@ -24,7 +24,7 @@ test('About and Contact load directly, refresh, and remain usable at 320px', asy
 
     const primaryLink =
       action === 'exercise'
-        ? page.getByRole('main').getByRole('link', { name: 'Find my core values' })
+        ? page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Find my core values' })
         : page.getByRole('main').getByRole('link', { name: 'corevaluesanalytics@gmail.com' });
     if (action === 'exercise') await expect(primaryLink).toHaveAttribute('href', '/exercise');
     else await expect(primaryLink).toHaveAttribute('href', 'mailto:corevaluesanalytics@gmail.com');
@@ -47,6 +47,7 @@ test('About and Contact load directly, refresh, and remain usable at 320px', asy
     await expect(page).toHaveURL(new RegExp(`${path}/?$`));
     await expect(page.getByRole('heading', { name: heading })).toBeVisible();
     if (action === 'exercise') {
+      await page.getByRole('button', { name: 'Menu' }).click();
       await primaryLink.click();
       await expect(page).toHaveURL(/\/exercise\/?$/);
       await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();

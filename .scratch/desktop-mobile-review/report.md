@@ -1,52 +1,62 @@
-# Desktop and mobile review
+# Desktop and mobile experience review
 
-Status: in progress — review incomplete
+Base: `9e3c9e501e25134979f5512fe8363163cb9b39c6` (local main). Review worktree: `review/desktop-mobile-quality`.
 
-Base: `9e3c9e501e25134979f5512fe8363163cb9b39c6` (local main).
+## Coverage and evidence
 
-## Important verification correction
+The first attempt used an unrelated server on port 5173; those original screenshots and browser-test results were
+discarded as evidence. The follow-up used servers explicitly started in this worktree: default settings on port 5173 and
+behaviour reflection enabled on port 4178.
 
-The initial browser and Playwright test runs targeted port 5173. A later process inspection identified its owner as a
-Vite server from `C:\dev\github\values-flow-integration`, a different worktree. Those results, including the failed
-`functional-pages.spec.ts:126` assertion, cannot be attributed to this branch. They must not be treated as verification
-or as a confirmed defect on this branch. The other server was left running.
+Playwright MCP with Chromium inspected `/`, `/howtouse`, `/about`, `/contact`, `/privacy`, `/history`, `/exercise`,
+`/replay`, `/completed`, `/reasoning`, an unknown route, and the enabled `/behaviour` flow. Layout and document overflow
+were checked at 320, 390, 768 and 1440 CSS pixels wide, with 800px-high viewports. Full-page captures at 320 and 1440
+were reviewed for the public pages, history, exercise setup and populated results, reasoning and replay. Mobile captures
+included exercise instructions, sorting, category review, and the behaviour question, results and recurring prompt; the
+enabled prompt was also inspected on desktop. A synthetic completed values backup supplied populated states.
 
-An explicitly bound Vite server from this worktree was then started on port 4178. In Chromium via Playwright MCP, the
-skip link received focus on Tab and moved focus to `main-content` on Enter; Escape closed the mobile menu and returned
-focus to its toggle at 390×844. At widths 320, 390, 768 and 1440, visits to `/`, `/howtouse`, `/about`, `/contact`,
-`/privacy`, `/history`, `/exercise`, `/replay`, `/completed`, `/reasoning` and a missing route found no document-level
-horizontal overflow. Lazy pages were allowed 250ms after navigation; this scan alone does not establish complete
-loaded-state coverage, visual quality or absence of clipping within components.
+Interactions included privacy consent changes, malformed backup import, exercise setup, instructions, placing and moving
+a value, category review, menu, skip link, and all six behaviour questions followed by the recurring prompt. A separate
+Chromium mobile-emulated context with touch enabled tapped through sorting, category review and moving a card. This is
+not a physical device or Safari test. The malformed import produced an alert; privacy settings updated after consent was
+changed. A reduced-motion emulation check confirmed the sampled home action has no transition.
 
-## Findings and changes
+## Findings and resolutions
 
-| Severity | Finding                                                                                                                                                                                                                          | Resolution                                                                                                                |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Medium   | Source inspection showed the mobile navigation had no Escape handling. `src/router.tsx`.                                                                                                                                         | Escape closes the menu and returns focus to its toggle; verified on this worktree at 390px and by a regression test.      |
-| Medium   | Shared shell had no skip link, requiring keyboard users to traverse navigation on every page. `src/router.tsx`, `src/styles/editorial.css`.                                                                                      | Added a focus-visible skip link and a focusable main target. Verified on this worktree at 390px and by a regression test. |
-| Decision | The guide shows instructions for a behaviour reflection reminder even with the behaviour route disabled; an existing test explicitly expects the section to remain visible when the link is absent. `src/personal/HelpPage.tsx`. | Left unchanged pending owner intent: should these instructions be visible before the feature is enabled?                  |
+| Severity         | Evidence                                                                                                                                                                                                                   | Resolution                                                                                                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Medium           | The shared mobile menu did not respond to Escape.                                                                                                                                                                          | Escape now closes it and returns focus to its toggle. A Playwright regression test covers it.                                                |
+| Medium           | The shared shell had no skip link.                                                                                                                                                                                         | Added a focus-visible link and focusable main target. Playwright checks Tab and Enter.                                                       |
+| Medium           | The guide displayed behaviour reminder instructions even when the behaviour route was disabled. The owner confirmed those instructions should be hidden in that configuration.                                             | The entire reminder section now follows the feature flag; tests passed with the flag both off and on.                                        |
+| Low              | At 320px, the two secondary home hero actions measured about 24px high.                                                                                                                                                    | Their interactive areas now have a 44px minimum height. Confirmation at 320, 390 and 1440 measured 48/44/44px across the three hero actions. |
+| Test maintenance | Two existing browser tests expected an About-page action inside the main content and obsolete copied-prompt wording. The current action is in shared navigation and the current prompt begins with different instructions. | Updated the tests to exercise the actual mobile menu and check the current prompt while retaining their navigation and privacy assertions.   |
 
-## Design and copy
+No document-level overflow was observed in the scanned pages or synthetic populated states. The home, guide and changed
+shared styles were checked in one confirmation round at 320 and 1440, with measurements at 390 as well. Screen
+dimensions alone do not prove every nested control is unclipped. Four representative palette combinations calculate to
+contrast ratios of 12.33:1 (ink/paper), 8.31:1 (plum/paper), 8.96:1 (white/plum), and 6.20:1 (ink/rose); this is not an
+exhaustive contrast audit, particularly over artwork and translucent surfaces.
 
-`src/router.tsx` owns the shared shell and routes; `src/styles/editorial.css`, `src/styles/globals.css`, `src/cv/` and
-feature styles define shared and feature treatments. Graphify's structural extraction of `src` produced 1,068 nodes and
-3,142 edges; CSS was unclassified, so style relationships were checked in source. The design uses plum, rose and paper
-surfaces, DM Sans headings, Source Serif 4 body text and Source Sans 3 interface text. `DESIGN.md` agrees with the
-implemented heading and body families; `PRODUCT.md` contains no conflicting typography claim. No copy changes were made.
+## Copy and design
 
-## Checks and limitations
+The reviewed public and exercise copy has a personal, reflective voice and clear descriptions of local storage. No
+substantive text was changed: the feature-gated guidance is hidden only when its route is unavailable. No unsupported
+claims or new proof were added. The full values-card dataset and every generated prompt variation were not individually
+copy-edited.
 
-`pnpm check` passed (typecheck, lint and unit tests), and `pnpm build` passed in this worktree. Seventeen Playwright
-tests in the home, guide and routing files passed against port 4178 using a temporary config. Other automated Playwright
-runs used the other server and need to be repeated against this worktree. A thorough visual review of this worktree,
-copy sweep, populated history/results/reflection/replay, error and consent states, reduced motion, contrast, real touch
-and mobile browser testing remain outstanding. The initial screenshots belong to the other server and are not valid
-evidence for this branch. Do not treat this report as a complete audit.
+The site keeps its existing plum, rose and paper palette, DM Sans headings, Source Serif 4 body copy and Source Sans 3
+controls. `DESIGN.md` agrees with the implemented heading and body families. Shared shell and routes live in
+`src/router.tsx`; editorial styles and tokens are in `src/styles/` and `src/cv/`. The earlier Graphify structural graph
+mapped 1,068 nodes and 3,142 edges; CSS required direct source inspection.
 
-The independent standards review of `9e3c9e5...30076a8` found no hard standards violations or material code smells. The
-spec review found no verified implementation defect or scope creep, but confirmed that the requested site-wide review
-and verification remain incomplete. The invalidated browser evidence makes that limitation wider than the reviewer could
-assess.
+## Verification and limitations
 
-Graphify generated `src/graphify-out/`; automatic policy rejected its recursive removal. That directory and the
-untracked screenshots produced by the tests remain in the worktree and are not part of the commit.
+`pnpm check`, `pnpm build` and `pnpm format:check` passed. The default browser suite excluding production-only PWA tests
+had 24 passes, one feature-disabled skip and one screenshot timeout during desktop sorting; both sorting tests passed
+when rerun alone. The enabled guide and behaviour-reflection suite passed seven tests. All four PWA tests passed
+separately against the production preview. The Impeccable detector returned no findings for the changed page targets.
+Targeted flag tests passed in both configurations.
+
+No physical-device testing, Safari/WebKit verification, exhaustive screen-reader testing, or exhaustive colour-contrast
+scan was performed. The feature-enabled flow was exercised in Chromium using emulated viewport and input. Independent
+review is pending.

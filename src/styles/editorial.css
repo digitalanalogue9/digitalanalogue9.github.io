@@ -251,6 +251,13 @@
   margin-top: 1.7rem;
 }
 
+.editorial-actions .editorial-text-link,
+.editorial-actions .editorial-history-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
 .editorial-button {
   display: inline-flex;
   min-height: 3rem;
