@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test';
 
+test('keyboard users can skip the shared navigation', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
+});
+
 test('home introduces the values exercise and keeps the public routes within reach', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Reject optional cookies' })).toBeVisible();
@@ -52,6 +60,11 @@ test('mobile navigation opens and closes after following a link', async ({ page 
   await expect(navigation).toBeHidden();
   await menu.click();
   await expect(navigation).toBeVisible();
+  await navigation.getByRole('link', { name: 'About' }).focus();
+  await page.keyboard.press('Escape');
+  await expect(navigation).toBeHidden();
+  await expect(menu).toBeFocused();
+  await menu.click();
   await navigation.getByRole('link', { name: 'About' }).click();
   await expect(page).toHaveURL('/about');
   await expect(menu).toHaveAttribute('aria-expanded', 'false');

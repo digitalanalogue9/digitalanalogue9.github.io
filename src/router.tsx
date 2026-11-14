@@ -1,5 +1,5 @@
 import { createBrowserRouter, Link, NavLink, Outlet, useLocation, useMatches } from 'react-router-dom';
-import { lazy, Suspense, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useRef, useState, type ReactNode } from 'react';
 import { NotFoundPage, RouteErrorPage } from './app/AppErrorPage';
 import CoreValuesLogoMark from './components/common/Navigation/CoreValuesLogoMark';
 import CookieBanner from './components/common/CookieBanner';
@@ -47,6 +47,7 @@ function RouteMetadata({
 function SiteLayout() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
   const isNotFoundRoute = useMatches().some((match) => match.handle === 'not-found');
   const routePath = location.pathname.replace(/\/+$/, '') || '/';
   const valuesFlowPaths = ['/exercise', '/completed', '/reasoning', '/replay'];
@@ -73,13 +74,27 @@ function SiteLayout() {
       <OfflineIndicator />
       <PWAPrompt />
       <div className="core-values-shell flex min-h-screen flex-col">
-        <header className="public-header print:hidden" role="banner" aria-label="Site header">
+        <a className="skip-link print:hidden" href="#main-content">
+          Skip to main content
+        </a>
+        <header
+          className="public-header print:hidden"
+          role="banner"
+          aria-label="Site header"
+          onKeyDown={(event) => {
+            if (event.key === 'Escape' && menuOpen) {
+              setMenuOpen(false);
+              menuToggleRef.current?.focus();
+            }
+          }}
+        >
           <div className="public-header-inner">
             <Link className="public-brand" to="/" aria-label="Core Values home">
               <CoreValuesLogoMark className="h-8 w-8 flex-shrink-0" />
               <span>Core Values</span>
             </Link>
             <button
+              ref={menuToggleRef}
               className="public-menu-toggle"
               type="button"
               aria-expanded={menuOpen}
@@ -109,6 +124,7 @@ function SiteLayout() {
         <CookieBanner />
         <main
           id="main-content"
+          tabIndex={-1}
           className={`${backgroundClassName} flex flex-1 flex-col bg-no-repeat px-4 py-8 sm:px-6 lg:px-8 ${isExerciseRoute ? 'exercise-main' : ''} print:block print:overflow-visible print:bg-none print:px-0 print:py-0`}
           role="main"
           aria-label="Main content"
