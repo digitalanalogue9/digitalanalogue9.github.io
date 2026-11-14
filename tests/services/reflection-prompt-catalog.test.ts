@@ -69,7 +69,7 @@ describe('catalog-backed prompt examples', () => {
     expect(recurring).toContain(
       '2. PRECISE WORK — You like working on things which involve great care and concentration.'
     );
-    expect(recurring).toContain('No optional reasons, notes, actions or possibilities have been included.');
+    expect(recurring).toContain('No saved reflection context has been included.');
     expect(recurring).not.toContain('self-reported recognition');
     expect(recurring).not.toContain('A timely decision can help work move forward.');
     expect(recurring).not.toContain('Protect time for a final accuracy check.');

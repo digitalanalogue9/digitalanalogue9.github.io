@@ -123,7 +123,7 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.getByRole('button', { name: 'Agent', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Prompt copied to clipboard');
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Create a recurring reflection');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Address me directly.');
   expect(await page.evaluate(() => navigator.clipboard.readText())).not.toContain('My private goal.');
   await page.getByRole('link', { name: 'Resume', exact: true }).click();
   await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
