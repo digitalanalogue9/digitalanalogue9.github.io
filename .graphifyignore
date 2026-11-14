@@ -1,0 +1,19 @@
+# Local tool state and generated artifacts; .gitignore also applies by default.
+/.serena/
+/.vscode/
+/.playwright-mcp/
+/graphify-out/
+/test-results/
+/coverage/
+/dist/
+/node_modules/
+/.impeccable/build/
+/.impeccable/mocks/
+/.impeccable/review/
+/.impeccable/critique/
+/.impeccable/live/sessions/
+/.impeccable/live/inject-journal.json
+/.impeccable/live/roots.json
+/.impeccable/config.local.json
+
+# Source data, project documentation, issues and GitHub workflows remain available.
