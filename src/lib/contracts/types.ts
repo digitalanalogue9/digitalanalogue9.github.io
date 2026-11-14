@@ -89,6 +89,7 @@ export type RoundSnapshot = {
   categories: CategoriesState;
   activeCategories: CategoryName[];
   commands: RoundCommand[];
+  readyForReflection?: boolean;
   createdAt: number;
   updatedAt: number;
 };

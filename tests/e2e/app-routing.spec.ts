@@ -144,5 +144,5 @@ test('exercise setup creates a team-focused Session only after an explicit start
   await page.goto('/history');
   await expect(sessionsLoaded).toBeVisible();
   await expect(sessionOptions).toHaveCount(initialSessionCount + 1);
-  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toBeVisible();
 });

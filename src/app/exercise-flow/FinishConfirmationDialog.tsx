@@ -8,11 +8,17 @@ type Props = {
   working: boolean;
   onContinue: () => void;
   onCancel: () => void;
+  onNextRound?: () => void;
 };
 
 const topUpPriority: CategoryName[] = ['Quite Important', 'Important', 'Of Some Importance'];
 
 function formatTopUp(round: RoundSnapshot): string {
+  if (round.categories['Very Important'].length > round.targetCoreValues) {
+    const target = round.targetCoreValues;
+    const nextCategory = round.activeCategories.find((category) => category !== 'Very Important') ?? 'Not Important';
+    return `If you finish now, only the top ${target} ${target === 1 ? 'value' : 'values'} in Very Important will be used. The remaining values will move to the top of ${nextCategory}.`;
+  }
   const selectedByCategory = getFinishSelectionByCategory(round);
   const additions = topUpPriority.flatMap((category) => {
     const count = selectedByCategory[category]?.length ?? 0;
@@ -29,7 +35,7 @@ function formatTopUp(round: RoundSnapshot): string {
   return `To reach ${round.targetCoreValues}, we’ll add ${additionText}.`;
 }
 
-export default function FinishConfirmationDialog({ open, round, working, onContinue, onCancel }: Props) {
+export default function FinishConfirmationDialog({ open, round, working, onContinue, onCancel, onNextRound }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const headingId = useId();
@@ -84,9 +90,10 @@ export default function FinishConfirmationDialog({ open, round, working, onConti
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-3">
           <p className="text-interface-base-default leading-relaxed">
             Your target is {round.targetCoreValues} {round.targetCoreValues === 1 ? 'value' : 'values'}. You have{' '}
-            {round.categories['Very Important'].length} in Very Important. {formatTopUp(round)} All other values will be
-            in Not Important.
+            {round.categories['Very Important'].length} in Very Important. {formatTopUp(round)} Other values will remain
+            outside your core values.
           </p>
+          {onNextRound && <p>Would you like to finish now or continue to the next round?</p>}
         </div>
 
         <footer className="border-sys-color-border-default grid shrink-0 grid-cols-2 gap-2 border-t pt-3 sm:flex sm:justify-end">
@@ -98,8 +105,18 @@ export default function FinishConfirmationDialog({ open, round, working, onConti
           >
             Cancel
           </button>
+          {onNextRound && (
+            <button
+              type="button"
+              className="cv-button cv-button--secondary min-h-11"
+              onClick={onNextRound}
+              disabled={working}
+            >
+              Next Round
+            </button>
+          )}
           <button type="button" className="cv-button min-h-11" onClick={onContinue} disabled={working}>
-            Continue
+            {onNextRound ? 'Finish now' : 'Continue'}
           </button>
         </footer>
       </div>

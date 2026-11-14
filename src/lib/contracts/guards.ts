@@ -126,7 +126,8 @@ function hasValidRoundSnapshotContents(value: Record<string, unknown>): boolean 
     Array.isArray(value.activeCategories) &&
     value.activeCategories.every((category) => isCategoryName(category)) &&
     Array.isArray(value.commands) &&
-    value.commands.every((command) => isRoundCommand(command))
+    value.commands.every((command) => isRoundCommand(command)) &&
+    (value.readyForReflection === undefined || typeof value.readyForReflection === 'boolean')
   );
 }
 

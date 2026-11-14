@@ -16,6 +16,8 @@ export default function PrivacyPage() {
       : consent.analytics === 'granted'
         ? 'Allowed'
         : 'Rejected';
+  const analyticsAllowed = isInitialized && consent.analytics === 'granted';
+  const choices = analyticsAllowed ? [true, false] : [false, true];
 
   return (
     <article className="app-page-panel mx-auto w-full max-w-4xl space-y-10" aria-labelledby="privacy-heading">
@@ -49,8 +51,7 @@ export default function PrivacyPage() {
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Use History to export a backup before clearing browser data or moving your work. In History,{' '}
-          <strong>Export</strong> saves your values exercise without the additional notes from the completed exercise
-          page. Choose <strong>Export reflection backup</strong> to include those notes.
+          <strong>Export</strong> saves your values exercise and any saved reflection notes.
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Backup files are saved wherever your browser downloads files. Keep them private and delete them when you no
@@ -89,23 +90,18 @@ export default function PrivacyPage() {
         <p className="text-sys-color-text-secondary leading-relaxed">
           Your current choice is <strong>{currentChoice}</strong>. You can change it at any time.
         </p>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <button
-            type="button"
-            onClick={() => saveAnalyticsChoice(true)}
-            aria-pressed={isInitialized && consent.analytics === 'granted'}
-            className="cv-button min-h-11 px-5 py-2"
-          >
-            Allow analytics
-          </button>
-          <button
-            type="button"
-            onClick={() => saveAnalyticsChoice(false)}
-            aria-pressed={isInitialized && consent.analytics === 'denied'}
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary min-h-11 border px-5 py-2 font-semibold hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            Reject analytics
-          </button>
+        <div className="flex flex-col items-end justify-end gap-3 sm:flex-row">
+          {choices.map((granted, index) => (
+            <button
+              key={String(granted)}
+              type="button"
+              onClick={() => saveAnalyticsChoice(granted)}
+              aria-pressed={isInitialized && consent.analytics === (granted ? 'granted' : 'denied')}
+              className={`cv-button min-h-11 px-5 py-2 ${index === 0 ? 'cv-button--secondary' : ''}`}
+            >
+              {granted ? 'Allow analytics' : 'Reject analytics'}
+            </button>
+          ))}
         </div>
         <p role="status" className="text-interface-base-small text-sys-color-text-secondary min-h-6">
           {saved ? 'Your analytics preference has been saved.' : ''}

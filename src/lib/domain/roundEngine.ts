@@ -138,8 +138,9 @@ function applyMoveCommand(round: RoundSnapshot, command: MoveCommand, now: numbe
 }
 
 export function applyRoundCommand(round: RoundSnapshot, command: RoundCommand, now: number): RoundSnapshot {
-  if (command.kind === 'drop') return applyDropCommand(round, command, now);
-  return applyMoveCommand(round, command, now);
+  const editableRound = { ...round, readyForReflection: false };
+  if (command.kind === 'drop') return applyDropCommand(editableRound, command, now);
+  return applyMoveCommand(editableRound, command, now);
 }
 
 function activeCardsCount(round: RoundSnapshot): number {
@@ -182,7 +183,10 @@ export function evaluateRoundTransition(round: RoundSnapshot): RoundTransitionRe
   const minimumVeryImportantCount =
     round.roundNumber === 1 ? round.targetCoreValues : Math.ceil(round.targetCoreValues / 2);
   const hasEnoughVeryImportant = veryImportantCount >= minimumVeryImportantCount;
-  const canComplete = deckEmpty && veryImportantCount === round.targetCoreValues && activeCount === veryImportantCount;
+  const canComplete =
+    deckEmpty &&
+    veryImportantCount === round.targetCoreValues &&
+    (round.readyForReflection === true || activeCount === veryImportantCount);
   const canAdvance = deckEmpty && hasEnoughCards && hasNotImportant;
   const canEarlyFinish = deckEmpty && hasEnoughCards && hasEnoughVeryImportant;
 
@@ -241,18 +245,20 @@ export function normalizeRoundForCompletion(round: RoundSnapshot, now: number): 
   const selectedByCategory = getFinishSelectionByCategory(round);
   const promoted = completionPriority.flatMap((category) => selectedByCategory[category] ?? []);
   const promotedIds = new Set(promoted.map((card) => card.id));
-  const demoted = completionPriority.flatMap((category) =>
-    round.categories[category].filter((card) => !promotedIds.has(card.id))
-  );
-
   const nextCategories = createEmptyCategories();
+  for (const category of completionPriority) {
+    nextCategories[category] = round.categories[category].filter((card) => !promotedIds.has(card.id));
+  }
+  const overflow = nextCategories['Very Important'];
+  const nextCategory = round.activeCategories.find((category) => category !== 'Very Important') ?? 'Not Important';
+  nextCategories[nextCategory] = [...overflow, ...nextCategories[nextCategory]];
   nextCategories['Very Important'] = promoted;
-  nextCategories['Not Important'] = demoted;
 
   return {
     ...round,
     categories: nextCategories,
-    activeCategories: ['Very Important', 'Not Important'],
+    activeCategories: round.activeCategories,
+    readyForReflection: true,
     updatedAt: now,
   };
 }
