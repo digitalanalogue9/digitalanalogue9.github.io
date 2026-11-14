@@ -1,57 +1,52 @@
 # Desktop and mobile review
 
-Status: in progress Base: `9e3c9e501e25134979f5512fe8363163cb9b39c6` (local main)
+Status: in progress — review incomplete
 
-## Scope and method
+Base: `9e3c9e501e25134979f5512fe8363163cb9b39c6` (local main).
 
-Chromium via Playwright MCP, at 320, 390, 768 and 1440 CSS pixels wide, 800–900 high. Navigated `/`, `/howtouse`,
-`/about`, `/contact`, `/privacy`, `/history`, `/exercise`, `/replay`, `/completed`, `/reasoning` and a missing route.
-Checked document overflow on each, and captured desktop and 320px full-page views of home, guide, about, contact,
-history and exercise setup. Inspected home, guide and setup captures. Tested cookie rejection, exercise setup, opening
-instructions, placing a card, opening a mobile category review, navigation, keyboard Escape and skip link. Direct
-completed and reasoning routes were visited without completed session data; replay and history were visited in empty
-states. These visits are not coverage of populated states.
+## Important verification correction
 
-Graphify structural extraction of `src` produced 1,068 nodes and 3,142 edges; CSS was unclassified, so the route and
-style mapping was checked against source. `src/router.tsx` owns the shell and routes; `src/styles/editorial.css`,
-`src/styles/globals.css`, `src/cv/` and feature styles define shared and feature treatments. The design uses plum, rose
-and paper surfaces, DM Sans headings, Source Serif 4 body text and Source Sans 3 interface text. The documented fonts
-agree with the implementation; `PRODUCT.md` contains no conflicting typography claim.
+The initial browser and Playwright test runs targeted port 5173. A later process inspection identified its owner as a
+Vite server from `C:\dev\github\values-flow-integration`, a different worktree. Those results, including the failed
+`functional-pages.spec.ts:126` assertion, cannot be attributed to this branch. They must not be treated as verification
+or as a confirmed defect on this branch. The other server was left running.
 
-## Findings
+An explicitly bound Vite server from this worktree was then started on port 4178. In Chromium via Playwright MCP, the
+skip link received focus on Tab and moved focus to `main-content` on Enter; Escape closed the mobile menu and returned
+focus to its toggle at 390×844. At widths 320, 390, 768 and 1440, visits to `/`, `/howtouse`, `/about`, `/contact`,
+`/privacy`, `/history`, `/exercise`, `/replay`, `/completed`, `/reasoning` and a missing route found no document-level
+horizontal overflow. Lazy pages were allowed 250ms after navigation; this scan alone does not establish complete
+loaded-state coverage, visual quality or absence of clipping within components.
 
-| Severity | Finding and evidence                                                                                                                                                                                                              | Resolution                                                                                                                                    |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Medium   | On a 320px viewport, Escape left the open navigation expanded and focus inside it. `src/router.tsx`.                                                                                                                              | Escape closes the menu and returns focus to its toggle. Confirmed at 390px with Playwright; regression test added.                            |
-| Medium   | Shared shell had no skip link, requiring keyboard users to traverse the navigation on every page. `src/router.tsx`, `src/styles/editorial.css`.                                                                                   | Added a visible-on-focus skip link and a focusable main target. Playwright confirmed Tab and Enter move focus to main; regression test added. |
-| Decision | The guide shows instructions for a behaviour reflection reminder even with the behaviour route disabled; its existing test explicitly expects the section to remain visible when the link is absent. `src/personal/HelpPage.tsx`. | Left unchanged pending owner intent: are these instructions meant to be visible before the feature is enabled?                                |
+## Findings and changes
 
-No document-level horizontal overflow was detected on the visited routes at the four widths. This does not establish
-that individual controls, text, or all states are free of clipping. The 320px instruction overlay was visible and
-operable at 800px height; shorter screens and real touch gestures were not verified.
+| Severity | Finding                                                                                                                                                                                                                          | Resolution                                                                                                                |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Medium   | Source inspection showed the mobile navigation had no Escape handling. `src/router.tsx`.                                                                                                                                         | Escape closes the menu and returns focus to its toggle; verified on this worktree at 390px and by a regression test.      |
+| Medium   | Shared shell had no skip link, requiring keyboard users to traverse navigation on every page. `src/router.tsx`, `src/styles/editorial.css`.                                                                                      | Added a focus-visible skip link and a focusable main target. Verified on this worktree at 390px and by a regression test. |
+| Decision | The guide shows instructions for a behaviour reflection reminder even with the behaviour route disabled; an existing test explicitly expects the section to remain visible when the link is absent. `src/personal/HelpPage.tsx`. | Left unchanged pending owner intent: should these instructions be visible before the feature is enabled?                  |
 
-## Copy
+## Design and copy
 
-The public copy uses an informal, reflective voice and concrete instructions. No substantive wording changes were made:
-no reviewed passage warranted a meaning-changing rewrite. The guide's feature-flag question above is a content
-availability decision, not evidence for changing a factual claim.
+`src/router.tsx` owns the shared shell and routes; `src/styles/editorial.css`, `src/styles/globals.css`, `src/cv/` and
+feature styles define shared and feature treatments. Graphify's structural extraction of `src` produced 1,068 nodes and
+3,142 edges; CSS was unclassified, so style relationships were checked in source. The design uses plum, rose and paper
+surfaces, DM Sans headings, Source Serif 4 body text and Source Sans 3 interface text. `DESIGN.md` agrees with the
+implemented heading and body families; `PRODUCT.md` contains no conflicting typography claim. No copy changes were made.
 
-## Limitations and outstanding work
+## Checks and limitations
 
-This is a partial review, not a complete audit of every layout and state. Populated history, completed results,
-reflection, replay, errors, data import/export, consent customisation, reduced motion, contrast measurements,
-synthesized touch and real-device/Safari behavior remain to be examined. The behaviour feature was disabled in the
-running configuration. The full copy corpus and all screenshots were not individually reviewed. These gaps limit the
-findings and require further work before calling the requested review complete.
+`pnpm check` passed (typecheck, lint and unit tests), and `pnpm build` passed in this worktree. Seventeen Playwright
+tests in the home, guide and routing files passed against port 4178 using a temporary config. Other automated Playwright
+runs used the other server and need to be repeated against this worktree. A thorough visual review of this worktree,
+copy sweep, populated history/results/reflection/replay, error and consent states, reduced motion, contrast, real touch
+and mobile browser testing remain outstanding. The initial screenshots belong to the other server and are not valid
+evidence for this branch. Do not treat this report as a complete audit.
 
-## Verification
+The independent standards review of `9e3c9e5...30076a8` found no hard standards violations or material code smells. The
+spec review found no verified implementation defect or scope creep, but confirmed that the requested site-wide review
+and verification remain incomplete. The invalidated browser evidence makes that limitation wider than the reviewer could
+assess.
 
-`pnpm check` passed (typecheck, lint and unit tests); `pnpm build` passed. The home navigation Playwright file passed
-all four tests; the guide, routing and first-run selection passed 13 tests. The broader exercise, sorting, reflection
-and functional-pages selection had one failure: `functional-pages.spec.ts:126` expects the copied Agent prompt to
-include `Create a recurring reflection`, but the clipboard contains a different prompt. Retrying the failure reproduced
-it. Neither the test nor prompt implementation was changed in this work; its intended wording needs investigation. The
-failure prevented the remainder of that test from running.
-
-Playwright MCP confirmed the new skip link focuses `main-content` and Escape closes the menu and restores focus. A
-further confirmation pass across all affected layouts and the independent code review remain outstanding.
+Graphify generated `src/graphify-out/`; automatic policy rejected its recursive removal. That directory and the
+untracked screenshots produced by the tests remain in the worktree and are not part of the commit.
