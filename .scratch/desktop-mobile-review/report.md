@@ -51,12 +51,17 @@ mapped 1,068 nodes and 3,142 edges; CSS required direct source inspection.
 
 ## Verification and limitations
 
-`pnpm check`, `pnpm build` and `pnpm format:check` passed. The default browser suite excluding production-only PWA tests
-had 24 passes, one feature-disabled skip and one screenshot timeout during desktop sorting; both sorting tests passed
-when rerun alone. The enabled guide and behaviour-reflection suite passed seven tests. All four PWA tests passed
-separately against the production preview. The Impeccable detector returned no findings for the changed page targets.
-Targeted flag tests passed in both configurations.
+`pnpm check`, `pnpm build`, `pnpm format:check` and `pnpm validate:pages-artifact` passed. The default browser suite
+excluding production-only PWA tests had 24 passes, one feature-disabled skip and one screenshot timeout during desktop
+sorting; both sorting tests passed when rerun alone. The enabled guide and behaviour-reflection suite passed seven
+tests. All four PWA tests passed separately against the production preview. The Impeccable detector returned no findings
+for the changed page targets. Targeted flag tests passed in both configurations.
 
 No physical-device testing, Safari/WebKit verification, exhaustive screen-reader testing, or exhaustive colour-contrast
-scan was performed. The feature-enabled flow was exercised in Chromium using emulated viewport and input. Independent
-review is pending.
+scan was performed. The feature-enabled flow was exercised in Chromium using emulated viewport and input.
+
+## Independent review and decisions
+
+Independent standards and spec reviewers found no material defect or scope mismatch in the changes from the base commit.
+The spec reviewer requested an explicit decision status; the behaviour-reminder decision is resolved as recorded above.
+No other product decision was identified in this review. The testing limitations and unreviewed copy scope above remain.
