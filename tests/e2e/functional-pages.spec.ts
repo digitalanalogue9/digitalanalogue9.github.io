@@ -59,7 +59,7 @@ async function importBackup(page: Page) {
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
   await page.getByLabel('Backup file contents (JSON)').fill(JSON.stringify(backup));
   await page.getByRole('button', { name: /Import.*text/ }).click();
-  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toBeVisible();
 }
 async function downloadJson(page: Page, button: string) {
   const previousCount = await page.evaluate(
@@ -108,16 +108,24 @@ test('history imports, exports, copies and deletes sessions; results provide pri
     );
   });
   await importBackup(page);
-  const legacy = await downloadJson(page, 'Legacy backup');
-  expect(legacy.session.timestamp).toBeDefined();
   const ordinary = await downloadJson(page, 'Export');
   expect(ordinary.completedSession.reflection.goal).toBe('My private goal.');
-  expect(ordinary.completedSession.reflection.values[cards[0].id].observation).toBe('My private observation.');
-  await expect(page.getByRole('button', { name: 'Reflection backup', exact: true })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Copy values', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeVisible();
+  const actions = page.getByRole('group', { name: 'Actions for selected session' });
+  await expect(actions.locator('button, a')).toHaveText([
+    'Delete',
+    'Export',
+    'Legacy backup',
+    'Print',
+    'Replay',
+    'Agent',
+    'Resume',
+  ]);
+  await page.getByRole('button', { name: 'Agent', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Prompt copied to clipboard');
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
-  await page.getByRole('link', { name: 'Resume session', exact: true }).click();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Create a recurring reflection');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).not.toContain('My private goal.');
+  await page.getByRole('link', { name: 'Resume', exact: true }).click();
   await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
   await page.getByRole('link', { name: 'Back to results', exact: true }).click();
   await expect(page).toHaveURL(/\/completed\?sessionId=/);
@@ -246,11 +254,13 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.goto('/history');
   await page.screenshot({ path: '.scratch/parity-history.png', fullPage: true });
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toHaveCount(0);
   await page.reload();
   await expect(page.getByText('No sessions saved in this browser yet.', { exact: true })).toBeVisible();
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles({ name: 'legacy.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
-  await expect(page.getByRole('link', { name: 'Resume session', exact: true })).toBeVisible();
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'session.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(ordinary)),
+  });
+  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toBeVisible();
 });

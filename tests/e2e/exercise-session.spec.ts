@@ -92,7 +92,7 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
     .getByRole('navigation', { name: 'Main navigation' })
     .getByRole('link', { name: 'History', exact: true })
     .click();
-  await expect(page.getByRole('link', { name: 'Resume session' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Resume' })).toBeVisible();
   await page.getByRole('link', { name: 'Replay', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Replay', exact: true })).toBeVisible();
   await page.getByLabel('Playback speed').selectOption('2x');

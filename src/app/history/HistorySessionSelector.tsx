@@ -12,7 +12,7 @@ type Props = {
   onDelete: (id: string) => void;
   onExport: (id: string) => void;
   onExportLegacy: (id: string) => void;
-  onCopyCompletedValues: (id: string) => void;
+  onCopyAgentPrompt: (id: string) => void;
   onPrintCompletedValues: (id: string) => void;
 };
 
@@ -21,7 +21,7 @@ function formatDate(value: number) {
 }
 
 const secondaryActionClassName =
-  'inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-sys-radius-button-sm border border-sys-color-border-strong bg-sys-color-surface-subtle px-2.5 py-1.5 text-xs font-semibold text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ref-color-brand-primary disabled:cursor-not-allowed disabled:opacity-45';
+  'inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-sys-radius-button-sm border border-sys-color-border-strong px-2.5 py-1.5 text-interface-base-small font-semibold text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ref-color-brand-primary disabled:cursor-not-allowed disabled:opacity-45';
 
 export default function HistorySessionSelector(props: Props) {
   const [selectedId, setSelectedId] = useState(props.sessions[0]?.id ?? '');
@@ -42,7 +42,7 @@ export default function HistorySessionSelector(props: Props) {
       className={`${historyButtonClassName} bg-ref-color-brand-primary hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary text-white focus-visible:outline-2 focus-visible:outline-offset-2`}
       to={`${completed ? '/reasoning' : '/exercise'}?sessionId=${encodeURIComponent(selected.id)}`}
     >
-      Resume session
+      Resume
     </Link>
   );
 
@@ -83,14 +83,18 @@ export default function HistorySessionSelector(props: Props) {
       </div>
 
       <div
-        className="flex flex-wrap items-center gap-2 xl:flex-nowrap"
+        className="flex flex-wrap items-center justify-end gap-2"
         role="group"
         aria-label="Actions for selected session"
       >
-        {primaryAction}
-        <Link className={secondaryActionClassName} to={`/replay?sessionId=${encodeURIComponent(selected.id)}`}>
-          Replay
-        </Link>
+        <button
+          type="button"
+          className={`${secondaryActionClassName} text-ref-color-rag-red-text`}
+          disabled={props.isWorking}
+          onClick={() => props.onDelete(selected.id)}
+        >
+          Delete
+        </button>
         <button
           type="button"
           className={secondaryActionClassName}
@@ -110,34 +114,40 @@ export default function HistorySessionSelector(props: Props) {
         <button
           type="button"
           className={secondaryActionClassName}
-          disabled={!completed || props.copyCompletedValuesLoading(selected.id)}
-          title={!completed ? 'Available after the session is complete' : undefined}
-          onClick={() => props.onCopyCompletedValues(selected.id)}
-        >
-          {props.copyCompletedValuesSucceeded(selected.id) ? 'Copied' : 'Copy values'}
-        </button>
-        <button
-          type="button"
-          className={secondaryActionClassName}
           disabled={!completed || props.printCompletedValuesLoading(selected.id)}
           title={!completed ? 'Available after the session is complete' : undefined}
           onClick={() => props.onPrintCompletedValues(selected.id)}
         >
           Print
         </button>
+        <Link
+          className={`${secondaryActionClassName} no-underline`}
+          to={`/replay?sessionId=${encodeURIComponent(selected.id)}`}
+        >
+          Replay
+        </Link>
         <button
           type="button"
-          className={`${secondaryActionClassName} text-ref-color-rag-red-text`}
-          disabled={props.isWorking}
-          onClick={() => props.onDelete(selected.id)}
+          className={secondaryActionClassName}
+          disabled={!completed || props.copyCompletedValuesLoading(selected.id)}
+          title={!completed ? 'Available after the session is complete' : undefined}
+          onClick={() => props.onCopyAgentPrompt(selected.id)}
         >
-          Delete
+          Agent
         </button>
+        {primaryAction}
       </div>
+
+      <p className="text-sys-color-text-secondary text-right text-sm">Export includes saved reflection notes.</p>
+      <p role="status" className="text-sys-color-text-secondary text-right text-sm">
+        {props.copyCompletedValuesSucceeded(selected.id)
+          ? 'Prompt copied to clipboard. Paste it into your chosen agent.'
+          : ''}
+      </p>
 
       {!completed && (
         <p className="text-sys-color-text-secondary text-sm">
-          Copy values and print become available when this session is complete.
+          Print and Agent become available when this session is complete.
         </p>
       )}
     </div>

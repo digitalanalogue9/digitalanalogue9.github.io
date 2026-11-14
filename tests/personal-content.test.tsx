@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe('personal site content', () => {
-  it('shows the About story, further perspectives, and an exercise route', async () => {
+  it('shows the About story and further perspectives', async () => {
     render(
       <MemoryRouter>
         <AboutPage />
@@ -40,7 +40,6 @@ describe('personal site content', () => {
       'https://www.youtube.com/watch?v=mL4l75rMIiQ'
     );
     expect(screen.getByText(/don’t imply an endorsement of Core Values/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Find my core values' })).toHaveAttribute('href', '/exercise');
     await waitFor(() => expect(document.title).toBe('About Core Values · A borrowed deck of cards'));
     expect(document.querySelector('meta[name="description"]')).toHaveAttribute(
       'content',

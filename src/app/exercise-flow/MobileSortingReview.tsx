@@ -312,7 +312,7 @@ export default function MobileSortingReview({
               {canEarlyFinish && !canComplete && (
                 <button
                   type="button"
-                  className="border-sys-color-border-strong bg-sys-color-surface-subtle text-sys-color-text-primary hover:bg-sys-color-surface-subtle-hover focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm min-h-11 w-full border px-4 py-2 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-45"
+                  className="border-sys-color-border-strong text-sys-color-text-primary hover:bg-sys-color-surface-subtle focus-visible:ring-sys-color-focus-ring rounded-sys-radius-button-sm bg-sys-color-surface-default min-h-11 w-full border px-4 py-2 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-45"
                   onClick={() => {
                     setIsNextRoundChoice(false);
                     setIsFinishDialogOpen(true);

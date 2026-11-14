@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom';
 import PageMetadata from './PageMetadata';
 
 export default function AboutPage() {
   return (
-    <article className="app-page-panel editorial-home mx-auto w-full max-w-4xl space-y-12" aria-labelledby="about-heading">
+    <article
+      className="app-page-panel editorial-home mx-auto w-full max-w-4xl space-y-12"
+      aria-labelledby="about-heading"
+    >
       <PageMetadata
         title="About Core Values · A borrowed deck of cards"
         description="A borrowed deck of cards led to Core Values, a tool for sorting values and returning to the priorities you choose."
@@ -105,12 +107,6 @@ export default function AboutPage() {
         <p className="text-sm leading-relaxed text-[#584451]">
           These links are provided for further reading and listening. They don’t imply an endorsement of Core Values.
         </p>
-      </section>
-
-      <section className="flex justify-end border-t border-[var(--editorial-line)] pt-8" aria-label="Explore the exercise">
-        <Link className="editorial-button editorial-button--primary" to="/exercise">
-          Find my core values
-        </Link>
       </section>
     </article>
   );

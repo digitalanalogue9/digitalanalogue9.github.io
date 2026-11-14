@@ -1,16 +1,12 @@
 'use client';
 
+import { exportSessionData } from '@/lib/db/canonicalSessionRepository';
+
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import type { CompletedSession } from '@/lib/contracts/types';
-import {
-  copyCompletedValuesText,
-  downloadJsonFile,
-  formatCompletedValuesText,
-  printCompletedValues,
-} from '@/lib/utils/completedValuesExport';
+import { copyCompletedValuesText, downloadJsonFile, printCompletedValues } from '@/lib/utils/completedValuesExport';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
-import { exportSessionData } from '@/lib/db/canonicalSessionRepository';
 import ImportSection from './ImportSection';
 import HistorySessionSelector from './HistorySessionSelector';
 import { historyButtonClassName } from '@/app/history/constants/buttonStyles';
@@ -203,7 +199,14 @@ export default function HistoryClient() {
 
       try {
         const completedSession = await ensureCompletedSession(sessionId);
-        await copyCompletedValuesText(formatCompletedValuesText(getSessionNameById(sessionId), completedSession));
+        const session = sessions.find((item) => item.id === sessionId);
+        if (!session) throw new Error('Session is unavailable.');
+        const prompt = service.composeRecurringReflectionPrompt({
+          exerciseType: session.exerciseType,
+          selectedValues: completedSession.finalValues,
+          reflection: completedSession.reflection,
+        });
+        await copyCompletedValuesText(prompt);
         setCopiedCompletedValuesSessionId(sessionId);
         if (copiedFeedbackTimeoutRef.current) {
           clearTimeout(copiedFeedbackTimeoutRef.current);
@@ -219,7 +222,7 @@ export default function HistoryClient() {
         setCopyingCompletedValuesSessionId((current) => (current === sessionId ? null : current));
       }
     },
-    [ensureCompletedSession, getSessionNameById]
+    [ensureCompletedSession, service, sessions]
   );
 
   const handlePrintCompletedValues = useCallback(
@@ -246,7 +249,7 @@ export default function HistoryClient() {
       setActionError(null);
       setIsImportError(false);
       try {
-        const payload = await service.exportSession(sessionId);
+        const payload = await service.exportSession(sessionId, { includeReflection: true });
         downloadJsonFile(`core-values-${getSessionNameById(sessionId)}`, payload);
       } catch (exportError) {
         setActionError(exportError instanceof Error ? exportError.message : 'Export failed.');
@@ -374,16 +377,7 @@ export default function HistoryClient() {
         </p>
       )}
 
-      <ImportSection
-        importText={importText}
-        onImportTextChange={setImportText}
-        onImportFromText={() => void handleImportText()}
-        onImportFile={handleImportFile}
-        isWorking={isWorking}
-        hasError={isImportError}
-      />
-
-      <section className="space-y-4 border-t border-[var(--editorial-line)] pt-8">
+      <section className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
         <h2 className="page-section-heading text-sys-color-text-primary text-3xl sm:text-4xl">
           Sessions saved in this browser
         </h2>
@@ -427,12 +421,20 @@ export default function HistoryClient() {
                   .catch(() => setActionError('Legacy backup export failed.'))
                   .finally(() => setIsWorking(false));
               }}
-              onCopyCompletedValues={handleCopyCompletedValuesFromList}
+              onCopyAgentPrompt={handleCopyCompletedValuesFromList}
               onPrintCompletedValues={handlePrintCompletedValuesFromList}
             />
           </div>
         )}
       </section>
+      <ImportSection
+        importText={importText}
+        onImportTextChange={setImportText}
+        onImportFromText={() => void handleImportText()}
+        onImportFile={handleImportFile}
+        isWorking={isWorking}
+        hasError={isImportError}
+      />
       {behaviourReflectionEnabled && (
         <section
           className="space-y-4 border-t border-[var(--editorial-line)] pt-8"

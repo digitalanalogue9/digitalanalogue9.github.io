@@ -116,19 +116,8 @@ export function ExerciseSetup() {
           <button type="submit" className="cv-button min-h-11" disabled={isStarting}>
             {isStarting ? 'Starting...' : 'Start exercise'}
           </button>
-          <button
-            type="button"
-            className="rounded-sys-radius-button-sm border-sys-color-border-strong bg-sys-color-surface-subtle text-interface-base-default text-sys-color-text-primary hover:bg-ref-color-brand-primary-hover inline-flex min-h-11 items-center justify-center border px-4 py-2 font-normal transition-colors hover:text-white active:translate-y-px disabled:opacity-60 motion-reduce:transition-none"
-            onClick={() => navigate('/history')}
-            disabled={isStarting}
-          >
-            View History
-          </button>
         </div>
       </form>
-      <p className="text-interface-base-small text-sys-color-text-primary mx-auto w-full max-w-2xl text-right">
-        Your progress is saved in this browser.
-      </p>
       {error && (
         <p
           className="rounded-sys-radius-button-sm bg-ref-color-rag-red-light text-interface-base-small text-ref-color-rag-red-text px-3 py-2"
