@@ -1,6 +1,6 @@
 # Mobile home-page journey
 
-Status: ready-for-agent (prototype phase only)
+Status: resolved
 
 ## Problem statement
 
@@ -117,3 +117,9 @@ Selected option 1: ordinary scrolling. On mobile, aim to show the personal and t
 viewport. Blend the See how it works and Resume an exercise links into the personal explanation; omit ‘in History’.
 Remove the gap and divider between the personal and team sections. Prototype reference: branch
 `prototype/mobile-homepage-journey`, commit `e3ecd1d`.
+
+## Completion
+
+Implemented on `implement/mobile-homepage-journey` and merged into `review/desktop-mobile-quality` in merge commit
+`2a009ce`. The owner selected ordinary scrolling and requested the mobile introduction lead into the actions. The
+storage note appears separately below the actions on mobile.
