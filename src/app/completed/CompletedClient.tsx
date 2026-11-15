@@ -23,6 +23,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
   const [recurringCopyFeedback, setRecurringCopyFeedback] = useState<string | null>(null);
+  const [copyConfirmationCount, setCopyConfirmationCount] = useState(0);
   const loadSequenceRef = useRef(0);
 
   const loadSession = useCallback(async () => {
@@ -155,6 +156,7 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard access is unavailable.');
       await navigator.clipboard.writeText(recurringPrompt);
+      setCopyConfirmationCount((count) => count + 1);
       setRecurringCopyFeedback('Prompt copied.');
     } catch (copyError) {
       setRecurringCopyFeedback(
@@ -190,9 +192,25 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             Use this prompt to reflect on your values over time. It includes your saved notes; you can edit it before
             copying.
           </p>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="!mt-1">
+            <div className="flex justify-end">
+              <button type="button" className="copy-prompt-link" onClick={() => void handleCopyRecurringPrompt()}>
+                Copy to clipboard
+              </button>
+            </div>
+            <p
+              className={
+                recurringCopyFeedback === 'Prompt copied.'
+                  ? 'sr-only'
+                  : 'text-interface-base-small text-sys-color-text-secondary'
+              }
+              role="status"
+            >
+              {recurringCopyFeedback}
+            </p>
             <RecurringReflectionControls
               recurringPrompt={recurringPrompt}
+              copyConfirmationCount={recurringCopyFeedback === 'Prompt copied.' ? copyConfirmationCount : 0}
               onPromptChange={(value) => {
                 setRecurringPrompt(value);
                 setRecurringCopyFeedback(null);
@@ -211,18 +229,15 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             {actionError}
           </p>
         )}
-        {recurringCopyFeedback && (
-          <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
-            {recurringCopyFeedback}
-          </p>
-        )}
-        <div className="flex flex-wrap justify-end gap-3">
+        <div className="flex justify-end">
           <Link
             to={{ pathname: '/reasoning', search: replaySearch }}
-            className={`${secondaryActionButtonClasses} no-underline sm:mr-auto`}
+            className={`${primaryActionButtonClasses} no-underline`}
           >
             Back to reflection
           </Link>
+        </div>
+        <div className="flex flex-wrap justify-end gap-3">
           <button type="button" className={secondaryActionButtonClasses} onClick={handlePrint}>
             Print
           </button>
@@ -243,9 +258,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           >
             Replay Session
           </Link>
-          <button type="button" className={primaryActionButtonClasses} onClick={() => void handleCopyRecurringPrompt()}>
-            Copy prompt
-          </button>
         </div>
       </section>
     </div>

@@ -57,7 +57,7 @@ describe('Session history and replay', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Resume' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Continue to reflection' })).toHaveAttribute(
       'href',
       '/reasoning?sessionId=history-session'
     );

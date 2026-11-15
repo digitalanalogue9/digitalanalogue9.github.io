@@ -1,10 +1,4 @@
-import type {
-  ExerciseType,
-  RelationshipReflectionNotes,
-  SessionReflection,
-  ValueReflectionNotes,
-  ValueWithReason,
-} from '@/lib/contracts/types';
+import type { ExerciseType, SessionReflection, ValueReflectionNotes, ValueWithReason } from '@/lib/contracts/types';
 import type {
   ReflectionRelationship,
   ReflectionSummary as ReflectionSummaryData,
@@ -19,10 +13,8 @@ export function ReflectionJournal({
   relationships,
   summary,
   working,
-  onGoalChange,
   onValueChange,
   onSuggestionChange,
-  onRelationshipChange,
 }: {
   selectedValues: ValueWithReason[];
   exerciseType: ExerciseType;
@@ -30,87 +22,40 @@ export function ReflectionJournal({
   relationships: ReflectionRelationship[];
   summary: ReflectionSummaryData;
   working: boolean;
-  onGoalChange: (value: string) => void;
   onValueChange: (valueId: string, field: keyof ValueReflectionNotes, value: string) => void;
   onSuggestionChange: (valueId: string, suggestionId: string, response: 'recognised' | 'rejected' | 'unsure') => void;
-  onRelationshipChange: (relationshipId: string, field: keyof RelationshipReflectionNotes, value: string) => void;
 }) {
   return (
     <div className="space-y-8">
-      <section className="space-y-2" aria-labelledby="reflection-goal-heading">
-        <h2
-          id="reflection-goal-heading"
-          className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"
-        >
-          Session goal (optional)
-        </h2>
-        <label className="sr-only" htmlFor="reflection-goal">
-          Session goal (optional)
-        </label>
-        <textarea
-          id="reflection-goal"
-          className="cv-field__control min-h-24 w-full resize-y"
-          value={reflection.goal ?? ''}
-          onChange={(event) => onGoalChange(event.target.value)}
-          disabled={working}
-        />
-      </section>
-
       {relationships.length > 0 && (
         <section aria-labelledby="value-relationships-heading" className="space-y-3">
           <h2
             id="value-relationships-heading"
             className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"
           >
-            Values in context
+            Balancing your values
           </h2>
-          <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+          <p className="text-interface-base-default text-sys-color-text-secondary leading-6">
             Selected values can complement each other or pull in different directions depending on the situation. These
             are possibilities to explore, not fixed opposites.
           </p>
           {relationships.map((relationship) => (
-            <fieldset
+            <article
               key={relationship.id}
               className="rounded-sys-radius-button-sm border-sys-color-border-default space-y-3 border p-4"
             >
-              <legend className="text-interface-base-small text-sys-color-text-primary px-1 font-semibold">
+              <h3 className="text-interface-base-default text-sys-color-text-primary font-semibold">
                 {relationship.title}
-              </legend>
-              <p className="text-interface-base-small text-sys-color-text-secondary leading-6">
+              </h3>
+              <p className="text-interface-base-default text-sys-color-text-secondary leading-6">
                 {relationship[exerciseType]}
               </p>
-              <label
-                className="text-interface-base-small text-sys-color-text-primary block font-semibold"
-                htmlFor={`relationship-observation-${relationship.id}`}
-              >
-                Observation (optional)
-              </label>
-              <textarea
-                id={`relationship-observation-${relationship.id}`}
-                className="cv-field__control min-h-20 w-full resize-y"
-                value={reflection.relationships?.[relationship.id]?.observation ?? ''}
-                onChange={(event) => onRelationshipChange(relationship.id, 'observation', event.target.value)}
-                disabled={working}
-              />
-              <label
-                className="text-interface-base-small text-sys-color-text-primary block font-semibold"
-                htmlFor={`relationship-action-${relationship.id}`}
-              >
-                Practical action (optional)
-              </label>
-              <textarea
-                id={`relationship-action-${relationship.id}`}
-                className="cv-field__control min-h-20 w-full resize-y"
-                value={reflection.relationships?.[relationship.id]?.action ?? ''}
-                onChange={(event) => onRelationshipChange(relationship.id, 'action', event.target.value)}
-                disabled={working}
-              />
-            </fieldset>
+            </article>
           ))}
         </section>
       )}
 
-      <section aria-labelledby="selected-value-reflections-heading" className="space-y-4">
+      <section aria-labelledby="selected-value-reflections-heading" className="space-y-5 sm:space-y-6">
         <h2
           id="selected-value-reflections-heading"
           className="page-section-heading text-sys-color-text-primary text-xl sm:text-2xl"

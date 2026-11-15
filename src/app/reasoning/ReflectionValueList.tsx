@@ -21,7 +21,7 @@ export function ReflectionValueList({
   ) => void;
 }) {
   return (
-    <ol className="space-y-5">
+    <ol className="space-y-5 pt-2 sm:pt-3">
       {selectedValues.map((value, index) => {
         const content = getReflectionContent(exerciseType, value);
         return (
@@ -30,8 +30,8 @@ export function ReflectionValueList({
               <h3 className="text-interface-base-large text-sys-color-text-primary font-semibold">
                 {index + 1}. {value.title}
               </h3>
-              <p className="text-interface-base-small text-sys-color-text-secondary leading-6">{value.description}</p>
-              <div className="text-interface-base-small text-sys-color-text-secondary space-y-1 leading-6">
+              <p className="text-interface-base-default text-sys-color-text-secondary leading-6">{value.description}</p>
+              <div className="text-interface-base-default text-sys-color-text-secondary space-y-1 leading-6">
                 <p className="font-semibold">Questions to consider</p>
                 {content.questions[exerciseType].map((question) => (
                   <p key={question}>{question}</p>
@@ -39,7 +39,7 @@ export function ReflectionValueList({
               </div>
               {content.possibilities.length > 0 && (
                 <div className="space-y-3">
-                  <p className="text-interface-base-small text-sys-color-text-primary font-semibold">
+                  <p className="text-interface-base-default text-sys-color-text-primary font-semibold">
                     Possibilities to consider
                   </p>
                   {content.possibilities.map((possibility) => {
@@ -53,14 +53,14 @@ export function ReflectionValueList({
                         key={possibility.id}
                         className="rounded-sys-radius-button-sm border-sys-color-border-default border p-3"
                       >
-                        <legend className="text-interface-base-small text-sys-color-text-primary px-1 font-semibold">
+                        <legend className="text-interface-base-default text-sys-color-text-primary px-1 font-semibold">
                           {possibility[exerciseType]}
                         </legend>
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
                           {(['recognised', 'rejected', 'unsure'] as const).map((option, optionIndex) => (
                             <label
                               key={option}
-                              className="text-interface-base-small text-sys-color-text-primary inline-flex min-h-11 items-center gap-2"
+                              className="text-interface-base-default text-sys-color-text-primary inline-flex min-h-11 items-center gap-2"
                             >
                               <input
                                 type="radio"
@@ -82,9 +82,9 @@ export function ReflectionValueList({
               <div>
                 <label
                   htmlFor={`reflection-observation-${value.id}`}
-                  className="text-interface-base-small text-sys-color-text-primary mb-1 block font-semibold"
+                  className="text-interface-base-default text-sys-color-text-primary mb-1 block font-semibold"
                 >
-                  Observation (optional)
+                  Observation
                 </label>
                 <textarea
                   id={`reflection-observation-${value.id}`}
@@ -98,9 +98,9 @@ export function ReflectionValueList({
               <div>
                 <label
                   htmlFor={`reflection-action-${value.id}`}
-                  className="text-interface-base-small text-sys-color-text-primary mb-1 block font-semibold"
+                  className="text-interface-base-default text-sys-color-text-primary mb-1 block font-semibold"
                 >
-                  Practical action (optional)
+                  Practical action
                 </label>
                 <textarea
                   id={`reflection-action-${value.id}`}

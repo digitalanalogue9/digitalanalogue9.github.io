@@ -106,14 +106,14 @@ test('guide behaviour reflection section and action follow the public feature fl
 
   const section = page.getByRole('region', { name: 'Set up a reflection reminder' });
   const action = page.getByRole('link', { name: 'Start a behaviour reflection', exact: true });
-  if ((await action.count()) > 0) {
+  if (process.env.VITE_ENABLE_BEHAVIOUR_REFLECTION === 'true') {
     await expect(section).toBeVisible();
     await expect(section.getByRole('link', { name: 'Start a behaviour reflection', exact: true })).toHaveAttribute(
       'href',
       '/behaviour'
     );
   } else {
-    await expect(section).toBeVisible();
+    await expect(section).toHaveCount(0);
     await expect(action).toHaveCount(0);
   }
 });

@@ -22,7 +22,7 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   const sessionUrl = page.url();
   await page.getByRole('link', { name: 'Save and come back later' }).click();
   await page.reload();
-  await page.getByRole('link', { name: 'Resume' }).click();
+  await page.getByRole('link', { name: 'Continue exercise' }).click();
   await expect(page).toHaveURL(sessionUrl);
   await expect(instructions).toHaveCount(0);
   await expect(page.getByRole('article', { name: 'Very Important category' })).toContainText(keptTitle);
@@ -60,15 +60,11 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   await expect(page.getByRole('heading', { name: 'Reflect on your values', exact: true })).toBeVisible();
   await expect(page.getByText(/Where have you seen .* shape your choices at work/)).toBeVisible();
   const finalTitle = (await page.locator('ol li h3').first().innerText()).replace(/^\d+\.\s*/, '');
-  await page.getByRole('textbox', { name: 'Session goal (optional)' }).fill('Make one deliberate choice each day.');
   await page
     .getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })
     .fill('I noticed this in a recent choice.');
   await expect(page.getByRole('status')).toContainText('Draft saved on this device.');
   await page.reload();
-  await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue(
-    'Make one deliberate choice each day.'
-  );
   await expect(page.getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })).toHaveValue(
     'I noticed this in a recent choice.'
   );
@@ -77,9 +73,6 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
   await page.getByRole('button', { name: 'Save reflection and complete', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Your core values', exact: true })).toBeVisible();
   await page.getByRole('link', { name: 'Back to reflection', exact: true }).click();
-  await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue(
-    'Make one deliberate choice each day.'
-  );
   await expect(page.getByRole('textbox', { name: `Observation for ${finalTitle}`, exact: true })).toHaveValue(
     'I noticed this in a recent choice.'
   );
@@ -92,7 +85,7 @@ test('start, sort, resume, reflect on selected values and complete the exercise'
     .getByRole('navigation', { name: 'Main navigation' })
     .getByRole('link', { name: 'History', exact: true })
     .click();
-  await expect(page.getByRole('link', { name: 'Resume' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View results' })).toBeVisible();
   await page.getByRole('link', { name: 'Replay', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Replay', exact: true })).toBeVisible();
   await page.getByLabel('Playback speed').selectOption('2x');
@@ -112,13 +105,9 @@ test('Analytics makes no network request before consent and loads after explicit
   });
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Allow Analytics' })).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more.' })).toBeVisible();
   await page.reload();
-  await expect(
-    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more.' })).toBeVisible();
   expect(analyticsRequests).toEqual([]);
   await expect(page.locator('script[src*="googletagmanager.com"]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Allow Analytics' }).click();

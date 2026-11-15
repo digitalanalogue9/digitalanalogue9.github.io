@@ -59,3 +59,25 @@ next-env.d.ts
 .playwright-mcp/*
 test-results/*
 reports/*
+
+# Graphify local-only output
+graphify-out/*
+!graphify-out/memory/
+!graphify-out/memory/**
+
+# Impeccable generated and local-only artifacts. Keep shared design and live configuration.
+/.impeccable/config.local.json
+/.impeccable/build/
+/.impeccable/mocks/
+/.impeccable/review/
+/.impeccable/critique/*
+!/.impeccable/critique/ignore.md
+/.impeccable/live/sessions/
+/.impeccable/live/inject-journal.json
+/.impeccable/live/roots.json
+
+*storybook.log
+storybook-static
+
+# .archify
+.archify/

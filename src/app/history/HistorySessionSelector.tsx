@@ -5,6 +5,7 @@ import { historyButtonClassName } from './constants/buttonStyles';
 
 type Props = {
   sessions: Session[];
+  readyForReflectionIds: string[];
   isWorking: boolean;
   copyCompletedValuesLoading: (id: string) => boolean;
   printCompletedValuesLoading: (id: string) => boolean;
@@ -36,13 +37,14 @@ export default function HistorySessionSelector(props: Props) {
   if (!selected) return null;
 
   const completed = selected.status === 'completed';
+  const readyForReflection = props.readyForReflectionIds.includes(selected.id);
   const sessionType = selected.exerciseType === 'team' ? 'Team values' : 'Personal values';
   const primaryAction = (
     <Link
       className={`${historyButtonClassName} bg-ref-color-brand-primary hover:bg-ref-color-brand-primary-hover focus-visible:outline-ref-color-brand-primary text-white focus-visible:outline-2 focus-visible:outline-offset-2`}
-      to={`${completed ? '/reasoning' : '/exercise'}?sessionId=${encodeURIComponent(selected.id)}`}
+      to={`${readyForReflection ? '/reasoning' : completed ? '/completed' : '/exercise'}?sessionId=${encodeURIComponent(selected.id)}`}
     >
-      Resume
+      {readyForReflection ? 'Continue to reflection' : completed ? 'View results' : 'Continue exercise'}
     </Link>
   );
 
@@ -73,7 +75,7 @@ export default function HistorySessionSelector(props: Props) {
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h3 className="text-sys-color-text-primary text-base font-semibold">{sessionType} session</h3>
           <span className={`text-sm font-semibold ${completed ? 'text-green-800' : 'text-sys-color-text-secondary'}`}>
-            {completed ? 'Completed' : 'In progress'}
+            {readyForReflection ? 'Ready to reflect' : completed ? 'Completed' : 'In progress'}
           </span>
         </div>
         <p className="text-sys-color-text-secondary mt-1 text-sm">
@@ -87,6 +89,7 @@ export default function HistorySessionSelector(props: Props) {
         role="group"
         aria-label="Actions for selected session"
       >
+        <div className="flex w-full justify-end">{primaryAction}</div>
         <button
           type="button"
           className={`${secondaryActionClassName} text-ref-color-rag-red-text`}
@@ -135,7 +138,6 @@ export default function HistorySessionSelector(props: Props) {
         >
           Agent
         </button>
-        {primaryAction}
       </div>
 
       <p className="text-sys-color-text-secondary text-right text-sm">Export includes saved reflection notes.</p>
