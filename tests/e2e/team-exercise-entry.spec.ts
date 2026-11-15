@@ -48,7 +48,7 @@ test('team session uses team-focused cards and resumes the saved session', async
   await page.getByRole('link', { name: 'Save and come back later' }).click();
   await expect(page).toHaveURL('/history');
   await expect(page.getByRole('heading', { name: 'Team values session' })).toBeVisible();
-  await page.getByRole('link', { name: 'Resume' }).click();
+  await page.getByRole('link', { name: 'Continue exercise' }).click();
   await expect(page).toHaveURL(sessionUrl);
   await expect(page.getByLabel(`Current card ${firstTitle}`, { exact: true })).toBeVisible();
 });
