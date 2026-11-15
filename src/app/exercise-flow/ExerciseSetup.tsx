@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import type { ExerciseType } from '@/lib/contracts/types';
@@ -10,10 +10,13 @@ import { getGameConfig } from '@/lib/utils/config';
 
 export function ExerciseSetup() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const service = useExerciseService();
   const gameConfig = getGameConfig();
   const [targetCoreValues, setTargetCoreValues] = useState(gameConfig.defaultCoreValues);
-  const [exerciseType, setExerciseType] = useState<ExerciseType>('personal');
+  const [exerciseType, setExerciseType] = useState<ExerciseType>(
+    searchParams.get('exerciseType') === 'team' ? 'team' : 'personal'
+  );
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
