@@ -85,7 +85,7 @@ export default function HomeClient() {
           </p>
         </div>
         <div>
-          <Link className="editorial-button editorial-button--primary" to="/exercise">
+          <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
             Start a team values conversation
           </Link>
         </div>
