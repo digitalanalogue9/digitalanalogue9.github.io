@@ -752,10 +752,11 @@
     margin-top: 0.7rem;
   }
 
-  .editorial-team {
+  .editorial-situations.editorial-team {
     grid-template-columns: 1fr;
     gap: 0.35rem;
-    padding-block: 0.1rem 0.2rem;
+    border: 0;
+    padding-block: 0;
   }
 
   .editorial-situations.editorial-team--mobile {
