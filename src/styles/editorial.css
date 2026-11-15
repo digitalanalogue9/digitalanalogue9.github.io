@@ -720,7 +720,8 @@
 }
 
 .editorial-storage-section {
-  padding-block: 1.1rem clamp(2rem, 3vw, 3rem);
+  border-top: 1px solid var(--editorial-line);
+  padding-block: clamp(1.5rem, 3vw, 2rem);
 }
 
 .editorial-home a:focus-visible {

@@ -97,7 +97,7 @@ function ReflectionSection({ placement }: { placement: 'mobile' | 'desktop' }) {
 
 function StorageNote() {
   return (
-    <section className="editorial-storage-section" aria-label="Your reflections on this device">
+    <section className="editorial-storage-section" aria-label="Saving your reflections">
       <p className="editorial-storage-note">
         Your reflections stay in this browser and don’t sync automatically. Use{' '}
         <Link className="editorial-history-link" to="/history">
