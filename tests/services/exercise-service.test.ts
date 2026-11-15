@@ -503,22 +503,55 @@ describe('ExerciseService', () => {
 
     expect(
       service.getReflectionRelationships('personal', valuesData.values as ValueCard[]).map(({ id }) => id)
-    ).toEqual([
-      'personal-fast-pace-precise-work',
-      'personal-independence-work-with-others',
-      'personal-security-risk',
-      'personal-promotion-time-freedom',
-      'personal-routine-variety',
-    ]);
+    ).toEqual(
+      expect.arrayContaining([
+        'personal-fast-pace-precise-work',
+        'personal-independence-work-with-others',
+        'personal-security-risk',
+        'personal-promotion-time-freedom',
+        'personal-routine-variety',
+      ])
+    );
     expect(
       service.getReflectionRelationships('team', teamValuesData.values as ValueCard[]).map(({ id }) => id)
-    ).toEqual([
-      'team-excellence-balance',
-      'team-innovation-standards',
-      'team-transparency-empathy',
-      'team-accountability-safety',
-      'team-focus-flexibility',
-    ]);
+    ).toEqual(
+      expect.arrayContaining([
+        'team-excellence-balance',
+        'team-innovation-standards',
+        'team-transparency-empathy',
+        'team-accountability-safety',
+        'team-focus-flexibility',
+      ])
+    );
+  });
+
+  test('curated pairs are distinct and show all applicable relationships for either catalogue', () => {
+    const service = new ExerciseServiceImpl(new InMemorySessionRepository());
+    for (const [exerciseType, cards] of [
+      ['personal', valuesData.values],
+      ['team', teamValuesData.values],
+    ] as const) {
+      const relationships = service.getReflectionRelationships(exerciseType, cards as ValueCard[]);
+      const pairKeys = relationships.map((relationship) => [...relationship.valueIds].sort().join(':'));
+      expect(relationships.length).toBeGreaterThan(5);
+      expect(new Set(pairKeys).size).toBe(pairKeys.length);
+      expect(new Set(relationships.map((relationship) => relationship.id)).size).toBe(relationships.length);
+      for (const relationship of relationships) {
+        const selected = cards.filter((card) => relationship.valueIds.includes(card.id)) as ValueCard[];
+        expect(selected).toHaveLength(2);
+        expect(service.getReflectionRelationships(exerciseType, selected).map(({ id }) => id)).toContain(
+          relationship.id
+        );
+      }
+    }
+    const selected = valuesData.values.filter((card) => ['4', '7', '33'].includes(card.id));
+    expect(service.getReflectionRelationships('personal', selected as ValueCard[]).map(({ id }) => id)).toEqual(
+      expect.arrayContaining(['personal-pressure-peace', 'personal-pressure-precise-work'])
+    );
+    const complementary = teamValuesData.values.filter((card) => ['18', '21'].includes(card.id));
+    expect(service.getReflectionRelationships('team', complementary as ValueCard[]).map(({ id }) => id)).toContain(
+      'team-trust-safety'
+    );
   });
 
   test('summarises recognition, notes, actions and unconfirmed possibilities separately', async () => {
