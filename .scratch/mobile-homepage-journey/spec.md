@@ -110,3 +110,10 @@ card figure is `.editorial-card-composition`; `.editorial-hero-copy` contains th
 
 The navigation treatment is the outstanding product decision. The owner has not approved a production implementation of
 any prototype variant.
+
+## Owner decision (2026-11-15)
+
+Selected option 1: ordinary scrolling. On mobile, aim to show the personal and team sections in the first iPhone SE
+viewport. Blend the See how it works and Resume an exercise links into the personal explanation; omit ‘in History’.
+Remove the gap and divider between the personal and team sections. Prototype reference: branch
+`prototype/mobile-homepage-journey`, commit `e3ecd1d`.
