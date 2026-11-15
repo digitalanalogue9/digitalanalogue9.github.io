@@ -17,6 +17,27 @@ const situations = [
   'Wondering what you want more of in your working life',
 ];
 
+function TeamActionSection({ placement }: { placement: 'mobile' | 'desktop' }) {
+  const headingId = `team-values-heading-${placement}`;
+
+  return (
+    <section className={`editorial-situations editorial-team editorial-team--${placement}`} aria-labelledby={headingId}>
+      <div>
+        <h2 id={headingId}>What matters to your team?</h2>
+        <p>
+          In a meeting, sort team-focused cards, discuss the trade-offs, then agree which values should guide your work
+          together.
+        </p>
+      </div>
+      <div>
+        <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
+          Start a team values conversation
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export default function HomeClient() {
   const behaviourReflectionEnabled = isBehaviourReflectionEnabled();
 
@@ -24,20 +45,22 @@ export default function HomeClient() {
     <div className="editorial-home">
       <section className="editorial-hero" aria-labelledby="home-heading">
         <div className="editorial-hero-copy">
-          <h1 id="home-heading">Some things matter more. Which things matter to you?</h1>
+          <h1 id="home-heading">Some things matter more.</h1>
+          <h2 className="editorial-personal-heading">Which things matter to you?</h2>
           <p className="editorial-lede">
-            Sort value cards to explore your priorities. Narrow your choices, then reflect on what your final set means
-            to you.
+            Sort value cards to explore your priorities, then reflect on what your final set means to you.{' '}
+            <Link className="editorial-text-link editorial-inline-link" to="/howtouse">
+              See how it works
+            </Link>{' '}
+            or{' '}
+            <Link className="editorial-history-link editorial-inline-link" to="/history">
+              Resume an exercise
+            </Link>
+            .
           </p>
           <div className="editorial-actions">
             <Link className="editorial-button editorial-button--primary" to="/exercise">
               Find my core values
-            </Link>
-            <Link className="editorial-text-link" to="/howtouse">
-              See how it works
-            </Link>
-            <Link className="editorial-history-link" to="/history">
-              Resume an exercise in History
             </Link>
           </div>
         </div>
@@ -51,6 +74,8 @@ export default function HomeClient() {
           <figcaption>Choose between values that matter in different ways.</figcaption>
         </figure>
       </section>
+
+      <TeamActionSection placement="mobile" />
 
       <section className="editorial-situations" aria-labelledby="situations-heading">
         <div>
@@ -76,20 +101,7 @@ export default function HomeClient() {
         </p>
       </section>
 
-      <section className="editorial-situations" aria-labelledby="team-values-heading">
-        <div>
-          <h2 id="team-values-heading">Or bring your team’s values into the room</h2>
-          <p>
-            Use the team-focused cards together in a meeting. Talk through the choices and trade-offs, then agree which
-            values you want to guide how you work together.
-          </p>
-        </div>
-        <div>
-          <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
-            Start a team values conversation
-          </Link>
-        </div>
-      </section>
+      <TeamActionSection placement="desktop" />
 
       {behaviourReflectionEnabled && (
         <section className="editorial-behaviour" aria-labelledby="behaviour-heading">

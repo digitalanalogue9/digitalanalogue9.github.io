@@ -3,9 +3,7 @@ import { expect, test } from '@playwright/test';
 test('visitor can reach personal app pages from the home page', async ({ page }) => {
   await page.goto('/');
 
-  await expect(
-    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more.' })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation).toContainText('About');
   await expect(navigation).toContainText('How it works');
@@ -92,9 +90,7 @@ test('home and direct exercise setup load and refresh without browser runtime er
   page.on('pageerror', (error) => runtimeErrors.push(error.message));
 
   await page.goto('/');
-  await expect(
-    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more.' })).toBeVisible();
   await page.getByRole('link', { name: 'Find my core values' }).first().click();
   await expect(page).toHaveURL(/\/exercise\/?$/);
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
@@ -117,9 +113,7 @@ test('exercise setup creates a team-focused Session only after an explicit start
   const initialSessionCount = await sessionOptions.count();
 
   await page.goto('/');
-  await expect(
-    page.getByRole('heading', { name: 'Some things matter more. Which things matter to you?' })
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Some things matter more.' })).toBeVisible();
   await page.goto('/exercise');
   await expect(page.getByRole('heading', { name: 'Set up your values exercise' })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Team-focused values' })).toBeVisible();
