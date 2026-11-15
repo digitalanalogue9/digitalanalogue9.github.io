@@ -722,28 +722,7 @@
   }
 
   .editorial-card-composition {
-    min-height: auto;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 0.5rem 0 2rem;
-  }
-
-  .editorial-card-composition figcaption {
-    position: static;
-  }
-
-  .editorial-value-card,
-  .editorial-value-card--1,
-  .editorial-value-card--2,
-  .editorial-value-card--3 {
-    width: 100%;
-    min-height: auto;
-    grid-column: auto;
-    transform: none;
-  }
-
-  .editorial-value-card p {
-    margin-top: 0.45rem;
+    display: none;
   }
 
   .editorial-outcome-values,

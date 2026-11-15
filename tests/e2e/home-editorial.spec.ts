@@ -1,5 +1,15 @@
 import { expect, test } from '@playwright/test';
 
+test('home keeps its introduction on mobile and shows the example cards on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const cards = page.getByRole('figure', { name: 'Three values from the personal card sort', includeHidden: true });
+  await expect(cards).toBeHidden();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(cards).toBeVisible();
+});
+
 test('keyboard users can skip the shared navigation', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('Tab');
