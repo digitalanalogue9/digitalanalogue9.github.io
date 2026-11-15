@@ -10,7 +10,7 @@ test('home keeps its introduction on mobile and shows the example cards on deskt
   await expect(cards).toBeVisible();
   await expect(page.locator('.editorial-team--mobile')).toBeHidden();
   const closingTop = await page
-    .locator('.editorial-closing')
+    .locator('.editorial-desktop-journey .editorial-closing')
     .evaluate((element) => element.getBoundingClientRect().top);
   const teamTop = await page
     .locator('.editorial-team--desktop')
@@ -18,18 +18,28 @@ test('home keeps its introduction on mobile and shows the example cards on deskt
   expect(teamTop).toBeGreaterThan(closingTop);
 });
 
-test('mobile home shows the complete personal and team introductions together', async ({ page }) => {
+test('mobile home presents the explanation before the personal and team actions', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto('/');
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
-  const personal = page.locator('.editorial-hero');
+  const personal = page.locator('.editorial-mobile-journey .editorial-personal');
   const team = page.locator('.editorial-team--mobile');
+  const introduction = page.locator('.editorial-mobile-journey');
+  const headings = introduction.getByRole('heading');
+  await expect(headings).toHaveText([
+    'Some things matter more.',
+    'When a decision pulls you in different directions',
+    'Make room to reflect on what matters to you.',
+    'Which things matter to you?',
+    'What matters to your team?',
+  ]);
   await expect(page.locator('.editorial-home').getByRole('link', { name: 'Find my core values' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Start a team values conversation' })).toBeVisible();
 
   for (const viewport of [
     { width: 375, height: 667 },
     { width: 320, height: 568 },
+    { width: 393, height: 852 },
   ]) {
     await page.setViewportSize(viewport);
     await expect(team).toBeVisible();
@@ -40,9 +50,14 @@ test('mobile home shows the complete personal and team introductions together', 
       `Mobile homepage ${viewport.width}×${viewport.height}: personal ${personalBottom}px, team ${teamBottom}px`
     );
 
+    expect(teamBottom).toBeGreaterThan(personalBottom);
     if (viewport.width === 375) {
-      expect(personalBottom).toBeLessThanOrEqual(viewport.height);
-      expect(teamBottom).toBeLessThanOrEqual(viewport.height);
+      const button = await personal.getByRole('link', { name: 'Find my core values' }).boundingBox();
+      expect(button!.y + button!.height).toBeLessThanOrEqual(viewport.height);
+    }
+    if (viewport.width === 393) {
+      const button = await team.getByRole('link', { name: 'Start a team values conversation' }).boundingBox();
+      expect(button!.y + button!.height).toBeLessThanOrEqual(viewport.height);
     }
   }
 });
@@ -82,7 +97,9 @@ test('home introduces the values exercise and keeps the public routes within rea
   await expect(page.getByRole('heading', { level: 1, name: 'Some things matter more.' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'Which things matter to you?' })).toBeVisible();
   await expect(
-    page.getByText('Sort value cards to explore your priorities, then reflect on what your final set means to you.')
+    page
+      .locator('.editorial-desktop-journey')
+      .getByText('Sort value cards to explore your priorities, then reflect on what your final set means to you.')
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'Find my core values' }).first()).toHaveAttribute('href', '/exercise');
   await expect(page.getByRole('link', { name: 'See how it works' }).first()).toHaveAttribute('href', '/howtouse');
