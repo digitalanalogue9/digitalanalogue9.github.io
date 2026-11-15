@@ -190,6 +190,14 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             Use this prompt to reflect on your values over time. It includes your saved notes; you can edit it before
             copying.
           </p>
+          <button type="button" className="copy-prompt-link" onClick={() => void handleCopyRecurringPrompt()}>
+            Copy to clipboard
+          </button>
+          {recurringCopyFeedback && (
+            <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
+              {recurringCopyFeedback}
+            </p>
+          )}
           <div className="flex flex-wrap items-center gap-3">
             <RecurringReflectionControls
               recurringPrompt={recurringPrompt}
@@ -209,11 +217,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
             role="alert"
           >
             {actionError}
-          </p>
-        )}
-        {recurringCopyFeedback && (
-          <p className="text-interface-base-small text-sys-color-text-secondary" role="status">
-            {recurringCopyFeedback}
           </p>
         )}
         <div className="flex flex-wrap justify-end gap-3">
@@ -243,9 +246,6 @@ export default function CompletedClient({ sessionId }: { sessionId: string }) {
           >
             Replay Session
           </Link>
-          <button type="button" className={primaryActionButtonClasses} onClick={() => void handleCopyRecurringPrompt()}>
-            Copy prompt
-          </button>
         </div>
       </section>
     </div>

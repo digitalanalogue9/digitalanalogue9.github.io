@@ -202,7 +202,15 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await expect(prompt).toHaveValue(/My private goal\./);
   await expect(prompt).toHaveValue(/My saved reason\./);
   await prompt.fill('An edited reflection prompt.');
-  await page.getByRole('button', { name: 'Copy prompt', exact: true }).click();
+  const copyPrompt = page.getByRole('button', { name: 'Copy to clipboard', exact: true });
+  expect(
+    await copyPrompt.evaluate((button) =>
+      Boolean(
+        button.compareDocumentPosition(document.querySelector('#recurring-prompt')!) & Node.DOCUMENT_POSITION_FOLLOWING
+      )
+    )
+  ).toBe(true);
+  await copyPrompt.click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('An edited reflection prompt.');
   await expect(page.getByText('Prompt copied.', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open History', exact: true })).toHaveCount(0);
@@ -217,7 +225,7 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Copy prompt', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy to clipboard', exact: true })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Recurring prompt' })).toHaveValue(
     /Selected values, in original rank order:/
   );

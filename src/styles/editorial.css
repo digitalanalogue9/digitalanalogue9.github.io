@@ -294,6 +294,22 @@
   text-underline-offset: 0.25rem;
 }
 
+#main-content button.copy-prompt-link,
+#main-content button.copy-prompt-link:hover:not(:disabled) {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--editorial-plum);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+#main-content button.copy-prompt-link:focus-visible {
+  outline: 3px solid var(--editorial-plum);
+  outline-offset: 3px;
+}
+
 .editorial-history-link {
   display: inline-block;
   margin-top: 1.25rem;
