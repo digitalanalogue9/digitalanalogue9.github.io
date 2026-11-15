@@ -13,6 +13,7 @@ import { historyButtonClassName } from '@/app/history/constants/buttonStyles';
 import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 import { useNavigate } from 'react-router-dom';
 import type { BehaviourAttempt } from '@/lib/services/behaviourAttemptService';
+import { evaluateRoundTransition } from '@/lib/domain/roundEngine';
 import { getBehaviourAttemptServiceSingleton } from '@/lib/services/serviceSingleton';
 
 type ExerciseService = ReturnType<typeof useExerciseService>;
@@ -35,6 +36,7 @@ export default function HistoryClient() {
   const service = useExerciseService();
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [readyForReflectionIds, setReadyForReflectionIds] = useState<string[]>([]);
   const [scenarioAttempts, setScenarioAttempts] = useState<BehaviourAttempt[]>([]);
   const [scenarioError, setScenarioError] = useState<string | null>(null);
   const [includeScenarioPrivateText, setIncludeScenarioPrivateText] = useState(false);
@@ -59,8 +61,19 @@ export default function HistoryClient() {
     setLoadError(null);
     try {
       const items = await service.listSessions();
+      const readyIds = await Promise.all(
+        items.map(async (item) => {
+          const record = await service.loadSession(item.id);
+          const ready =
+            item.status === 'completed'
+              ? !record.completedSession?.reflection
+              : evaluateRoundTransition(record.currentRound).canComplete;
+          return ready ? item.id : null;
+        })
+      );
       if (requestSequence !== loadSequenceRef.current) return;
       setSessions(items);
+      setReadyForReflectionIds(readyIds.filter((id): id is string => id !== null));
     } catch (loadError) {
       if (requestSequence !== loadSequenceRef.current) return;
       setLoadError(loadError instanceof Error ? loadError.message : 'Unable to load history.');
@@ -407,6 +420,7 @@ export default function HistoryClient() {
           <div className="mt-3">
             <HistorySessionSelector
               sessions={sessions}
+              readyForReflectionIds={readyForReflectionIds}
               isWorking={isWorking}
               copyCompletedValuesLoading={(id) => copyingCompletedValuesSessionId === id}
               printCompletedValuesLoading={(id) => printingCompletedValuesSessionId === id}

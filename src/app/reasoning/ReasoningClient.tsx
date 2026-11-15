@@ -5,12 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { nonExercisePageContainerClassName } from '@/app/layoutClasses';
 import { ReflectionJournal } from '@/app/reasoning/ReflectionJournal';
-import type {
-  RelationshipReflectionNotes,
-  SessionReflection,
-  ValueReflectionNotes,
-  ValueCard,
-} from '@/lib/contracts/types';
+import type { SessionReflection, ValueReflectionNotes, ValueCard } from '@/lib/contracts/types';
 import { evaluateRoundTransition } from '@/lib/domain/roundEngine';
 import { useExerciseService } from '@/lib/services/ExerciseServiceContext';
 
@@ -162,18 +157,6 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
     },
     []
   );
-  const updateRelationshipReflection = useCallback(
-    (relationshipId: string, field: keyof RelationshipReflectionNotes, value: string) => {
-      setReflection((current) => ({
-        ...current,
-        relationships: {
-          ...current.relationships,
-          [relationshipId]: { ...current.relationships?.[relationshipId], [field]: value },
-        },
-      }));
-    },
-    []
-  );
 
   if (loading) {
     return (
@@ -215,8 +198,16 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
       <header className="space-y-4 border-b border-[var(--editorial-line)] pb-8">
         <h1 className="page-heading text-4xl sm:text-5xl lg:text-6xl">Reflect on your values</h1>
         <p className="page-intro max-w-[70ch]">
-          These optional prompts help you explore the values you selected. Your answers are saved with this session on
-          this device.
+          These <strong>optional</strong> prompts help you explore the values you selected. You can{' '}
+          <button
+            type="button"
+            className="reflection-skip-link"
+            onClick={() => void handleComplete()}
+            disabled={working || finalValues.length === 0}
+          >
+            skip for now
+          </button>{' '}
+          and return to these prompts later.
         </p>
         {error && (
           <p
@@ -249,10 +240,8 @@ export default function ReasoningClient({ sessionId }: { sessionId: string }) {
           relationships={relationships}
           summary={summary}
           working={working}
-          onGoalChange={(goal) => setReflection((current) => ({ ...current, goal }))}
           onValueChange={updateValueReflection}
           onSuggestionChange={updateSuggestionResponse}
-          onRelationshipChange={updateRelationshipReflection}
         />
       )}
 

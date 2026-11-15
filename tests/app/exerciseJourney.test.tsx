@@ -1,11 +1,12 @@
 import 'fake-indexeddb/auto';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, expect, test, vi } from 'vitest';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Link, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { deleteDB } from 'idb';
 import { ExerciseRoute } from '../../src/app/ExerciseRoute';
 import { CompletedRoute } from '../../src/app/CompletedRoute';
 import { ReasoningRoute } from '../../src/app/ReasoningRoute';
+import { HistoryRoute } from '../../src/app/HistoryRoute';
 import { closeSessionRepository, createSession } from '../../src/lib/db/canonicalSessionRepository';
 import { getExerciseServiceSingleton } from '../../src/lib/services/ExerciseServiceContext';
 
@@ -44,9 +45,60 @@ test('a normally sorted exercise opens optional reflection and completes with sa
   expect(
     await screen.findByText(new RegExp(`Where have we seen ${kept.title} shape the way we work together`))
   ).toBeInTheDocument();
-  expect(screen.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue('');
+  expect(screen.queryByRole('textbox', { name: 'Session goal (optional)' })).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Save reflection and complete' }));
   expect(await screen.findByRole('heading', { name: 'Reflect on your values' })).toBeInTheDocument();
+});
+
+test('skipping reflection completes the session without losing a saved draft', async () => {
+  localStorage.setItem('show-instructions', 'false');
+  const record = await createSession({
+    initialValues: ['a', 'b'].map((id) => ({ id, title: `Value ${id}`, description: `Description ${id}` })),
+    targetCoreValues: 1,
+    exerciseType: 'personal',
+  });
+  const [selected, rejected] = record.currentRound.deck;
+  render(
+    <MemoryRouter initialEntries={[`/exercise?sessionId=${record.session.id}`]}>
+      <Link to="/history">Open test history</Link>
+      <Routes>
+        <Route path="/exercise" element={<ExerciseRoute />} />
+        <Route path="/reasoning" element={<ReasoningRoute />} />
+        <Route path="/completed" element={<CompletedRoute />} />
+        <Route path="/history" element={<HistoryRoute />} />
+      </Routes>
+    </MemoryRouter>
+  );
+  fireEvent.click(screen.getByRole('link', { name: 'Open test history' }));
+  expect(await screen.findByText('In progress')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('link', { name: 'Continue exercise' }));
+  await screen.findByLabelText(`Current card ${selected.title}`);
+  fireEvent.click(screen.getByRole('button', { name: 'Place current card in Very Important' }));
+  await screen.findByLabelText(`Current card ${rejected.title}`);
+  fireEvent.click(screen.getByRole('button', { name: 'Place current card in Not Important' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Proceed to reasoning' }));
+  fireEvent.change(await screen.findByRole('textbox', { name: `Observation for ${selected.title}` }), {
+    target: { value: 'Keep my draft.' },
+  });
+  await screen.findByText('Draft saved on this device.');
+  fireEvent.click(screen.getByRole('link', { name: 'Open test history' }));
+  expect(await screen.findByText('Ready to reflect')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('link', { name: 'Continue to reflection' }));
+  expect(await screen.findByRole('textbox', { name: `Observation for ${selected.title}` })).toHaveValue(
+    'Keep my draft.'
+  );
+  fireEvent.click(screen.getByRole('button', { name: 'skip for now' }));
+  expect(await screen.findByRole('heading', { name: 'Your core values' })).toBeInTheDocument();
+  const saved = await getExerciseServiceSingleton().loadSession(record.session.id);
+  expect(saved.completedSession?.reflection?.values[selected.id]?.observation).toBe('Keep my draft.');
+  fireEvent.click(screen.getByRole('link', { name: 'Back to reflection' }));
+  expect(await screen.findByRole('button', { name: 'skip for now' })).toBeVisible();
+  expect(screen.getByRole('textbox', { name: `Observation for ${selected.title}` })).toHaveValue('Keep my draft.');
+  fireEvent.click(screen.getByRole('link', { name: 'Open test history' }));
+  expect(await screen.findByRole('link', { name: 'View results' })).toHaveAttribute(
+    'href',
+    `/completed?sessionId=${record.session.id}`
+  );
 });
 
 test('a failed draft save keeps reflection entries visible and explains the storage error', async () => {
@@ -73,7 +125,7 @@ test('a failed draft save keeps reflection entries visible and explains the stor
   await screen.findByLabelText(`Current card ${rejected.title}`);
   fireEvent.click(screen.getByRole('button', { name: 'Place current card in Not Important' }));
   fireEvent.click(await screen.findByRole('button', { name: 'Proceed to reasoning' }));
-  const goal = await screen.findByRole('textbox', { name: 'Session goal (optional)' });
+  const goal = await screen.findByRole('textbox', { name: `Observation for ${selected.title}` });
   fireEvent.change(goal, { target: { value: 'Keep the important entries.' } });
 
   expect(await screen.findByRole('alert')).toHaveTextContent(/Draft could not be saved.*Storage is unavailable/);
@@ -104,7 +156,7 @@ test('a failed completion save keeps entries on the reflection page and can be r
   await screen.findByLabelText(`Current card ${rejected.title}`);
   fireEvent.click(screen.getByRole('button', { name: 'Place current card in Not Important' }));
   fireEvent.click(await screen.findByRole('button', { name: 'Proceed to reasoning' }));
-  const goal = await screen.findByRole('textbox', { name: 'Session goal (optional)' });
+  const goal = await screen.findByRole('textbox', { name: `Observation for ${selected.title}` });
   fireEvent.change(goal, { target: { value: 'Retry this completed reflection.' } });
   await screen.findByText('Draft saved on this device.');
 

@@ -354,6 +354,23 @@
   outline-offset: 3px;
 }
 
+#main-content button.reflection-skip-link {
+  display: inline;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--editorial-plum);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+#main-content button.reflection-skip-link:focus-visible {
+  outline: 3px solid var(--editorial-plum);
+  outline-offset: 3px;
+}
+
 .editorial-history-link {
   display: inline-block;
   margin-top: 1.25rem;

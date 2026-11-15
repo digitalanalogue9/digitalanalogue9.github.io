@@ -59,7 +59,7 @@ async function importBackup(page: Page) {
   await page.getByRole('button', { name: 'Reject optional cookies' }).click();
   await page.getByLabel('Backup file contents (JSON)').fill(JSON.stringify(backup));
   await page.getByRole('button', { name: /Import.*text/ }).click();
-  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
 }
 async function downloadJson(page: Page, button: string) {
   const previousCount = await page.evaluate(
@@ -112,25 +112,23 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   expect(ordinary.completedSession.reflection.goal).toBe('My private goal.');
   const actions = page.getByRole('group', { name: 'Actions for selected session' });
   await expect(actions.locator('button, a')).toHaveText([
+    'View results',
     'Delete',
     'Export',
     'Legacy backup',
     'Print',
     'Replay',
     'Agent',
-    'Resume',
   ]);
   await page.getByRole('button', { name: 'Agent', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Prompt copied to clipboard');
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(cards[0].title);
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Each run should be brief');
   expect(await page.evaluate(() => navigator.clipboard.readText())).not.toContain('My private goal.');
-  await page.getByRole('link', { name: 'Resume', exact: true }).click();
-  await expect(page).toHaveURL(/\/reasoning\?sessionId=/);
-  await page.getByRole('link', { name: 'Back to results', exact: true }).click();
+  await page.getByRole('link', { name: 'View results', exact: true }).click();
   await expect(page).toHaveURL(/\/completed\?sessionId=/);
   await page.getByRole('link', { name: 'Back to reflection', exact: true }).click();
-  await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveValue('My private goal.');
+  await expect(page.getByRole('textbox', { name: 'Session goal (optional)' })).toHaveCount(0);
   await page.getByRole('link', { name: 'Back to results', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Your core values', level: 1 })).toBeVisible();
@@ -146,36 +144,37 @@ test('history imports, exports, copies and deletes sessions; results provide pri
         )
       )
   ).toBe(true);
-  await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: 'Codex', exact: true })).toHaveCount(0);
+  const setupInstructions = page.getByRole('combobox', { name: 'Setup instructions' });
+  await expect(setupInstructions).toHaveValue('');
+  for (const name of ['Copilot', 'Claude', 'ChatGPT']) {
+    await expect(page.getByRole('heading', { name, exact: true })).toHaveCount(0);
+  }
+  await setupInstructions.selectOption({ label: 'Copilot' });
+  await expect(page.getByRole('heading', { name: 'Copilot', exact: true })).toBeVisible();
   await expect(page.getByText(/Microsoft calls these Scheduled tasks\./)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Microsoft guide to scheduled tasks in Copilot Chat' })).toHaveAttribute(
     'href',
     'https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts'
   );
-  await page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true }).focus();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('radio', { name: 'Claude Cowork', exact: true })).toBeChecked();
-  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Microsoft 365 Copilot Chat', exact: true })).toHaveCount(0);
+  await setupInstructions.selectOption({ label: 'Claude' });
+  await expect(page.getByRole('heading', { name: 'Claude', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Copilot', exact: true })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Claude guide to scheduled tasks' })).toHaveAttribute(
     'href',
     'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork'
   );
-  await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('radio', { name: 'Codex', exact: true })).toBeChecked();
-  await expect(page.getByRole('heading', { name: 'Codex', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Claude Cowork', exact: true })).toHaveCount(0);
-  await expect(
-    page.getByRole('link', { name: 'Official OpenAI documentation for Codex scheduled tasks' })
-  ).toHaveAttribute('href', 'https://developers.openai.com/codex/app/automations');
+  await setupInstructions.selectOption({ label: 'ChatGPT' });
+  await expect(page.getByRole('heading', { name: 'ChatGPT', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Claude', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'OpenAI guide to tasks in ChatGPT' })).toHaveAttribute(
+    'href',
+    'https://help.openai.com/en/articles/10291617-tasks-in-chatgpt'
+  );
   const prompt = page.getByRole('textbox', { name: 'Recurring prompt' });
   expect(
     await prompt.evaluate((field) =>
       Boolean(
-        field.compareDocumentPosition(document.querySelector('input[name="recurring-reflection-service"]')!) &
+        field.compareDocumentPosition(document.querySelector('#recurring-reflection-service')!) &
         Node.DOCUMENT_POSITION_FOLLOWING
       )
     )
@@ -193,7 +192,7 @@ test('history imports, exports, copies and deletes sessions; results provide pri
     await prompt.evaluate((field) =>
       Boolean(
         field.compareDocumentPosition(
-          Array.from(document.querySelectorAll('h3')).find((heading) => heading.textContent === 'Codex')!
+          Array.from(document.querySelectorAll('h3')).find((heading) => heading.textContent === 'ChatGPT')!
         ) & Node.DOCUMENT_POSITION_FOLLOWING
       )
     )
@@ -212,7 +211,9 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   ).toBe(true);
   await copyPrompt.click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('An edited reflection prompt.');
-  await expect(page.getByText('Prompt copied.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('status')).toHaveText('Prompt copied.');
+  await expect(page.getByText('Prompt copied.', { exact: true })).toBeHidden();
+  await expect(prompt.locator('..').locator('.copy-prompt-flash')).toBeAttached();
   await expect(page.getByRole('link', { name: 'Open History', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Preview one-off coaching prompt' })).toHaveCount(0);
   await expect(page.getByLabel('Recurring reflection frequency')).toHaveCount(0);
@@ -224,11 +225,12 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Set up recurring reflection', exact: true })).toBeVisible();
-  await expect(page.getByRole('radio', { name: 'Microsoft 365 Copilot', exact: true })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Setup instructions' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy to clipboard', exact: true })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Recurring prompt' })).toHaveValue(
     /Selected values, in original rank order:/
   );
+  await expect(page.getByRole('textbox', { name: 'Recurring prompt' })).toHaveValue(/My private goal\./);
   await expect(page.getByRole('heading', { name: 'Your core values', exact: true })).toBeVisible();
   const previousDownloadCount = await page.evaluate(
     () =>
@@ -262,7 +264,7 @@ test('history imports, exports, copies and deletes sessions; results provide pri
   await page.goto('/history');
   await page.screenshot({ path: '.scratch/parity-history.png', fullPage: true });
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
-  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toHaveCount(0);
   await page.reload();
   await expect(page.getByText('No sessions saved in this browser yet.', { exact: true })).toBeVisible();
   await page.locator('input[type="file"]').setInputFiles({
@@ -270,5 +272,5 @@ test('history imports, exports, copies and deletes sessions; results provide pri
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(ordinary)),
   });
-  await expect(page.getByRole('link', { name: 'Resume', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View results', exact: true })).toBeVisible();
 });
