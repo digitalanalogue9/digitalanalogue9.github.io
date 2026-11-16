@@ -60,8 +60,8 @@ test('privacy page loads directly, refreshes and manages consent', async ({ page
   const banner = page.getByRole('region', { name: 'Privacy preferences' });
   await expect(banner).toContainText('Optional Google Analytics helps me understand visits to this site.');
   await expect(banner.getByRole('button', { name: 'Allow analytics' })).toBeVisible();
-  await expect(banner.getByRole('button', { name: 'Reject optional cookies' })).toBeVisible();
-  await expect(banner.getByText('Customise preferences')).toBeVisible();
+  await expect(banner.getByRole('button', { name: 'Reject analytics' })).toBeVisible();
+  await expect(banner.getByText('Customise preferences')).toHaveCount(0);
   await banner.getByRole('link', { name: 'Read the privacy notice' }).click();
   await expect(page).toHaveURL(/\/privacy\/?$/);
   await page.setViewportSize({ width: 320, height: 800 });
@@ -73,7 +73,9 @@ test('privacy page loads directly, refreshes and manages consent', async ({ page
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth))
     .toBe(true);
-  const rejectAnalytics = page.getByRole('button', { name: 'Reject analytics' });
+  const rejectAnalytics = page
+    .getByRole('main', { name: 'Main content' })
+    .getByRole('button', { name: 'Reject analytics' });
   await rejectAnalytics.focus();
   await rejectAnalytics.press('Enter');
   await expect(page.getByRole('status')).toHaveText('Your analytics preference has been saved.');

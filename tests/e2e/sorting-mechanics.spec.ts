@@ -4,7 +4,7 @@ test('desktop supports dragging, moving and ordering placed cards', async ({ pag
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.addInitScript(() => localStorage.setItem('show-instructions', 'false'));
   await page.goto('/exercise');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
   const current = page.getByLabel(/^Current card /);
   const bucket = page.getByRole('article', { name: 'Very Important category' });
@@ -33,7 +33,7 @@ test('mobile retains compact sorting and allows review, movement and reordering'
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => localStorage.setItem('show-instructions', 'false'));
   await page.goto('/exercise');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   await page.getByRole('button', { name: 'Start exercise', exact: true }).click();
   const current = page.getByLabel(/^Current card /);
   const first = await current.getByRole('heading').innerText();

@@ -41,7 +41,8 @@ export default function PrivacyPage() {
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           The app doesn’t send your exercise values, choices or notes to a server. Saved work doesn’t sync between
-          browsers or devices. Clearing this site’s browser data can remove it, along with your preferences.
+          browsers or devices. Clearing this site’s browser data can remove it, along with your preferences. If you copy
+          a prompt into another service, that service receives the information you choose to share.
         </p>
       </section>
 
@@ -67,8 +68,9 @@ export default function PrivacyPage() {
           Optional Google Analytics
         </h2>
         <p className="text-sys-color-text-secondary leading-relaxed">
-          If you allow analytics, this site sends page views to Google Analytics. Page URLs and referrers omit query
-          strings and fragments, so session identifiers in links aren’t included.
+          If you allow analytics, this site sends page views to Google Analytics. The page views sent by this site omit
+          query strings and fragments from URLs and referrers. Google may also collect automatic events, which can
+          include the full page URL depending on the Analytics property’s settings.
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Exercise values, choices, notes and imported or exported backup contents aren’t sent. Google may process
@@ -77,7 +79,8 @@ export default function PrivacyPage() {
         </p>
         <p className="text-sys-color-text-secondary leading-relaxed">
           Analytics doesn’t load before consent. Advertising features and Google Signals are disabled. Rejecting or
-          withdrawing consent stops further page views. It doesn’t remove information Google has already collected.
+          withdrawing consent disables further Google Analytics collection on this page. Requests already in progress
+          may still complete. It doesn’t remove information Google has already collected.
         </p>
       </section>
 

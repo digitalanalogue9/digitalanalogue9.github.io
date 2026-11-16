@@ -1,20 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useConsent } from '@/lib/hooks/useConsent';
 import type { ConsentStatus } from '@/lib/types/Consent';
 
 export default function CookieBanner() {
   const { consent, updateConsent } = useConsent();
-  const [choices, setChoices] = useState(consent);
-
-  useEffect(() => setChoices(consent), [consent]);
-
-  const chooseConsent = (analytics: ConsentStatus, functional: ConsentStatus) => {
-    updateConsent({ analytics, functional, advertisement: 'denied' });
-  };
-
-  const updateChoice = (type: 'analytics' | 'functional', granted: boolean) => {
-    setChoices((current) => ({ ...current, [type]: granted ? 'granted' : 'denied' }));
+  const chooseConsent = (analytics: ConsentStatus) => {
+    updateConsent({ analytics, advertisement: 'denied' });
   };
 
   if (consent.analytics !== 'pending') return null;
@@ -49,57 +40,20 @@ export default function CookieBanner() {
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={() => chooseConsent('granted', 'granted')}
+              onClick={() => chooseConsent('granted')}
               className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
             >
               Allow analytics
             </button>
             <button
               type="button"
-              onClick={() => chooseConsent('denied', 'denied')}
-              className="rounded-sys-radius-button-sm text-interface-base-small min-h-11 border border-white px-5 py-2 font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+              onClick={() => chooseConsent('denied')}
+              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
             >
-              Reject optional cookies
+              Reject analytics
             </button>
           </div>
         </div>
-
-        <details className="border-t border-white/30 pt-3">
-          <summary className="w-fit cursor-pointer rounded-sm font-semibold text-white underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-            Customise preferences
-          </summary>
-          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-              <label htmlFor="consent-analytics" className="flex min-h-11 items-center gap-3">
-                <input
-                  id="consent-analytics"
-                  type="checkbox"
-                  checked={choices.analytics === 'granted'}
-                  onChange={(event) => updateChoice('analytics', event.target.checked)}
-                  className="cv-checkbox__control"
-                />
-                <span>Google Analytics</span>
-              </label>
-              <label htmlFor="consent-functional" className="flex min-h-11 items-center gap-3">
-                <input
-                  id="consent-functional"
-                  type="checkbox"
-                  checked={choices.functional === 'granted'}
-                  onChange={(event) => updateChoice('functional', event.target.checked)}
-                  className="cv-checkbox__control"
-                />
-                <span>Functional preferences</span>
-              </label>
-            </div>
-            <button
-              type="button"
-              onClick={() => chooseConsent(choices.analytics, choices.functional)}
-              className="rounded-sys-radius-button-sm bg-ref-color-brand-accent text-interface-base-small text-sys-color-text-primary min-h-11 w-full px-5 py-2 font-semibold transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none sm:w-auto"
-            >
-              Save preferences
-            </button>
-          </div>
-        </details>
       </div>
     </section>
   );

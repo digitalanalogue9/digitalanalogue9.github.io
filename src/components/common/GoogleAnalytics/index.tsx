@@ -22,16 +22,16 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID = DEFAULT_MEASUREMEN
   const page = location.pathname;
 
   useEffect(() => {
+    const disableKey = `ga-disable-${GA_MEASUREMENT_ID}`;
+    const analyticsWindow = window as unknown as Record<string, unknown>;
     if (!isInitialized || consent.analytics !== 'granted' || !GA_MEASUREMENT_ID) {
+      analyticsWindow[disableKey] = true;
       setIsReady(false);
       previousPageRef.current = null;
-      scriptRef.current?.remove();
-      scriptRef.current = null;
-      delete window.gtag;
-      delete window.dataLayer;
       return;
     }
 
+    analyticsWindow[disableKey] = false;
     let active = true;
     const existingScript = document.querySelector<HTMLScriptElement>(
       `script[data-core-values-analytics="${GA_MEASUREMENT_ID}"]`
@@ -55,6 +55,8 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID = DEFAULT_MEASUREMEN
         send_page_view: false,
         allow_google_signals: false,
         allow_ad_personalization_signals: false,
+        page_location: `${window.location.origin}${window.location.pathname}`,
+        page_referrer: '',
       });
 
       const script = document.createElement('script');
@@ -91,6 +93,7 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID = DEFAULT_MEASUREMEN
       }
     }
     previousPageRef.current = page;
+    window.gtag('set', { page_location: pageLocation, page_referrer: pageReferrer });
     window.gtag('event', 'page_view', {
       page_path: page,
       page_location: pageLocation,

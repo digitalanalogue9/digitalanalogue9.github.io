@@ -6,7 +6,6 @@ const CONSENT_KEY = 'cookie-consent';
 const CONSENT_CHANGED_EVENT = 'core-values-consent-changed';
 const DEFAULT_CONSENT: CookieConsent = {
   analytics: 'pending',
-  functional: 'pending',
   advertisement: 'denied',
   timestamp: 0,
 };
@@ -21,7 +20,6 @@ function normalizeConsent(value: unknown): CookieConsent {
   const candidate = value as Partial<CookieConsent>;
   return {
     analytics: isConsentStatus(candidate.analytics) ? candidate.analytics : DEFAULT_CONSENT.analytics,
-    functional: isConsentStatus(candidate.functional) ? candidate.functional : DEFAULT_CONSENT.functional,
     advertisement: isConsentStatus(candidate.advertisement) ? candidate.advertisement : DEFAULT_CONSENT.advertisement,
     timestamp: typeof candidate.timestamp === 'number' ? candidate.timestamp : DEFAULT_CONSENT.timestamp,
   };

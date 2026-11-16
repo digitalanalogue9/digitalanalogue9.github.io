@@ -40,6 +40,8 @@ describe('privacy choices', () => {
     localStorage.clear();
     delete window.gtag;
     delete window.dataLayer;
+    delete (window as unknown as Record<string, unknown>)['ga-disable-G-JZPX5JCP5D'];
+    document.querySelectorAll('script[data-core-values-analytics]').forEach((script) => script.remove());
   });
 
   afterEach(() => cleanup());
@@ -82,14 +84,14 @@ describe('privacy choices', () => {
 
     const banner = await screen.findByRole('region', { name: 'Privacy preferences' });
     expect(banner).toBeVisible();
-    fireEvent.click(screen.getByRole('button', { name: 'Reject optional cookies' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject analytics' }));
 
     await waitFor(() => expect(screen.queryByRole('region', { name: 'Privacy preferences' })).not.toBeInTheDocument());
     expect(JSON.parse(localStorage.getItem(consentKey) ?? '{}')).toMatchObject({
       analytics: 'denied',
-      functional: 'denied',
       advertisement: 'denied',
     });
+    expect(JSON.parse(localStorage.getItem(consentKey) ?? '{}')).not.toHaveProperty('functional');
 
     unmount();
     render(
@@ -98,6 +100,19 @@ describe('privacy choices', () => {
       </MemoryRouter>
     );
     await waitFor(() => expect(screen.queryByRole('region', { name: 'Privacy preferences' })).not.toBeInTheDocument());
+  });
+
+  it('offers equally styled analytics choices without a redundant customisation panel', () => {
+    render(
+      <MemoryRouter>
+        <CookieBanner />
+      </MemoryRouter>
+    );
+    expect(screen.queryByText('Customise preferences')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Functional preferences')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Allow analytics' }).className).toBe(
+      screen.getByRole('button', { name: 'Reject analytics' }).className
+    );
   });
 
   it('does not request Google Analytics until the visitor grants consent', async () => {
@@ -121,6 +136,9 @@ describe('privacy choices', () => {
       return element!;
     });
     expect(script.src).toContain('id=G-JZPX5JCP5D');
+    expect(window.dataLayer?.find((call) => call[0] === 'config')?.[2]).toMatchObject({
+      page_location: `${window.location.origin}${window.location.pathname}`,
+    });
 
     script.dispatchEvent(new Event('load'));
     await waitFor(() => {
@@ -140,8 +158,10 @@ describe('privacy choices', () => {
     });
 
     fireEvent.click(screen.getByRole('button', { name: 'Reject analytics' }));
-    await waitFor(() => expect(document.querySelector('script[src*="googletagmanager.com"]')).not.toBeInTheDocument());
-    expect(window.gtag).toBeUndefined();
+    await waitFor(() => expect((window as unknown as Record<string, unknown>)['ga-disable-G-JZPX5JCP5D']).toBe(true));
     expect(JSON.parse(localStorage.getItem(consentKey) ?? '{}').analytics).toBe('denied');
+    fireEvent.click(screen.getByRole('button', { name: 'Allow analytics' }));
+    await waitFor(() => expect((window as unknown as Record<string, unknown>)['ga-disable-G-JZPX5JCP5D']).toBe(false));
+    expect(document.querySelectorAll('script[src*="googletagmanager.com"]')).toHaveLength(1);
   });
 });

@@ -8,7 +8,7 @@ test.skip(
 test('participant can complete and resume a Behaviour reflection', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/behaviour');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   await page.getByRole('button', { name: 'Start reflection' }).click();
 
   for (let position = 0; position < 6; position += 1) {

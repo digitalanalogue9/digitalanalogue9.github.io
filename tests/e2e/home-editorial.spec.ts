@@ -21,7 +21,7 @@ test('home keeps its introduction on mobile and shows the example cards on deskt
 test('mobile home presents the explanation before the personal and team actions', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto('/');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   const personal = page.locator('.editorial-mobile-journey .editorial-personal');
   const team = page.locator('.editorial-team--mobile');
   const introduction = page.locator('.editorial-mobile-journey');
@@ -91,8 +91,8 @@ test('keyboard users can skip the shared navigation', async ({ page }) => {
 
 test('home introduces the values exercise and keeps the public routes within reach', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Reject optional cookies' })).toBeVisible();
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await expect(page.getByRole('button', { name: 'Reject analytics' })).toBeVisible();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Some things matter more.' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'Which things matter to you?' })).toBeVisible();

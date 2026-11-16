@@ -9,7 +9,7 @@ const teamValueTitles = (
 
 test('team action preselects team values without creating a session until start', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   const teamAction = page.getByRole('link', { name: 'Start a team values conversation' });
   await expect(teamAction).toHaveAttribute('href', '/exercise?exerciseType=team');
   await teamAction.click();
@@ -24,7 +24,7 @@ test('team action preselects team values without creating a session until start'
 
 test('team session uses team-focused cards and resumes the saved session', async ({ page }) => {
   await page.goto('/exercise?exerciseType=team');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   const teamChoice = page.getByRole('radio', { name: 'Team-focused values' });
   const personalChoice = page.getByRole('radio', { name: 'Personal values' });
   await expect(teamChoice).toBeChecked();
@@ -55,7 +55,7 @@ test('team session uses team-focused cards and resumes the saved session', async
 
 test('personal home action and direct setup keep Personal values selected', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Reject optional cookies' }).click();
+  await page.getByRole('button', { name: 'Reject analytics' }).click();
   await page.getByRole('link', { name: 'Find my core values' }).first().click();
   await expect(page).toHaveURL('/exercise');
   await expect(page.getByRole('radio', { name: 'Personal values' })).toBeChecked();
