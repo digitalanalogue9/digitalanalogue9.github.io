@@ -411,7 +411,8 @@
   box-shadow: 0 0.8rem 1.8rem rgb(60 42 56 / 10%);
 }
 
-.editorial-value-card h2 {
+.editorial-value-card h2,
+.editorial-value-card h3 {
   color: var(--editorial-plum);
   font-size: clamp(1.35rem, 2vw, 1.8rem);
 }
@@ -722,6 +723,64 @@
 .editorial-storage-section {
   border-top: 1px solid var(--editorial-line);
   padding-block: clamp(1.5rem, 3vw, 2rem);
+}
+
+@media (min-width: 42.001rem) {
+  .editorial-home-heading {
+    padding-block: 3rem 1rem;
+  }
+
+  #main-content .editorial-home .editorial-home-heading h1 {
+    font-size: clamp(2.65rem, 5.4vw, 5rem);
+    letter-spacing: -0.025em;
+  }
+
+  .editorial-action-sections {
+    display: grid;
+    gap: 1.5rem;
+    margin-block: 2.5rem;
+  }
+
+  .editorial-action-sections .editorial-personal--desktop,
+  .editorial-action-sections .editorial-team--desktop {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin: 0;
+    border: 0;
+    background: transparent;
+    padding: clamp(2rem, 3vw, 3rem) 0;
+  }
+
+  #main-content .editorial-personal--desktop .editorial-personal-heading {
+    font-size: clamp(2rem, 3.8vw, 3.3rem);
+  }
+
+  .editorial-team--desktop .editorial-team-copy > .editorial-button {
+    margin-top: 1.5rem;
+  }
+
+  .editorial-action-sections .editorial-card-composition {
+    min-height: 20rem;
+  }
+
+  #main-content .editorial-desktop-journey .editorial-storage-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .editorial-desktop-journey .editorial-storage-section {
+    border: 1px solid var(--editorial-line);
+    background: #fff;
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .editorial-desktop-journey .editorial-storage-note {
+    margin-top: 0.75rem;
+    max-width: 55rem;
+    font-weight: 400;
+    line-height: 1.65;
+  }
 }
 
 .editorial-home a:focus-visible {

@@ -1,15 +1,44 @@
 import { Link } from 'react-router-dom';
 import valueCatalogue from '@/data/values.json';
+import teamValueCatalogue from '@/data/team-values.json';
 import { isBehaviourReflectionEnabled } from '@/lib/utils/config/featureFlags';
 
-const featuredValues = ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS'].map((title) => {
-  const value = valueCatalogue.values.find((item) => item.title === title);
-  if (!value) throw new Error(`The public example value ${title} is missing from the catalogue.`);
-  return {
-    ...value,
-    displayTitle: title.toLocaleLowerCase('en-GB').replace(/^\w/, (character) => character.toLocaleUpperCase('en-GB')),
-  };
-});
+function featuredCards(catalogue: typeof valueCatalogue, titles: string[]) {
+  return titles.map((title) => {
+    const value = catalogue.values.find((item) => item.title === title);
+    if (!value) throw new Error(`The public example value ${title} is missing from the catalogue.`);
+    return {
+      ...value,
+      displayTitle: title
+        .toLocaleLowerCase('en-GB')
+        .replace(/^\w/, (character) => character.toLocaleUpperCase('en-GB')),
+    };
+  });
+}
+
+const featuredValues = featuredCards(valueCatalogue, ['LEARNING', 'INDEPENDENCE', 'HELPING OTHERS']);
+const featuredTeamValues = featuredCards(teamValueCatalogue, ['TEAMWORK', 'INCLUSIVITY', 'GROWTH']);
+
+function ExampleCards({ team = false }: { team?: boolean }) {
+  return (
+    <figure
+      className="editorial-card-composition"
+      aria-label={`Three values from the ${team ? 'team' : 'personal'} card sort`}
+    >
+      {(team ? featuredTeamValues : featuredValues).map((value, index) => (
+        <article className={`editorial-value-card editorial-value-card--${index + 1}`} key={value.id}>
+          <h3>{value.displayTitle}</h3>
+          <p>{value.description}</p>
+        </article>
+      ))}
+      <figcaption>
+        {team
+          ? 'Explore values that could guide your work together.'
+          : 'Choose between values that matter in different ways.'}
+      </figcaption>
+    </figure>
+  );
+}
 
 const situations = [
   'Considering a change of job',
@@ -22,18 +51,26 @@ function TeamActionSection({ placement }: { placement: 'mobile' | 'desktop' }) {
 
   return (
     <section className={`editorial-situations editorial-team editorial-team--${placement}`} aria-labelledby={headingId}>
-      <div>
+      <div className="editorial-team-copy">
         <h2 id={headingId}>What matters to your team?</h2>
         <p>
           In a meeting, sort team-focused cards, discuss the trade-offs, then agree which values should guide your work
           together.
         </p>
+        {placement === 'desktop' && (
+          <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
+            Start a team values conversation
+          </Link>
+        )}
       </div>
-      <div>
-        <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
-          Start a team values conversation
-        </Link>
-      </div>
+      {placement === 'desktop' && <ExampleCards team />}
+      {placement === 'mobile' && (
+        <div>
+          <Link className="editorial-button editorial-button--primary" to="/exercise?exerciseType=team">
+            Start a team values conversation
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
@@ -95,15 +132,17 @@ function ReflectionSection({ placement }: { placement: 'mobile' | 'desktop' }) {
   );
 }
 
-function StorageNote() {
+function StorageNote({ heading = false }: { heading?: boolean }) {
   return (
-    <section className="editorial-storage-section" aria-label="Saving your reflections">
+    <section className="editorial-storage-section" aria-label="Where your reflections are kept">
+      {heading && <h2>Where your reflections are kept</h2>}
       <p className="editorial-storage-note">
-        Your reflections stay in this browser and don’t sync automatically. Use{' '}
+        Your reflections are saved in the browser you’re using now. They won’t appear on another device automatically.
+        To keep a copy, go to{' '}
         <Link className="editorial-history-link" to="/history">
           History
         </Link>{' '}
-        to export a backup before clearing browser data or changing devices.
+        and export a backup before clearing your browser data or changing devices.
       </p>
     </section>
   );
@@ -126,25 +165,21 @@ export default function HomeClient() {
       </div>
 
       <div className="editorial-desktop-journey">
-        <section className="editorial-hero" aria-labelledby="home-heading">
-          <div className="editorial-hero-copy">
-            <h1 id="home-heading">Some things matter more.</h1>
-            <PersonalAction />
-          </div>
-          <figure className="editorial-card-composition" aria-label="Three values from the personal card sort">
-            {featuredValues.map((value, index) => (
-              <article className={`editorial-value-card editorial-value-card--${index + 1}`} key={value.id}>
-                <h2>{value.displayTitle}</h2>
-                <p>{value.description}</p>
-              </article>
-            ))}
-            <figcaption>Choose between values that matter in different ways.</figcaption>
-          </figure>
-        </section>
+        <header className="editorial-home-heading">
+          <h1>Some things matter more.</h1>
+        </header>
         <SituationsSection placement="desktop" />
         <ReflectionSection placement="desktop" />
-        <StorageNote />
-        <TeamActionSection placement="desktop" />
+        <div className="editorial-action-sections">
+          <section className="editorial-personal editorial-personal--desktop" aria-label="Personal values">
+            <div>
+              <PersonalAction />
+            </div>
+            <ExampleCards />
+          </section>
+          <TeamActionSection placement="desktop" />
+        </div>
+        <StorageNote heading />
       </div>
 
       {behaviourReflectionEnabled && (
