@@ -1,4 +1,8 @@
 import type { CompletedSession } from '@/lib/contracts/types';
+import backgroundSvg from '../../../public/images/core-values-error-bg.svg?raw';
+import headingFont from '../../../public/fonts/dm-sans-latin-600-normal.woff2?inline';
+import bodyFont from '../../../public/fonts/source-serif-4-latin-400-normal.woff2?inline';
+import interfaceFont from '../../../public/fonts/source-sans-3-latin-600-normal.woff2?inline';
 
 type ClipboardWriter = {
   writeText: (text: string) => Promise<void>;
@@ -55,7 +59,6 @@ export function formatCompletedValuesText(sessionReference: string, completedSes
 
 export function buildCompletedValuesHtml(sessionReference: string, completedSession: CompletedSession): string {
   const completedAt = formatCompletedAt(completedSession.completedAt);
-  const completedBy = getCompletedBy(completedSession);
   const cardsMarkup = completedSession.finalValues
     .map((value, index) => {
       const reason = normalizeCompletedValueReason(value.reason);
@@ -80,6 +83,21 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Completed Values - ${escapeHtml(sessionReference)}</title>
     <style>
+      @font-face {
+        font-family: 'DM Sans';
+        src: url('${headingFont}') format('woff2');
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: 'Source Serif 4';
+        src: url('${bodyFont}') format('woff2');
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: 'Source Sans 3';
+        src: url('${interfaceFont}') format('woff2');
+        font-weight: 600;
+      }
       @page {
         margin: 12mm;
       }
@@ -89,23 +107,24 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       }
 
       body {
-        background: #f7f5e6;
-        color: #14363f;
-        font-family: 'Source Sans 3', Arial, sans-serif;
-        line-height: 1.45;
+        background: #faf5f8 url('data:image/svg+xml,${encodeURIComponent(backgroundSvg)}') center / cover fixed no-repeat;
+        color: #3c2a38;
+        font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+        line-height: 1.5;
         margin: 0;
       }
 
       main {
-        background: #ffffff;
-        border: 1px solid rgba(51, 63, 72, 0.18);
+        background: #faf5f8;
+        border: 1px solid #d6bdcc;
+        border-radius: 8px;
         margin: 24px auto;
-        max-width: 960px;
-        padding: 32px;
+        max-width: 896px;
+        padding: clamp(24px, 5vw, 40px);
       }
 
       header {
-        border-bottom: 2px solid #00f2b6;
+        border-bottom: 1px solid #d6bdcc;
         display: grid;
         gap: 16px;
         grid-template-columns: 1fr auto;
@@ -113,18 +132,20 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       }
 
       h1 {
-        font-family: 'Source Sans 3', Arial;
-        font-size: 32px;
-        font-weight: 400;
+        font-family: 'DM Sans', Arial, sans-serif;
+        font-size: clamp(28px, 5vw, 40px);
+        font-weight: 600;
         line-height: 1.15;
         margin: 0;
       }
 
       .stamp {
-        border: 1px solid rgba(240, 70, 50, 0.55);
-        color: #14363f;
+        align-self: start;
+        border: 1px solid #d6bdcc;
+        color: #613d60;
+        font-family: 'Source Sans 3', Arial, sans-serif;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 600;
         letter-spacing: 0.08em;
         padding: 8px 10px;
         text-transform: uppercase;
@@ -133,7 +154,7 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       .meta {
         display: grid;
         gap: 8px 24px;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         margin: 20px 0 24px;
       }
 
@@ -143,6 +164,8 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
 
       .meta strong {
         display: block;
+        font-family: 'Source Sans 3', Arial, sans-serif;
+        font-weight: 600;
         font-size: 11px;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -157,35 +180,48 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       }
 
       .value-card {
-        border: 1px solid rgba(51, 63, 72, 0.18);
+        background: #ffffff;
+        border: 1px solid #d6bdcc;
+        border-radius: 8px;
         break-inside: avoid;
         display: grid;
         gap: 12px;
         grid-template-columns: auto 1fr;
-        padding: 12px;
+        padding: 16px;
         page-break-inside: avoid;
       }
 
       .value-index {
         align-items: center;
-        background: #14363f;
+        background: #613d60;
+        border-radius: 50%;
         color: #ffffff;
         display: flex;
-        font-weight: 700;
+        font-family: 'Source Sans 3', Arial, sans-serif;
+        font-weight: 600;
         height: 28px;
         justify-content: center;
         width: 28px;
       }
 
       h2 {
-        font-family: 'Source Sans 3', Arial;
+        font-family: 'DM Sans', Arial, sans-serif;
+        font-weight: 600;
         font-size: 18px;
         margin: 0 0 4px;
       }
 
       .value-card p {
-        font-size: 13px;
+        font-size: 16px;
         margin: 0;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 600px) {
+        main { margin: 12px; }
+        header { grid-template-columns: 1fr; }
+        .stamp { justify-self: start; }
+        .meta { grid-template-columns: 1fr; }
       }
 
       @media print {
@@ -210,7 +246,6 @@ export function buildCompletedValuesHtml(sessionReference: string, completedSess
       </header>
       <section class="meta" aria-label="Completion details">
         <p><strong>Completed</strong>${escapeHtml(completedAt)}</p>
-        <p><strong>Completed by</strong>${escapeHtml(completedBy)}</p>
         <p><strong>Session reference</strong>${escapeHtml(sessionReference)}</p>
       </section>
       <ol>${cardsMarkup}</ol>
